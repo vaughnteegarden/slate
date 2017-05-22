@@ -29,11 +29,9 @@ search: true
 
 ## Download the SDK
 
-## Set up the SDK
+## Set up the SDK - IOS
 
-### IOS
-
-### Android
+## Set up the SDK - Android
 
 # App Flows
 
@@ -49,7 +47,7 @@ search: true
 
 ## Customer
 
-### Register customer
+### Register customer method
 
 ### Log in customer
 
@@ -59,29 +57,18 @@ search: true
 
 > To authorize, use this code:
 
-```ruby
+``` objective_c
 require 'kittn'
 
 api = Kittn::APIClient.authorize!('meowmeowmeow')
 ```
 
-```python
+```java
 import kittn
 
 api = kittn.authorize('meowmeowmeow')
 ```
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
 
 > Make sure to replace `meowmeowmeow` with your API key.
 
