@@ -2,8 +2,8 @@
 title: Rezolve SDK Documentation
 
 language_tabs:
-  - objective_c:IOS
-  - java:Android
+  - objective_c: IOS
+  - java: Android
 
 toc_footers:
   - <a href='#'>Footer link 1</a>
