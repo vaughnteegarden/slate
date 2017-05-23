@@ -28,29 +28,42 @@ The Rezolve SDK is a full-featured application suite. Capabilities that can be i
 * Scanning of Rezolve Encoded visual media
 * Listening to Rezolve Encoded audio media
 * Purchasing of scanned products
-* Purchase history 
+* Purchase history
 
 ## Intended audience
 
-This document is intended for experienced IOS and Android developer. It is expected that you have built apps before, and know your way around an IDE. 
+This document is intended for experienced IOS and Android developer. It is expected that you have built apps before, and know your way around an IDE.
 
 ## For more information
 
-For more information on Rezolve, see http://rezolve.com. 
+For more information on Rezolve, see http://rezolve.com.
 
 # Getting Started
 
 ## Get an API key
 
+Using the Rezolve API requires a contract. Please visit https://www.rezolve.com/#sectionForm and supply your contact info. We will respond ASAP, and provied an API key upon contract completion.
+
 ## Download the SDK
+
+The Rezolve SDK for **IOS** can be downloaded here: <a href="#">TBD</a>
+
+The Rezolve SDK for **Android** can be downloaded here: <a href="#">TBD</a>
 
 ## Set up the SDK - IOS
 
+Need setup steps and screenshots.
+
 ## Set up the SDK - Android
+
+Need setup steps and screenshots.
 
 # App Flows
 
 ## Login flow
+
+Image test.
+<img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"/>
 
 ## Scan to buy flow
 
