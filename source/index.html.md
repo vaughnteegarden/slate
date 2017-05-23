@@ -42,7 +42,7 @@ For more information on Rezolve, see http://rezolve.com.
 
 ## Get an API key
 
-Using the Rezolve API requires a contract. Please visit https://www.rezolve.com/#sectionForm and supply your contact info. We will respond ASAP, and provied an API key upon contract completion.
+Using the Rezolve API requires a contract. Please visit <a href="https://www.rezolve.com/#sectionForm">our contact form</a> and supply your info. We will respond ASAP, and provied an API key upon contract completion.
 
 ## Download the SDK
 
@@ -52,19 +52,23 @@ The Rezolve SDK for **Android** can be downloaded here: <a href="#">TBD</a>
 
 ## Set up the SDK - IOS
 
->This is an aside maybe. 
-Need setup steps and screenshots.
+
 
 ## Set up the SDK - Android
 
-Need setup steps and screenshots.
+Android Studio is the target IDE for these instructions. 
+
+The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
+
+1. For this demo, the project **test.example.com** has been created.<br/><img src="images/01newproj.png" style="margin:6px 0;"><br/><br/>
+2. In your project, go to File > New Module... <br/><img src="images/02newmodule.png" style="margin:6px 0;"><br/><br/>
+3. ... and choose Import JAR/.AAR Package. Hit Next. <br/><img src="images/03importaar.png" style="margin:6px 0;"><br/><br/>
+4. Select the SDK file you downloaded, and click Finish. File name may differ from what is shown in screenshot. <br/><img src="images/04pickaar.png" style="margin:6px 0;"><br/><br/>
+5. The SDK should import as a module. You are now ready to develop. <br/><img src="images/05imported.png" style="margin:6px 0;"><br/><br/>
 
 # App Flows
 
 ## Login flow
-
-Image test.
-<img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"/>
 
 ## Scan to buy flow
 
