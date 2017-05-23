@@ -52,6 +52,7 @@ The Rezolve SDK for **Android** can be downloaded here: <a href="#">TBD</a>
 
 ## Set up the SDK - IOS
 
+>This is an aside maybe. 
 Need setup steps and screenshots.
 
 ## Set up the SDK - Android
