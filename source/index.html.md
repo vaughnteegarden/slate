@@ -17,11 +17,26 @@ search: true
 
 # Introduction
 
-## What is the Rezolve SDK
+The **Rezolve SDK** is a software development kit that enables the app developer to integrate Rezolve's unique abilities within their app. 
+
+## Capabilities
+
+The Rezolve SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
+
+* Consumer registration and login
+* Consumer profile and wallet management
+* Scanning of Rezolve Encoded visual media
+* Listening to Rezolve Encoded audio media
+* Purchasing of scanned products
+* Purchase history 
 
 ## Intended audience
 
+This document is intended for experienced IOS and Android developer. It is expected that you have built apps before, and know your way around an IDE. 
+
 ## For more information
+
+For more information on Rezolve, see http://rezolve.com. 
 
 # Getting Started
 
@@ -54,6 +69,12 @@ search: true
 ### Log out customer
 
 ## Shop
+
+
+
+# Errors
+
+# Kitten API Examples
 
 > To authorize, use this code:
 
