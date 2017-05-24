@@ -52,11 +52,18 @@ The Rezolve SDK for **Android** can be downloaded here: <a href="#">TBD</a>
 
 ## Set up the SDK - IOS
 
+XCode is the target IDE for these instructions.
 
+The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
+
+1. Open your existing project.<br/><br/>
+2. Go to the app target’s General configuration page.<br/><br/>
+3. Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
+4. Select your framework from the list of binaries that can be embedded.
 
 ## Set up the SDK - Android
 
-Android Studio is the target IDE for these instructions. 
+Android Studio is the target IDE for these instructions.
 
 The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
 
