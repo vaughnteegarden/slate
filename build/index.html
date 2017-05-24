@@ -266,9 +266,20 @@
 
 <h2 id="set-up-the-sdk-ios">Set up the SDK - IOS</h2>
 
+<p>XCode is the target IDE for these instructions.</p>
+
+<p>The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
+
+<ol>
+<li>Open your existing project.<br/><br/></li>
+<li>Go to the app target’s General configuration page.<br/><br/></li>
+<li>Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
+<li>Select your framework from the list of binaries that can be embedded.</li>
+</ol>
+
 <h2 id="set-up-the-sdk-android">Set up the SDK - Android</h2>
 
-<p>Android Studio is the target IDE for these instructions. </p>
+<p>Android Studio is the target IDE for these instructions.</p>
 
 <p>The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:</p>
 
