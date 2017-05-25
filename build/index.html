@@ -236,11 +236,13 @@
 <p>The Rezolve SDK is a full-featured application suite. Capabilities that can be integrated into your application include:</p>
 
 <ul>
-<li>Consumer registration and login</li>
+<li>Consumer account creation and Rezolve login</li>
 <li>Consumer profile and wallet management</li>
+<li>Consumer management of topup devices</li>
 <li>Scanning of Rezolve Encoded visual media</li>
 <li>Listening to Rezolve Encoded audio media</li>
 <li>Purchasing of scanned products</li>
+<li>Purchasing of topups</li>
 <li>Purchase history</li>
 </ul>
 
@@ -266,7 +268,7 @@
 
 <h2 id="set-up-the-sdk-ios">Set up the SDK - IOS</h2>
 
-<p>XCode is the target IDE for these instructions.</p>
+<p><strong>XCode</strong> is the target IDE for these instructions.</p>
 
 <p>The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
 
@@ -277,9 +279,12 @@
 <li>Select your framework from the list of binaries that can be embedded.</li>
 </ol>
 
+<p>TODO: verify instructions with Marcos
+TODO: do we need to import anythinng per file, or otherwise set up the framework in code to use it? Marcos</p>
+
 <h2 id="set-up-the-sdk-android">Set up the SDK - Android</h2>
 
-<p>Android Studio is the target IDE for these instructions.</p>
+<p><strong>Android Studio</strong> is the target IDE for these instructions.</p>
 
 <p>The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:</p>
 
@@ -291,15 +296,87 @@
 <li>The SDK should import as a module. You are now ready to develop. <br/><img src="images/05imported.png" style="margin:6px 0;"><br/><br/></li>
 </ol>
 
+<p>TODO: verify install instructions with Adam.
+TODO: anything to import per file to use functions?</p>
+
 <h1 id="app-flows">App Flows</h1>
 
-<h2 id="login-flow">Login flow</h2>
+<p>This section describes the intended usage of the SDK to build specific feature-related functionalities.</p>
+
+<h2 id="basic-usage">Basic Usage</h2>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">import</span> <span class="n">RezolveSDK</span>
+
+<span class="n">let</span> <span class="n">API_KEY</span><span class="o">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s">"ABC123"</span>           <span class="c1">//substitute your api key here
+</span>
+<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
+
+</code></pre><pre class="highlight java tab-java"><code><span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSDK</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveInterface</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSession</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.CheckoutCallback</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.FavouriteCallback</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.UserActivityCallback</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.WalletCallback</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.AddressbookInterface</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.ApiCheckInterface</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.FavouriteInterface</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.ProductInterface</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.WalletInterface</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.utils.RequestType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.api.ApiStatus</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.api.ApiVersions</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.cart.Order</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.useractivity.Transaction</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.customer.Address</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.customer.Favourite</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.customer.PaymentCard</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.foreign.SignUpRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.network.HttpResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.Catalog</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.DisplayProduct</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.Merchant</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.Product</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.ProductBundle</span><span class="o">;</span>
+
+<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"ABC123"</span><span class="o">;</span>
+
+<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span><span class="n">RezolveEnv</span><span class="o">.</span><span class="na">Development</span><span class="o">);</span>
+
+</code></pre>
+<p>To get started, import the SDK into your file, and initialize it. When initializing the SDK in your page, you must specify your <code class="prettyprint">API Key</code>, and the <code class="prettyprint">server environment</code> you are targeting. </p>
+
+<p>Your <code class="prettyprint">API Key</code> is supplied to you upon signup with Rezolve.</p>
+
+<p>Your <code class="prettyprint">server environment</code> is an enum with one of the following values: <code class="prettyprint">Development</code>, <code class="prettyprint">Sandbox</code>, or <code class="prettyprint">Production</code></p>
+
+<p>TODO Marcos verify
+TODO Adam verify</p>
+
+<h2 id="session-management-user-management">Session Management, User Management</h2>
+
+<p>To get the SDK talking to backend services, you must establish a session. A session combines several  functions, and abstracts them from the developer:
+* Verifies the validity of the mobile app, through the API key
+* Creates the consumer account, if one doesn&rsquo;t exist
+* Identifies the consumer and pairs them with a partner-supplied session token, and assigns them a Rezolve session token
+* Verifies each request from the mobile app</p>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">require</span> <span class="err">'</span><span class="n">kittn</span><span class="err">'</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">Kittn</span><span class="o">::</span><span class="n">APIClient</span><span class="p">.</span><span class="n">authorize</span><span class="o">!</span><span class="p">(</span><span class="err">'</span><span class="n">meowmeowmeow</span><span class="err">'</span><span class="p">)</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kn">import</span> <span class="nn">kittn</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="na">authorize</span><span class="o">(</span><span class="err">'</span><span class="n">meowmeowmeow</span><span class="err">'</span><span class="o">)</span>
+</code></pre>
+<p>For the purpose of the SDK, it is assumed the partner app is providing the authentication of users. Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>. The first time <code class="prettyprint">createSession{}</code> is called, it will create a Rezolve user account, and return an <code class="prettyprint">entity_id</code> (Rezolve user id) and a <code class="prettyprint">partner_id</code>. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. </p>
+
+<p>To create a session, you must pass </p>
+
+<h2 id="profile-management">Profile Management</h2>
+
+<h2 id="topup-flow">Topup flow</h2>
 
 <h2 id="scan-to-buy-flow">Scan to buy flow</h2>
 
-<h2 id="profile-flow">Profile flow</h2>
-
-<h2 id="etc">etc&hellip;</h2>
+<h2 id="checkout-flow">Checkout flow</h2>
 
 <h1 id="modules">Modules</h1>
 
