@@ -127,6 +127,7 @@ This section will describe how to:
 ### Register User
 
 >Structure of authenticationRequest object. It is used with both the registerUser and createSession methods.
+
 ```json
 {
     "device": {
@@ -164,7 +165,7 @@ You will know if you need to call `registerUser` instead of `createSession` if e
 
 <aside class="notice">
 It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
-</notice>
+</aside>
 
 
 ### Create Session
