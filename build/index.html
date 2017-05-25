@@ -337,24 +337,23 @@ TODO: anything to import per file to use functions?</p>
 <h3 id="register-user">Register User</h3>
 
 <blockquote>
-<p>Structure of authenticationRequest object. It is used with both the registerUser and createSession methods.
-<code class="prettyprint">json
-{
-    &quot;device&quot;: {
-      &quot;device_id&quot;: &quot;bd17391f9561&quot;,
-      &quot;make&quot;: &quot;apple&quot;,
-      &quot;os_type&quot;: &quot;iOS&quot;,
-      &quot;os_version&quot;: &quot;10.3&quot;,
-      &quot;locale&quot;: &quot;Europe/London&quot;
-    }
-    &quot;email&quot;: &quot;user@domain.com&quot;,
-    &quot;first_name&quot;: &quot;John&quot;,
-    &quot;last_name&quot;: &quot;Doe&quot;,
-    &quot;name&quot;: &quot;John Doe&quot;
-}
-</code>
-To register a user, you will need to call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">authenticationRequest</code> object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
+<p>Structure of authenticationRequest object. It is used with both the registerUser and createSession methods.</p>
 </blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"device"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"device_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bd17391f9561"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"make"</span><span class="p">:</span><span class="w"> </span><span class="s2">"apple"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"os_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iOS"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"os_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10.3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Europe/London"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@domain.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>To register a user, you will need to call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">authenticationRequest</code> object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
 
 <span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
@@ -370,79 +369,67 @@ To register a user, you will need to call the sdk <code class="prettyprint">regi
 
 <aside class="notice">
 It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
-</notice>
+</aside>
 
+<h3 id="create-session">Create Session</h3>
 
-### Create Session
-To get the SDK talking to backend services, you must establish a session. A session combines several  functions, and abstracts them from the developer:
+<p>To get the SDK talking to backend services, you must establish a session. A session combines several  functions, and abstracts them from the developer:
 * Verifies the validity of the mobile app, through the API key
 * Creates the consumer account, if one doesn&rsquo;t exist
 * Identifies the consumer and pairs them with a partner-supplied session token, and assigns them a Rezolve session token
-* Verifies each request from the mobile app
+* Verifies each request from the mobile app</p>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">stuff</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">stuff</span>
+</code></pre>
+<p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>. The first time <code class="prettyprint">createSession{}</code> is called, it will create a Rezolve user account, and return an <code class="prettyprint">entity_id</code> (Rezolve user id) and a <code class="prettyprint">partner_id</code>. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. </p>
 
+<p>To create a session, you must pass </p>
 
-&ldquo;` objective_c
-stuff
-&rdquo;`
-&ldquo;`java
-stuff
-&rdquo;`
- Once the user is authenticated on the partner side, make a call to `createSession{}`. The first time `createSession{}` is called, it will create a Rezolve user account, and return an `entity_id` (Rezolve user id) and a `partner_id`. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. 
+<h3 id="logout-session">Logout Session</h3>
 
+<h2 id="profile-management">Profile Management</h2>
 
+<h2 id="topup-flow">Topup flow</h2>
 
-To create a session, you must pass 
+<h2 id="scan-to-buy-flow">Scan to buy flow</h2>
 
-### Logout Session
+<h2 id="checkout-flow">Checkout flow</h2>
 
-## Profile Management 
+<h1 id="modules">Modules</h1>
 
-## Topup flow
+<h2 id="customer">Customer</h2>
 
-## Scan to buy flow
+<h3 id="register-customer-method">Register customer method</h3>
 
-## Checkout flow
+<h3 id="log-in-customer">Log in customer</h3>
 
-# Modules
+<h3 id="log-out-customer">Log out customer</h3>
 
-## Customer
+<h2 id="shop">Shop</h2>
 
-### Register customer method
+<h1 id="errors">Errors</h1>
 
-### Log in customer
+<h1 id="kitten-api-examples">Kitten API Examples</h1>
 
-### Log out customer
+<blockquote>
+<p>To authorize, use this code:</p>
+</blockquote>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">require</span> <span class="err">'</span><span class="n">kittn</span><span class="err">'</span>
 
-## Shop
+<span class="n">api</span> <span class="o">=</span> <span class="n">Kittn</span><span class="o">::</span><span class="n">APIClient</span><span class="p">.</span><span class="n">authorize</span><span class="o">!</span><span class="p">(</span><span class="err">'</span><span class="n">meowmeowmeow</span><span class="err">'</span><span class="p">)</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kn">import</span> <span class="nn">kittn</span>
 
+<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="na">authorize</span><span class="o">(</span><span class="err">'</span><span class="n">meowmeowmeow</span><span class="err">'</span><span class="o">)</span>
+</code></pre>
+<blockquote>
+<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
+</blockquote>
 
+<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
 
-# Errors
+<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
 
-# Kitten API Examples
-
-> To authorize, use this code:
-
-&ldquo;` objective_c
-require &lsquo;kittn&rsquo;
-
-api = Kittn::APIClient.authorize!(&lsquo;meowmeowmeow&rsquo;)
-&rdquo;`
-
-&ldquo;`java
-import kittn
-
-api = kittn.authorize(&lsquo;meowmeowmeow&rsquo;)
-&rdquo;`
-
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
 
 <aside class="notice">
 You must replace <code>meowmeowmeow</code> with your personal API key.
