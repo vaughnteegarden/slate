@@ -124,6 +124,8 @@ This section will describe how to:
 2. Create a Session for that user
 3. When the user is done, log them out
 
+<img src="images/loginsequencediagram.png" style="margin:6px 0;">
+
 ### Register User
 
 >Structure of authenticationRequest object. It is used with both the registerUser and createSession methods.
