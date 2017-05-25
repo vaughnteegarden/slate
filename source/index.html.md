@@ -23,11 +23,13 @@ The **Rezolve SDK** is a software development kit that enables the app developer
 
 The Rezolve SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
 
-* Consumer registration and login
+* Consumer account creation and Rezolve login
 * Consumer profile and wallet management
+* Consumer management of topup devices
 * Scanning of Rezolve Encoded visual media
 * Listening to Rezolve Encoded audio media
 * Purchasing of scanned products
+* Purchasing of topups
 * Purchase history
 
 ## Intended audience
@@ -52,7 +54,7 @@ The Rezolve SDK for **Android** can be downloaded here: <a href="#">TBD</a>
 
 ## Set up the SDK - IOS
 
-XCode is the target IDE for these instructions.
+**XCode** is the target IDE for these instructions.
 
 The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
 
@@ -61,9 +63,12 @@ The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve 
 3. Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
 4. Select your framework from the list of binaries that can be embedded.
 
+TODO: verify instructions with Marcos
+TODO: do we need to import anythinng per file, or otherwise set up the framework in code to use it? Marcos
+
 ## Set up the SDK - Android
 
-Android Studio is the target IDE for these instructions.
+**Android Studio** is the target IDE for these instructions.
 
 The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
 
@@ -73,15 +78,104 @@ The Android SDK is distributed as an .aar library. This makes it easy to import 
 4. Select the SDK file you downloaded, and click Finish. File name may differ from what is shown in screenshot. <br/><img src="images/04pickaar.png" style="margin:6px 0;"><br/><br/>
 5. The SDK should import as a module. You are now ready to develop. <br/><img src="images/05imported.png" style="margin:6px 0;"><br/><br/>
 
+TODO: verify install instructions with Adam.
+TODO: anything to import per file to use functions?
+
 # App Flows
 
-## Login flow
+This section describes the intended usage of the SDK to build specific feature-related functionalities.
+
+## Basic Usage
+
+``` objective_c
+import RezolveSDK
+
+let API_KEY: String = "ABC123"           //substitute your api key here
+
+let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+
+```
+
+```java
+import com.rezolve.sdk.RezolveSDK;
+import com.rezolve.sdk.RezolveInterface;
+import com.rezolve.sdk.RezolveSession;
+import com.rezolve.sdk.core.callbacks.CheckoutCallback;
+import com.rezolve.sdk.core.callbacks.FavouriteCallback;
+import com.rezolve.sdk.core.callbacks.UserActivityCallback;
+import com.rezolve.sdk.core.callbacks.WalletCallback;
+import com.rezolve.sdk.core.interfaces.AddressbookInterface;
+import com.rezolve.sdk.core.interfaces.ApiCheckInterface;
+import com.rezolve.sdk.core.interfaces.FavouriteInterface;
+import com.rezolve.sdk.core.interfaces.ProductInterface;
+import com.rezolve.sdk.core.interfaces.WalletInterface;
+import com.rezolve.sdk.core.utils.RequestType;
+import com.rezolve.sdk.model.api.ApiStatus;
+import com.rezolve.sdk.model.api.ApiVersions;
+import com.rezolve.sdk.model.cart.Order;
+import com.rezolve.sdk.model.useractivity.Transaction;
+import com.rezolve.sdk.model.customer.Address;
+import com.rezolve.sdk.model.customer.Favourite;
+import com.rezolve.sdk.model.customer.PaymentCard;
+import com.rezolve.sdk.model.foreign.SignUpRequest;
+import com.rezolve.sdk.model.network.HttpResponse;
+import com.rezolve.sdk.model.shop.Catalog;
+import com.rezolve.sdk.model.shop.DisplayProduct;
+import com.rezolve.sdk.model.shop.Merchant;
+import com.rezolve.sdk.model.shop.Product;
+import com.rezolve.sdk.model.shop.ProductBundle;
+
+private final static String API_KEY = "ABC123";
+
+RezolveSDK.getInstance(API_KEY,RezolveEnv.Development);
+
+```
+
+To get started, import the SDK into your file, and initialize it. When initializing the SDK in your page, you must specify your `API Key`, and the `server environment` you are targeting. 
+
+Your `API Key` is supplied to you upon signup with Rezolve.
+
+Your `server environment` is an enum with one of the following values: `Development`, `Sandbox`, or `Production`
+
+TODO Marcos verify
+TODO Adam verify
+
+
+
+
+## Session Management, User Management
+
+To get the SDK talking to backend services, you must establish a session. A session combines several  functions, and abstracts them from the developer:
+* Verifies the validity of the mobile app, through the API key
+* Creates the consumer account, if one doesn't exist
+* Identifies the consumer and pairs them with a partner-supplied session token, and assigns them a Rezolve session token
+* Verifies each request from the mobile app
+
+
+``` objective_c
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+```
+
+```java
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+```
+For the purpose of the SDK, it is assumed the partner app is providing the authentication of users. Once the user is authenticated on the partner side, make a call to `createSession{}`. The first time `createSession{}` is called, it will create a Rezolve user account, and return an `entity_id` (Rezolve user id) and a `partner_id`. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. 
+
+
+
+To create a session, you must pass 
+
+## Profile Management 
+
+## Topup flow
 
 ## Scan to buy flow
 
-## Profile flow
-
-## etc...
+## Checkout flow
 
 # Modules
 
