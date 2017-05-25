@@ -93,42 +93,13 @@ import RezolveSDK
 let API_KEY: String = "ABC123"           //substitute your api key here
 
 let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
-
 ```
-
 ```java
 import com.rezolve.sdk.RezolveSDK;
-import com.rezolve.sdk.RezolveInterface;
-import com.rezolve.sdk.RezolveSession;
-import com.rezolve.sdk.core.callbacks.CheckoutCallback;
-import com.rezolve.sdk.core.callbacks.FavouriteCallback;
-import com.rezolve.sdk.core.callbacks.UserActivityCallback;
-import com.rezolve.sdk.core.callbacks.WalletCallback;
-import com.rezolve.sdk.core.interfaces.AddressbookInterface;
-import com.rezolve.sdk.core.interfaces.ApiCheckInterface;
-import com.rezolve.sdk.core.interfaces.FavouriteInterface;
-import com.rezolve.sdk.core.interfaces.ProductInterface;
-import com.rezolve.sdk.core.interfaces.WalletInterface;
-import com.rezolve.sdk.core.utils.RequestType;
-import com.rezolve.sdk.model.api.ApiStatus;
-import com.rezolve.sdk.model.api.ApiVersions;
-import com.rezolve.sdk.model.cart.Order;
-import com.rezolve.sdk.model.useractivity.Transaction;
-import com.rezolve.sdk.model.customer.Address;
-import com.rezolve.sdk.model.customer.Favourite;
-import com.rezolve.sdk.model.customer.PaymentCard;
-import com.rezolve.sdk.model.foreign.SignUpRequest;
-import com.rezolve.sdk.model.network.HttpResponse;
-import com.rezolve.sdk.model.shop.Catalog;
-import com.rezolve.sdk.model.shop.DisplayProduct;
-import com.rezolve.sdk.model.shop.Merchant;
-import com.rezolve.sdk.model.shop.Product;
-import com.rezolve.sdk.model.shop.ProductBundle;
 
 private final static String API_KEY = "ABC123";
 
 RezolveSDK.getInstance(API_KEY,RezolveEnv.Development);
-
 ```
 
 To get started, import the SDK into your file, and initialize it. When initializing the SDK in your page, you must specify your `API Key`, and the `server environment` you are targeting. 
@@ -138,13 +109,65 @@ Your `API Key` is supplied to you upon signup with Rezolve.
 Your `server environment` is an enum with one of the following values: `Development`, `Sandbox`, or `Production`
 
 TODO Marcos verify
+
 TODO Adam verify
 
 
 
 
-## Session Management, User Management
+##  User Management, Session Management
 
+For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumes to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
+
+This section will describe how to:
+1. Register a Rezolve user via the SDK
+2. Create a Session for that user
+3. When the user is done, log them out
+
+### Register User
+
+>Structure of authenticationRequest object. It is used with both the registerUser and createSession methods.
+```json
+{
+    "device": {
+      "device_id": "bd17391f9561",
+      "make": "apple",
+      "os_type": "iOS",
+      "os_version": "10.3",
+      "locale": "Europe/London"
+    }
+    "email": "user@domain.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "name": "John Doe"
+}
+```
+To register a user, you will need to call the sdk `registerUser` method, passing in an `authenticationRequest` object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
+
+
+
+```objective_c
+let request: AuthenticationRequest = authenticationRequest()
+
+let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+
+sdk.registerUser(authenticationRequest: request) {  (entityId, partnerId) in 
+	// persist the entity_id and partner_id values here
+}
+```
+```java
+TODO need example
+```
+The `registerUser` method is used as shown to the right. Upon successful registration, the response will contain a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
+
+You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
+
+<aside class="notice">
+It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
+</notice>
+
+
+### Create Session
 To get the SDK talking to backend services, you must establish a session. A session combines several  functions, and abstracts them from the developer:
 * Verifies the validity of the mobile app, through the API key
 * Creates the consumer account, if one doesn't exist
@@ -153,21 +176,18 @@ To get the SDK talking to backend services, you must establish a session. A sess
 
 
 ``` objective_c
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+stuff
 ```
-
 ```java
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
+stuff
 ```
-For the purpose of the SDK, it is assumed the partner app is providing the authentication of users. Once the user is authenticated on the partner side, make a call to `createSession{}`. The first time `createSession{}` is called, it will create a Rezolve user account, and return an `entity_id` (Rezolve user id) and a `partner_id`. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. 
+ Once the user is authenticated on the partner side, make a call to `createSession{}`. The first time `createSession{}` is called, it will create a Rezolve user account, and return an `entity_id` (Rezolve user id) and a `partner_id`. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. 
 
 
 
 To create a session, you must pass 
+
+### Logout Session
 
 ## Profile Management 
 
