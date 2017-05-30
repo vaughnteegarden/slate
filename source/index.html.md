@@ -72,7 +72,7 @@ TODO: do we need to import anythinng per file, or otherwise set up the framework
 
 The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
 
-1. For this demo, the project **test.example.com** has been created.<br/><img src="images/01newproj.png" style="margin:6px 0;"><br/><br/>
+1. For this demo, the project **test.example.com** has been created.<br/><br/>
 2. In your project, go to File > New Module... <br/><img src="images/02newmodule.png" style="margin:6px 0;"><br/><br/>
 3. ... and choose Import JAR/.AAR Package. Hit Next. <br/><img src="images/03importaar.png" style="margin:6px 0;"><br/><br/>
 4. Select the SDK file you downloaded, and click Finish. File name may differ from what is shown in screenshot. <br/><img src="images/04pickaar.png" style="margin:6px 0;"><br/><br/>
@@ -81,7 +81,7 @@ The Android SDK is distributed as an .aar library. This makes it easy to import 
 TODO: verify install instructions with Adam.
 TODO: anything to import per file to use functions?
 
-# App Flows
+# SDK Feature Use
 
 This section describes the intended usage of the SDK to build specific feature-related functionalities.
 
@@ -90,29 +90,34 @@ This section describes the intended usage of the SDK to build specific feature-r
 ``` objective_c
 import RezolveSDK
 
-let API_KEY: String = "ABC123"           //substitute your api key here
+...
 
+let API_KEY: String = "ABC123"           //substitute your api key here
 let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+
+// possible values for env: enum are .Development , .Sandbox, and .Production
 ```
 ```java
 import com.rezolve.sdk.RezolveSDK;
 
+...
+
 private final static String API_KEY = "ABC123";
 
-RezolveSDK.getInstance(API_KEY,RezolveEnv.Development);
+RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
+
+// possible values for RezolveSDK.Env enum are .DEVELOPMENT , .SANDBOX, and .PRODUCTION
 ```
 
 To get started, import the SDK into your file, and initialize it. When initializing the SDK in your page, you must specify your `API Key`, and the `server environment` you are targeting. 
 
 Your `API Key` is supplied to you upon signup with Rezolve.
 
-Your `server environment` is an enum with one of the following values: `Development`, `Sandbox`, or `Production`
+Your `server environment` is an enum. See values, right.
 
 TODO Marcos verify
 
 TODO Adam verify
-
-
 
 
 ##  User Management, Session Management
@@ -120,11 +125,12 @@ TODO Adam verify
 For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumes to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
 
 This section will describe how to:
+
 1. Register a Rezolve user via the SDK
 2. Create a Session for that user
 3. When the user is done, log them out
 
-<img src="images/loginsequencediagram.png" style="margin:6px 0;">
+<img src="images/loginsequencediagram.png" style="margin:6px 0;"><br/>[ <a href="images/loginsequencediagram.png">View full size</a> ]
 
 ### Register User
 
@@ -151,6 +157,7 @@ To register a user, you will need to call the sdk `registerUser` method, passing
 
 ```objective_c
 let request: AuthenticationRequest = authenticationRequest()
+// TODO populate authenticationRequest object
 
 let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
 
@@ -159,48 +166,122 @@ sdk.registerUser(authenticationRequest: request) {  (entityId, partnerId) in
 }
 ```
 ```java
-TODO need example
+private final static String API_KEY = "ABC123";
+
+RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
+
+AuthenticationRequest myAuthenticationRequest = new AuthenticationRequest.Builder()
+.email("b")
+.firstName("d")
+.lastName("e")
+.name("h")
+.device(new DeviceProfile("12345", "Samsung", "UK"))
+.build();
+
+sdk.registerUser(myAuthenticationRequest, this);
+
+//TODO catch response
 ```
 The `registerUser` method is used as shown to the right. Upon successful registration, the response will contain a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
 
-You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
-
 <aside class="notice">
+You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
+</aside>
+
+<aside class="alert">
 It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
 </aside>
 
 
 ### Create Session
-To get the SDK talking to backend services, you must establish a session. A session combines several  functions, and abstracts them from the developer:
+To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
 * Verifies the validity of the mobile app, through the API key
-* Creates the consumer account, if one doesn't exist
-* Identifies the consumer and pairs them with a partner-supplied session token, and assigns them a Rezolve session token
-* Verifies each request from the mobile app
-
+* Identifies the consumer and pairs them with a session token
+* Verifies each request from the mobile app by passing API Key and session token
+* establishes a public key for the session, for encrypting transmitted credit card info
 
 ``` objective_c
-stuff
+let request: AuthenticationRequest = authenticationRequest()
+// TODO populate authenticationRequest object
+
+let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+
+sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
+	// begin interacting with features
+}
 ```
 ```java
-stuff
+private final static String API_KEY = "ABC123";
+private RezolveSession rezolveSession;
+
+RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
+
+
+
+
 ```
- Once the user is authenticated on the partner side, make a call to `createSession{}`. The first time `createSession{}` is called, it will create a Rezolve user account, and return an `entity_id` (Rezolve user id) and a `partner_id`. These values should be persisted locally for the life of the app, and if possible, stored server side on the partner server. 
-
-
-
-To create a session, you must pass 
+Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id`. The server will respond with a session authentication token, and a session public key. The SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of sensitive information for this session.
 
 ### Logout Session
 
-## Profile Management 
+Logging a user out is as simple as passing the `entity_id` to the logout method.
 
-## Topup flow
+## Consumer Profile Management
 
-## Scan to buy flow
+Once logged in, you have access to the consumer's records. These include:
+* Consumer Profile - Name, email, and device profile (phone info) for the consumer
+* Address Book - A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Favorites - A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
+* Wallet - Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
 
-## Checkout flow
+There are no specific flows to consider when managing the customer profile and assicated records. The consumer profile itself supports only update... no add or delete. 
 
-# Modules
+Address Book, Favorites, and Wallet all support standard CRUD operations. 
+
+## Instant buy flow
+
+<img src="images/Instant%20Purchase%20flow.png" style="margin:6px 0;"><br/>[ <a href="images/Instant%20Purchase%20flow.png">View full size</a> ]
+
+The premise of instant purchase is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
+
+First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the "payoff" URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
+
+Use the SDK `getProduct` call to retrieve product information. The `partner_id`, `merchant_id`, `catalog_id` and `product_id` will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.
+
+Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
+
+If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
+
+At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
+
+When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+
+## Top Up flow
+
+<img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]
+
+The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `favouriteService.create` method. Once there is one or more favorites, use the `favouriteService.getAll` method to list them. The customer will choose a favorite.
+
+The customer then wants to see a list of top up amounts. To accomplish this, we use the `getProducts` method, passing in a fixed category id. Note that each top up amount is stored in the catalog as a separate product with it's own SKU.
+
+Display the list of top up choices. You can display each "product" as a currency amount, or utilize the "description" field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.
+
+When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
+
+If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
+
+At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
+
+When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+
+
+# Error Handling
+
+
+
+
+
+# Module Reference Docs
 
 ## Customer
 
@@ -211,159 +292,4 @@ To create a session, you must pass
 ### Log out customer
 
 ## Shop
-
-
-
-# Errors
-
-# Kitten API Examples
-
-> To authorize, use this code:
-
-``` objective_c
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```java
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
 
