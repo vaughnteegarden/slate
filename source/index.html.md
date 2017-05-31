@@ -184,21 +184,24 @@ let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
 
 sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
 	// begin interacting with features
+    // example: session.CustomerProfileService.get
 }
 ```
 ```java
-private final static String API_KEY = "ABC123";
-private RezolveSession rezolveSession;
-
-RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
+TODO add code sample
 ```
 To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
+
 * Verifies the validity of the mobile app, through the API key
 * Identifies the consumer and pairs them with a session token
 * Verifies each request from the mobile app by passing API Key and session token
 * establishes a public key for the session, for encrypting transmitted credit card info
 
-Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id`. The server will respond with a session authentication token, and a session public key. The SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of sensitive information for this session.
+Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id`. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
+
+When the session is established, you can begin to access services, for example:
+`session.CustomerProfileService.get`
+
 
 ### Logout Session
 
@@ -213,14 +216,16 @@ Logging a user out is as simple as passing the `entity_id` to the logout method.
 ## Consumer Profile Management
 
 Once logged in, you have access to the consumer's records. These include:
-* Consumer Profile - Name, email, and device profile (phone info) for the consumer
-* Address Book - A collection of postal addresses, to be used for ship-to and bill-to purposes.
-* Favorites - A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
-* Wallet - Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
+* Consumer Profile - Via the `ConsumerProfileService`. Name, email, and device profile (phone info) for the consumer
+* Address Book - Via the `AddressbookService`. A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Favorites - Via the `FavouriteService`. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
+* Wallet - Via the `WalletService`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
 
-There are no specific flows to consider when managing the customer profile and assicated records. The consumer profile itself supports only update... no add or delete. 
+There are no specific flows to consider when managing the customer profile and assicated records.  
 
-Address Book, Favorites, and Wallet all support standard CRUD operations. 
+AddressbookService, FavouriteService, and WalletService support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
+
+ProfileService supports only `update` and `get`.
 
 ## Instant buy flow
 
@@ -230,32 +235,95 @@ The premise of instant purchase is to capture an image scan (usually of an adver
 
 First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the "payoff" URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
 
+``` objective_c
+TODO add getProduct code sample, IOS
+```
+```java
+TODO add getProduct code sample, Android
+```
 Use the SDK `getProduct` call to retrieve product information. The `partner_id`, `merchant_id`, `catalog_id` and `product_id` will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.
 
+``` objective_c
+TODO add checkoutOrder code sample, IOS
+```
+```java
+TODO add checkoutOrder code sample, Android
+```
 Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
 
+``` objective_c
+TODO add walletService.getAll code sample, IOS
+```
+```java
+TODO add walletService.getAll code sample, Android
+```
 If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
+``` objective_c
+TODO add buyOrder code sample, IOS
+```
+```java
+TODO add buyOrder code sample, Android
+```
 When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 ## Top Up flow
 
 <img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]
 
-The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `favouriteService.create` method. Once there is one or more favorites, use the `favouriteService.getAll` method to list them. The customer will choose a favorite.
+``` objective_c
+TODO add FavouriteService.create code sample, IOS
+```
+```java
+TODO add FavouriteService.create code sample, Android
+```
 
+The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteService.create` method. 
+
+``` objective_c
+TODO add FavouriteService.getAll code sample, IOS
+```
+```java
+TODO add FavouriteService.getAll code sample, Android
+```
+Once there is one or more favorites, use the `FavouriteService.getAll` method to list them. The customer will choose a favorite.
+
+``` objective_c
+TODO add getProducts code sample, IOS
+```
+```java
+TODO add getProducts code sample, Android
+```
 The customer then wants to see a list of top up amounts. To accomplish this, we use the `getProducts` method, passing in a fixed category id. Note that each top up amount is stored in the catalog as a separate product with it's own SKU.
 
 Display the list of top up choices. You can display each "product" as a currency amount, or utilize the "description" field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.
 
+``` objective_c
+TODO add checkoutOrder code sample, IOS
+```
+```java
+TODO add checkoutOrder code sample, Android
+```
 When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
+``` objective_c
+TODO add walletService.getAll code sample, IOS
+```
+```java
+TODO add walletService.getAll code sample, Android
+```
 If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
+``` objective_c
+TODO add buyOrder code sample, IOS
+```
+```java
+TODO add buyOrder code sample, Android
+```
 When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 
@@ -267,13 +335,12 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 # Module Reference Docs
 
+## Authentication
+
 ## Customer
-
-### Register customer method
-
-### Log in customer
-
-### Log out customer
 
 ## Shop
 
+## Activity
+
+## Check Version
