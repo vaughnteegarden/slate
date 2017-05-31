@@ -134,21 +134,6 @@ This section will describe how to:
 
 ### Register User
 
-```json
-{
-    "device": {
-      "device_id": "bd17391f9561",
-      "make": "apple",
-      "os_type": "iOS",
-      "os_version": "10.3",
-      "locale": "Europe/London"
-    }
-    "email": "user@domain.com",
-    "first_name": "John",
-    "last_name": "Doe",
-    "name": "John Doe"
-}
-```
 ```objective_c
 let request: AuthenticationRequest = authenticationRequest()
 // TODO populate authenticationRequest object
@@ -206,10 +191,6 @@ private final static String API_KEY = "ABC123";
 private RezolveSession rezolveSession;
 
 RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
-
-
-
-
 ```
 To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
 * Verifies the validity of the mobile app, through the API key
@@ -221,6 +202,12 @@ Once the user is authenticated on the partner side, make a call to `createSessio
 
 ### Logout Session
 
+``` objective_c
+TODO add code sample, IOS
+```
+```java
+TODO add code sample, Android
+```
 Logging a user out is as simple as passing the `entity_id` to the logout method.
 
 ## Consumer Profile Management
