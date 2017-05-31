@@ -10,7 +10,6 @@ toc_footers:
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
-  - errors
 
 search: true
 ---
@@ -197,7 +196,7 @@ To log in and interact with Rezolve services, you must establish a session. A se
 * Verifies each request from the mobile app by passing API Key and session token
 * establishes a public key for the session, for encrypting transmitted credit card info
 
-Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id`. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
+Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id` and a `deviceProfile` object. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
 
 When the session is established, you can begin to access services, for example:
 `session.CustomerProfileService.get`
@@ -347,11 +346,44 @@ TODO
 # Module Reference Docs
 
 ## Authentication
+Authentication services are an aggregate of SDK. 
 ### register
+Method signature: `sdk.register(SignUpRequest, SignUpResponse)`
+
+#### signUpRequest Object
+
+|field|format|example|
+|---|---|---|
+|email|string|user@domain.com|
+|first_name|string|John|
+|last_name|string|Doe|
+|deviceProfile|object|&nbsp;|
+
+#### deviceProfile Object
+
+|field|format|example|
+|---|---|---|
+|device_id|string|bd17391f9561|
+|make|string|apple|
+|os_type|string|iOS|
+|os_version|string|10.3|
+|locale|locale as a combination of ISO 639-1 language code and ISO 3166-1 country code|en_GB|
+
+#### SignUpResponse Object
+<aside class="warning">
+Note, the values in the SignUpResponse should be persisted at least for the life of the install. Persisting on the partner server is recommended, as this allows for Rezolve account reassociation after an uninstall/reinstall.
+</aside>
+
+|field|format|example|
+|---|---|---|
+|partner_id|string|rezolve|
+|entity_id|string|9310c880695c|
+
 ### createSession
 ### logout
 
 ## ProfileService
+Profile services are an aggregate of Session. 
 ### get 
 ### update
 
