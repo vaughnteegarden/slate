@@ -391,19 +391,23 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <span class="n">sdk</span><span class="p">.</span><span class="n">createSession</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">session</span><span class="o">:</span> <span class="n">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
     <span class="c1">// begin interacting with features
+</span>    <span class="c1">// example: session.CustomerProfileService.get
 </span><span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"ABC123"</span><span class="o">;</span>
-<span class="kd">private</span> <span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">;</span>
-
-<span class="n">RezolveSDK</span> <span class="n">sdk</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">DEVELOPMENT</span><span class="o">);</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span>
 </code></pre>
-<p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
-* Verifies the validity of the mobile app, through the API key
-* Identifies the consumer and pairs them with a session token
-* Verifies each request from the mobile app by passing API Key and session token
-* establishes a public key for the session, for encrypting transmitted credit card info</p>
+<p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:</p>
 
-<p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code>. The server will respond with a session authentication token, and a session public key. The SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of sensitive information for this session.</p>
+<ul>
+<li>Verifies the validity of the mobile app, through the API key</li>
+<li>Identifies the consumer and pairs them with a session token</li>
+<li>Verifies each request from the mobile app by passing API Key and session token</li>
+<li>establishes a public key for the session, for encrypting transmitted credit card info</li>
+</ul>
+
+<p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code>. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.</p>
+
+<p>When the session is established, you can begin to access services, for example:
+<code class="prettyprint">session.CustomerProfileService.get</code></p>
 
 <h3 id="logout-session">Logout Session</h3>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
@@ -414,14 +418,16 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <h2 id="consumer-profile-management">Consumer Profile Management</h2>
 
 <p>Once logged in, you have access to the consumer&rsquo;s records. These include:
-* Consumer Profile - Name, email, and device profile (phone info) for the consumer
-* Address Book - A collection of postal addresses, to be used for ship-to and bill-to purposes.
-* Favorites - A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
-* Wallet - Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</p>
+* Consumer Profile - Via the <code class="prettyprint">ConsumerProfileService</code>. Name, email, and device profile (phone info) for the consumer
+* Address Book - Via the <code class="prettyprint">AddressbookService</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Favorites - Via the <code class="prettyprint">FavouriteService</code>. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
+* Wallet - Via the <code class="prettyprint">WalletService</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</p>
 
-<p>There are no specific flows to consider when managing the customer profile and assicated records. The consumer profile itself supports only update&hellip; no add or delete. </p>
+<p>There are no specific flows to consider when managing the customer profile and assicated records.  </p>
 
-<p>Address Book, Favorites, and Wallet all support standard CRUD operations. </p>
+<p>AddressbookService, FavouriteService, and WalletService support the following CRUD operations: <code class="prettyprint">create</code>, <code class="prettyprint">update</code>, <code class="prettyprint">delete</code>, <code class="prettyprint">getAll</code>, <code class="prettyprint">get</code>.</p>
+
+<p>ProfileService supports only <code class="prettyprint">update</code> and <code class="prettyprint">get</code>.</p>
 
 <h2 id="instant-buy-flow">Instant buy flow</h2>
 
@@ -430,48 +436,70 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>The premise of instant purchase is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
 <p>First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the &ldquo;payoff&rdquo; URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProduct</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProduct</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>Use the SDK <code class="prettyprint">getProduct</code> call to retrieve product information. The <code class="prettyprint">partner_id</code>, <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code> and <code class="prettyprint">product_id</code> will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>Once you have product information, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). </p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h2 id="top-up-flow">Top Up flow</h2>
 
 <p><img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]</p>
-
-<p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">favouriteService.create</code> method. Once there is one or more favorites, use the <code class="prettyprint">favouriteService.getAll</code> method to list them. The customer will choose a favorite.</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="p">.</span><span class="n">create</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="o">.</span><span class="na">create</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
+<p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteService.create</code> method. </p>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
+<p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteService.getAll</code> method to list them. The customer will choose a favorite.</p>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProducts</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProducts</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>The customer then wants to see a list of top up amounts. To accomplish this, we use the <code class="prettyprint">getProducts</code> method, passing in a fixed category id. Note that each top up amount is stored in the catalog as a separate product with it&rsquo;s own SKU.</p>
 
 <p>Display the list of top up choices. You can display each &ldquo;product&rdquo; as a currency amount, or utilize the &ldquo;description&rdquo; field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>When you have the product choice, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h1 id="error-handling">Error Handling</h1>
 
 <h1 id="module-reference-docs">Module Reference Docs</h1>
 
+<h2 id="authentication">Authentication</h2>
+
 <h2 id="customer">Customer</h2>
 
-<h3 id="register-customer-method">Register customer method</h3>
-
-<h3 id="log-in-customer">Log in customer</h3>
-
-<h3 id="log-out-customer">Log out customer</h3>
-
 <h2 id="shop">Shop</h2>
+
+<h2 id="activity">Activity</h2>
+
+<h2 id="check-version">Check Version</h2>
 
           <h1 id="errors">Errors</h1>
 
