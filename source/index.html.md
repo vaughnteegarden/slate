@@ -233,8 +233,10 @@ ProfileService supports only `update` and `get`.
 
 The premise of instant purchase is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
+##### 1. Capture image and get product URL
 First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the "payoff" URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
 
+##### 2. Fetch product info
 ``` objective_c
 TODO add getProduct code sample, IOS
 ```
@@ -243,6 +245,7 @@ TODO add getProduct code sample, Android
 ```
 Use the SDK `getProduct` call to retrieve product information. The `partner_id`, `merchant_id`, `catalog_id` and `product_id` will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.
 
+##### 3. Get an order total
 ``` objective_c
 TODO add checkoutOrder code sample, IOS
 ```
@@ -251,6 +254,7 @@ TODO add checkoutOrder code sample, Android
 ```
 Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
 
+##### 4. Show payment card choices
 ``` objective_c
 TODO add walletService.getAll code sample, IOS
 ```
@@ -261,6 +265,7 @@ If the consumer agrees with the price and wishes to complete the order, use `wal
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
+##### 5. Submit payment for order
 ``` objective_c
 TODO add buyOrder code sample, IOS
 ```
@@ -273,15 +278,16 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 <img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]
 
+##### 1. Add the top up target as a Favorite
 ``` objective_c
 TODO add FavouriteService.create code sample, IOS
 ```
 ```java
 TODO add FavouriteService.create code sample, Android
 ```
-
 The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteService.create` method. 
 
+##### 2. List available favorites 
 ``` objective_c
 TODO add FavouriteService.getAll code sample, IOS
 ```
@@ -290,16 +296,18 @@ TODO add FavouriteService.getAll code sample, Android
 ```
 Once there is one or more favorites, use the `FavouriteService.getAll` method to list them. The customer will choose a favorite.
 
+##### 3. Get a list of topup amounts using getProducts
 ``` objective_c
 TODO add getProducts code sample, IOS
 ```
 ```java
 TODO add getProducts code sample, Android
 ```
-The customer then wants to see a list of top up amounts. To accomplish this, we use the `getProducts` method, passing in a fixed category id. Note that each top up amount is stored in the catalog as a separate product with it's own SKU.
+The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, we use the `getProducts` method, passing in a fixed category id. 
 
 Display the list of top up choices. You can display each "product" as a currency amount, or utilize the "description" field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.
 
+##### 4. Get an order total
 ``` objective_c
 TODO add checkoutOrder code sample, IOS
 ```
@@ -308,6 +316,7 @@ TODO add checkoutOrder code sample, Android
 ```
 When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
+##### 5. Show payment card choices
 ``` objective_c
 TODO add walletService.getAll code sample, IOS
 ```
@@ -318,6 +327,7 @@ If the consumer agrees with the price and wishes to complete the order, use `wal
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
+##### 6. Submit payment for order
 ``` objective_c
 TODO add buyOrder code sample, IOS
 ```
@@ -329,6 +339,7 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 # Error Handling
 
+TODO
 
 
 
@@ -336,11 +347,51 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 # Module Reference Docs
 
 ## Authentication
+### register
+### createSession
+### logout
 
-## Customer
+## ProfileService
+### get 
+### update
+
+## FavoriteService
+### create
+### update
+### delete
+### getAll
+### get
+
+## AddressbookService
+### create
+### update
+### delete
+### getAll
+### get
+
+## WalletService
+### create
+### update
+### delete
+### getAll
+### get
 
 ## Shop
+### getMerchants
+### getCatalogs
+### getCatalog
+### getProducts
+### getProduct
 
 ## Activity
+### getOrders
 
-## Check Version
+## Checkout
+### checkoutOrder
+### buyOrder
+### signOrderUpdates
+
+## API Check
+### checkVersion
+### getStatus
+### checkUpgrade
