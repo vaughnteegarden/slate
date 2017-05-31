@@ -149,10 +149,6 @@ This section will describe how to:
     "name": "John Doe"
 }
 ```
-To register a user, you will need to call the sdk `registerUser` method, passing in an `authenticationRequest` object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
-
-
-
 ```objective_c
 let request: AuthenticationRequest = authenticationRequest()
 // TODO populate authenticationRequest object
@@ -180,6 +176,8 @@ sdk.registerUser(myAuthenticationRequest, this);
 
 //TODO catch response
 ```
+To register a user, you will need to call the sdk `registerUser` method, passing in an `authenticationRequest` object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
+
 The `registerUser` method is used as shown to the right. Upon successful registration, the response will contain a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
 
 <aside class="notice">
@@ -192,11 +190,6 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 
 ### Create Session
-To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
-* Verifies the validity of the mobile app, through the API key
-* Identifies the consumer and pairs them with a session token
-* Verifies each request from the mobile app by passing API Key and session token
-* establishes a public key for the session, for encrypting transmitted credit card info
 
 ``` objective_c
 let request: AuthenticationRequest = authenticationRequest()
@@ -218,6 +211,12 @@ RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
 
 
 ```
+To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
+* Verifies the validity of the mobile app, through the API key
+* Identifies the consumer and pairs them with a session token
+* Verifies each request from the mobile app by passing API Key and session token
+* establishes a public key for the session, for encrypting transmitted credit card info
+
 Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id`. The server will respond with a session authentication token, and a session public key. The SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of sensitive information for this session.
 
 ### Logout Session
