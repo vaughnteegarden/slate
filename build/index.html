@@ -360,9 +360,7 @@ TODO: anything to import per file to use functions?</p>
     </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>To register a user, you will need to call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">authenticationRequest</code> object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
+</span></code></pre><pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
 <span class="c1">// TODO populate authenticationRequest object
 </span>
 <span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
@@ -386,6 +384,8 @@ TODO: anything to import per file to use functions?</p>
 
 <span class="c1">//TODO catch response</span>
 </code></pre>
+<p>To register a user, you will need to call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">authenticationRequest</code> object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
+
 <p>The <code class="prettyprint">registerUser</code> method is used as shown to the right. Upon successful registration, the response will contain a <code class="prettyprint">partner_id</code> and an <code class="prettyprint">entity_id</code>. <strong>Persist both these values for the life of the app.</strong></p>
 
 <aside class="notice">
@@ -397,12 +397,6 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 </aside>
 
 <h3 id="create-session">Create Session</h3>
-
-<p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
-* Verifies the validity of the mobile app, through the API key
-* Identifies the consumer and pairs them with a session token
-* Verifies each request from the mobile app by passing API Key and session token
-* establishes a public key for the session, for encrypting transmitted credit card info</p>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
 <span class="c1">// TODO populate authenticationRequest object
 </span>
@@ -420,6 +414,12 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 
 </code></pre>
+<p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
+* Verifies the validity of the mobile app, through the API key
+* Identifies the consumer and pairs them with a session token
+* Verifies each request from the mobile app by passing API Key and session token
+* establishes a public key for the session, for encrypting transmitted credit card info</p>
+
 <p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code>. The server will respond with a session authentication token, and a session public key. The SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of sensitive information for this session.</p>
 
 <h3 id="logout-session">Logout Session</h3>
