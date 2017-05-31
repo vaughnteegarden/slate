@@ -347,20 +347,7 @@ TODO: anything to import per file to use functions?</p>
 <p><img src="images/loginsequencediagram.png" style="margin:6px 0;"><br/>[ <a href="images/loginsequencediagram.png">View full size</a> ]</p>
 
 <h3 id="register-user">Register User</h3>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"device"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"device_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bd17391f9561"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"make"</span><span class="p">:</span><span class="w"> </span><span class="s2">"apple"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"os_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iOS"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"os_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10.3"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"locale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Europe/London"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@domain.com"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre><pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
 <span class="c1">// TODO populate authenticationRequest object
 </span>
 <span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
@@ -409,10 +396,6 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <span class="kd">private</span> <span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">;</span>
 
 <span class="n">RezolveSDK</span> <span class="n">sdk</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">DEVELOPMENT</span><span class="o">);</span>
-
-
-
-
 </code></pre>
 <p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
 * Verifies the validity of the mobile app, through the API key
@@ -423,7 +406,9 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code>. The server will respond with a session authentication token, and a session public key. The SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of sensitive information for this session.</p>
 
 <h3 id="logout-session">Logout Session</h3>
-
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+</code></pre>
 <p>Logging a user out is as simple as passing the <code class="prettyprint">entity_id</code> to the logout method.</p>
 
 <h2 id="consumer-profile-management">Consumer Profile Management</h2>
