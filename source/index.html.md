@@ -169,7 +169,7 @@ The `registerUser` method is used as shown to the right. Upon successful registr
 You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
 </aside>
 
-<aside class="alert">
+<aside class="warning">
 It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
 </aside>
 
