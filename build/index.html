@@ -435,23 +435,23 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>The premise of instant purchase is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
-<h5 id="1-capture-image-and-get-product-url">1. Capture image and get product URL</h5>
+<h4 id="1-capture-image-and-get-product-url">1. Capture image and get product URL</h4>
 
 <p>First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the &ldquo;payoff&rdquo; URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.</p>
 
-<h5 id="2-fetch-product-info">2. Fetch product info</h5>
+<h4 id="2-fetch-product-info">2. Fetch product info</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProduct</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProduct</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
 <p>Use the SDK <code class="prettyprint">getProduct</code> call to retrieve product information. The <code class="prettyprint">partner_id</code>, <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code> and <code class="prettyprint">product_id</code> will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.</p>
 
-<h5 id="3-get-an-order-total">3. Get an order total</h5>
+<h4 id="3-get-an-order-total">3. Get an order total</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
 <p>Once you have product information, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). </p>
 
-<h5 id="4-show-payment-card-choices">4. Show payment card choices</h5>
+<h4 id="4-show-payment-card-choices">4. Show payment card choices</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
@@ -459,7 +459,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
-<h5 id="5-submit-payment-for-order">5. Submit payment for order</h5>
+<h4 id="5-submit-payment-for-order">5. Submit payment for order</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
@@ -469,19 +469,19 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p><img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]</p>
 
-<h5 id="1-add-the-top-up-target-as-a-favorite">1. Add the top up target as a Favorite</h5>
+<h4 id="1-add-the-top-up-target-as-a-favorite">1. Add the top up target as a Favorite</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="p">.</span><span class="n">create</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="o">.</span><span class="na">create</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
 <p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteService.create</code> method. </p>
 
-<h5 id="2-list-available-favorites">2. List available favorites</h5>
+<h4 id="2-list-available-favorites">2. List available favorites</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
 <p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteService.getAll</code> method to list them. The customer will choose a favorite.</p>
 
-<h5 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h5>
+<h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProducts</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProducts</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
@@ -489,13 +489,13 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>Display the list of top up choices. You can display each &ldquo;product&rdquo; as a currency amount, or utilize the &ldquo;description&rdquo; field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.</p>
 
-<h5 id="4-get-an-order-total">4. Get an order total</h5>
+<h4 id="4-get-an-order-total">4. Get an order total</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
 <p>When you have the product choice, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).</p>
 
-<h5 id="5-show-payment-card-choices">5. Show payment card choices</h5>
+<h4 id="5-show-payment-card-choices">5. Show payment card choices</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
@@ -503,7 +503,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
-<h5 id="6-submit-payment-for-order">6. Submit payment for order</h5>
+<h4 id="6-submit-payment-for-order">6. Submit payment for order</h4>
 <pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
 </code></pre>
