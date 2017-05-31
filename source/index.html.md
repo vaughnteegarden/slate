@@ -134,8 +134,6 @@ This section will describe how to:
 
 ### Register User
 
->Structure of authenticationRequest object. It is used with both the registerUser and createSession methods.
-
 ```json
 {
     "device": {
