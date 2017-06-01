@@ -510,190 +510,46 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h1 id="error-handling">Error Handling</h1>
-
-<p>TODO</p>
-
-<h1 id="module-reference-docs">Module Reference Docs</h1>
-
-<h2 id="authentication">Authentication</h2>
-
-<p>Authentication services are an aggregate of SDK. </p>
-
-<h3 id="register">register</h3>
-
-<p>Method signature: <code class="prettyprint">sdk.register(SignUpRequest, SignUpResponse)</code></p>
-
-<h4 id="signuprequest-object">signUpRequest Object</h4>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"errors"</span><span class="p">:[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="s2">"&lt;error_type&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="p">:</span><span class="s2">"&lt;error_code&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="s2">"&lt;error_message&gt;"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>All SDK methods use a uniform error format, as shown at the right. Possible values are:</p>
 
 <table><thead>
 <tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
+<th>Type</th>
+<th>Error Code</th>
+<th>Message</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>email</td>
-<td>string</td>
-<td>user@domain.com</td>
+<td>Authentication</td>
+<td>1</td>
+<td>Access is denied.</td>
 </tr>
 <tr>
-<td>first_name</td>
-<td>string</td>
-<td>John</td>
+<td>Registration</td>
+<td>2</td>
+<td>Registration failed.</td>
 </tr>
 <tr>
-<td>last_name</td>
-<td>string</td>
-<td>Doe</td>
+<td>Not Found</td>
+<td>4</td>
+<td>Requested resource not found</td>
 </tr>
 <tr>
-<td>deviceProfile</td>
-<td>object</td>
-<td>&nbsp;</td>
+<td>Bad Request</td>
+<td>5</td>
+<td>Incorrect or malformed parameters</td>
 </tr>
 </tbody></table>
-
-<h4 id="deviceprofile-object">deviceProfile Object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>device_id</td>
-<td>string</td>
-<td>bd17391f9561</td>
-</tr>
-<tr>
-<td>make</td>
-<td>string</td>
-<td>apple</td>
-</tr>
-<tr>
-<td>os_type</td>
-<td>string</td>
-<td>iOS</td>
-</tr>
-<tr>
-<td>os_version</td>
-<td>string</td>
-<td>10.3</td>
-</tr>
-<tr>
-<td>locale</td>
-<td>locale as a combination of ISO 639-1 language code and ISO 3166-1 country code</td>
-<td>en_GB</td>
-</tr>
-</tbody></table>
-
-<h4 id="signupresponse-object">SignUpResponse Object</h4>
-
-<aside class="warning">
-Note, the values in the SignUpResponse should be persisted at least for the life of the install. Persisting on the partner server is recommended, as this allows for Rezolve account reassociation after an uninstall/reinstall.
-</aside>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>partner_id</td>
-<td>string</td>
-<td>rezolve</td>
-</tr>
-<tr>
-<td>entity_id</td>
-<td>string</td>
-<td>9310c880695c</td>
-</tr>
-</tbody></table>
-
-<h3 id="createsession">createSession</h3>
-
-<h3 id="logout">logout</h3>
-
-<h2 id="profileservice">ProfileService</h2>
-
-<p>Profile services are an aggregate of Session. </p>
-
-<h3 id="get">get</h3>
-
-<h3 id="update">update</h3>
-
-<h2 id="favoriteservice">FavoriteService</h2>
-
-<h3 id="create">create</h3>
-
-<h3 id="update">update</h3>
-
-<h3 id="delete">delete</h3>
-
-<h3 id="getall">getAll</h3>
-
-<h3 id="get">get</h3>
-
-<h2 id="addressbookservice">AddressbookService</h2>
-
-<h3 id="create">create</h3>
-
-<h3 id="update">update</h3>
-
-<h3 id="delete">delete</h3>
-
-<h3 id="getall">getAll</h3>
-
-<h3 id="get">get</h3>
-
-<h2 id="walletservice">WalletService</h2>
-
-<h3 id="create">create</h3>
-
-<h3 id="update">update</h3>
-
-<h3 id="delete">delete</h3>
-
-<h3 id="getall">getAll</h3>
-
-<h3 id="get">get</h3>
-
-<h2 id="shop">Shop</h2>
-
-<h3 id="getmerchants">getMerchants</h3>
-
-<h3 id="getcatalogs">getCatalogs</h3>
-
-<h3 id="getcatalog">getCatalog</h3>
-
-<h3 id="getproducts">getProducts</h3>
-
-<h3 id="getproduct">getProduct</h3>
-
-<h2 id="activity">Activity</h2>
-
-<h3 id="getorders">getOrders</h3>
-
-<h2 id="checkout">Checkout</h2>
-
-<h3 id="checkoutorder">checkoutOrder</h3>
-
-<h3 id="buyorder">buyOrder</h3>
-
-<h3 id="signorderupdates">signOrderUpdates</h3>
-
-<h2 id="api-check">API Check</h2>
-
-<h3 id="checkversion">checkVersion</h3>
-
-<h3 id="getstatus">getStatus</h3>
-
-<h3 id="checkupgrade">checkUpgrade</h3>
 
           <h1 id="module-reference-docs">Module Reference Docs</h1>
 
@@ -701,7 +557,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>Authentication services are an aggregate of SDK. </p>
 
-<h3 id="register">register</h3>
+<h3 id="register">Register</h3>
 
 <p>Method signature: <code class="prettyprint">sdk.register(SignUpRequest, SignUpResponse)</code></p>
 
@@ -772,7 +628,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h4 id="signupresponse-object">SignUpResponse Object</h4>
+<h4 id="signupresponse-object">signUpResponse Object</h4>
 
 <aside class="warning">
 Note, the values in the SignUpResponse should be persisted at least for the life of the install. Persisting on the partner server is recommended, as this allows for Rezolve account reassociation after an uninstall/reinstall.
@@ -797,13 +653,59 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="createsession">createSession</h3>
+<h3 id="create-session">Create Session</h3>
+
+<p>Method signature: <code class="prettyprint">sdk.createSession(entityId, partnerId, DeviceProfile, RezolveSession)</code></p>
+
+<p><code class="prettyprint">entity_id</code> is a string, returned from sdk.register</p>
+
+<p><code class="prettyprint">partner_id</code> is a string, returned from sdk.register</p>
+
+<h4 id="deviceprofile-object">deviceProfile Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>device_id</td>
+<td>string</td>
+<td>bd17391f9561</td>
+</tr>
+<tr>
+<td>make</td>
+<td>string</td>
+<td>apple</td>
+</tr>
+<tr>
+<td>os_type</td>
+<td>string</td>
+<td>iOS</td>
+</tr>
+<tr>
+<td>os_version</td>
+<td>string</td>
+<td>10.3</td>
+</tr>
+<tr>
+<td>locale</td>
+<td>locale as a combination of ISO 639-1 language code and ISO 3166-1 country code</td>
+<td>en_GB</td>
+</tr>
+</tbody></table>
 
 <h3 id="logout">logout</h3>
 
+<p>Method signature: <code class="prettyprint">sdk.logout(entityId)</code></p>
+
+<p><code class="prettyprint">entity_id</code> is a string, returned from sdk.register</p>
+
 <h2 id="profileservice">ProfileService</h2>
 
-<p>Profile services are an aggregate of Session. </p>
+<p>Profile services are an aggregate of Session.</p>
 
 <h3 id="get">get</h3>
 
