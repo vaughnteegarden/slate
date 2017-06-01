@@ -553,13 +553,19 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
           <h1 id="module-reference-docs">Module Reference Docs</h1>
 
-<h2 id="authentication">Authentication</h2>
+<h2 id="module-authentication">Module: Authentication</h2>
 
-<p>Authentication services are an aggregate of SDK. </p>
+<p>Authentication services are an aggregate of SDK.</p>
 
-<h3 id="register">Register</h3>
+<p>This module handles consumer user creation and authentication.</p>
 
-<p>Method signature: <code class="prettyprint">sdk.register(SignUpRequest, SignUpResponse)</code></p>
+<h3 id="method-register">Method: Register</h3>
+
+<p>Method signature: <code class="prettyprint">sdk.register( SignUpRequest )</code></p>
+
+<p>You must pass in a valid <code class="prettyprint">signUpRequest</code> object.</p>
+
+<p>The method returns a <code class="prettyprint">signUpResponse</code> object.</p>
 
 <h4 id="signuprequest-object">signUpRequest Object</h4>
 
@@ -601,6 +607,11 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <th>example</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
 <tr>
 <td>device_id</td>
 <td>string</td>
@@ -653,13 +664,15 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="create-session">Create Session</h3>
+<h3 id="method-create-session">Method: Create Session</h3>
 
-<p>Method signature: <code class="prettyprint">sdk.createSession(entityId, partnerId, DeviceProfile, RezolveSession)</code></p>
+<p>Method signature: <code class="prettyprint">sdk.createSession( entityId, partnerId, DeviceProfile )</code></p>
 
-<p><code class="prettyprint">entity_id</code> is a string, returned from sdk.register</p>
+<p><code class="prettyprint">entity_id</code> is a string, returned from <code class="prettyprint">sdk.register</code></p>
 
-<p><code class="prettyprint">partner_id</code> is a string, returned from sdk.register</p>
+<p><code class="prettyprint">partner_id</code> is a string, returned from <code class="prettyprint">sdk.register</code></p>
+
+<p>The method returns a <code class="prettyprint">rezolveSession</code> object.</p>
 
 <h4 id="deviceprofile-object">deviceProfile Object</h4>
 
@@ -670,6 +683,11 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <th>example</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
 <tr>
 <td>device_id</td>
 <td>string</td>
@@ -697,87 +715,471 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="logout">logout</h3>
+<h4 id="rezolvesession-object">rezolveSession Object</h4>
 
-<p>Method signature: <code class="prettyprint">sdk.logout(entityId)</code></p>
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>partner_id</td>
+<td>string</td>
+<td>rezolve</td>
+</tr>
+<tr>
+<td>entity_id</td>
+<td>string</td>
+<td>9310c880695c</td>
+</tr>
+<tr>
+<td>deviceProfile</td>
+<td>object</td>
+<td></td>
+</tr>
+</tbody></table>
 
-<p><code class="prettyprint">entity_id</code> is a string, returned from sdk.register</p>
+<h3 id="method-logout">Method: Logout</h3>
 
-<h2 id="profileservice">ProfileService</h2>
+<p>Method signature: <code class="prettyprint">sdk.logout( entityId )</code></p>
 
-<p>Profile services are an aggregate of Session.</p>
+<p><code class="prettyprint">entity_id</code> is a string, returned from <code class="prettyprint">sdk.register</code>.</p>
 
-<h3 id="get">get</h3>
+<h2 id="module-profileservice">Module: ProfileService</h2>
 
-<h3 id="update">update</h3>
+<p>The ProfileService is an aggregate of Session.</p>
 
-<h2 id="favoriteservice">FavoriteService</h2>
+<p>This module handles maintaining the consumer&rsquo;s contact information and device info.</p>
 
-<h3 id="create">create</h3>
+<h3 id="method-get">Method: get</h3>
 
-<h3 id="update">update</h3>
+<p>Method signature: <code class="prettyprint">session.customerProfileService.get()</code></p>
 
-<h3 id="delete">delete</h3>
+<p>No parameters are required to be passed in. It will always fetch the profile for the authenticated consumer.</p>
 
-<h3 id="getall">getAll</h3>
+<p>The method returns a <code class="prettyprint">customerProfile</code> object.</p>
 
-<h3 id="get">get</h3>
+<h4 id="customerprofile-object">customerProfile Object</h4>
 
-<h2 id="addressbookservice">AddressbookService</h2>
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
+<tr>
+<td>entity_id</td>
+<td>string</td>
+<td>9310c880695c</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Mr.</td>
+</tr>
+<tr>
+<td>first_name</td>
+<td>string</td>
+<td>John</td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>string</td>
+<td>Doe</td>
+</tr>
+<tr>
+<td>email</td>
+<td>string</td>
+<td>user@domain.com</td>
+</tr>
+<tr>
+<td>timezone</td>
+<td>string</td>
+<td>Europe/London</td>
+</tr>
+<tr>
+<td>date_created</td>
+<td>unix timestamp integer</td>
+<td>1492805827</td>
+</tr>
+<tr>
+<td>date_updated</td>
+<td>unix timestamp integer</td>
+<td>1492805827</td>
+</tr>
+<tr>
+<td>devices</td>
+<td>array of deviceProfile objects</td>
+<td></td>
+</tr>
+</tbody></table>
 
-<h3 id="create">create</h3>
+<h4 id="deviceprofile-object">deviceProfile Object</h4>
 
-<h3 id="update">update</h3>
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
+<tr>
+<td>device_id</td>
+<td>string</td>
+<td>bd17391f9561</td>
+</tr>
+<tr>
+<td>make</td>
+<td>string</td>
+<td>apple</td>
+</tr>
+<tr>
+<td>os_type</td>
+<td>string</td>
+<td>iOS</td>
+</tr>
+<tr>
+<td>os_version</td>
+<td>string</td>
+<td>10.3</td>
+</tr>
+<tr>
+<td>locale</td>
+<td>locale as a combination of ISO 639-1 language code and ISO 3166-1 country code</td>
+<td>en_GB</td>
+</tr>
+</tbody></table>
 
-<h3 id="delete">delete</h3>
+<h3 id="method-update">Method: update</h3>
 
-<h3 id="getall">getAll</h3>
+<p>Method signature: <code class="prettyprint">session.customerProfileService.update( customerProfile )</code></p>
 
-<h3 id="get">get</h3>
+<p>The profile update method works only for the updating of consumer personal data. Device profiles and date stamps are not editable.</p>
 
-<h2 id="walletservice">WalletService</h2>
+<p>A full <code class="prettyprint">customerProfile</code> object must be supplied.</p>
 
-<h3 id="create">create</h3>
+<p>The modified <code class="prettyprint">customerProfile</code> object is returned upon success.</p>
 
-<h3 id="update">update</h3>
+<h2 id="module-addressbookservice">Module: AddressbookService</h2>
 
-<h3 id="delete">delete</h3>
+<p>The AddressbookService is an aggregate of Session.</p>
 
-<h3 id="getall">getAll</h3>
+<p>This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.</p>
 
-<h3 id="get">get</h3>
+<h3 id="method-create">Method: create</h3>
 
-<h2 id="shop">Shop</h2>
+<p>Method signature: <code class="prettyprint">session.addressbookService.create( address )</code></p>
 
-<h3 id="getmerchants">getMerchants</h3>
+<p>You must pass in a valid <code class="prettyprint">address</code> object with the <code class="prettyprint">id</code> field blank.</p>
 
-<h3 id="getcatalogs">getCatalogs</h3>
+<p>The method returns the created <code class="prettyprint">address</code> object with <code class="prettyprint">id</code> upon success.</p>
 
-<h3 id="getcatalog">getCatalog</h3>
+<h4 id="address-object">address Object</h4>
 
-<h3 id="getproducts">getProducts</h3>
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
+<tr>
+<td>short_name</td>
+<td>string</td>
+<td>My house</td>
+</tr>
+<tr>
+<td>line1</td>
+<td>string</td>
+<td>Theodore Lowe</td>
+</tr>
+<tr>
+<td>line2</td>
+<td>string</td>
+<td>Ap #867-859 Sit Rd.</td>
+</tr>
+<tr>
+<td>city</td>
+<td>string</td>
+<td>New York</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>NY</td>
+</tr>
+<tr>
+<td>zip</td>
+<td>string</td>
+<td>39531</td>
+</tr>
+<tr>
+<td>country</td>
+<td>string</td>
+<td>USA</td>
+</tr>
+</tbody></table>
 
-<h3 id="getproduct">getProduct</h3>
+<h3 id="method-update">Method: update</h3>
 
-<h2 id="activity">Activity</h2>
+<p>Method signature: <code class="prettyprint">session.addressbookService.update( address )</code></p>
 
-<h3 id="getorders">getOrders</h3>
+<p>You must pass in a valid <code class="prettyprint">address</code> object with <code class="prettyprint">id</code> populated.</p>
 
-<h2 id="checkout">Checkout</h2>
+<p>The method returns the updated <code class="prettyprint">address</code> object upon success.</p>
 
-<h3 id="checkoutorder">checkoutOrder</h3>
+<h3 id="method-delete">Method: delete</h3>
 
-<h3 id="buyorder">buyOrder</h3>
+<p>Method signature: <code class="prettyprint">session.addressbookService.delete( id )</code></p>
 
-<h3 id="signorderupdates">signOrderUpdates</h3>
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">address</code> to delete.</p>
 
-<h2 id="api-check">API Check</h2>
+<h3 id="method-get">Method: get</h3>
 
-<h3 id="checkversion">checkVersion</h3>
+<p>Method signature: <code class="prettyprint">session.addressbookService.get( id )</code></p>
 
-<h3 id="getstatus">getStatus</h3>
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">address</code> to get.</p>
 
-<h3 id="checkupgrade">checkUpgrade</h3>
+<p>The method returns an <code class="prettyprint">address</code> object.</p>
+
+<h3 id="method-getall">Method: getAll</h3>
+
+<p>Method signature: <code class="prettyprint">session.addressbookService.getAll()</code></p>
+
+<p>The method returns an array of <code class="prettyprint">address</code> objects.</p>
+
+<h2 id="module-favoriteservice">Module: FavoriteService</h2>
+
+<p>The FavoriteService is an aggregate of Session.</p>
+
+<p>This module provides CRUD functions for Favorites. The term &ldquo;Favorite&rdquo; refers to the target of a top up operation, in which money is added to a remote account associated with a device or service. The consumer may add one or more favorites to their account.</p>
+
+<h3 id="method-create">Method: create</h3>
+
+<p>Method signature: <code class="prettyprint">session.favouriteService.create()</code></p>
+
+<p>You must pass in a <code class="prettyprint">favourite</code> object with the <code class="prettyprint">id</code> field blank.</p>
+
+<p>The method returns the created <code class="prettyprint">favourite</code> object with <code class="prettyprint">id</code> upon success.</p>
+
+<h4 id="favourite-object">favourite Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>new_id_123</td>
+</tr>
+<tr>
+<td>value</td>
+<td>string</td>
+<td>549912341234</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>phone</td>
+</tr>
+<tr>
+<td>provider</td>
+<td>string</td>
+<td>AT&amp;T</td>
+</tr>
+</tbody></table>
+
+<h3 id="method-update">Method: update</h3>
+
+<p>Method signature: <code class="prettyprint">session.favouriteService.update( favourite )</code></p>
+
+<p>You must pass in a valid <code class="prettyprint">favourite</code> object with <code class="prettyprint">id</code> populated.</p>
+
+<p>The method returns the updated <code class="prettyprint">favourite</code> object upon success.</p>
+
+<h3 id="method-delete">Method: delete</h3>
+
+<p>Method signature: <code class="prettyprint">session.favouriteService.delete( id )</code></p>
+
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">favourite</code> to delete.</p>
+
+<h3 id="method-get">Method: get</h3>
+
+<p>Method signature: <code class="prettyprint">session.favouriteService.get( id )</code></p>
+
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">favourite</code> to get.</p>
+
+<p>The method returns an <code class="prettyprint">favourite</code> object.</p>
+
+<h3 id="method-getall">Method: getAll</h3>
+
+<p>Method signature: <code class="prettyprint">session.favouriteService.getAll()</code></p>
+
+<p>The method returns an array of <code class="prettyprint">favourite</code> objects.</p>
+
+<h2 id="module-walletservice">Module: WalletService</h2>
+
+<p>The WalletService is an aggregate of Session.</p>
+
+<p>This module provides CRUD functions for payment cards.  The consumer may add one or more payment cards to their account.</p>
+
+<h3 id="method-create">Method: create</h3>
+
+<p>Method signature: <code class="prettyprint">session.walletService.create()</code></p>
+
+<p>You must pass in a <code class="prettyprint">paymentCard</code> object with the <code class="prettyprint">id</code> field blank.</p>
+
+<p>TODO describe how to encrypt PAN</p>
+
+<p>The method returns the created <code class="prettyprint">paymentCard</code> object with <code class="prettyprint">id</code> upon success.</p>
+
+<h4 id="paymentcard-object">paymentCard Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123</td>
+</tr>
+<tr>
+<td>short_name</td>
+<td>string</td>
+<td>black amex</td>
+</tr>
+<tr>
+<td>pan</td>
+<td>string</td>
+<td>gWkxi0kiMJnEagRpm5dXmggWOrblj9+wsasm8Ysjp</td>
+</tr>
+<tr>
+<td>pan6</td>
+<td>string</td>
+<td>123456</td>
+</tr>
+<tr>
+<td>pan4</td>
+<td>string</td>
+<td>1234</td>
+</tr>
+<tr>
+<td>brand</td>
+<td>string</td>
+<td>visa</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>debit</td>
+</tr>
+<tr>
+<td>name_on_card</td>
+<td>string</td>
+<td>John Curtis</td>
+</tr>
+<tr>
+<td>expires_on</td>
+<td>string</td>
+<td>08/17</td>
+</tr>
+<tr>
+<td>valid_from</td>
+<td>string</td>
+<td>08/14</td>
+</tr>
+<tr>
+<td>address_id</td>
+<td>string</td>
+<td>123</td>
+</tr>
+</tbody></table>
+
+<h3 id="method-update">Method: update</h3>
+
+<p>Method signature: <code class="prettyprint">session.walletService.update( paymentCard )</code></p>
+
+<p>You must pass in a valid <code class="prettyprint">paymentCard</code> object with <code class="prettyprint">id</code> populated.</p>
+
+<p>The method returns the updated <code class="prettyprint">paymentCard</code> object upon success.</p>
+
+<h3 id="method-delete">Method: delete</h3>
+
+<p>Method signature: <code class="prettyprint">session.walletService.delete( id )</code></p>
+
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">paymentCard</code> to delete.</p>
+
+<h3 id="method-get">Method: get</h3>
+
+<p>Method signature: <code class="prettyprint">session.walletService.get( id )</code></p>
+
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">paymentCard</code> to get.</p>
+
+<p>The method returns a <code class="prettyprint">paymentCard</code> object.</p>
+
+<h3 id="method-getall">Method: getAll</h3>
+
+<p>Method signature: <code class="prettyprint">session.walletService.getAll()</code></p>
+
+<p>The method returns an array of <code class="prettyprint">paymentCard</code> objects.</p>
+
+<h2 id="module-shop">Module: Shop</h2>
+
+<h3 id="method-getmerchants">Method: getMerchants</h3>
+
+<h3 id="method-getcatalogs">Method: getCatalogs</h3>
+
+<h3 id="method-getcatalog">Method: getCatalog</h3>
+
+<h3 id="method-getproducts">Method: getProducts</h3>
+
+<h3 id="method-getproduct">Method: getProduct</h3>
+
+<h2 id="module-activity">Module: Activity</h2>
+
+<h3 id="method-getorders">Method: getOrders</h3>
+
+<h2 id="module-checkout">Module: Checkout</h2>
+
+<h3 id="method-checkoutorder">Method: checkoutOrder</h3>
+
+<h3 id="method-buyorder">Method: buyOrder</h3>
+
+<h3 id="method-signorderupdates">Method: signOrderUpdates</h3>
+
+<h2 id="module-api-check">Module: API Check</h2>
+
+<h3 id="method-checkversion">Method: checkVersion</h3>
+
+<h3 id="method-getstatus">Method: getStatus</h3>
+
+<h3 id="method-checkupgrade">Method: checkUpgrade</h3>
 
       </div>
       <div class="dark-box">
