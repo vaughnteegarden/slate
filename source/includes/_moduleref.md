@@ -266,13 +266,25 @@ Method signature: `session.walletService.create()`
 
 You must pass in a `paymentCard` object with the `id` field blank.
 
+TODO describe how to encrypt PAN
+
 The method returns the created `paymentCard` object with `id` upon success.
 
 #### paymentCard Object
 
 |field|format|example|
 |---|---|---|
-
+|id|auto-assigned string|123|
+|short_name|string|black amex|
+|pan|string|gWkxi0kiMJnEagRpm5dXmggWOrblj9+wsasm8Ysjp|
+|pan6|string|123456|
+|pan4|string|1234|
+|brand|string|visa|
+|type|string|debit|
+|name_on_card|string|John Curtis|
+|expires_on|string|08/17|
+|valid_from|string|08/14|
+|address_id|string|123|
 
 ### Method: update
 
