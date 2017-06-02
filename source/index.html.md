@@ -22,6 +22,7 @@ The **Rezolve SDK** is a software development kit that enables the app developer
 ## Capabilities
 
 >Note: Code samples will appear in this column.
+
 ```
 Code samples for IOS and Android will appear here.
 
