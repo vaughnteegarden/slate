@@ -266,7 +266,7 @@ Method signature: `session.walletService.create()`
 
 You must pass in a `paymentCard` object with the `id` field blank.
 
-TODO describe how to encrypt PAN
+The SDK will encrypt the PAN (payment account number) using the session public key before transmission.
 
 The method returns the created `paymentCard` object with `id` upon success.
 
@@ -326,9 +326,89 @@ Shop is an aggregate of Session.
 The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.
 
 ### Method: getMerchants
+
+Method signature: `session.getMerchants()`
+
+The method returns an array of `merchant` objects.
+
+#### merchant Object
+
+|field|format|example|
+|---|---|---|
+|id|string|brookstone|
+|title|string|Brookstone|
+|logo_url|string|http://domain.com/path/logo.jpg|
+|image_url|string|http://domain.com/path/image.jpg|
+
+Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.
+
+
 ### Method: getCatalogs
+
+Method signature: `session.getCatalogs( merchant_id )`
+
+You must pass in the `id` of the `merchant` to whose catalogs you wish to get.
+
+The method returns an array of `catalog` objects owned by a specific merchant.
+
+#### catalog Object
+
+|field|format|example|
+|---|---|---|
+|id|string|2|
+|parent_id|integer|1|
+|title||Fitness Wear|
+|has_products|boolean|true|
+|has_catalogs|boolean|false|
+|image_url|string|http://domain.com/path/image.jpg|
+|catlogs|array of catalog objects| |
+
+Notes:
+
+If `has_catalogs` is `false`, the `catalogs` array should be empty.
+
+If `has_products` is `true`, call `getProducts` with the category `id` to get a product list.
+
 ### Method: getCatalog
+
+Method signature: `session.getCatalog( merchant_id, catalog_id )`
+
+The method returns a `catalog` object.
+
 ### Method: getProducts
+
+Method signature: `session.getProducts( merchant_id, catalog_id, pageNavigation)`
+
+You must pass a `merchant_id`, `catalog_id`, and a `pageNavivation` object. 
+
+The method returns a `pageResult` object.
+
+#### pageNavigation Object
+
+The pageNavigation object controls pagignation and sorting of paginated results. 
+
+|field|format|example|explanation|
+|---|---|---|---|
+|count|integer|10|number of items per page|
+|pageIndex|integer|1|what page of results you are requesting|
+|sortBy|string|productName|must be a field of the pageResult > SDKEntity object array (see below)|
+|sort|enum|one of: ASC, DESC|
+
+#### pageResult Object
+
+pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products. 
+
+|field|format|example|explanation|
+|---|---|---|---|
+|links|object| |object containing First, Next, Previous, Last links|
+|count|integer|10|items per page, as requested in pageNavigation.count|
+|total|integer|50|total items in SDKEntity array|
+|SDKEntity|array| |array of Product objects|
+
+#### links Object
+
+#### product Object
+
 ### Method: getProduct
 
 ## Module: Activity

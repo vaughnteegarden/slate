@@ -1,5 +1,5 @@
 ---
-title: Rezolve SDK Documentation
+title: Rezolve Inside (TM) SDK Documentation
 
 language_tabs:
   - objective_c: IOS
@@ -17,31 +17,41 @@ search: true
 
 # Introduction
 
-The **Rezolve SDK** is a software development kit that enables the app developer to integrate Rezolve's unique abilities within their app. 
-
+The **Rezolve Inside<sup>TM</sup> SDK** is a software development kit that enables mobile app developers to integrate Rezolve’s mobile commerce and engagement capabilities into their new or existing mobile apps.
 ## Capabilities
-> Note:
 
 ```html
-Code samples for IOS and Android will appear here.
+Note:
+
+Code samples for IOS and Android will appear in this column.
 
 You can switch between IOS and Android by clicking the tabs above.
 ```
 
-The Rezolve SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
+The Rezolve Inside<sup>TM</sup> SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
 
+* Enabling Shoppable Ads - <a href="images/RezolveOverview-ShoppableAds.pdf">see Shoppable Ads PDF</a>
+* Creating a browsable Mall - <a href="images/RezolveOverview-Mall.pdf">see Mall PDF</a>
+* Supporting Pre-pay account Top Up - <a href="images/RezolveOverview-TopUp.pdf">see Top Up PDF</a>
 * Consumer account creation and Rezolve login
 * Consumer profile and wallet management
 * Consumer management of topup devices
 * Scanning of Rezolve Encoded visual media
 * Listening to Rezolve Encoded audio media
-* Purchasing of scanned products
-* Purchasing of topups
 * Purchase history
 
 ## Intended audience
 
 This document is intended for experienced IOS and Android developer. It is expected that you have built apps before, and know your way around an IDE.
+
+## Term Definitions
+
+|Partner|The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app. |
+|Developer|The Developer is the mobile app developer of the Partner.|
+|Merchant|A merchant runs an ecommerce site that offers products for sale. Merchants also create Shoppable Ads and link them to products. A merchant may also offer device accounts that need Top Up. |
+|Consumer|The end user of the Partner's mobile app. The customer who buys merchant products.|
+|SDK|Refers to the Rezolve Inside<sup>TM</sup> SDK, unless otherwise specified.|
+
 
 ## For more information
 
@@ -55,31 +65,31 @@ TODO: Add contact info for sales inquiry.
 
 ## Get an API key
 
-Using the Rezolve API requires a contract. Please visit <a href="https://www.rezolve.com/#sectionForm">our contact form</a> and supply your info. We will respond ASAP, and provied an API key upon contract completion.
+You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please visit <a href="https://www.rezolve.com/#sectionForm">the contact page</a> and request an API key. We’ll establish some basic information to form a contract of use, and send for your approval. Upon signature, we will provide an API key for you to use.
 
 ## Download the SDK
 
-The Rezolve SDK for **IOS** can be downloaded here: <a href="#">TBD</a>
+The Rezolve Inside<sup>TM</sup> SDK for **IOS** can be downloaded here: <a href="#">TBD</a>
 
-The Rezolve SDK for **Android** can be downloaded here: <a href="#">TBD</a>
+The Rezolve Inside<sup>TM</sup> SDK for **Android** can be downloaded here: <a href="#">TBD</a>
 
 ## Set up the SDK - IOS
 
-**XCode** is the target IDE for these instructions.
+The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
 The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
 
 1. Open your existing project.<br/><br/>
 2. Go to the app target’s General configuration page.<br/><br/>
 3. Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
-4. Select your framework from the list of binaries that can be embedded.
+4. Select the Rezolve framework from the list of binaries that can be embedded.
 
 TODO: verify instructions with Marcos
 TODO: do we need to import anythinng per file, or otherwise set up the framework in code to use it? Marcos
 
 ## Set up the SDK - Android
 
-**Android Studio** is the target IDE for these instructions.
+The target IDE for Android instructions is **Android Studio**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
 The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
 
@@ -238,11 +248,11 @@ AddressbookService, FavouriteService, and WalletService support the following CR
 
 ProfileService supports only `update` and `get`.
 
-## Instant buy flow
+## Shoppable Ads flow
 
-<img src="images/Instant%20Purchase%20flow.png" style="margin:6px 0;"><br/>[ <a href="images/Instant%20Purchase%20flow.png">View full size</a> ]
+<img src="images/ShoppableAdsFlow.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdsFlow.png">View full size</a> ]
 
-The premise of instant purchase is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
+The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
 #### 1. Capture image and get product URL
 First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the "payoff" URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
