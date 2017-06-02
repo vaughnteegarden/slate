@@ -314,7 +314,17 @@ Method signature: `session.walletService.getAll()`
 
 The method returns an array of `paymentCard` objects.
 
+
+
+
+
+
 ## Module: Shop
+
+Shop is an aggregate of Session.
+
+The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.
+
 ### Method: getMerchants
 ### Method: getCatalogs
 ### Method: getCatalog

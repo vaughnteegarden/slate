@@ -21,6 +21,13 @@ The **Rezolve SDK** is a software development kit that enables the app developer
 
 ## Capabilities
 
+>Note: Code samples will appear in this column.
+```
+Code samples for IOS and Android will appear here.
+
+You can switch between IOS and Android by clicking the tabs above.
+```
+
 The Rezolve SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
 
 * Consumer account creation and Rezolve login
@@ -39,6 +46,10 @@ This document is intended for experienced IOS and Android developer. It is expec
 ## For more information
 
 For more information on Rezolve, see http://rezolve.com.
+
+TODO: Add pointer to tech support resource(s)
+
+TODO: Add contact info for sales inquiry.
 
 # Getting Started
 
