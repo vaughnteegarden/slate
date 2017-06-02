@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Rezolve SDK Documentation</title>
+    <title>Rezolve Inside (TM) SDK Documentation</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -229,33 +229,40 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>The <strong>Rezolve SDK</strong> is a software development kit that enables the app developer to integrate Rezolve&rsquo;s unique abilities within their app. </p>
+<p>The <strong>Rezolve Inside<sup>TM</sup> SDK</strong> is a software development kit that enables mobile app developers to integrate Rezolve’s mobile commerce and engagement capabilities into their new or existing mobile apps.</p>
 
 <h2 id="capabilities">Capabilities</h2>
+<pre class="highlight html tab-html"><code>Note:
 
-<blockquote>
-<p>Note:</p>
-</blockquote>
-<pre class="highlight html tab-html"><code>Code samples for IOS and Android will appear here.
+Code samples for IOS and Android will appear in this column.
 
 You can switch between IOS and Android by clicking the tabs above.
 </code></pre>
-<p>The Rezolve SDK is a full-featured application suite. Capabilities that can be integrated into your application include:</p>
+<p>The Rezolve Inside<sup>TM</sup> SDK is a full-featured application suite. Capabilities that can be integrated into your application include:</p>
 
 <ul>
+<li>Enabling Shoppable Ads - <a href="images/RezolveOverview-ShoppableAds.pdf">see Shoppable Ads PDF</a></li>
+<li>Creating a browsable Mall - <a href="images/RezolveOverview-Mall.pdf">see Mall PDF</a></li>
+<li>Supporting Pre-pay account Top Up - <a href="images/RezolveOverview-TopUp.pdf">see Top Up PDF</a></li>
 <li>Consumer account creation and Rezolve login</li>
 <li>Consumer profile and wallet management</li>
 <li>Consumer management of topup devices</li>
 <li>Scanning of Rezolve Encoded visual media</li>
 <li>Listening to Rezolve Encoded audio media</li>
-<li>Purchasing of scanned products</li>
-<li>Purchasing of topups</li>
 <li>Purchase history</li>
 </ul>
 
 <h2 id="intended-audience">Intended audience</h2>
 
 <p>This document is intended for experienced IOS and Android developer. It is expected that you have built apps before, and know your way around an IDE.</p>
+
+<h2 id="term-definitions">Term Definitions</h2>
+
+<p>|Partner|The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app. |
+|Developer|The Developer is the mobile app developer of the Partner.|
+|Merchant|A merchant runs an ecommerce site that offers products for sale. Merchants also create Shoppable Ads and link them to products. A merchant may also offer device accounts that need Top Up. |
+|Consumer|The end user of the Partner&rsquo;s mobile app. The customer who buys merchant products.|
+|SDK|Refers to the Rezolve Inside<sup>TM</sup> SDK, unless otherwise specified.|</p>
 
 <h2 id="for-more-information">For more information</h2>
 
@@ -269,17 +276,17 @@ You can switch between IOS and Android by clicking the tabs above.
 
 <h2 id="get-an-api-key">Get an API key</h2>
 
-<p>Using the Rezolve API requires a contract. Please visit <a href="https://www.rezolve.com/#sectionForm">our contact form</a> and supply your info. We will respond ASAP, and provied an API key upon contract completion.</p>
+<p>You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please visit <a href="https://www.rezolve.com/#sectionForm">the contact page</a> and request an API key. We’ll establish some basic information to form a contract of use, and send for your approval. Upon signature, we will provide an API key for you to use.</p>
 
 <h2 id="download-the-sdk">Download the SDK</h2>
 
-<p>The Rezolve SDK for <strong>IOS</strong> can be downloaded here: <a href="#">TBD</a></p>
+<p>The Rezolve Inside<sup>TM</sup> SDK for <strong>IOS</strong> can be downloaded here: <a href="#">TBD</a></p>
 
-<p>The Rezolve SDK for <strong>Android</strong> can be downloaded here: <a href="#">TBD</a></p>
+<p>The Rezolve Inside<sup>TM</sup> SDK for <strong>Android</strong> can be downloaded here: <a href="#">TBD</a></p>
 
 <h2 id="set-up-the-sdk-ios">Set up the SDK - IOS</h2>
 
-<p><strong>XCode</strong> is the target IDE for these instructions.</p>
+<p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
 <p>The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
 
@@ -287,7 +294,7 @@ You can switch between IOS and Android by clicking the tabs above.
 <li>Open your existing project.<br/><br/></li>
 <li>Go to the app target’s General configuration page.<br/><br/></li>
 <li>Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
-<li>Select your framework from the list of binaries that can be embedded.</li>
+<li>Select the Rezolve framework from the list of binaries that can be embedded.</li>
 </ol>
 
 <p>TODO: verify instructions with Marcos
@@ -295,7 +302,7 @@ TODO: do we need to import anythinng per file, or otherwise set up the framework
 
 <h2 id="set-up-the-sdk-android">Set up the SDK - Android</h2>
 
-<p><strong>Android Studio</strong> is the target IDE for these instructions.</p>
+<p>The target IDE for Android instructions is <strong>Android Studio</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
 <p>The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:</p>
 
@@ -440,11 +447,11 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>ProfileService supports only <code class="prettyprint">update</code> and <code class="prettyprint">get</code>.</p>
 
-<h2 id="instant-buy-flow">Instant buy flow</h2>
+<h2 id="shoppable-ads-flow">Shoppable Ads flow</h2>
 
-<p><img src="images/Instant%20Purchase%20flow.png" style="margin:6px 0;"><br/>[ <a href="images/Instant%20Purchase%20flow.png">View full size</a> ]</p>
+<p><img src="images/ShoppableAdsFlow.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdsFlow.png">View full size</a> ]</p>
 
-<p>The premise of instant purchase is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
+<p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
 <h4 id="1-capture-image-and-get-product-url">1. Capture image and get product URL</h4>
 
@@ -1062,7 +1069,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>You must pass in a <code class="prettyprint">paymentCard</code> object with the <code class="prettyprint">id</code> field blank.</p>
 
-<p>TODO describe how to encrypt PAN</p>
+<p>The SDK will encrypt the PAN (payment account number) using the session public key before transmission.</p>
 
 <p>The method returns the created <code class="prettyprint">paymentCard</code> object with <code class="prettyprint">id</code> upon success.</p>
 
@@ -1168,11 +1175,196 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <h3 id="method-getmerchants">Method: getMerchants</h3>
 
+<p>Method signature: <code class="prettyprint">session.getMerchants()</code></p>
+
+<p>The method returns an array of <code class="prettyprint">merchant</code> objects.</p>
+
+<h4 id="merchant-object">merchant Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>brookstone</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Brookstone</td>
+</tr>
+<tr>
+<td>logo_url</td>
+<td>string</td>
+<td>http://domain.com/path/logo.jpg</td>
+</tr>
+<tr>
+<td>image_url</td>
+<td>string</td>
+<td>http://domain.com/path/image.jpg</td>
+</tr>
+</tbody></table>
+
+<p>Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.</p>
+
 <h3 id="method-getcatalogs">Method: getCatalogs</h3>
+
+<p>Method signature: <code class="prettyprint">session.getCatalogs( merchant_id )</code></p>
+
+<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">merchant</code> to whose catalogs you wish to get.</p>
+
+<p>The method returns an array of <code class="prettyprint">catalog</code> objects owned by a specific merchant.</p>
+
+<h4 id="catalog-object">catalog Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>2</td>
+</tr>
+<tr>
+<td>parent_id</td>
+<td>integer</td>
+<td>1</td>
+</tr>
+<tr>
+<td>title</td>
+<td></td>
+<td>Fitness Wear</td>
+</tr>
+<tr>
+<td>has_products</td>
+<td>boolean</td>
+<td>true</td>
+</tr>
+<tr>
+<td>has_catalogs</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>image_url</td>
+<td>string</td>
+<td>http://domain.com/path/image.jpg</td>
+</tr>
+<tr>
+<td>catlogs</td>
+<td>array of catalog objects</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>Notes:</p>
+
+<p>If <code class="prettyprint">has_catalogs</code> is <code class="prettyprint">false</code>, the <code class="prettyprint">catalogs</code> array should be empty.</p>
+
+<p>If <code class="prettyprint">has_products</code> is <code class="prettyprint">true</code>, call <code class="prettyprint">getProducts</code> with the category <code class="prettyprint">id</code> to get a product list.</p>
 
 <h3 id="method-getcatalog">Method: getCatalog</h3>
 
+<p>Method signature: <code class="prettyprint">session.getCatalog( merchant_id, catalog_id )</code></p>
+
+<p>The method returns a <code class="prettyprint">catalog</code> object.</p>
+
 <h3 id="method-getproducts">Method: getProducts</h3>
+
+<p>Method signature: <code class="prettyprint">session.getProducts( merchant_id, catalog_id, pageNavigation)</code></p>
+
+<p>You must pass a <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code>, and a <code class="prettyprint">pageNavivation</code> object. </p>
+
+<p>The method returns a <code class="prettyprint">pageResult</code> object.</p>
+
+<h4 id="pagenavigation-object">pageNavigation Object</h4>
+
+<p>The pageNavigation object controls pagignation and sorting of paginated results. </p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+<th>explanation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>count</td>
+<td>integer</td>
+<td>10</td>
+<td>number of items per page</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>integer</td>
+<td>1</td>
+<td>what page of results you are requesting</td>
+</tr>
+<tr>
+<td>sortBy</td>
+<td>string</td>
+<td>productName</td>
+<td>must be a field of the pageResult &gt; SDKEntity object array (see below)</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>enum</td>
+<td>one of: ASC, DESC</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="pageresult-object">pageResult Object</h4>
+
+<p>pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products. </p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+<th>explanation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>links</td>
+<td>object</td>
+<td></td>
+<td>object containing First, Next, Previous, Last links</td>
+</tr>
+<tr>
+<td>count</td>
+<td>integer</td>
+<td>10</td>
+<td>items per page, as requested in pageNavigation.count</td>
+</tr>
+<tr>
+<td>total</td>
+<td>integer</td>
+<td>50</td>
+<td>total items in SDKEntity array</td>
+</tr>
+<tr>
+<td>SDKEntity</td>
+<td>array</td>
+<td></td>
+<td>array of Product objects</td>
+</tr>
+</tbody></table>
+
+<h4 id="links-object">links Object</h4>
+
+<h4 id="product-object">product Object</h4>
 
 <h3 id="method-getproduct">Method: getProduct</h3>
 
