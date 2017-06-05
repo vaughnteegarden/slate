@@ -690,48 +690,9 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p><code class="prettyprint">partner_id</code> is a string, returned from <code class="prettyprint">sdk.register</code></p>
 
+<p><code class="prettyprint">deviceProfile</code> is an object (see definition above)</p>
+
 <p>The method returns a <code class="prettyprint">rezolveSession</code> object.</p>
-
-<h4 id="deviceprofile-object">deviceProfile Object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>id</td>
-<td>auto-assigned string</td>
-<td>123abc</td>
-</tr>
-<tr>
-<td>device_id</td>
-<td>string</td>
-<td>bd17391f9561</td>
-</tr>
-<tr>
-<td>make</td>
-<td>string</td>
-<td>apple</td>
-</tr>
-<tr>
-<td>os_type</td>
-<td>string</td>
-<td>iOS</td>
-</tr>
-<tr>
-<td>os_version</td>
-<td>string</td>
-<td>10.3</td>
-</tr>
-<tr>
-<td>locale</td>
-<td>locale as a combination of ISO 639-1 language code and ISO 3166-1 country code</td>
-<td>en_GB</td>
-</tr>
-</tbody></table>
 
 <h4 id="rezolvesession-object">rezolveSession Object</h4>
 
@@ -1364,9 +1325,194 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <h4 id="links-object">links Object</h4>
 
+<p>The links object is a series of 5 pageNavigation objects (see above), each representing a particular pagination navigation goal:</p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>explanation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>current</td>
+<td>pageNavigation object</td>
+<td>The current page of results</td>
+</tr>
+<tr>
+<td>first</td>
+<td>pageNavigation object</td>
+<td>The first page of results</td>
+</tr>
+<tr>
+<td>last</td>
+<td>pageNavigation object</td>
+<td>The last page of results</td>
+</tr>
+<tr>
+<td>prev</td>
+<td>pageNavigation object</td>
+<td>The previous page of results. If you are on the first page, this should be blank</td>
+</tr>
+<tr>
+<td>next</td>
+<td>pageNavigation object</td>
+<td>The next page of results. If you are on the last page, this should be blank.</td>
+</tr>
+</tbody></table>
+
 <h4 id="product-object">product Object</h4>
 
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-populated string</td>
+<td>123</td>
+</tr>
+<tr>
+<td>merchant_id</td>
+<td>string</td>
+<td>brookstone</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Fitbit Charge 2</td>
+</tr>
+<tr>
+<td>subtitle</td>
+<td>string</td>
+<td>Heart Rate and Fitness Wristband</td>
+</tr>
+<tr>
+<td>price</td>
+<td>decimal</td>
+<td>129.00</td>
+</tr>
+<tr>
+<td>images</td>
+<td>array of image urls</td>
+<td>http://domain.com/path/image.jpg</td>
+</tr>
+<tr>
+<td>options</td>
+<td>object</td>
+<td></td>
+</tr>
+<tr>
+<td>optionAvailable</td>
+<td>array of Variant objects</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="option-object">option Object</h4>
+
+<p>An option represents a choice. For example, Color or Size on a clothing item.</p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>label</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>extraInfo</td>
+<td>string displayed to the user, provides additional info about the option</td>
+<td>Color may differ from shown.</td>
+</tr>
+<tr>
+<td>values</td>
+<td>array of optionValue objects</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="optionvalue-object">optionValue Object</h4>
+
+<p>OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.</p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>Red</td>
+</tr>
+<tr>
+<td>value</td>
+<td>string</td>
+<td>C001</td>
+</tr>
+</tbody></table>
+
+<h4 id="variant-object">variant Object</h4>
+
+<p>A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.</p>
+
+<blockquote>
+<p>Example data for a product with three sizes, two colors, two patterns:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="s2">"option_available"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P001"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI02"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P001"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI03"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P001"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P001"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI02"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P001"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI03"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P001"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI02"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI03"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI02"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI03"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+<p>A variant has a varying number of key/value string pairs, as determined by the number of options in a product. A product with three options will have three key/value pairs in it&rsquo;s variants.</p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>Size</td>
+</tr>
+<tr>
+<td>value</td>
+<td>string</td>
+<td>SI01</td>
+</tr>
+</tbody></table>
+
 <h3 id="method-getproduct">Method: getProduct</h3>
+
+<p>Method signature: <code class="prettyprint">session.getProduct( merchant_id, catalog_id, product_id)</code></p>
+
+<p>You must pass a <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code>, and a <code class="prettyprint">product_id</code>.</p>
+
+<p>The method returns a <code class="prettyprint">product</code> object (see definition above).</p>
 
 <h2 id="module-activity">Module: Activity</h2>
 
