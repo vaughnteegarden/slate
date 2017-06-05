@@ -49,18 +49,10 @@ Method signature: `sdk.createSession( entityId, partnerId, DeviceProfile )`
 
 `partner_id` is a string, returned from `sdk.register`
 
+`deviceProfile` is an object (see definition above)
+
 The method returns a `rezolveSession` object.
 
-#### deviceProfile Object
-
-|field|format|example|
-|---|---|---|
-|id|auto-assigned string|123abc|
-|device_id|string|bd17391f9561|
-|make|string|apple|
-|os_type|string|iOS|
-|os_version|string|10.3|
-|locale|locale as a combination of ISO 639-1 language code and ISO 3166-1 country code|en_GB|
 
 #### rezolveSession Object
 
@@ -407,9 +399,88 @@ pageResult is a generic object used for combining pagination info with an array 
 
 #### links Object
 
+The links object is a series of 5 pageNavigation objects (see above), each representing a particular pagination navigation goal:
+
+|field|format|explanation|
+|---|---|---|
+|current|pageNavigation object|The current page of results|
+|first|pageNavigation object|The first page of results|
+|last|pageNavigation object|The last page of results|
+|prev|pageNavigation object|The previous page of results. If you are on the first page, this should be blank|
+|next|pageNavigation object|The next page of results. If you are on the last page, this should be blank.|
+
 #### product Object
 
+|field|format|example|
+|---|---|---|
+|id|auto-populated string|123|
+|merchant_id|string|brookstone|
+|title|string|Fitbit Charge 2|
+|subtitle|string|Heart Rate and Fitness Wristband|
+|price|decimal|129.00|
+|images|array of image urls|http://domain.com/path/image.jpg|
+|options|object||
+|optionAvailable|array of Variant objects||
+
+#### option Object
+
+An option represents a choice. For example, Color or Size on a clothing item.
+
+|field|format|example|
+|---|---|---|
+|label|string||
+|extraInfo|string displayed to the user, provides additional info about the option|Color may differ from shown.|
+|values|array of optionValue objects||
+
+#### optionValue Object
+OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.
+
+|field|format|example|
+|---|---|---|
+|label|string|Red|
+|value|string|C001|
+
+#### variant Object
+
+A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.
+
+> Example data for a product with three sizes, two colors, two patterns:
+
+```json
+"option_available": [
+	{ "size": "SI01", "color": "C001", "pattern": "P001" },
+	{ "size": "SI02", "color": "C001", "pattern": "P001" },
+	{ "size": "SI03", "color": "C001", "pattern": "P001" },
+	{ "size": "SI01", "color": "C002", "pattern": "P001" },
+	{ "size": "SI02", "color": "C002", "pattern": "P001" },
+	{ "size": "SI03", "color": "C002", "pattern": "P001" },
+	{ "size": "SI01", "color": "C001", "pattern": "P002" },
+	{ "size": "SI02", "color": "C001", "pattern": "P002" },
+	{ "size": "SI03", "color": "C001", "pattern": "P002" },
+	{ "size": "SI01", "color": "C002", "pattern": "P002" },
+	{ "size": "SI02", "color": "C002", "pattern": "P002" },
+	{ "size": "SI03", "color": "C002", "pattern": "P002" },
+]
+```
+
+A variant has a varying number of key/value string pairs, as determined by the number of options in a product. A product with three options will have three key/value pairs in it's variants.
+
+|field|format|example|
+|---|---|---|
+|label|string|Size|
+|value|string|SI01|
+
 ### Method: getProduct
+
+Method signature: `session.getProduct( merchant_id, catalog_id, product_id)`
+
+You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
+
+The method returns a `product` object (see definition above).
+
+
+
+
 
 ## Module: Activity
 ### Method: getOrders
