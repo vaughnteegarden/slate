@@ -349,7 +349,8 @@ You can switch between IOS and Android by clicking the tabs above.
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.customer.DeviceProfile</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.foreign.SignUpRequest</span><span class="o">;</span>
 
-<span class="c1">// To handle server responses you will need to import interfaces or abstract classes from the following packages:</span>
+<span class="c1">// To handle server responses you will need to import interfaces or</span>
+<span class="c1">// abstract classes from the following packages:</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.*</span><span class="o">;</span>
 
@@ -465,7 +466,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <span class="c1">// Note: You don't need to create a new session if user navigatess to another activity. </span>
 <span class="c1">// After the session is created, you can access it by calling:</span>
 
-<span class="n">RezolveSession</span> <span class="n">rezolveSession</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">();</span>
+<span class="n">RezolveSession</span> <span class="n">rezolveSession</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">)</span>
+<span class="o">.</span><span class="na">getRezolveSession</span><span class="o">();</span>
 
 
 </code></pre>
@@ -778,7 +780,42 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>This module handles consumer user creation and authentication.</p>
 
 <h3 id="method-register">Method: Register</h3>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
+<span class="c1">// TODO populate authenticationRequest object
+</span>
+<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
 
+<span class="n">sdk</span><span class="p">.</span><span class="n">registerUser</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span>  <span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">partnerId</span><span class="p">)</span> <span class="k">in</span> 
+    <span class="c1">// persist the entity_id and partner_id values here
+</span><span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">DeviceProfile</span> <span class="n">deviceProfile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeviceProfile</span><span class="o">(</span><span class="n">deviceId</span><span class="o">,</span> <span class="n">deviceManufacturer</span><span class="o">,</span> <span class="n">locale</span><span class="o">);</span>
+<span class="n">SignUpRequest</span> <span class="n">signUpRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SignUpRequest</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">email</span><span class="o">(</span><span class="s">"john.doe@domain.com"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">firstName</span><span class="o">(</span><span class="s">"John"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">lastName</span><span class="o">(</span><span class="s">"Doe"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"JDoe"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">device</span><span class="o">(</span><span class="n">deviceProfile</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">registerUser</span><span class="o">(</span><span class="n">signUpRequest</span><span class="o">,</span> 
+<span class="k">new</span> <span class="nf">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">,</span> 
+    <span class="n">String</span> <span class="n">entityId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// persist the entity_id and partner_id values here</span>
+        <span class="o">...</span>
+
+        <span class="c1">// set session for convenience</span>
+        <span class="n">mySession</span> <span class="o">=</span> <span class="n">rezolveSession</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationFailure</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// handle failure here</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+
+</code></pre>
 <p>Method signature: <code class="prettyprint">sdk.register( SignUpRequest, [callback or interface] )</code></p>
 
 <p>You must pass in a valid <code class="prettyprint">signUpRequest</code> object.</p>
@@ -883,45 +920,58 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-create-session">Method: Create Session</h3>
+<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
+<span class="c1">// TODO populate authenticationRequest object
+</span>
+<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
 
-<p>Method signature: <code class="prettyprint">sdk.createSession( entityId, partnerId, DeviceProfile, [callback or interface] )</code></p>
+<span class="n">sdk</span><span class="p">.</span><span class="n">createSession</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">session</span><span class="o">:</span> <span class="n">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+    <span class="c1">// use created session to access managers
+</span>    <span class="c1">// example: session.CustomerProfileService.get
+</span><span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
+<span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">s</span><span class="o">,</span> 
+    <span class="n">String</span> <span class="n">s1</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mySession</span> <span class="o">=</span> <span class="n">rezolveSession</span><span class="o">;</span>
+        <span class="c1">// use created session to access managers</span>
+    <span class="o">}</span>
 
-<p><code class="prettyprint">entity_id</code> is a string, returned from <code class="prettyprint">sdk.register</code></p>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationFailure</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// handle failed initialization</span>
+    <span class="o">}</span>
+<span class="o">});</span>
 
-<p><code class="prettyprint">partner_id</code> is a string, returned from <code class="prettyprint">sdk.register</code></p>
 
-<p><code class="prettyprint">deviceProfile</code> is an object (see definition above)</p>
+<span class="n">Method</span> <span class="nl">signature:</span> <span class="err">`</span><span class="n">sdk</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">DeviceProfile</span><span class="o">,</span> <span class="o">[</span><span class="n">callback</span> <span class="n">or</span> <span class="kd">interface</span><span class="err">]</span> <span class="err">)`</span>
 
-<p>The method returns a <code class="prettyprint">rezolveSession</code> object.</p>
+<span class="err">`</span><span class="nc">entity_id</span><span class="err">`</span> <span class="n">is</span> <span class="n">a</span> <span class="n">string</span><span class="o">,</span> <span class="n">returned</span> <span class="n">from</span> <span class="err">`</span><span class="n">sdk</span><span class="o">.</span><span class="na">register</span><span class="err">`</span>
 
-<h4 id="rezolvesession-object">rezolveSession Object</h4>
+<span class="err">`</span><span class="n">partner_id</span><span class="err">`</span> <span class="n">is</span> <span class="n">a</span> <span class="n">string</span><span class="o">,</span> <span class="n">returned</span> <span class="n">from</span> <span class="err">`</span><span class="n">sdk</span><span class="o">.</span><span class="na">register</span><span class="err">`</span>
 
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>partner_id</td>
-<td>string</td>
-<td>rezolve</td>
-</tr>
-<tr>
-<td>entity_id</td>
-<td>string</td>
-<td>9310c880695c</td>
-</tr>
-<tr>
-<td>deviceProfile</td>
-<td>object</td>
-<td></td>
-</tr>
-</tbody></table>
+<span class="err">`</span><span class="n">deviceProfile</span><span class="err">`</span> <span class="n">is</span> <span class="n">an</span> <span class="nf">object</span> <span class="o">(</span><span class="n">see</span> <span class="n">definition</span> <span class="n">above</span><span class="o">)</span>
 
-<h3 id="method-logout">Method: Logout</h3>
+<span class="n">The</span> <span class="n">method</span> <span class="n">returns</span> <span class="n">a</span> <span class="err">`</span><span class="n">rezolveSession</span><span class="err">`</span> <span class="n">object</span><span class="o">.</span>
 
+<span class="err">####</span> <span class="n">rezolveSession</span> <span class="n">Object</span>
+
+<span class="o">|</span><span class="n">field</span><span class="o">|</span><span class="n">format</span><span class="o">|</span><span class="n">example</span><span class="o">|</span>
+<span class="o">|---|---|---|</span>
+<span class="o">|</span><span class="n">partner_id</span><span class="o">|</span><span class="n">string</span><span class="o">|</span><span class="n">rezolve</span><span class="o">|</span>
+<span class="o">|</span><span class="n">entity_id</span><span class="o">|</span><span class="n">string</span><span class="o">|</span><span class="mi">9310</span><span class="n">c880695c</span><span class="o">|</span>
+<span class="o">|</span><span class="n">deviceProfile</span><span class="o">|</span><span class="n">object</span><span class="o">|</span> <span class="o">|</span>
+
+<span class="err">###</span> <span class="nl">Method:</span> <span class="n">Logout</span>
+
+<span class="err">```</span> <span class="n">objective_c</span>
+<span class="c1">// When session ends you should inform the sdk by calling</span>
+<span class="n">session</span><span class="o">.</span><span class="na">authenticationService</span><span class="o">.</span><span class="na">logout</span><span class="o">();</span>
+
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
+<span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAuthenticationManager</span><span class="o">().</span><span class="na">logout</span><span class="o">(</span><span class="n">entityId</span><span class="o">);</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">sdk.logout( entityId )</code></p>
 
 <p><code class="prettyprint">entity_id</code> is a string, returned from <code class="prettyprint">sdk.register</code>.</p>
