@@ -387,7 +387,7 @@ The pageNavigation object controls pagignation and sorting of paginated results.
 
 #### pageResult Object
 
-pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products. 
+pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products.
 
 |field|format|example|explanation|
 |---|---|---|---|
@@ -475,7 +475,7 @@ Method signature: `session.getProduct( merchant_id, catalog_id, product_id)`
 
 You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
 
-The method returns a `product` object (see definition above).
+The method returns a <a href="#product-object">`product object`</a> .
 
 
 
@@ -492,7 +492,7 @@ The activity module handles order history and other historical data.
 
 Method signature: `session.getOrders()`
 
-The method returns an array of `transaction` objects.
+The method returns an array of `transaction objects`.
 
 #### transaction Object
 
@@ -582,6 +582,8 @@ The method returns an `order` object.
 |finalPrice|decimal|159.00|
 |options|map of OptionValue objects||
 
+See <a href="#optionvalue-object"`optionValue object`</a>.
+
 #### geoLoc Object
 
 |field|format|example|
@@ -621,7 +623,7 @@ Creates an encrypted paymentRequest object to be used with buyOrder.
 
 Method signature: `session.createPaymentRequest( paymentCard, cvv )`
 
-You must pass in a `paymentCard` object (<a href="#paymentcard-object">jump to object</a>) and a `cvv` string.
+You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a `cvv` string.
 
 #### paymentRequest object
 
@@ -636,9 +638,18 @@ BuyOrder references an order id and supplies payment for the order.
 
 Method signature: `session.buyOrder( paymentRequest, order )`
 
-You must pass in a `paymentRequest` object (<a href="#paymentrequest-object">jump to object</a>), and the `order` object (<a href="#order-object">jump to object</a>) you want to provide payment for.
+You must pass in a <a href="#paymentrequest-object">`paymentRequest object`</a>, and the <a href="#order-object">`order object`</a> you want to provide payment for.
 
-The method returns a <a href="#transaction-object">`transaction object`</a> (<a href="#transaction-object">jump to object</a>). 
+The method returns a <a href="#transaction-object">`transaction object`</a>. 
+
+### Method: signOrderUpdates
+
+In environments where transactions can take a very long time (minutes to tens of minutes), this method provides a way to subscribe and be notified of transaction success.
+
+Method signature: `session.buyOrder( entity_id, order_id )`
+
+This method is reserved for future ffunctionality.
+
 
 
 
@@ -649,7 +660,7 @@ The method returns a <a href="#transaction-object">`transaction object`</a> (<a 
 
 API Check is an aggregate of SDK.
 
-The *API Check* module helps the developer with lifecycle management.
+The *API Check* module assists the developer with app lifecycle management.
 
 This module is reserved for future functionality.
 
