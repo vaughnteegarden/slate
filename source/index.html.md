@@ -121,7 +121,8 @@ import com.rezolve.sdk.RezolveSession;
 import com.rezolve.sdk.model.customer.DeviceProfile;
 import com.rezolve.sdk.model.foreign.SignUpRequest;
 
-// To handle server responses you will need to import interfaces or abstract classes from the following packages:
+// To handle server responses you will need to import interfaces or
+// abstract classes from the following packages:
 import com.rezolve.sdk.core.callbacks.*;
 import com.rezolve.sdk.core.interfaces.*;
 
@@ -201,6 +202,7 @@ new RezolveInterface() {
 });
 
 ```
+
 To register a user, you will need to call the sdk `registerUser` method, passing in an `SignUpRequest object`. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
 
 The `registerUser` method is used as shown to the right. Upon successful registration, the response will contain a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
@@ -248,7 +250,8 @@ partnerId, deviceProfile, new RezolveInterface() {
 // Note: You don't need to create a new session if user navigatess to another activity. 
 // After the session is created, you can access it by calling:
 
-RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession();
+RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+.getRezolveSession();
 
 
 ```

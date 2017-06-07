@@ -6,6 +6,47 @@ Authentication services are an aggregate of SDK.
 This module handles consumer user creation and authentication.
 
 ### Method: Register
+
+```objective_c
+let request: AuthenticationRequest = authenticationRequest()
+// TODO populate authenticationRequest object
+
+let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+
+sdk.registerUser(authenticationRequest: request) {  (entityId, partnerId) in 
+	// persist the entity_id and partner_id values here
+}
+```
+```java
+DeviceProfile deviceProfile = new DeviceProfile(deviceId, deviceManufacturer, locale);
+SignUpRequest signUpRequest = new SignUpRequest.Builder()
+    .email("john.doe@domain.com")
+    .firstName("John")
+    .lastName("Doe")
+    .name("JDoe")
+    .device(deviceProfile)
+    .build();
+
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(signUpRequest, 
+new RezolveInterface() {
+    @Override
+    public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
+    String entityId) {
+    	// persist the entity_id and partner_id values here
+        ...
+
+        // set session for convenience
+        mySession = rezolveSession;
+    }
+
+    @Override
+    public void onInitializationFailure() {
+    	// handle failure here
+    }
+});
+
+```
+
 Method signature: `sdk.register( SignUpRequest, [callback or interface] )`
 
 You must pass in a valid `signUpRequest` object.
@@ -43,6 +84,35 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 |entity_id|string|9310c880695c|
 
 ### Method: Create Session
+
+``` objective_c
+let request: AuthenticationRequest = authenticationRequest()
+// TODO populate authenticationRequest object
+
+let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+
+sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
+	// use created session to access managers
+    // example: session.CustomerProfileService.get
+}
+```
+```java
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, 
+partnerId, deviceProfile, new RezolveInterface() {
+    @Override
+    public void onInitializationSuccess(RezolveSession rezolveSession, String s, 
+    String s1) {
+        mySession = rezolveSession;
+        // use created session to access managers
+    }
+
+    @Override
+    public void onInitializationFailure() {
+        // handle failed initialization
+    }
+});
+
+
 Method signature: `sdk.createSession( entityId, partnerId, DeviceProfile, [callback or interface] )`
 
 `entity_id` is a string, returned from `sdk.register`
@@ -53,7 +123,6 @@ Method signature: `sdk.createSession( entityId, partnerId, DeviceProfile, [callb
 
 The method returns a `rezolveSession` object.
 
-
 #### rezolveSession Object
 
 |field|format|example|
@@ -63,6 +132,16 @@ The method returns a `rezolveSession` object.
 |deviceProfile|object| |
 
 ### Method: Logout
+
+``` objective_c
+// When session ends you should inform the sdk by calling
+session.authenticationService.logout();
+
+```
+```java
+// When session ends you should inform the sdk by calling
+rezolveSession.getAuthenticationManager().logout(entityId);
+```
 
 Method signature: `sdk.logout( entityId )`
 
