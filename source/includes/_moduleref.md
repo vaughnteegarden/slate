@@ -582,7 +582,7 @@ The method returns an `order` object.
 |finalPrice|decimal|159.00|
 |options|map of OptionValue objects||
 
-See <a href="#optionvalue-object"`optionValue object`</a>.
+See <a href="#optionvalue-object">`optionValue object`</a>.
 
 #### geoLoc Object
 
@@ -670,11 +670,11 @@ Reserved for future functionality.
 
 ### Method: getStatus
 
-Reserved for future functionality. 
+Reserved for future functionality.
 
 ### Method: checkUpgrade
 
-Reserved for future functionality. 
+Reserved for future functionality.
 
 
 
