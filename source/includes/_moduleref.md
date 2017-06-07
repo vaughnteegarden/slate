@@ -636,9 +636,9 @@ BuyOrder references an order id and supplies payment for the order.
 
 Method signature: `session.buyOrder( paymentRequest, order )`
 
-You must pass in a `paymentRequest` object (<a href="#paymentRequest-object">jump to object</a>), and the `order` object (<a href="#order-object">jump to object</a>) you want to provide payment for.
+You must pass in a `paymentRequest` object (<a href="#paymentrequest-object">jump to object</a>), and the `order` object (<a href="#order-object">jump to object</a>) you want to provide payment for.
 
-The method returns a `transaction` object (<a href="#transaction-object">jump to object</a>). 
+The method returns a <a href="#transaction-object">`transaction object`</a> (<a href="#transaction-object">jump to object</a>). 
 
 
 
