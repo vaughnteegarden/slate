@@ -182,9 +182,11 @@ SignUpRequest signUpRequest = new SignUpRequest.Builder()
     .device(deviceProfile)
     .build();
 
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(signUpRequest, new RezolveInterface() {
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(signUpRequest, 
+new RezolveInterface() {
     @Override
-    public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, String entityId) {
+    public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
+    String entityId) {
     	// persist the entity_id and partner_id values here
         ...
 
@@ -226,9 +228,11 @@ sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
 }
 ```
 ```java
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, 
+partnerId, deviceProfile, new RezolveInterface() {
     @Override
-    public void onInitializationSuccess(RezolveSession rezolveSession, String s, String s1) {
+    public void onInitializationSuccess(RezolveSession rezolveSession, String s, 
+    String s1) {
         mySession = rezolveSession;
         // use created session to access managers
     }
@@ -300,7 +304,8 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager().getAll(this);
+		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession()
+        .getWalletManager().getAll(this);
 	}
 
 	@Override
@@ -360,7 +365,7 @@ The premise of Shoppable Ads is to capture an image scan (usually of an advertis
 ```
 ```java
  
- 
+```
 First, enable the scan screen using `session.startVideo()`, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
 
 #### 2. Fetch product info
@@ -501,7 +506,8 @@ Once there is one or more favorites, use the `FavouriteService.getAll` method to
 
 ```
 ```java
-rezolveSession.getProductManager().getProducts(merchant, catalog, count, pageIndex, sortBy, sortDirection, new ProductCallback() {
+rezolveSession.getProductManager().getProducts(merchant, catalog, count, 
+pageIndex, sortBy, sortDirection, new ProductCallback() {
     @Override
     public void onGetProductsSuccess(PageResult<DisplayProduct> pageResult) {
         int count = pageResult.getCount();
