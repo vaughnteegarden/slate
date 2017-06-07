@@ -1294,7 +1294,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <h4 id="pageresult-object">pageResult Object</h4>
 
-<p>pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products. </p>
+<p>pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products.</p>
 
 <table><thead>
 <tr>
@@ -1519,7 +1519,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>You must pass a <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code>, and a <code class="prettyprint">product_id</code>.</p>
 
-<p>The method returns a <code class="prettyprint">product</code> object (see definition above).</p>
+<p>The method returns a <a href="#product-object"><code class="prettyprint">product object</code></a> .</p>
 
 <h2 id="module-activity">Module: Activity</h2>
 
@@ -1531,7 +1531,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>Method signature: <code class="prettyprint">session.getOrders()</code></p>
 
-<p>The method returns an array of <code class="prettyprint">transaction</code> objects.</p>
+<p>The method returns an array of <code class="prettyprint">transaction objects</code>.</p>
 
 <h4 id="transaction-object">transaction Object</h4>
 
@@ -1776,6 +1776,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
+<p>See <a href="#optionvalue-object"`optionValue object`</a>.</p>
+
 <h4 id="geoloc-object">geoLoc Object</h4>
 
 <table><thead>
@@ -1860,7 +1862,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>Method signature: <code class="prettyprint">session.createPaymentRequest( paymentCard, cvv )</code></p>
 
-<p>You must pass in a <code class="prettyprint">paymentCard</code> object (<a href="#paymentcard-object">jump to object</a>) and a <code class="prettyprint">cvv</code> string.</p>
+<p>You must pass in a <a href="#paymentcard-object"><code class="prettyprint">paymentCard object</code></a> and a <code class="prettyprint">cvv</code> string.</p>
 
 <h4 id="paymentrequest-object">paymentRequest object</h4>
 
@@ -1889,15 +1891,23 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>Method signature: <code class="prettyprint">session.buyOrder( paymentRequest, order )</code></p>
 
-<p>You must pass in a <code class="prettyprint">paymentRequest</code> object (<a href="#paymentrequest-object">jump to object</a>), and the <code class="prettyprint">order</code> object (<a href="#order-object">jump to object</a>) you want to provide payment for.</p>
+<p>You must pass in a <a href="#paymentrequest-object"><code class="prettyprint">paymentRequest object</code></a>, and the <a href="#order-object"><code class="prettyprint">order object</code></a> you want to provide payment for.</p>
 
-<p>The method returns a <a href="#transaction-object"><code class="prettyprint">transaction object</code></a> (<a href="#transaction-object">jump to object</a>). </p>
+<p>The method returns a <a href="#transaction-object"><code class="prettyprint">transaction object</code></a>. </p>
+
+<h3 id="method-signorderupdates">Method: signOrderUpdates</h3>
+
+<p>In environments where transactions can take a very long time (minutes to tens of minutes), this method provides a way to subscribe and be notified of transaction success.</p>
+
+<p>Method signature: <code class="prettyprint">session.buyOrder( entity_id, order_id )</code></p>
+
+<p>This method is reserved for future ffunctionality.</p>
 
 <h2 id="module-api-check">Module: API Check</h2>
 
 <p>API Check is an aggregate of SDK.</p>
 
-<p>The <em>API Check</em> module helps the developer with lifecycle management.</p>
+<p>The <em>API Check</em> module assists the developer with app lifecycle management.</p>
 
 <p>This module is reserved for future functionality.</p>
 
