@@ -258,19 +258,37 @@ You can switch between IOS and Android by clicking the tabs above.
 
 <h2 id="term-definitions">Term Definitions</h2>
 
-<p>|Partner|The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app. |
-|Developer|The Developer is the mobile app developer of the Partner.|
-|Merchant|A merchant runs an ecommerce site that offers products for sale. Merchants also create Shoppable Ads and link them to products. A merchant may also offer device accounts that need Top Up. |
-|Consumer|The end user of the Partner&rsquo;s mobile app. The customer who buys merchant products.|
-|SDK|Refers to the Rezolve Inside<sup>TM</sup> SDK, unless otherwise specified.|</p>
+<table><thead>
+<tr>
+<th>term</th>
+<th>definition</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Partner</td>
+<td>The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app.</td>
+</tr>
+<tr>
+<td>Developer</td>
+<td>The Developer is the mobile app developer of the Partner.</td>
+</tr>
+<tr>
+<td>Merchant</td>
+<td>A merchant runs an ecommerce site that offers products for sale. Merchants also create Shoppable Ads and link them to products. A merchant may also offer device accounts that need Top Up.</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>The end user of the Partner&rsquo;s mobile app. The customer who buys merchant products.</td>
+</tr>
+<tr>
+<td>SDK</td>
+<td>Refers to the Rezolve Inside<sup>TM</sup> SDK, unless otherwise specified.</td>
+</tr>
+</tbody></table>
 
 <h2 id="for-more-information">For more information</h2>
 
 <p>For more information on Rezolve, see http://rezolve.com.</p>
-
-<p>TODO: Add pointer to tech support resource(s)</p>
-
-<p>TODO: Add contact info for sales inquiry.</p>
 
 <h1 id="getting-started">Getting Started</h1>
 
@@ -297,9 +315,6 @@ You can switch between IOS and Android by clicking the tabs above.
 <li>Select the Rezolve framework from the list of binaries that can be embedded.</li>
 </ol>
 
-<p>TODO: verify instructions with Marcos
-TODO: do we need to import anythinng per file, or otherwise set up the framework in code to use it? Marcos</p>
-
 <h2 id="set-up-the-sdk-android">Set up the SDK - Android</h2>
 
 <p>The target IDE for Android instructions is <strong>Android Studio</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
@@ -313,9 +328,6 @@ TODO: do we need to import anythinng per file, or otherwise set up the framework
 <li>Select the SDK file you downloaded, and click Finish. File name may differ from what is shown in screenshot. <br/><img src="images/04pickaar.png" style="margin:6px 0;"><br/><br/></li>
 <li>The SDK should import as a module. You are now ready to develop. <br/><img src="images/05imported.png" style="margin:6px 0;"><br/><br/></li>
 </ol>
-
-<p>TODO: verify install instructions with Adam.
-TODO: anything to import per file to use functions?</p>
 
 <h1 id="sdk-feature-use">SDK Feature Use</h1>
 
@@ -345,10 +357,6 @@ TODO: anything to import per file to use functions?</p>
 <p>Your <code class="prettyprint">API Key</code> is supplied to you upon signup with Rezolve.</p>
 
 <p>Your <code class="prettyprint">server environment</code> is an enum. See values, right.</p>
-
-<p>TODO Marcos verify</p>
-
-<p>TODO Adam verify</p>
 
 <h2 id="user-management-session-management">User Management, Session Management</h2>
 
@@ -387,7 +395,6 @@ TODO: anything to import per file to use functions?</p>
 
 <span class="n">sdk</span><span class="o">.</span><span class="na">registerUser</span><span class="o">(</span><span class="n">myAuthenticationRequest</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
-<span class="c1">//TODO catch response</span>
 </code></pre>
 <p>To register a user, you will need to call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">authenticationRequest</code> object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
 
@@ -411,7 +418,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="c1">// begin interacting with features
 </span>    <span class="c1">// example: session.CustomerProfileService.get
 </span><span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:</p>
 
@@ -428,8 +435,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <code class="prettyprint">session.CustomerProfileService.get</code></p>
 
 <h3 id="logout-session">Logout Session</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>Logging a user out is as simple as passing the <code class="prettyprint">entity_id</code> to the logout method.</p>
 
@@ -449,37 +456,37 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <h2 id="shoppable-ads-flow">Shoppable Ads flow</h2>
 
-<p><img src="images/ShoppableAdsFlow.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdsFlow.png">View full size</a> ]</p>
+<p><img src="images/ShoppableAddsFlow.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAddsFlow.png">View full size</a> ]</p>
 
-<p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
+<p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
 <h4 id="1-capture-image-and-get-product-url">1. Capture image and get product URL</h4>
 
-<p>First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the &ldquo;payoff&rdquo; URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.</p>
+<p>First, enable the scan screen using <code class="prettyprint">session.startVideo()</code>, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.</p>
 
 <h4 id="2-fetch-product-info">2. Fetch product info</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProduct</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProduct</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>Use the SDK <code class="prettyprint">getProduct</code> call to retrieve product information. The <code class="prettyprint">partner_id</code>, <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code> and <code class="prettyprint">product_id</code> will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.</p>
 
 <h4 id="3-get-an-order-total">3. Get an order total</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>Once you have product information, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). </p>
 
 <h4 id="4-show-payment-card-choices">4. Show payment card choices</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="5-submit-payment-for-order">5. Submit payment for order</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
@@ -488,42 +495,42 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p><img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]</p>
 
 <h4 id="1-add-the-top-up-target-as-a-favorite">1. Add the top up target as a Favorite</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="p">.</span><span class="n">create</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="o">.</span><span class="na">create</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
-<p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteService.create</code> method. </p>
+<p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteService.create</code> method.</p>
 
 <h4 id="2-list-available-favorites">2. List available favorites</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">FavouriteService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteService.getAll</code> method to list them. The customer will choose a favorite.</p>
 
 <h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProducts</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">getProducts</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, we use the <code class="prettyprint">getProducts</code> method, passing in a fixed category id. </p>
 
 <p>Display the list of top up choices. You can display each &ldquo;product&rdquo; as a currency amount, or utilize the &ldquo;description&rdquo; field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.</p>
 
 <h4 id="4-get-an-order-total">4. Get an order total</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">checkoutOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>When you have the product choice, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).</p>
 
 <h4 id="5-show-payment-card-choices">5. Show payment card choices</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="p">.</span><span class="n">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">walletService</span><span class="o">.</span><span class="na">getAll</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="6-submit-payment-for-order">6. Submit payment for order</h4>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="p">,</span> <span class="n">IOS</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span> <span class="n">add</span> <span class="n">buyOrder</span> <span class="n">code</span> <span class="n">sample</span><span class="o">,</span> <span class="n">Android</span>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
@@ -786,12 +793,12 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 <tr>
 <td>date_created</td>
-<td>unix timestamp integer</td>
+<td>long (unix timestamp)</td>
 <td>1492805827</td>
 </tr>
 <tr>
 <td>date_updated</td>
-<td>unix timestamp integer</td>
+<td>long (unix timestamp)</td>
 <td>1492805827</td>
 </tr>
 <tr>
@@ -1465,8 +1472,6 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <h4 id="variant-object">variant Object</h4>
 
-<p>A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.</p>
-
 <blockquote>
 <p>Example data for a product with three sizes, two colors, two patterns:</p>
 </blockquote>
@@ -1485,6 +1490,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     </span><span class="p">{</span><span class="w"> </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SI03"</span><span class="p">,</span><span class="w"> </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C002"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pattern"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P002"</span><span class="w"> </span><span class="p">},</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
+<p>A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.</p>
+
 <p>A variant has a varying number of key/value string pairs, as determined by the number of options in a product. A product with three options will have three key/value pairs in it&rsquo;s variants.</p>
 
 <table><thead>
@@ -1516,23 +1523,395 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <h2 id="module-activity">Module: Activity</h2>
 
+<p>Activity is an aggregate of Session.</p>
+
+<p>The activity module handles order history and other historical data.</p>
+
 <h3 id="method-getorders">Method: getOrders</h3>
+
+<p>Method signature: <code class="prettyprint">session.getOrders()</code></p>
+
+<p>The method returns an array of <code class="prettyprint">transaction</code> objects.</p>
+
+<h4 id="transaction-object">transaction Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>80695c</td>
+</tr>
+<tr>
+<td>payWith</td>
+<td>string</td>
+<td>123123123</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>scan</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>processing</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>long (unix timestamp)</td>
+<td>1493130773</td>
+</tr>
+<tr>
+<td>finalPrice</td>
+<td>decimal</td>
+<td>129.00</td>
+</tr>
+<tr>
+<td>deliveryAddressId</td>
+<td>String</td>
+<td>123</td>
+</tr>
+<tr>
+<td>pan4</td>
+<td>string</td>
+<td>4111</td>
+</tr>
+<tr>
+<td>geoLoc</td>
+<td>object</td>
+<td></td>
+</tr>
+<tr>
+<td>items</td>
+<td>array of transactionItem objects</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="geoloc-object">geoLoc Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>lat</td>
+<td>double</td>
+<td>51.5237737</td>
+</tr>
+<tr>
+<td>long</td>
+<td>double</td>
+<td>-0.1585369</td>
+</tr>
+</tbody></table>
+
+<h4 id="transactionitem-object">transactionItem object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>38389992</td>
+</tr>
+<tr>
+<td>price</td>
+<td>decimal</td>
+<td>129.00</td>
+</tr>
+<tr>
+<td>qty</td>
+<td>decimal</td>
+<td>1</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Fitbit Charge 2</td>
+</tr>
+<tr>
+<td>imageUrl</td>
+<td>string</td>
+<td>http://domain.com/path/image.jpg</td>
+</tr>
+</tbody></table>
 
 <h2 id="module-checkout">Module: Checkout</h2>
 
+<p>Checkout is an aggregate of Session.</p>
+
+<p>The checkout module creates orders and completes orders with payment.</p>
+
 <h3 id="method-checkoutorder">Method: checkoutOrder</h3>
+
+<p>CheckoutOrder creates an order id and calculates the cost of the order.</p>
+
+<p>Method signature: <code class="prettyprint">session.checkoutOrder( cart )</code></p>
+
+<p>You must pass in a <code class="prettyprint">cart</code> object.</p>
+
+<p>The method returns an <code class="prettyprint">order</code> object.</p>
+
+<h4 id="cart-object">cart Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchantId</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>loyaltySettings</td>
+<td>object</td>
+<td></td>
+</tr>
+<tr>
+<td>deliverySettings</td>
+<td>object</td>
+<td></td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>products</td>
+<td>array of checkoutProduct objects</td>
+<td></td>
+</tr>
+<tr>
+<td>geoLoc</td>
+<td>Object</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="loyaltysettings-object">loyaltySettings Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>loyalty_id</td>
+<td>string</td>
+<td>123123</td>
+</tr>
+</tbody></table>
+
+<h4 id="deliverysettings-object">deliverySettings Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>delivery_address_id</td>
+<td>string</td>
+<td>14</td>
+</tr>
+</tbody></table>
+
+<h4 id="checkoutproduct-object">checkoutProduct Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>productId</td>
+<td>string</td>
+<td>12345c</td>
+</tr>
+<tr>
+<td>productTitle</td>
+<td>string</td>
+<td>Fitbit Charge 2</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>decimal</td>
+<td>1</td>
+</tr>
+<tr>
+<td>finalPrice</td>
+<td>decimal</td>
+<td>159.00</td>
+</tr>
+<tr>
+<td>options</td>
+<td>map of OptionValue objects</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="geoloc-object">geoLoc Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>lat</td>
+<td>double</td>
+<td>51.5237737</td>
+</tr>
+<tr>
+<td>long</td>
+<td>double</td>
+<td>-0.1585369</td>
+</tr>
+</tbody></table>
+
+<h4 id="order-object">order Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>123</td>
+</tr>
+<tr>
+<td>finalPrice</td>
+<td>decimal</td>
+<td>129.00</td>
+</tr>
+<tr>
+<td>breakdown</td>
+<td>array of priceBreakdown objects</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h4 id="pricebreakdown-object">priceBreakdown Object</h4>
+
+<blockquote>
+<p>Example breakdown object:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">  </span><span class="s2">"breakdown"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">129.00</span><span class="w">  </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shipping"</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">10.00</span><span class="w">  </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tax"</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">10.00</span><span class="w">  </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"option_variant"</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">10.00</span><span class="w">  </span><span class="p">},</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>amount</td>
+<td>decimal</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h3 id="method-createpaymentrequest">Method: createPaymentRequest</h3>
+
+<p>Creates an encrypted paymentRequest object to be used with buyOrder.</p>
+
+<p>Method signature: <code class="prettyprint">session.createPaymentRequest( paymentCard, cvv )</code></p>
+
+<p>You must pass in a <code class="prettyprint">paymentCard</code> object (<a href="#paymentcard-object">jump to object</a>) and a <code class="prettyprint">cvv</code> string.</p>
+
+<h4 id="paymentrequest-object">paymentRequest object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>paymentCard</td>
+<td>object</td>
+<td>(encrypted)</td>
+</tr>
+<tr>
+<td>cvv</td>
+<td>string</td>
+<td>(encrypted)</td>
+</tr>
+</tbody></table>
 
 <h3 id="method-buyorder">Method: buyOrder</h3>
 
-<h3 id="method-signorderupdates">Method: signOrderUpdates</h3>
+<p>BuyOrder references an order id and supplies payment for the order.</p>
+
+<p>Method signature: <code class="prettyprint">session.buyOrder( paymentRequest, order )</code></p>
+
+<p>You must pass in a <code class="prettyprint">paymentRequest</code> object (<a href="#paymentRequest-object">jump to object</a>), and the <code class="prettyprint">order</code> object (<a href="#order-object">jump to object</a>) you want to provide payment for.</p>
+
+<p>The method returns a <code class="prettyprint">transaction</code> object (<a href="#transaction-object">jump to object</a>). </p>
 
 <h2 id="module-api-check">Module: API Check</h2>
 
+<p>API Check is an aggregate of SDK.</p>
+
+<p>The <em>API Check</em> module helps the developer with lifecycle management.</p>
+
+<p>This module is reserved for future functionality.</p>
+
 <h3 id="method-checkversion">Method: checkVersion</h3>
+
+<p>Reserved for future functionality.</p>
 
 <h3 id="method-getstatus">Method: getStatus</h3>
 
+<p>Reserved for future functionality. </p>
+
 <h3 id="method-checkupgrade">Method: checkUpgrade</h3>
+
+<p>Reserved for future functionality. </p>
 
       </div>
       <div class="dark-box">
