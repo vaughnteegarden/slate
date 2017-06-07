@@ -98,8 +98,8 @@ The method returns a `customerProfile` object.
 |last_name|string|Doe|
 |email|string|user@domain.com|
 |timezone|string|Europe/London|
-|date_created|unix timestamp integer|1492805827|
-|date_updated|unix timestamp integer|1492805827|
+|date_created|long (unix timestamp)|1492805827|
+|date_updated|long (unix timestamp)|1492805827|
 |devices|array of deviceProfile objects||
 
 #### deviceProfile Object
@@ -334,7 +334,6 @@ The method returns an array of `merchant` objects.
 
 Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.
 
-
 ### Method: getCatalogs
 
 Method signature: `session.getCatalogs( merchant_id )`
@@ -442,8 +441,6 @@ OptionValue objects are key/value pairs, each describing one choice within an op
 
 #### variant Object
 
-A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.
-
 > Example data for a product with three sizes, two colors, two patterns:
 
 ```json
@@ -462,6 +459,8 @@ A variant represents a unique combination of  option values for a product. For e
 	{ "size": "SI03", "color": "C002", "pattern": "P002" },
 ]
 ```
+
+A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.
 
 A variant has a varying number of key/value string pairs, as determined by the number of options in a product. A product with three options will have three key/value pairs in it's variants.
 
@@ -482,15 +481,190 @@ The method returns a `product` object (see definition above).
 
 
 
+
 ## Module: Activity
+
+Activity is an aggregate of Session.
+
+The activity module handles order history and other historical data.
+
 ### Method: getOrders
 
+Method signature: `session.getOrders()`
+
+The method returns an array of `transaction` objects.
+
+#### transaction Object
+
+|field|format|example|
+|---|---|---|
+|id|string|80695c|
+|payWith|string|123123123|
+|type|string|scan|
+|status|string|processing|
+|timestamp|long (unix timestamp)|1493130773|
+|finalPrice|decimal|129.00|
+|deliveryAddressId|String|123|
+|pan4|string|4111|
+|geoLoc|object||
+|items|array of transactionItem objects||
+
+#### geoLoc Object
+
+|field|format|example|
+|---|---|---|
+|lat|double|51.5237737|
+|long|double|-0.1585369|
+
+#### transactionItem object
+
+|field|format|example|
+|---|---|---|
+|id|string|38389992|
+|price|decimal|129.00|
+|qty|decimal|1|
+|title|string|Fitbit Charge 2|
+|imageUrl|string|http://domain.com/path/image.jpg|
+
+
+
+
+
+
+
+
 ## Module: Checkout
+
+Checkout is an aggregate of Session.
+
+The checkout module creates orders and completes orders with payment.
+
 ### Method: checkoutOrder
+
+CheckoutOrder creates an order id and calculates the cost of the order.
+
+Method signature: `session.checkoutOrder( cart )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### cart Object
+
+|field|format|example|
+|---|---|---|
+|merchantId|string||
+|loyaltySettings|object||
+|deliverySettings|object||
+|type|string||
+|products|array of checkoutProduct objects||
+|geoLoc|Object||
+
+#### loyaltySettings Object
+
+|field|format|example|
+|---|---|---|
+|loyalty_id|string|123123|
+
+#### deliverySettings Object
+
+|field|format|example|
+|---|---|---|
+|delivery_address_id|string|14|
+
+#### checkoutProduct Object
+
+|field|format|example|
+|---|---|---|
+|productId|string|12345c|
+|productTitle|string|Fitbit Charge 2|
+|quantity|decimal|1|
+|finalPrice|decimal|159.00|
+|options|map of OptionValue objects||
+
+#### geoLoc Object
+
+|field|format|example|
+|---|---|---|
+|lat|double|51.5237737|
+|long|double|-0.1585369|
+
+#### order Object
+
+|field|format|example|
+|---|---|---|
+|id|string|123|
+|finalPrice|decimal|129.00|
+|breakdown|array of priceBreakdown objects||
+
+#### priceBreakdown Object
+
+>Example breakdown object:
+
+```json
+  "breakdown": [
+    { "type": "main", "amount": 129.00  },
+    { "type": "shipping", "amount": 10.00  },
+    { "type": "tax", "amount": 10.00  },
+    { "type": "option_variant", "amount": 10.00  },
+  ]
+```
+
+|field|format|example|
+|---|---|---|
+|type|string||
+|amount|decimal||
+
+### Method: createPaymentRequest
+
+Creates an encrypted paymentRequest object to be used with buyOrder.
+
+Method signature: `session.createPaymentRequest( paymentCard, cvv )`
+
+You must pass in a `paymentCard` object (<a href="#paymentcard-object">jump to object</a>) and a `cvv` string.
+
+#### paymentRequest object
+
+|field|format|example|
+|---|---|---|
+|paymentCard|object|(encrypted)|
+|cvv|string|(encrypted)|
+
 ### Method: buyOrder
-### Method: signOrderUpdates
+
+BuyOrder references an order id and supplies payment for the order.
+
+Method signature: `session.buyOrder( paymentRequest, order )`
+
+You must pass in a `paymentRequest` object (<a href="#paymentRequest-object">jump to object</a>), and the `order` object (<a href="#order-object">jump to object</a>) you want to provide payment for.
+
+The method returns a `transaction` object (<a href="#transaction-object">jump to object</a>). 
+
+
+
+
+
 
 ## Module: API Check
+
+API Check is an aggregate of SDK.
+
+The *API Check* module helps the developer with lifecycle management.
+
+This module is reserved for future functionality.
+
 ### Method: checkVersion
+
+Reserved for future functionality.
+
 ### Method: getStatus
+
+Reserved for future functionality. 
+
 ### Method: checkUpgrade
+
+Reserved for future functionality. 
+
+
+
+

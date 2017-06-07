@@ -46,6 +46,8 @@ This document is intended for experienced IOS and Android developer. It is expec
 
 ## Term Definitions
 
+|term|definition|
+|---|---|
 |Partner|The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app. |
 |Developer|The Developer is the mobile app developer of the Partner.|
 |Merchant|A merchant runs an ecommerce site that offers products for sale. Merchants also create Shoppable Ads and link them to products. A merchant may also offer device accounts that need Top Up. |
@@ -57,9 +59,6 @@ This document is intended for experienced IOS and Android developer. It is expec
 
 For more information on Rezolve, see http://rezolve.com.
 
-TODO: Add pointer to tech support resource(s)
-
-TODO: Add contact info for sales inquiry.
 
 # Getting Started
 
@@ -84,8 +83,6 @@ The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve 
 3. Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
 4. Select the Rezolve framework from the list of binaries that can be embedded.
 
-TODO: verify instructions with Marcos
-TODO: do we need to import anythinng per file, or otherwise set up the framework in code to use it? Marcos
 
 ## Set up the SDK - Android
 
@@ -99,8 +96,6 @@ The Android SDK is distributed as an .aar library. This makes it easy to import 
 4. Select the SDK file you downloaded, and click Finish. File name may differ from what is shown in screenshot. <br/><img src="images/04pickaar.png" style="margin:6px 0;"><br/><br/>
 5. The SDK should import as a module. You are now ready to develop. <br/><img src="images/05imported.png" style="margin:6px 0;"><br/><br/>
 
-TODO: verify install instructions with Adam.
-TODO: anything to import per file to use functions?
 
 # SDK Feature Use
 
@@ -136,9 +131,7 @@ Your `API Key` is supplied to you upon signup with Rezolve.
 
 Your `server environment` is an enum. See values, right.
 
-TODO Marcos verify
 
-TODO Adam verify
 
 
 ##  User Management, Session Management
@@ -180,7 +173,6 @@ AuthenticationRequest myAuthenticationRequest = new AuthenticationRequest.Builde
 
 sdk.registerUser(myAuthenticationRequest, this);
 
-//TODO catch response
 ```
 To register a user, you will need to call the sdk `registerUser` method, passing in an `authenticationRequest` object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
 
@@ -209,7 +201,7 @@ sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
 }
 ```
 ```java
-TODO add code sample
+ 
 ```
 To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
 
@@ -227,10 +219,10 @@ When the session is established, you can begin to access services, for example:
 ### Logout Session
 
 ``` objective_c
-TODO add code sample, IOS
+ 
 ```
 ```java
-TODO add code sample, Android
+ 
 ```
 Logging a user out is as simple as passing the `entity_id` to the logout method.
 
@@ -250,37 +242,37 @@ ProfileService supports only `update` and `get`.
 
 ## Shoppable Ads flow
 
-<img src="images/ShoppableAdsFlow.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdsFlow.png">View full size</a> ]
+<img src="images/ShoppableAddsFlow.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAddsFlow.png">View full size</a> ]
 
-The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) with the smartphone, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
+The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
 #### 1. Capture image and get product URL
-First, enable the scan screen, and capture a watermarked image. The Digimarc SDK will extract a Digimarc id from the image. Use the Digimarc SDK to fetch the "payoff" URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
+First, enable the scan screen using `session.startVideo()`, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
 
 #### 2. Fetch product info
 ``` objective_c
-TODO add getProduct code sample, IOS
+ 
 ```
 ```java
-TODO add getProduct code sample, Android
+ 
 ```
 Use the SDK `getProduct` call to retrieve product information. The `partner_id`, `merchant_id`, `catalog_id` and `product_id` will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.
 
 #### 3. Get an order total
 ``` objective_c
-TODO add checkoutOrder code sample, IOS
+ 
 ```
 ```java
-TODO add checkoutOrder code sample, Android
+ 
 ```
 Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
 
 #### 4. Show payment card choices
 ``` objective_c
-TODO add walletService.getAll code sample, IOS
+ 
 ```
 ```java
-TODO add walletService.getAll code sample, Android
+ 
 ```
 If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
 
@@ -288,10 +280,10 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 #### 5. Submit payment for order
 ``` objective_c
-TODO add buyOrder code sample, IOS
+ 
 ```
 ```java
-TODO add buyOrder code sample, Android
+ 
 ```
 When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
@@ -301,28 +293,28 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 #### 1. Add the top up target as a Favorite
 ``` objective_c
-TODO add FavouriteService.create code sample, IOS
+ 
 ```
 ```java
-TODO add FavouriteService.create code sample, Android
-```
-The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteService.create` method. 
 
-#### 2. List available favorites 
+```
+The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteService.create` method.
+
+#### 2. List available favorites
 ``` objective_c
-TODO add FavouriteService.getAll code sample, IOS
+
 ```
 ```java
-TODO add FavouriteService.getAll code sample, Android
+
 ```
 Once there is one or more favorites, use the `FavouriteService.getAll` method to list them. The customer will choose a favorite.
 
 #### 3. Get a list of topup amounts using getProducts
 ``` objective_c
-TODO add getProducts code sample, IOS
+
 ```
 ```java
-TODO add getProducts code sample, Android
+
 ```
 The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, we use the `getProducts` method, passing in a fixed category id. 
 
@@ -330,19 +322,19 @@ Display the list of top up choices. You can display each "product" as a currency
 
 #### 4. Get an order total
 ``` objective_c
-TODO add checkoutOrder code sample, IOS
+
 ```
 ```java
-TODO add checkoutOrder code sample, Android
+
 ```
 When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
 #### 5. Show payment card choices
 ``` objective_c
-TODO add walletService.getAll code sample, IOS
+
 ```
 ```java
-TODO add walletService.getAll code sample, Android
+
 ```
 If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
 
@@ -350,10 +342,10 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 #### 6. Submit payment for order
 ``` objective_c
-TODO add buyOrder code sample, IOS
+
 ```
 ```java
-TODO add buyOrder code sample, Android
+
 ```
 When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
