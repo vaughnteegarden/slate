@@ -6,8 +6,8 @@ language_tabs:
   - java: Android
 
 toc_footers:
-  - <a href='#'>Footer link 1</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='http://www.rezolve.com'>Rezolve Homepage</a>
+  - <a href='https://github.com/tripit/slate'>Documentation powered by Slate</a>
 
 includes:
 - moduleref
@@ -114,20 +114,34 @@ let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
 // possible values for env: enum are .Development , .Sandbox, and .Production
 ```
 ```java
+// Import the following classes:
+import com.rezolve.sdk.RezolveInterface;
 import com.rezolve.sdk.RezolveSDK;
+import com.rezolve.sdk.RezolveSession;
+import com.rezolve.sdk.model.customer.DeviceProfile;
+import com.rezolve.sdk.model.foreign.SignUpRequest;
 
-...
+// To handle server responses you will need to import interfaces or abstract classes from the following packages:
+import com.rezolve.sdk.core.callbacks.*;
+import com.rezolve.sdk.core.interfaces.*;
 
-private final static String API_KEY = "ABC123";
 
+// Rezolve SDK operates on models from com.rezolve.sdk.model subpackages. 
+// For example to handle a response from getMerchants query you will need a Merchant model:
+import com.rezolve.sdk.model.shop.Merchant;
+
+// initialize SDK
+// possible values for RezolveSDK.Env enum are .DEVELOPMENT , .SANDBOX, and .PRODUCTION
+private static final String API_KEY = "1234567890";
 RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
 
-// possible values for RezolveSDK.Env enum are .DEVELOPMENT , .SANDBOX, and .PRODUCTION
 ```
 
-To get started, import the SDK into your file, and initialize it. When initializing the SDK in your page, you must specify your `API Key`, and the `server environment` you are targeting. 
+To get started, import the SDK into your file.
 
-Your `API Key` is supplied to you upon signup with Rezolve.
+The SDK must be initialized before use. When initializing the SDK, you must specify your `API Key`, and the `server environment` you are targeting.
+
+Your `API Key` is supplied to you when you set up a developer account with Rezolve.
 
 Your `server environment` is an enum. See values, right.
 
@@ -159,22 +173,33 @@ sdk.registerUser(authenticationRequest: request) {  (entityId, partnerId) in
 }
 ```
 ```java
-private final static String API_KEY = "ABC123";
+DeviceProfile deviceProfile = new DeviceProfile(deviceId, deviceManufacturer, locale);
+SignUpRequest signUpRequest = new SignUpRequest.Builder()
+    .email("john.doe@domain.com")
+    .firstName("John")
+    .lastName("Doe")
+    .name("JDoe")
+    .device(deviceProfile)
+    .build();
 
-RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(signUpRequest, new RezolveInterface() {
+    @Override
+    public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, String entityId) {
+    	// persist the entity_id and partner_id values here
+        ...
 
-AuthenticationRequest myAuthenticationRequest = new AuthenticationRequest.Builder()
-.email("b")
-.firstName("d")
-.lastName("e")
-.name("h")
-.device(new DeviceProfile("12345", "Samsung", "UK"))
-.build();
+        // set session for convenience
+        mySession = rezolveSession;
+    }
 
-sdk.registerUser(myAuthenticationRequest, this);
+    @Override
+    public void onInitializationFailure() {
+    	// handle failure here
+    }
+});
 
 ```
-To register a user, you will need to call the sdk `registerUser` method, passing in an `authenticationRequest` object. The authenticationRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
+To register a user, you will need to call the sdk `registerUser` method, passing in an `SignUpRequest object`. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
 
 The `registerUser` method is used as shown to the right. Upon successful registration, the response will contain a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
 
@@ -196,12 +221,32 @@ let request: AuthenticationRequest = authenticationRequest()
 let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
 
 sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
-	// begin interacting with features
+	// use created session to access managers
     // example: session.CustomerProfileService.get
 }
 ```
 ```java
- 
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
+    @Override
+    public void onInitializationSuccess(RezolveSession rezolveSession, String s, String s1) {
+        mySession = rezolveSession;
+        // use created session to access managers
+    }
+
+    @Override
+    public void onInitializationFailure() {
+        // handle failed initialization
+    }
+});
+
+
+
+// Note: You don't need to create a new session if user navigatess to another activity. 
+// After the session is created, you can access it by calling:
+
+RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession();
+
+
 ```
 To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
 
@@ -219,12 +264,15 @@ When the session is established, you can begin to access services, for example:
 ### Logout Session
 
 ``` objective_c
- 
+// When session ends you should inform the sdk by calling
+session.authenticationService.logout();
+
 ```
 ```java
- 
+// When session ends you should inform the sdk by calling
+rezolveSession.getAuthenticationManager().logout(entityId);
 ```
-Logging a user out is as simple as passing the `entity_id` to the logout method.
+When a seession is over, you should notify the SDK by passing the `entity_id` to the logout method.
 
 ## Consumer Profile Management
 
@@ -234,11 +282,70 @@ Once logged in, you have access to the consumer's records. These include:
 * Favorites - Via the `FavouriteService`. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
 * Wallet - Via the `WalletService`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
 
-There are no specific flows to consider when managing the customer profile and assicated records.  
+There are no specific flows to consider when managing the customer profile and assicated records.
 
 AddressbookService, FavouriteService, and WalletService support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
 
 ProfileService supports only `update` and `get`.
+
+#### Android-specific instructions on Managers
+
+``` objective_c
+ 
+```
+```java
+public class MyActivity extends AppCompatActivity implements WalletInterface {
+
+	...
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager().getAll(this);
+	}
+
+	@Override
+	public void onWalletGetAllSuccess(List<PaymentCard> list) {  
+		// handle getAll response here
+		for(PaymentCard paymentCard : list) {
+    			String cardId = paymentCard.getId();
+			String expiresOn = paymentCard.getExpiresOn();
+		}
+	}
+
+	@Override
+	public void onWalletGetSuccess(PaymentCard paymentCard) {  
+	}
+
+	@Override
+	public void onWalletUpdateSuccess(PaymentCard paymentCard) { 
+	}
+
+	@Override
+	public void onWalletCreateSuccess(PaymentCard paymentCard) {
+	}
+
+	@Override
+	public void onWalletDeleteSuccess(HttpResponse httpResponse) {
+	}
+
+	@Override
+	public void onFailure(HttpResponse httpResponse) { 
+	}
+}
+
+
+// Alternately, if you only intend to use one of the methods provided by the 
+// manager, you can handle the response in a WalletCallback:
+rezolveSession.getWalletManager().getAll(new WalletCallback() {
+    @Override
+    public void onWalletGetAllSuccess(List<PaymentCard> list) {
+        // handle getAll response here
+    }
+});
+
+```
+
+To use a method from a manager you need to pass a corresponding interface. For example, if you want to use `WalletManager` methods your current activity should implement `WalletInterface`:
 
 ## Shoppable Ads flow
 
@@ -247,44 +354,109 @@ ProfileService supports only `update` and `get`.
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
 #### 1. Capture image and get product URL
+
+``` objective_c
+ 
+```
+```java
+ 
+ 
 First, enable the scan screen using `session.startVideo()`, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
 
 #### 2. Fetch product info
+
 ``` objective_c
  
 ```
 ```java
- 
+rezolveSession.getProductManager().getProduct(merchant, catalog, productId, new ProductCallback() {
+    @Override
+    public void onGetProductSuccess(Product product) {
+        String title = product.getTitle();
+        // handle result
+    }
+});
+
 ```
+
 Use the SDK `getProduct` call to retrieve product information. The `partner_id`, `merchant_id`, `catalog_id` and `product_id` will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.
 
-#### 3. Get an order total
+#### 3. Create an order and get an order total
+
 ``` objective_c
  
 ```
 ```java
- 
+HashMap<String, String> options = new HashMap<>();
+options.put("color", "red");
+
+CheckoutProduct checkoutProduct = new CheckoutProduct();
+checkoutProduct.setId(product.getId());
+checkoutProduct.setPrice(product.getPrice());
+checkoutProduct.setTitle(product.getTitle());
+checkoutProduct.setQty(5);
+checkoutProduct.setOptions(options);
+
+HashMap<String, String> deliverySettings = new HashMap<>();
+deliverySettings.put("delivery_address_id", "123123");
+
+HashMap<String, String> loyaltySettings = new HashMap<>();
+loyaltySettings.put("loyalty_id", "123123");
+
+HashMap<String, Double> geoLoc = new HashMap<>();
+geoLoc.put("lat", 12.3123);
+geoLoc.put("long", 31.1323);
+
+List<CheckoutProduct> items = new ArrayList<>();
+items.add(checkoutProduct);
+
+Cart cart = new Cart.Builder()
+        .merchantId(product.getMerchantId())
+        .type("scan")
+        .deliverySettings(deliverySettings)
+        .loyaltySettings(loyaltySettings)
+        .geoLoc(geoLoc)
+        .items(items)
+        .build();
+
+rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
+    @Override
+    public void onCheckoutOrderSuccess(Order order) {
+        String orderId = order.getOrderId();
+        //handle result
+    }
+});
 ```
+
 Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
 
 #### 4. Show payment card choices
+
 ``` objective_c
  
 ```
 ```java
- 
+rezolveSession.getWalletManager().getAll(new WalletCallback() {
+    @Override
+    public void onWalletGetAllSuccess(List<PaymentCard> list) {
+        // handle getAll response here
+    }
+});
 ```
+
 If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
 #### 5. Submit payment for order
+
 ``` objective_c
  
 ```
 ```java
- 
+
 ```
+
 When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 ## Top Up flow
@@ -296,6 +468,13 @@ When the user confirms intent, pass the card choice and the entered CVV value to
  
 ```
 ```java
+Favourite favourite = new Favourite(id, value, type, provider);
+
+rezolveSession.getFavouriteManager().create(favourite, new FavouriteCallback() {
+    @Override
+    public void onFavouriteCreateSuccess(Favourite favourites) {
+    }
+});
 
 ```
 The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteService.create` method.
@@ -305,7 +484,15 @@ The top up flow gives the mobile consumer the ability to add money to a remote a
 
 ```
 ```java
-
+rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
+    @Override
+    public void onFavouriteGetAllSuccess(List<Favourite> favourites) {
+        for(Favourite favourite : favourites) {
+            String favouriteId = favourite.getId();
+            // handle response
+        }
+    }
+});
 ```
 Once there is one or more favorites, use the `FavouriteService.getAll` method to list them. The customer will choose a favorite.
 
@@ -314,6 +501,19 @@ Once there is one or more favorites, use the `FavouriteService.getAll` method to
 
 ```
 ```java
+rezolveSession.getProductManager().getProducts(merchant, catalog, count, pageIndex, sortBy, sortDirection, new ProductCallback() {
+    @Override
+    public void onGetProductsSuccess(PageResult<DisplayProduct> pageResult) {
+        int count = pageResult.getCount();
+        int total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> displayProducts = pageResult.getEmbedded();
+        for(DisplayProduct displayProduct : displayProducts) {
+            String title = displayProduct.getTitle();
+            // fetch other params as needed
+        }
+    }
+});
 
 ```
 The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, we use the `getProducts` method, passing in a fixed category id. 
@@ -334,7 +534,12 @@ When you have the product choice, call the SDK `checkoutOrder` method. Pass in t
 
 ```
 ```java
-
+rezolveSession.getWalletManager().getAll(new WalletCallback() {
+    @Override
+    public void onWalletGetAllSuccess(List<PaymentCard> list) {
+        // handle getAll response here
+    }
+});
 ```
 If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
 

@@ -6,7 +6,7 @@ Authentication services are an aggregate of SDK.
 This module handles consumer user creation and authentication.
 
 ### Method: Register
-Method signature: `sdk.register( SignUpRequest )`
+Method signature: `sdk.register( SignUpRequest, [callback or interface] )`
 
 You must pass in a valid `signUpRequest` object.
 
@@ -43,7 +43,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 |entity_id|string|9310c880695c|
 
 ### Method: Create Session
-Method signature: `sdk.createSession( entityId, partnerId, DeviceProfile )`
+Method signature: `sdk.createSession( entityId, partnerId, DeviceProfile, [callback or interface] )`
 
 `entity_id` is a string, returned from `sdk.register`
 
@@ -81,7 +81,7 @@ The ProfileService is an aggregate of Session.
 This module handles maintaining the consumer's contact information and device info.
 
 ### Method: get
-Method signature: `session.customerProfileService.get()`
+Method signature: `session.customerProfileService.get( [callback or interface] )`
 
 No parameters are required to be passed in. It will always fetch the profile for the authenticated consumer.
 
@@ -115,7 +115,7 @@ The method returns a `customerProfile` object.
 
 ### Method: update
 
-Method signature: `session.customerProfileService.update( customerProfile )`
+Method signature: `session.customerProfileService.update( customerProfile, [callback or interface] )`
 
 The profile update method works only for the updating of consumer personal data. Device profiles and date stamps are not editable.
 
@@ -137,7 +137,7 @@ This module provides CRUD functions for consumer addresses. The consumer may add
 
 ### Method: create
 
-Method signature: `session.addressbookService.create( address )`
+Method signature: `session.addressbookService.create( address, [callback or interface] )`
 
 You must pass in a valid `address` object with the `id` field blank.
 
@@ -158,7 +158,7 @@ The method returns the created `address` object with `id` upon success.
 
 ### Method: update
 
-Method signature: `session.addressbookService.update( address )`
+Method signature: `session.addressbookService.update( address, [callback or interface] )`
 
 You must pass in a valid `address` object with `id` populated.
 
@@ -166,13 +166,13 @@ The method returns the updated `address` object upon success.
 
 ### Method: delete
 
-Method signature: `session.addressbookService.delete( id )`
+Method signature: `session.addressbookService.delete( id, [callback or interface] )`
 
 You must pass in the `id` of the `address` to delete.
 
 ### Method: get
 
-Method signature: `session.addressbookService.get( id )`
+Method signature: `session.addressbookService.get( id, [callback or interface] )`
 
 You must pass in the `id` of the `address` to get.
 
@@ -180,7 +180,7 @@ The method returns an `address` object.
 
 ### Method: getAll
 
-Method signature: `session.addressbookService.getAll()`
+Method signature: `session.addressbookService.getAll( [callback or interface] )`
 
 The method returns an array of `address` objects.
 
@@ -198,7 +198,7 @@ This module provides CRUD functions for Favorites. The term "Favorite" refers to
 
 ### Method: create
 
-Method signature: `session.favouriteService.create()`
+Method signature: `session.favouriteService.create( [callback or interface] )`
 
 You must pass in a `favourite` object with the `id` field blank.
 
@@ -215,7 +215,7 @@ The method returns the created `favourite` object with `id` upon success.
 
 ### Method: update
 
-Method signature: `session.favouriteService.update( favourite )`
+Method signature: `session.favouriteService.update( favourite, [callback or interface] )`
 
 You must pass in a valid `favourite` object with `id` populated.
 
@@ -223,13 +223,13 @@ The method returns the updated `favourite` object upon success.
 
 ### Method: delete
 
-Method signature: `session.favouriteService.delete( id )`
+Method signature: `session.favouriteService.delete( id, [callback or interface] )`
 
 You must pass in the `id` of the `favourite` to delete.
 
 ### Method: get
 
-Method signature: `session.favouriteService.get( id )`
+Method signature: `session.favouriteService.get( id, [callback or interface] )`
 
 You must pass in the `id` of the `favourite` to get.
 
@@ -237,7 +237,7 @@ The method returns an `favourite` object.
 
 ### Method: getAll
 
-Method signature: `session.favouriteService.getAll()`
+Method signature: `session.favouriteService.getAll( [callback or interface] )`
 
 The method returns an array of `favourite` objects.
 
@@ -254,7 +254,7 @@ This module provides CRUD functions for payment cards.  The consumer may add one
 
 ### Method: create
 
-Method signature: `session.walletService.create()`
+Method signature: `session.walletService.create( [callback or interface] )`
 
 You must pass in a `paymentCard` object with the `id` field blank.
 
@@ -280,7 +280,7 @@ The method returns the created `paymentCard` object with `id` upon success.
 
 ### Method: update
 
-Method signature: `session.walletService.update( paymentCard )`
+Method signature: `session.walletService.update( paymentCard, [callback or interface] )`
 
 You must pass in a valid `paymentCard` object with `id` populated.
 
@@ -288,13 +288,13 @@ The method returns the updated `paymentCard` object upon success.
 
 ### Method: delete
 
-Method signature: `session.walletService.delete( id )`
+Method signature: `session.walletService.delete( id, [callback or interface] )`
 
 You must pass in the `id` of the `paymentCard` to delete.
 
 ### Method: get
 
-Method signature: `session.walletService.get( id )`
+Method signature: `session.walletService.get( id, [callback or interface] )`
 
 You must pass in the `id` of the `paymentCard` to get.
 
@@ -302,7 +302,7 @@ The method returns a `paymentCard` object.
 
 ### Method: getAll
 
-Method signature: `session.walletService.getAll()`
+Method signature: `session.walletService.getAll( [callback or interface] )`
 
 The method returns an array of `paymentCard` objects.
 
@@ -319,7 +319,7 @@ The Shop module offers methods specific to e-commerce; getting catalogs, product
 
 ### Method: getMerchants
 
-Method signature: `session.getMerchants()`
+Method signature: `session.getMerchants( [callback or interface] )`
 
 The method returns an array of `merchant` objects.
 
@@ -336,7 +336,7 @@ Recommended use of images: the image_url is used as a header background, and the
 
 ### Method: getCatalogs
 
-Method signature: `session.getCatalogs( merchant_id )`
+Method signature: `session.getCatalogs( merchant_id, [callback or interface] )`
 
 You must pass in the `id` of the `merchant` to whose catalogs you wish to get.
 
@@ -362,13 +362,13 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 
 ### Method: getCatalog
 
-Method signature: `session.getCatalog( merchant_id, catalog_id )`
+Method signature: `session.getCatalog( merchant_id, catalog_id, [callback or interface] )`
 
 The method returns a `catalog` object.
 
 ### Method: getProducts
 
-Method signature: `session.getProducts( merchant_id, catalog_id, pageNavigation)`
+Method signature: `session.getProducts( merchant_id, catalog_id, pageNavigation, [callback or interface] )`
 
 You must pass a `merchant_id`, `catalog_id`, and a `pageNavivation` object. 
 
@@ -471,7 +471,7 @@ A variant has a varying number of key/value string pairs, as determined by the n
 
 ### Method: getProduct
 
-Method signature: `session.getProduct( merchant_id, catalog_id, product_id)`
+Method signature: `session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )`
 
 You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
 
@@ -490,7 +490,7 @@ The activity module handles order history and other historical data.
 
 ### Method: getOrders
 
-Method signature: `session.getOrders()`
+Method signature: `session.getOrders( [callback or interface] )`
 
 The method returns an array of `transaction objects`.
 
@@ -543,7 +543,7 @@ The checkout module creates orders and completes orders with payment.
 
 CheckoutOrder creates an order id and calculates the cost of the order.
 
-Method signature: `session.checkoutOrder( cart )`
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
 
 You must pass in a `cart` object.
 
@@ -621,7 +621,7 @@ See <a href="#optionvalue-object">`optionValue object`</a>.
 
 Creates an encrypted paymentRequest object to be used with buyOrder.
 
-Method signature: `session.createPaymentRequest( paymentCard, cvv )`
+Method signature: `session.createPaymentRequest( paymentCard, cvv, [callback or interface] )`
 
 You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a `cvv` string.
 
@@ -636,19 +636,19 @@ You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a 
 
 BuyOrder references an order id and supplies payment for the order.
 
-Method signature: `session.buyOrder( paymentRequest, order )`
+Method signature: `session.buyOrder( paymentRequest, order, [callback or interface] )`
 
 You must pass in a <a href="#paymentrequest-object">`paymentRequest object`</a>, and the <a href="#order-object">`order object`</a> you want to provide payment for.
 
-The method returns a <a href="#transaction-object">`transaction object`</a>. 
+The method returns a <a href="#transaction-object">`transaction object`</a>.
 
 ### Method: signOrderUpdates
 
 In environments where transactions can take a very long time (minutes to tens of minutes), this method provides a way to subscribe and be notified of transaction success.
 
-Method signature: `session.buyOrder( entity_id, order_id )`
+Method signature: `session.buyOrder( entity_id, order_id, [callback or interface] )`
 
-This method is reserved for future ffunctionality.
+This method is reserved for future functionality.
 
 
 
