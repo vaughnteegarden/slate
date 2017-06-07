@@ -404,9 +404,11 @@ You can switch between IOS and Android by clicking the tabs above.
     <span class="o">.</span><span class="na">device</span><span class="o">(</span><span class="n">deviceProfile</span><span class="o">)</span>
     <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
-<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">registerUser</span><span class="o">(</span><span class="n">signUpRequest</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">registerUser</span><span class="o">(</span><span class="n">signUpRequest</span><span class="o">,</span> 
+<span class="k">new</span> <span class="nf">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">String</span> <span class="n">entityId</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">,</span> 
+    <span class="n">String</span> <span class="n">entityId</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// persist the entity_id and partner_id values here</span>
         <span class="o">...</span>
 
@@ -443,9 +445,11 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="c1">// use created session to access managers
 </span>    <span class="c1">// example: session.CustomerProfileService.get
 </span><span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
+<span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">String</span> <span class="n">s1</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">s</span><span class="o">,</span> 
+    <span class="n">String</span> <span class="n">s1</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">mySession</span> <span class="o">=</span> <span class="n">rezolveSession</span><span class="o">;</span>
         <span class="c1">// use created session to access managers</span>
     <span class="o">}</span>
@@ -510,7 +514,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
@@ -565,13 +570,11 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <h4 id="1-capture-image-and-get-product-url">1. Capture image and get product URL</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
 </code></pre><pre class="highlight java tab-java"><code>
+</code></pre>
+<p>First, enable the scan screen using <code class="prettyprint">session.startVideo()</code>, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.</p>
 
-<span class="n">First</span><span class="o">,</span> <span class="n">enable</span> <span class="n">the</span> <span class="n">scan</span> <span class="n">screen</span> <span class="n">using</span> <span class="err">`</span><span class="n">session</span><span class="o">.</span><span class="na">startVideo</span><span class="o">()</span><span class="err">`</span><span class="o">,</span> <span class="n">and</span> <span class="n">capture</span> <span class="n">a</span> <span class="n">watermarked</span> <span class="n">image</span><span class="o">.</span> <span class="n">The</span> <span class="n">Digimarc</span> <span class="n">SDK</span> <span class="n">will</span> <span class="n">extract</span> <span class="n">an</span> <span class="n">ad</span> <span class="n">id</span> <span class="n">from</span> <span class="n">the</span> <span class="n">image</span><span class="o">.</span> <span class="n">Use</span> <span class="n">the</span> <span class="n">scanManager</span> <span class="n">to</span> <span class="n">fetch</span> <span class="n">the</span> <span class="n">product</span> <span class="n">URL</span> <span class="n">associated</span> <span class="n">with</span> <span class="n">the</span> <span class="n">id</span> <span class="n">from</span> <span class="n">the</span> <span class="n">Digimarc</span> <span class="n">server</span><span class="o">.</span> <span class="n">This</span> <span class="n">url</span> <span class="n">will</span> <span class="n">point</span> <span class="n">to</span> <span class="n">a</span> <span class="n">getProduct</span> <span class="n">API</span> <span class="n">endpoint</span><span class="o">.</span>
-
-<span class="err">####</span> <span class="mi">2</span><span class="o">.</span> <span class="n">Fetch</span> <span class="n">product</span> <span class="n">info</span>
-
-<span class="err">```</span> <span class="n">objective_c</span>
-
+<h4 id="2-fetch-product-info">2. Fetch product info</h4>
+<pre class="highlight objective_c tab-objective_c"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getProductManager</span><span class="o">().</span><span class="na">getProduct</span><span class="o">(</span><span class="n">merchant</span><span class="o">,</span> <span class="n">catalog</span><span class="o">,</span> <span class="n">productId</span><span class="o">,</span> <span class="k">new</span> <span class="n">ProductCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetProductSuccess</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
@@ -679,7 +682,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getProductManager</span><span class="o">().</span><span class="na">getProducts</span><span class="o">(</span><span class="n">merchant</span><span class="o">,</span> <span class="n">catalog</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">pageIndex</span><span class="o">,</span> <span class="n">sortBy</span><span class="o">,</span> <span class="n">sortDirection</span><span class="o">,</span> <span class="k">new</span> <span class="n">ProductCallback</span><span class="o">()</span> <span class="o">{</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getProductManager</span><span class="o">().</span><span class="na">getProducts</span><span class="o">(</span><span class="n">merchant</span><span class="o">,</span> <span class="n">catalog</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> 
+<span class="n">pageIndex</span><span class="o">,</span> <span class="n">sortBy</span><span class="o">,</span> <span class="n">sortDirection</span><span class="o">,</span> <span class="k">new</span> <span class="n">ProductCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetProductsSuccess</span><span class="o">(</span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">DisplayProduct</span><span class="o">&gt;</span> <span class="n">pageResult</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">pageResult</span><span class="o">.</span><span class="na">getCount</span><span class="o">();</span>
