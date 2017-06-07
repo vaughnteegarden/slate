@@ -111,7 +111,7 @@ partnerId, deviceProfile, new RezolveInterface() {
         // handle failed initialization
     }
 });
-
+```
 
 Method signature: `sdk.createSession( entityId, partnerId, DeviceProfile, [callback or interface] )`
 
