@@ -90,7 +90,7 @@ The target IDE for Android instructions is **Android Studio**. If you use a diff
 
 The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
 
-1. In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/>
+1. In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/>
 
 ```java
 flatDir {
