@@ -35,7 +35,7 @@ import com.rezolve.sdk.model.shop.Merchant;
 
 // initialize SDK
 // possible values for RezolveSDK.Env enum are .DEVELOPMENT , .SANDBOX, .PRODUCTION
-private static final String API_KEY = "1234567890";
+String API_KEY = "1234567890";
 RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
 
 ```
@@ -147,16 +147,12 @@ partnerId, deviceProfile, new RezolveInterface() {
     }
 });
 
-
-
 // Note: You don't need to create a new session if user navigatess to another activity. 
 // After the session is created, you can access it by calling:
-
 RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
 .getRezolveSession();
-
-
 ```
+
 To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
 
 * Verifies the validity of the mobile app, through the API key
@@ -364,10 +360,21 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
  
 ```
 ```java
+// Create an encrypted payment request using the CheckoutManager.createPaymentRequest
+PaymentRequest paymentRequest = mySession.getCheckoutManager().createPaymentRequest( paymentCard, cvv );
 
+// pass the paymentRequest object, order object, and callback to the buyOrder method
+rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new CheckoutCallback() {
+    @Override
+    public void onBuyOrderSuccess(Transaction transaction) {
+        //handle result
+    }
+});
 ```
 
-When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This will create the encrypted `paymentRequest` object needed for checkout.
+
+Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response will contain either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 ## Top Up flow
 
@@ -463,7 +470,9 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 ```java
 
 ```
-When the user confirms intent, pass the card choice and the entered CVV value to the `buyOrder` method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This will create the encrypted `paymentRequest` object needed for checkout.
+
+Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response will contain either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 
 # Error Handling
