@@ -91,7 +91,7 @@ The target IDE for Android instructions is **Android Studio**. If you use a diff
 The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
 
 <ol>
-<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li>
+<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li></ol>
 
 ```java
 flatDir {
@@ -99,15 +99,14 @@ flatDir {
 }
 ```
 
-<li>In the project-level gradle file, specify the libs dir as "flatDir". <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li>
+<ol start="2"><li>In the project-level gradle file, specify the libs dir as "flatDir". <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li></ol>
 
 ```java
 compile(name:'rezolve-sdk-1.0-release', ext: 'aar')
 ```
 
-<li> Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency, and resync if necessary.  Note: change filename/version as needed to match your download. <br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li>
+<ol start="3"><li>Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency, and resync if necessary.  Note: change filename/version as needed to match your download. <br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li></ol>
 
-</ol>
 
 # SDK Feature Use
 
