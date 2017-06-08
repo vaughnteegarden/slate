@@ -322,23 +322,15 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:</p>
 
 <ol>
-<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li>
-
-&ldquo;`java
-flatDir {
-    dirs &lsquo;libs&rsquo;
-}
-&rdquo;`
-
-<li>In the project-level gradle file, specify the libs dir as &ldquo;flatDir&rdquo;. <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li>
-
-&ldquo;`java
-compile(name:&lsquo;rezolve-sdk-1.0-release&rsquo;, ext: &lsquo;aar&rsquo;)
-&rdquo;`
-
-<li> Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency, and resync if necessary.  Note: change filename/version as needed to match your download. <br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li>
-
-</ol>
+<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li></ol>
+<pre class="highlight java tab-java"><code><span class="n">flatDir</span> <span class="o">{</span>
+    <span class="n">dirs</span> <span class="err">'</span><span class="n">libs</span><span class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+<ol start="2"><li>In the project-level gradle file, specify the libs dir as &ldquo;flatDir&rdquo;. <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li></ol>
+<pre class="highlight java tab-java"><code><span class="n">compile</span><span class="o">(</span><span class="nl">name:</span><span class="err">'</span><span class="n">rezolve</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="n">release</span><span class="err">'</span><span class="o">,</span> <span class="nl">ext:</span> <span class="err">'</span><span class="n">aar</span><span class="err">'</span><span class="o">)</span>
+</code></pre>
+<ol start="3"><li>Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency, and resync if necessary.  Note: change filename/version as needed to match your download. <br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li></ol>
 
 <h1 id="sdk-feature-use">SDK Feature Use</h1>
 
