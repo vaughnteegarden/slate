@@ -365,7 +365,7 @@ You can switch between IOS and Android by clicking the tabs above.
 
 <span class="c1">// initialize SDK</span>
 <span class="c1">// possible values for RezolveSDK.Env enum are .DEVELOPMENT , .SANDBOX, .PRODUCTION</span>
-<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"1234567890"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"1234567890"</span><span class="o">;</span>
 <span class="n">RezolveSDK</span> <span class="n">sdk</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">DEVELOPMENT</span><span class="o">);</span>
 
 </code></pre>
@@ -465,15 +465,10 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 
-
-
 <span class="c1">// Note: You don't need to create a new session if user navigatess to another activity. </span>
 <span class="c1">// After the session is created, you can access it by calling:</span>
-
 <span class="n">RezolveSession</span> <span class="n">rezolveSession</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">)</span>
 <span class="o">.</span><span class="na">getRezolveSession</span><span class="o">();</span>
-
-
 </code></pre>
 <p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:</p>
 
@@ -651,9 +646,20 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <h4 id="5-submit-payment-for-order">5. Submit payment for order</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
-</code></pre><pre class="highlight java tab-java"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Create an encrypted payment request using the CheckoutManager.createPaymentRequest</span>
+<span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">mySession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">().</span><span class="na">createPaymentRequest</span><span class="o">(</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="n">cvv</span> <span class="o">);</span>
+
+<span class="c1">// pass the paymentRequest object, order object, and callback to the buyOrder method</span>
+<span class="n">rezolveSession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">().</span><span class="na">buyOrder</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">order</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBuyOrderSuccess</span><span class="o">(</span><span class="n">Transaction</span> <span class="n">transaction</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//handle result</span>
+    <span class="o">}</span>
+<span class="o">});</span>
 </code></pre>
-<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
+<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This will create the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
+
+<p>Pass the <code class="prettyprint">paymentRequst</code> object and the <code class="prettyprint">order</code> object to the <code class="prettyprint">buyOrder</code> method. The response will contain either a <code class="prettyprint">transaction</code> object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h2 id="top-up-flow">Top Up flow</h2>
 
@@ -731,7 +737,9 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <pre class="highlight objective_c tab-objective_c"><code>
 </code></pre><pre class="highlight java tab-java"><code>
 </code></pre>
-<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">buyOrder</code> method. The response will contain either an order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
+<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This will create the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
+
+<p>Pass the <code class="prettyprint">paymentRequst</code> object and the <code class="prettyprint">order</code> object to the <code class="prettyprint">buyOrder</code> method. The response will contain either a <code class="prettyprint">transaction</code> object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h1 id="error-handling">Error Handling</h1>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
