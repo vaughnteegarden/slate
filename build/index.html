@@ -322,16 +322,22 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:</p>
 
 <ol>
-<li>In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/>
-<code class="prettyprint">java
+<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. If necessary, re-sync the project.<br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li>
+
+&ldquo;`java
 flatDir {
-dirs &#39;libs&#39;
+    dirs &lsquo;libs&rsquo;
 }
-2. In the project-level gradle file, specify the libs dir as &quot;flatDir&quot;. &lt;br/&gt;&lt;img src=&quot;images/import-3-addtogradle.png&quot; style=&quot;margin:6px 0;&quot;&gt;&lt;br/&gt;&lt;br/&gt;
-</code>java
+&rdquo;`
+
+<li>In the project-level gradle file, specify the libs dir as &ldquo;flatDir&rdquo;. <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li>
+
+&ldquo;`java
 compile(name:&lsquo;rezolve-sdk-1.0-release&rsquo;, ext: &lsquo;aar&rsquo;)
-&ldquo;`
-3. Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency, and resync if necessary.  Note: change filename/version as needed to match your download. <br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li>
+&rdquo;`
+
+<li> Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency, and resync if necessary.  Note: change filename/version as needed to match your download. <br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li>
+
 </ol>
 
 <h1 id="sdk-feature-use">SDK Feature Use</h1>
@@ -648,7 +654,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 </code></pre>
 <p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
-<p>At this point, we recommend using a &quot;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
+<p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="5-submit-payment-for-order">5. Submit payment for order</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
