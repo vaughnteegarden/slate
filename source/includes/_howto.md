@@ -51,7 +51,7 @@ RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
 
 ```
 
-To get started, import the SDK into your file.
+To get started, import the SDK into your code file.
 
 The SDK must be initialized before use. When initializing the SDK, you must specify your `API Key`, and the `server environment` you are targeting.
 
@@ -60,6 +60,70 @@ Your `API Key` is supplied to you when you set up a developer account with Rezol
 Your `server environment` is an enum. See values, right.
 
 
+## Android-specific instructions on Managers
+
+```java
+// 	THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort
+
+// 
+// Using MANAGER, you must handle the response in a WalletCallback:
+//
+public class MyActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+ 		...
+        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
+        
+            @Override
+            public void onInitializationSuccess(RezolveSession rezolveSession, String 
+            entityId, String partnerId) {
+                rezolveSession.getWalletManager().getAll(new WalletCallback() {
+                
+                    @Override
+                    public void onWalletGetAllSuccess(List<PaymentCard> list) {
+                    // handle getAll response here
+                        for(PaymentCard paymentCard : list) {
+                            String cardId = paymentCard.getId();
+                            String expiresOn = paymentCard.getExpiresOn();
+                            // ...etc
+                    	}
+                    }
+                });
+            }
+        });
+    }
+}
+
+// 
+// Using INTERFACE, you can save some development time
+// 
+public class MyActivity extends AppCompatActivity implements WalletInterface {
+	...
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession()
+        .getWalletManager().getAll(this);
+	}
+
+	@Override
+	public void onWalletGetAllSuccess(List<PaymentCard> list) {
+		// handle getAll response here
+		for(PaymentCard paymentCard : list) {
+    		String cardId = paymentCard.getId();
+			String expiresOn = paymentCard.getExpiresOn();
+            // ...etc
+		}
+	}
+}
+
+```
+
+In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface. 
+
+For example, if you want to use `WalletManager` methods, you can either do so directly, or implement `WalletInterface` in your current activty for convenience. See Android code at right for comparison.
+
+The Module Reference section exclusively documents using Feature Interfaces, as this is the preferred method.
 
 
 ##  User Management, Session Management
@@ -204,72 +268,7 @@ AddressbookManager, FavouriteManager, and WalletManager support the following CR
 
 ProfileManager supports only `update` and `get`.
 
-#### Android-specific instructions on Managers
 
-``` objective_c
- 
-```
-```java
-// 	THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort
-
-// 
-// Using MANAGER, you must handle the response in a WalletCallback:
-//
-public class MyActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
- 		...
-        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
-        .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
-        
-            @Override
-            public void onInitializationSuccess(RezolveSession rezolveSession, String 
-            entityId, String partnerId) {
-                rezolveSession.getWalletManager().getAll(new WalletCallback() {
-                
-                    @Override
-                    public void onWalletGetAllSuccess(List<PaymentCard> list) {
-                    // handle getAll response here
-                        for(PaymentCard paymentCard : list) {
-                            String cardId = paymentCard.getId();
-                            String expiresOn = paymentCard.getExpiresOn();
-                            ...etc
-                    	}
-                    }
-                });
-            }
-        });
-    }
-}
-
-// 
-// Using INTERFACE, you can save some development time
-// 
-public class MyActivity extends AppCompatActivity implements WalletInterface {
-	...
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession()
-        .getWalletManager().getAll(this);
-	}
-
-	@Override
-	public void onWalletGetAllSuccess(List<PaymentCard> list) {
-		// handle getAll response here
-		for(PaymentCard paymentCard : list) {
-    		String cardId = paymentCard.getId();
-			String expiresOn = paymentCard.getExpiresOn();
-            ...etc
-		}
-	}
-}
-
-
-
-
-```
-
-In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each Manager has an equivalent Interface. For example, if you want to use `WalletManager` methods, you can either do so directly, or implement `WalletInterface` in your current activty for convenience. See right for comparison.
 
 ## Shoppable Ads flow
 
@@ -280,10 +279,10 @@ The premise of Shoppable Ads is to capture an image scan (usually of an advertis
 #### 1. Capture image and get product URL
 
 ``` objective_c
- 
+
 ```
 ```java
- 
+
 ```
 First, enable the scan screen using `session.startVideo()`, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
 
