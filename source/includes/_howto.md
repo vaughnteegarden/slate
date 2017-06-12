@@ -39,6 +39,17 @@ String API_KEY = "1234567890";
 RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
 
 ```
+```java
+// Note: the SDK's manifest requests the following permissions:
+// On Android 6.0+, you will have to specifically request the last two. 
+// See https://developer.android.com/training/permissions/requesting.html
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.CAMERA" />
+
+```
 
 To get started, import the SDK into your file.
 
@@ -128,7 +139,7 @@ let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
 
 sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
 	// use created session to access managers
-    // example: session.CustomerProfileService.get
+    // example: session.CustomerProfileManager.get
 }
 ```
 ```java
@@ -163,14 +174,14 @@ To log in and interact with Rezolve services, you must establish a session. A se
 Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id` and a `deviceProfile` object. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
 
 When the session is established, you can begin to access services, for example:
-`session.CustomerProfileService.get`
+`session.CustomerProfileManager.get`
 
 
 ### Logout Session
 
 ``` objective_c
 // When session ends you should inform the sdk by calling
-session.authenticationService.logout();
+session.authenticationManager.logout();
 
 ```
 ```java
@@ -182,16 +193,16 @@ When a seession is over, you should notify the SDK by passing the `entity_id` to
 ## Consumer Profile Management
 
 Once logged in, you have access to the consumer's records. These include:
-* Consumer Profile - Via the `ConsumerProfileService`. Name, email, and device profile (phone info) for the consumer
-* Address Book - Via the `AddressbookService`. A collection of postal addresses, to be used for ship-to and bill-to purposes.
-* Favorites - Via the `FavouriteService`. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
-* Wallet - Via the `WalletService`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
+* Consumer Profile - Via the `ConsumerProfileManager`. Name, email, and device profile (phone info) for the consumer
+* Address Book - Via the `AddressbookManager`. A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Favorites - Via the `FavouriteManager`. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
+* Wallet - Via the `WalletManager`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
 
 There are no specific flows to consider when managing the customer profile and assicated records.
 
-AddressbookService, FavouriteService, and WalletService support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
+AddressbookManager, FavouriteManager, and WalletManager support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
 
-ProfileService supports only `update` and `get`.
+ProfileManager supports only `update` and `get`.
 
 #### Android-specific instructions on Managers
 
@@ -199,10 +210,43 @@ ProfileService supports only `update` and `get`.
  
 ```
 ```java
+// 	THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort
+
+// 
+// Using MANAGER, you must handle the response in a WalletCallback:
+//
+public class MyActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+ 		...
+        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
+        
+            @Override
+            public void onInitializationSuccess(RezolveSession rezolveSession, String 
+            entityId, String partnerId) {
+                rezolveSession.getWalletManager().getAll(new WalletCallback() {
+                
+                    @Override
+                    public void onWalletGetAllSuccess(List<PaymentCard> list) {
+                    // handle getAll response here
+                        for(PaymentCard paymentCard : list) {
+                            String cardId = paymentCard.getId();
+                            String expiresOn = paymentCard.getExpiresOn();
+                            ...etc
+                    	}
+                    }
+                });
+            }
+        });
+    }
+}
+
+// 
+// Using INTERFACE, you can save some development time
+// 
 public class MyActivity extends AppCompatActivity implements WalletInterface {
-
 	...
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession()
@@ -213,45 +257,19 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 	public void onWalletGetAllSuccess(List<PaymentCard> list) {  
 		// handle getAll response here
 		for(PaymentCard paymentCard : list) {
-    			String cardId = paymentCard.getId();
+    		String cardId = paymentCard.getId();
 			String expiresOn = paymentCard.getExpiresOn();
+            ...etc
 		}
-	}
-
-	@Override
-	public void onWalletGetSuccess(PaymentCard paymentCard) {  
-	}
-
-	@Override
-	public void onWalletUpdateSuccess(PaymentCard paymentCard) { 
-	}
-
-	@Override
-	public void onWalletCreateSuccess(PaymentCard paymentCard) {
-	}
-
-	@Override
-	public void onWalletDeleteSuccess(HttpResponse httpResponse) {
-	}
-
-	@Override
-	public void onFailure(HttpResponse httpResponse) { 
 	}
 }
 
 
-// Alternately, if you only intend to use one of the methods provided by the 
-// manager, you can handle the response in a WalletCallback:
-rezolveSession.getWalletManager().getAll(new WalletCallback() {
-    @Override
-    public void onWalletGetAllSuccess(List<PaymentCard> list) {
-        // handle getAll response here
-    }
-});
+
 
 ```
 
-To use a method from a manager you need to pass a corresponding interface. For example, if you want to use `WalletManager` methods your current activity should implement `WalletInterface`:
+In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each Manager has an equivalent Interface. For example, if you want to use `WalletManager` methods, you can either do so directly, or implement `WalletInterface` in your current activty for convenience. See right for comparison.
 
 ## Shoppable Ads flow
 
@@ -275,7 +293,8 @@ First, enable the scan screen using `session.startVideo()`, and capture a waterm
  
 ```
 ```java
-rezolveSession.getProductManager().getProduct(merchant, catalog, productId, new ProductCallback() {
+rezolveSession.getProductManager().getProduct(merchant, 
+ catalog, productId, new ProductCallback() {
     @Override
     public void onGetProductSuccess(Product product) {
         String title = product.getTitle();
@@ -350,7 +369,7 @@ rezolveSession.getWalletManager().getAll(new WalletCallback() {
 });
 ```
 
-If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
+If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer will choose a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
@@ -361,7 +380,8 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 ```
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest
-PaymentRequest paymentRequest = mySession.getCheckoutManager().createPaymentRequest( paymentCard, cvv );
+PaymentRequest paymentRequest = mySession.getCheckoutManager()
+.createPaymentRequest( paymentCard, cvv );
 
 // pass the paymentRequest object, order object, and callback to the buyOrder method
 rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new CheckoutCallback() {
@@ -394,7 +414,7 @@ rezolveSession.getFavouriteManager().create(favourite, new FavouriteCallback() {
 });
 
 ```
-The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteService.create` method.
+The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteManager.create` method.
 
 #### 2. List available favorites
 ``` objective_c
@@ -411,7 +431,7 @@ rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
     }
 });
 ```
-Once there is one or more favorites, use the `FavouriteService.getAll` method to list them. The customer will choose a favorite.
+Once there is one or more favorites, use the `FavouriteManager.getAll` method to list them. The customer will choose a favorite.
 
 #### 3. Get a list of topup amounts using getProducts
 ``` objective_c
@@ -459,7 +479,7 @@ rezolveSession.getWalletManager().getAll(new WalletCallback() {
     }
 });
 ```
-If the consumer agrees with the price and wishes to complete the order, use `walletService.getAll` to list the available card choices. The consumer will choose a payment card.
+If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer will choose a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 

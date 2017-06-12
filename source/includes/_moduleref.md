@@ -1,6 +1,6 @@
 # Module Reference Docs
 
-## Module: Authentication
+## Module: AuthenticationManager
 Authentication services are an aggregate of SDK.
 
 This module handles consumer user creation and authentication.
@@ -153,14 +153,104 @@ Method signature: `sdk.logout( entityId )`
 
 
 
-## Module: ProfileService
+## Module: ProfileManager
 
-The ProfileService is an aggregate of Session.
+The ProfileManager is an aggregate of Session.
 
 This module handles maintaining the consumer's contact information and device info.
 
-### Method: get
-Method signature: `session.customerProfileService.get( [callback or interface] )`
+### Method: customerProfileManager.get
+
+``` objective_c
+
+```
+```java
+
+
+// get using CustomerProfileInterface
+public class Profile extends AppCompatActivity implements CustomerProfileInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+
+        // get customer profile
+        myProfileManager.get(this);
+    }
+
+    @Override
+    public void onGetSuccess(CustomerProfile customerProfile) {
+        // access profile info
+        String dateCreated = customerProfile.getDateCreated();
+        String dateUpdated = customerProfile.getDateUpdated();
+        List devices = customerProfile.getDevices();
+        String email = customerProfile.getEmail();
+        String entityId = customerProfile.getEntityId();
+        String firstName = customerProfile.getFirstName();
+        String lastName = customerProfile.getLastName();
+        String locale = customerProfile.getLocale();
+        String name = customerProfile.getName();
+        String timezone = customerProfile.getTimezone();
+        String title = customerProfile.getTitle();
+
+        // access device profile info
+        String deviceId = customerProfile.getDevices().get(1).getDeviceId();
+        String make = customerProfile.getDevices().get(1).getMake();
+        String osType = customerProfile.getDevices().get(1).getOsType();
+        Integer osVersion = customerProfile.getDevices().get(1).getOsVersion();
+    }
+}
+
+
+
+// get using CustomerProfileManager
+public class Profile2 extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+		...
+        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession( entityId,
+        partnerId, deviceProfile, new RezolveInterface() {
+            @Override
+            public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
+
+                rezolveSession.getCustomerProfileManager().get(new CustomerProfileCallback() {
+                    @Override
+                    public void onGetSuccess(CustomerProfile customerProfile) {
+                        super.onGetSuccess(customerProfile);
+                        // access profile info
+                        String dateCreated = customerProfile.getDateCreated();
+                        String dateUpdated = customerProfile.getDateUpdated();
+                        List devices = customerProfile.getDevices();
+                        String email = customerProfile.getEmail();
+                        String entityId = customerProfile.getEntityId();
+                        String firstName = customerProfile.getFirstName();
+                        String lastName = customerProfile.getLastName();
+                        String locale = customerProfile.getLocale();
+                        String name = customerProfile.getName();
+                        String timezone = customerProfile.getTimezone();
+                        String title = customerProfile.getTitle();
+
+                        // access device profile info
+                        String deviceId = customerProfile.getDevices().get(1).getDeviceId();
+                        String make = customerProfile.getDevices().get(1).getMake();
+                        String osType = customerProfile.getDevices().get(1).getOsType();
+                        Integer osVersion = customerProfile.getDevices().get(1).getOsVersion();
+                    }
+                });
+            }
+        });
+    }
+}
+```
+
+Method signature: `session.customerProfileManager.get( [callback or interface] )`
 
 No parameters are required to be passed in. It will always fetch the profile for the authenticated consumer.
 
@@ -179,7 +269,7 @@ The method returns a `customerProfile` object.
 |timezone|string|Europe/London|
 |date_created|long (unix timestamp)|1492805827|
 |date_updated|long (unix timestamp)|1492805827|
-|devices|array of deviceProfile objects||
+|devices|array of deviceProfile objects| |
 
 #### deviceProfile Object
 
@@ -189,12 +279,60 @@ The method returns a `customerProfile` object.
 |device_id|string|bd17391f9561|
 |make|string|apple|
 |os_type|string|iOS|
-|os_version|string|10.3|
+|os_version|int|10.3|
 |locale|locale as a combination of ISO 639-1 language code and ISO 3166-1 country code|en_GB|
 
-### Method: update
+### Method: customerProfileManager.update
 
-Method signature: `session.customerProfileService.update( customerProfile, [callback or interface] )`
+``` objective_c
+
+```
+```java
+// update using CustomerProfileInterface
+public class Profile extends AppCompatActivity implements CustomerProfileInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+
+
+        //update customer profile
+        String API_KEY = "1234567890";
+        String deviceId = "62c7c7042511c086";
+        String deviceManufacturer = "HTC";
+        String locale = "en-US";
+        DeviceProfile deviceProfile = new DeviceProfile(deviceId, deviceManufacturer, locale);
+        List<DeviceProfile> devices = new ArrayList<DeviceProfile>();
+        devices.add(deviceProfile);
+
+        CustomerProfile profile = new CustomerProfile();
+        profile.setDevices(devices);
+        profile.setEmail("johndoe@gmail.com");
+        profile.setEntityId("123");
+        profile.setFirstName("John");
+        profile.setLastName("Doe");
+        profile.setLocale("en-US");
+        profile.setName("John Doe");
+        profile.setTimezone("America/New_York");
+        profile.setTitle("Mr.");
+
+        myProfileManager.update(profile, this);
+    }
+
+    @Override
+    public void onUpdateSuccess(CustomerProfile customerProfile) {
+        // show success message
+    }
+
+}
+
+```
+
+Method signature: `session.customerProfileManager.update( customerProfile, [callback or interface] )`
 
 The profile update method works only for the updating of consumer personal data. Device profiles and date stamps are not editable.
 
@@ -208,13 +346,48 @@ The modified `customerProfile` object is returned upon success.
 
 
 
-## Module: AddressbookService
+## Module: AddressbookManager
 
-The AddressbookService is an aggregate of Session.
+The AddressbookManager is an aggregate of Session.
 
 This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.
 
-### Method: create
+### Method: addressbookManager.create
+
+```objective_c
+
+```
+```java
+// create address using addressBookInterface
+public class addressBook extends AppCompatActivity implements AddressbookInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+
+        // create a new address
+        Address address = new Address();
+        address.setShortName("Home");
+        address.setCity("Boston");
+        address.setCountry("US");
+        address.setLine1("123 Some Street");
+        address.setLine2("");
+        address.setState("MA");
+        address.setZip("02110");
+        myAddressManager.create(address,this);
+
+    }
+
+    @Override
+    public void onAddressbookCreateSuccess(Address address) {
+        // show create success update message
+    }
+}
+```
 
 Method signature: `session.addressbookService.create( address, [callback or interface] )`
 
@@ -235,31 +408,173 @@ The method returns the created `address` object with `id` upon success.
 |zip|string|39531|
 |country|string|USA|
 
-### Method: update
+### Method: addressbookManager.update
 
-Method signature: `session.addressbookService.update( address, [callback or interface] )`
+```objective_c
+
+```
+```java
+// update address using addressBookInterface
+public class addressBook extends AppCompatActivity implements AddressbookInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+
+        // update an address
+        Address address = new Address();
+        address.setShortName("Home");
+        address.setCity("Boston");
+        address.setCountry("US");
+        address.setLine1("123 Some Street");
+        address.setLine2("");
+        address.setState("MA");
+        address.setZip("02110");
+        myAddressManager.create(address,this);
+    }
+
+    @Override
+    public void onAddressbookUpdateSuccess(Address address) {
+        // show update success message
+    }
+}
+```
+
+Method signature: `session.addressbookManager.update( address, [callback or interface] )`
 
 You must pass in a valid `address` object with `id` populated.
 
 The method returns the updated `address` object upon success.
 
-### Method: delete
+### Method: addressbookManager.delete
 
-Method signature: `session.addressbookService.delete( id, [callback or interface] )`
+```objective_c
 
-You must pass in the `id` of the `address` to delete.
+```
+```java
+// delete address using AddressbookInterface
+public class addressBook extends AppCompatActivity implements AddressbookInterface {
 
-### Method: get
+    private final static String API_KEY = "your_api_key";
 
-Method signature: `session.addressbookService.get( id, [callback or interface] )`
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+
+        // delete an address
+        Address address = new Address();
+        address.setShortName("Home");
+        address.setCity("Boston");
+        address.setCountry("US");
+        address.setLine1("123 Some Street");
+        address.setLine2("");
+        address.setState("MA");
+        address.setZip("02110");
+        myAddressManager.delete(address,this);
+    }
+
+    @Override
+    public void onAddressbookDeleteSuccess(HttpResponse httpResponse) {
+        // show delete update message
+    }
+}
+```
+
+Method signature: `session.addressbookManager.delete( id, [callback or interface] )`
+
+You must pass in the `address` object to delete.
+
+### Method: addressbookManager.get
+
+```objective_c
+
+```
+```java
+// get address using AddressbookInterface
+public class addressBook extends AppCompatActivity implements AddressbookInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+
+        // get a single address
+        String address_id = "123";
+        myAddressManager.get(address_id,this);
+    }
+
+    @Override
+    public void onAddressbookGetSuccess(Address address) {
+        // get address info
+        String id = address.getId();
+        String shortName = address.getShortName();
+        String city = address.getCity();
+        String country = address.getCountry();
+        String line1 = address.getLine1();
+        String line2 = address.getLine2();
+        String state = address.getState();
+        String zip = address.getZip();
+    }
+}
+```
+
+Method signature: `session.addressbookManager.get( id, [callback or interface] )`
 
 You must pass in the `id` of the `address` to get.
 
 The method returns an `address` object.
 
-### Method: getAll
+### Method: addressbookManager.getAll
+```objective_c
 
-Method signature: `session.addressbookService.getAll( [callback or interface] )`
+```
+```java
+// get all addresses using AddressbookInterface
+public class addressBook extends AppCompatActivity implements AddressbookInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+
+        // list all addresses
+        myAddressManager.getAll(this);
+    }
+
+    @Override
+    public void onAddressbookGetAllSuccess(List<Address> list) {
+        // get address list info
+        for(Address address : list) {
+            String id = address.getId();
+            String shortName = address.getShortName();
+            String city = address.getCity();
+            String country = address.getCountry();
+            String line1 = address.getLine1();
+            String line2 = address.getLine2();
+            String state = address.getState();
+            String zip = address.getZip();
+        }
+    }
+}
+```
+
+Method signature: `session.addressbookManager.getAll( [callback or interface] )`
 
 The method returns an array of `address` objects.
 
@@ -269,15 +584,47 @@ The method returns an array of `address` objects.
 
 
 
-## Module: FavoriteService
+## Module: FavoriteManager
 
-The FavoriteService is an aggregate of Session.
+The FavoriteManager is an aggregate of Session.
 
 This module provides CRUD functions for Favorites. The term "Favorite" refers to the target of a top up operation, in which money is added to a remote account associated with a device or service. The consumer may add one or more favorites to their account.
 
-### Method: create
+### Method: favouriteManager.create
 
-Method signature: `session.favouriteService.create( [callback or interface] )`
+```objective_c
+
+```
+```java
+// create favorite using FavouriteInterface
+public class Favorites extends AppCompatActivity implements FavouriteInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+
+        // create a favourite
+        Favourite favourite = new Favourite();
+        favourite.setId("9310c880695c");
+        favourite.setProvider("AT&T");
+        favourite.setType("phone");
+        favourite.setValue("549912341234");
+        myFavouriteManager.create(favourite,this);
+    }
+
+    @Override
+    public void onFavouriteCreateSuccess(Favourite favourite) {
+        // show favourite created message
+    }
+}
+```
+
+Method signature: `session.favouriteManager.create( [callback or interface] )`
 
 You must pass in a `favourite` object with the `id` field blank.
 
@@ -292,31 +639,158 @@ The method returns the created `favourite` object with `id` upon success.
 |type|string|phone|
 |provider|string|AT&T|
 
-### Method: update
+### Method: favouriteManager.update
 
-Method signature: `session.favouriteService.update( favourite, [callback or interface] )`
+```objective_c
+
+```
+```java
+// update favorite using FavouriteInterface
+public class Favorites extends AppCompatActivity implements FavouriteInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+
+        // update a favourite
+        Favourite favourite = new Favourite();
+        favourite.setId("9310c880695c");
+        favourite.setProvider("AT&T");
+        favourite.setType("phone");
+        favourite.setValue("549912341234");
+        myFavouriteManager.update(favourite,this);
+    }
+
+    @Override
+    public void onFavouriteUpdateSuccess(Favourite favourite) {
+        // show favourite updated message
+    }
+}
+```
+
+Method signature: `session.favouriteManager.update( favourite, [callback or interface] )`
 
 You must pass in a valid `favourite` object with `id` populated.
 
 The method returns the updated `favourite` object upon success.
 
-### Method: delete
+### Method: favouriteManager.delete
 
-Method signature: `session.favouriteService.delete( id, [callback or interface] )`
+```objective_c
 
-You must pass in the `id` of the `favourite` to delete.
+```
+```java
+// delete favorite using FavouriteInterface
+public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
-### Method: get
+    private final static String API_KEY = "your_api_key";
 
-Method signature: `session.favouriteService.get( id, [callback or interface] )`
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+
+        // delete a favourite
+        Favourite favourite = new Favourite();
+        favourite.setId("9310c880695c");
+        favourite.setProvider("AT&T");
+        favourite.setType("phone");
+        favourite.setValue("549912341234");
+        myFavouriteManager.delete(favourite,this);
+    }
+
+    @Override
+    public void onFavouriteDeleteSuccess(HttpResponse httpResponse) {
+        // show favourite deleted message
+    }
+}
+```
+
+Method signature: `session.favouriteManager.delete( id, [callback or interface] )`
+
+You must pass in the `favourite` object to delete.
+
+### Method: favouriteManager.get
+
+```objective_c
+
+```
+```java
+// get a favorite using FavouriteInterface
+public class Favorites extends AppCompatActivity implements FavouriteInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+
+        // get a single favourite
+        String favourite_id = "123";
+        myFavouriteManager.get(favourite_id,this);
+    }
+
+    @Override
+    public void onFavouriteGetSuccess(Favourite favourite) {
+        // get favourite info
+        String id = favourite.getId();
+        String provider = favourite.getProvider();
+        String type= favourite.getType();
+        String value = favourite.getValue();
+    }
+}
+```
+
+Method signature: `session.favouriteManager.get( id, [callback or interface] )`
 
 You must pass in the `id` of the `favourite` to get.
 
 The method returns an `favourite` object.
 
-### Method: getAll
+### Method: favouriteManager.getAll
 
-Method signature: `session.favouriteService.getAll( [callback or interface] )`
+```objective_c
+
+```
+```java
+public class Favorites extends AppCompatActivity implements FavouriteInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+
+        // list all favourites
+        myFavouriteManager.getAll(this);
+    }
+
+    @Override
+    public void onFavouriteGetAllSuccess(List<Favourite> list) {
+        // get favourite list info
+        for(Favourite favourite : list) {
+            String id = favourite.getId();
+            String provider = favourite.getProvider();
+            String type= favourite.getType();
+            String value = favourite.getValue();
+        }
+    }
+}
+```
+
+Method signature: `session.favouriteManager.getAll( [callback or interface] )`
 
 The method returns an array of `favourite` objects.
 
@@ -326,14 +800,50 @@ The method returns an array of `favourite` objects.
 
 
 
-## Module: WalletService
-The WalletService is an aggregate of Session.
+## Module: WalletManager
+The WalletManager is an aggregate of Session.
 
 This module provides CRUD functions for payment cards.  The consumer may add one or more payment cards to their account.
 
-### Method: create
+### Method: walletManager.create
 
-Method signature: `session.walletService.create( [callback or interface] )`
+```objective_c
+
+```
+```java
+// create payment card using WalletInterface
+public class Wallet extends AppCompatActivity implements WalletInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+
+        // create a new payment card
+        PaymentCard myCard = new PaymentCard();
+        myCard.setAddressId("123");
+        myCard.setBrand("Bank of America");
+        myCard.setExpiresOn("08/19");
+        myCard.setNameOnCard("John Doe");
+        myCard.setPan("4111111111111111");
+        myCard.setShortName("My Amex");
+        myCard.setType("Amex");
+        myCard.setValidFrom("08/16");
+        myWalletManager.create(myCard, this);
+    }
+
+    @Override
+    public void onWalletCreateSuccess(PaymentCard paymentCard) {
+        // display success message
+    }
+}
+```
+
+Method signature: `session.walletManager.create( [callback or interface] )`
 
 You must pass in a `paymentCard` object with the `id` field blank.
 
@@ -357,31 +867,180 @@ The method returns the created `paymentCard` object with `id` upon success.
 |valid_from|string|08/14|
 |address_id|string|123|
 
-### Method: update
+### Method: walletManager.update
 
-Method signature: `session.walletService.update( paymentCard, [callback or interface] )`
+```objective_c
+
+```
+```java
+// update payment card using WalletInterface
+public class Wallet extends AppCompatActivity implements WalletInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+
+        // update a payment card
+        PaymentCard myCard2 = new PaymentCard();
+        myCard.setAddressId("123");
+        myCard.setBrand("Bank of America");
+        myCard.setExpiresOn("08/19");
+        myCard.setNameOnCard("John Doe");
+        myCard.setPan("4111111111111111");
+        myCard.setShortName("My Amex");
+        myCard.setType("Amex");
+        myCard.setValidFrom("08/16");
+        myWalletManager.update(myCard, this);
+    }
+
+    @Override
+    public void onWalletUpdateSuccess(PaymentCard paymentCard) {
+        // display success message
+    }
+}
+```
+
+Method signature: `session.walletManager.update( paymentCard, [callback or interface] )`
 
 You must pass in a valid `paymentCard` object with `id` populated.
 
 The method returns the updated `paymentCard` object upon success.
 
-### Method: delete
+### Method: walletManager.delete
 
-Method signature: `session.walletService.delete( id, [callback or interface] )`
+```objective_c
 
-You must pass in the `id` of the `paymentCard` to delete.
+```
+```java
+// delete payment card using WalletInterface
+public class Wallet extends AppCompatActivity implements WalletInterface {
 
-### Method: get
+    private final static String API_KEY = "your_api_key";
 
-Method signature: `session.walletService.get( id, [callback or interface] )`
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+
+        // delete a payment card
+        PaymentCard myCard3 = new PaymentCard();
+        myCard.setAddressId("123");
+        myCard.setBrand("Bank of America");
+        myCard.setExpiresOn("08/19");
+        myCard.setNameOnCard("John Doe");
+        myCard.setPan("4111111111111111");
+        myCard.setShortName("My Amex");
+        myCard.setType("Amex");
+        myCard.setValidFrom("08/16");
+        myWalletManager.delete(myCard, this);
+    }
+
+    @Override
+    public void onWalletDeleteSuccess(HttpResponse httpResponse) {
+        // display success message
+    }
+}
+```
+
+Method signature: `session.walletManager.delete( id, [callback or interface] )`
+
+You must pass in the `paymentCard` object to delete.
+
+### Method: walletManager.get
+
+```objective_c
+
+```
+```java
+// get a payment card using WalletInterface
+public class Wallet extends AppCompatActivity implements WalletInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+
+        // list a single payment card
+        String card_id = "123";
+        myWalletManager.get(card_id,this);
+    }
+
+    @Override
+    public void onWalletGetSuccess(PaymentCard paymentCard) {
+        // show Card info
+        String cardId = paymentCard.getId();
+        String addressId = paymentCard.getAddressId();
+        String brand = paymentCard.getBrand();
+        String expiresOn = paymentCard.getExpiresOn();
+        String nameOnCard = paymentCard.getNameOnCard();
+        String pan4 = paymentCard.getPan4();
+        String pan6 = paymentCard.getPan6();
+        String shortName = paymentCard.getShortName();
+        String type = paymentCard.getType();
+        String validFrom = paymentCard.getValidFrom();
+    }
+}
+```
+
+Method signature: `session.walletManager.get( id, [callback or interface] )`
 
 You must pass in the `id` of the `paymentCard` to get.
 
 The method returns a `paymentCard` object.
 
-### Method: getAll
+### Method: walletManager.getAll
 
-Method signature: `session.walletService.getAll( [callback or interface] )`
+```objective_c
+
+```
+```java
+// get all payment cards using WalletInterface
+public class Wallet extends AppCompatActivity implements WalletInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+
+        // list all payment cards
+        myWalletManager.getAll(this);
+    }
+
+    @Override
+    public void onWalletGetAllSuccess(List<PaymentCard> list) {
+        // handle getAll response here
+        for(PaymentCard paymentCard : list) {
+            String cardId = paymentCard.getId();
+            String addressId = paymentCard.getAddressId();
+            String brand = paymentCard.getBrand();
+            String expiresOn = paymentCard.getExpiresOn();
+            String nameOnCard = paymentCard.getNameOnCard();
+            String pan4 = paymentCard.getPan4();
+            String pan6 = paymentCard.getPan6();
+            String shortName = paymentCard.getShortName();
+            String type = paymentCard.getType();
+            String validFrom = paymentCard.getValidFrom();
+        }
+    }
+}
+```
+
+Method signature: `session.walletManager.getAll( [callback or interface] )`
 
 The method returns an array of `paymentCard` objects.
 
@@ -390,13 +1049,47 @@ The method returns an array of `paymentCard` objects.
 
 
 
-## Module: Shop
+## Module: ProductManager
 
 Shop is an aggregate of Session.
 
 The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.
 
 ### Method: getMerchants
+
+```objective_c
+
+```
+```java
+// get merchants using ProductInterface
+public class Products extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+
+        // get merchants
+        myProductManager.getMerchants(this);
+    }
+
+
+    @Override
+    public void onGetMerchantsSuccess(List<Merchant> list) {
+        // list merchants
+        for(Merchant merchant : list) {
+            String merchant_id = merchant.getId();
+            String imageUrl = merchant.getImageUrl();
+            String logoUrl = merchant.getLogoUrl();
+            String title = merchant.getTitle();
+        }
+    }
+}
+```
 
 Method signature: `session.getMerchants( [callback or interface] )`
 
@@ -414,6 +1107,41 @@ The method returns an array of `merchant` objects.
 Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.
 
 ### Method: getCatalogs
+
+```objective_c
+
+```
+```java
+// get catalogs using ProductInterface
+public class Products extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+
+		// get catalogs
+        String merchantId = "123";
+        myProductManager.getCatalogs(merchantId, this);
+    }
+
+    @Override
+    public void onGetCatalogsSuccess(List<Catalog> list) {
+        for (Catalog catalog : list) {
+            String catalog_id = catalog.getId();
+            String parent_id = catalog.getParentCatalogId();
+            String imageUrl = catalog.getImageUrl();
+            String title = catalog.getTitle();
+            Boolean hasCatalog = catalog.hasCatalog();
+            Boolean hasProduct = catalog.hasProduct();
+        }
+    }
+}
+```
 
 Method signature: `session.getCatalogs( merchant_id, [callback or interface] )`
 
@@ -441,11 +1169,99 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 
 ### Method: getCatalog
 
+```objective_c
+
+```
+```java
+// get a single catalog using ProductInterface
+public class Products extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+
+        // get single catalog
+        String catalogId = "123";
+        String merchantId = "123";
+        myProductManager.getCatalog(merchantId, catalogId, this);
+    }
+
+    @Override
+    public void onGetCatalogSuccess(List<Catalog> list) {
+        for (Catalog catalog : list) {
+            String catalog_id = catalog.getId();
+            String parent_id = catalog.getParentCatalogId();
+            String imageUrl = catalog.getImageUrl();
+            String title = catalog.getTitle();
+            Boolean hasCatalog = catalog.hasCatalog();
+            Boolean hasProduct = catalog.hasProduct();
+        }
+    }
+}
+```
+
 Method signature: `session.getCatalog( merchant_id, catalog_id, [callback or interface] )`
 
 The method returns a `catalog` object.
 
 ### Method: getProducts
+
+```objective_c
+
+```
+```java
+// get products using ProductInterface
+public class Products extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+
+        // get products
+        Catalog catalog = new Catalog();
+        Integer count = 16;
+        Integer page = 1;
+        String sort_by_field = "title";
+        String sort_direction = "ASC";
+        String merchantId3 = "123";
+        String catalogId2 = "123";
+        myProductManager.getProducts(merchantId3, catalogId2, count, page, 
+        sort_by_field, sort_direction, this);
+    }
+
+    @Override
+    public void onGetProductsSuccess(PageResult<DisplayProduct> pageResult) {
+        Integer count = pageResult.getCount();
+        Integer total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> embed = pageResult.getEmbedded();
+
+        for (Link link: links){
+            Integer linkcount = link.getCount();
+            Integer page = link.getPage();
+            String sort = link.getSort();
+            String sortBy = link.getSortBy();
+        }
+
+        for (DisplayProduct displayProduct : embed){
+            displayProduct.getId();
+            displayProduct.getImageUrl();
+            displayProduct.getPrice();
+            displayProduct.getTitle();
+        }
+    }
+}
+```
 
 Method signature: `session.getProducts( merchant_id, catalog_id, pageNavigation, [callback or interface] )`
 
@@ -550,6 +1366,71 @@ A variant has a varying number of key/value string pairs, as determined by the n
 
 ### Method: getProduct
 
+```objective_c
+
+```
+```java
+// get a single product using ProductInterface
+public class Products extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+
+        // get single product
+        Product product2 = new Product();
+        String productId = "123abc";
+        String merchantId4 = "123";
+        String catalogId3 = "123";
+        myProductManager.getProduct(merchantId4, catalogId3, productId, this);
+    }
+
+    @Override
+    public void onGetProductSuccess(com.rezolve.sdk.model.shop.Product product) {
+        // get product info
+        String product_id = product.getId();
+        String title = product.getTitle();
+        String subtitle = product.getSubtitle();
+        String description = product.getDescription();
+        List<String> images = product.getImages();
+        String merchant_id = product.getMerchantId();
+        float price = product.getPrice();
+        HashMap<String, Option> options = product.getOptions();
+        List<Variant> optionsAvail = product.getOptionAvailable();
+
+        // iterate to get values of options hashmap
+        for (String key : options.keySet()) {
+            String optionName = key;
+            Option optionValue = options.get(key);
+
+            String extraInfo = optionValue.getExtraInfo();
+            String label = optionValue.getLabel();
+            List<OptionValue> values = optionValue.getValues();
+
+            for(OptionValue opVal: values){
+                String opValLabel = opVal.getLabel();
+                String opValValue = opVal.getValue();
+            }
+        }
+
+        // iterate to get values of variant array
+        for (Variant variant : optionsAvail) {
+            HashMap<String, String> composition = variant.getCompositions();
+            // iterate to get values of composition hashmap
+            for (String key : composition.keySet() ){
+                String compLabel = key;
+                String compValue = composition.get(key);
+            }
+        }
+    }
+}
+```
+
 Method signature: `session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )`
 
 You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
@@ -561,13 +1442,69 @@ The method returns a <a href="#product-object">`product object`</a> .
 
 
 
-## Module: Activity
+## Module: UserActivityManager
 
 Activity is an aggregate of Session.
 
 The activity module handles order history and other historical data.
 
 ### Method: getOrders
+
+```objective_c
+
+```
+```java
+// get transactions using UserActivityManager
+public class Activities extends AppCompatActivity implements UserActivityInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getUserActivityManager();
+
+        // get transactions from User Activity Manager
+        myActivityManager.getOrders(this);
+    }
+
+    @Override
+    public void onGetOrdersSuccess(List<Transaction> list) {
+        for(Transaction transaction : list){
+            Map<String, String> deliverySettings = transaction.getDeliverySettings();
+            float finalPrice = transaction.getFinalPrice();
+            Map<String, Double> geoLoc = transaction.getGeoLoc();
+            List<TransactionItem> items = transaction.getItems();
+            Map<String, String> loyaltySettings = transaction.getLoyaltySettings();
+            String merchant_id = transaction.getMerchantId();
+            String pan4 = transaction.getPan4();
+            String payWith = transaction.getPayWith();
+            String status = transaction.getStatus();
+            String timestamp = transaction.getTimestamp();
+            String type = transaction.getType();
+
+            for (String key : geoLoc.keySet()) {
+                String label = key;
+                Double value = geoLoc.get(key);
+            }
+
+            for (TransactionItem transactionItem : items) {
+                transactionItem.getId();
+                transactionItem.getImageUrl();
+                transactionItem.getPrice();
+                transactionItem.getQty();
+                transactionItem.getTitle();
+            }
+
+            for (String key : loyaltySettings.keySet()) {
+                String label = key;
+                String value = loyaltySettings.get(key);
+            }
+        }
+    }
+}
+```
 
 Method signature: `session.getOrders( [callback or interface] )`
 
@@ -612,13 +1549,86 @@ The method returns an array of `transaction objects`.
 
 
 
-## Module: Checkout
+## Module: CheckoutManager
 
 Checkout is an aggregate of Session.
 
 The checkout module creates orders and completes orders with payment.
 
 ### Method: checkoutOrder
+
+```objective_c
+
+```
+```java
+// create an order and calculate cart cost
+public class Checkout extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
+
+        // create a cart object for demo use
+        // in actual use, pass an existing cart object
+        HashMap<String, String> options = new HashMap<>();
+        options.put("color", "red");
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        checkoutProduct.setId("123");
+        checkoutProduct.setPrice(125);
+        checkoutProduct.setTitle("Fitbit 2");
+        checkoutProduct.setQty(5);
+        checkoutProduct.setOptions(options);
+
+        List<CheckoutProduct> items = new ArrayList<>();
+        items.add(checkoutProduct);
+
+        HashMap<String, Double> geoLoc = new HashMap<>();
+        geoLoc.put("lat", 12.3123);
+        geoLoc.put("long", 31.1323);
+
+        HashMap<String, String> deliverySettings = new HashMap<>();
+        deliverySettings.put("delivery_address_id", "123123");
+
+        HashMap<String, String> loyaltySettings = new HashMap<>();
+        loyaltySettings.put("loyalty_id", "123123");
+
+        String merchantId = "123";
+
+        Cart cart = new Cart.Builder()
+                .merchantId(merchantId)
+                .type("scan")
+                .deliverySettings(deliverySettings)
+                .loyaltySettings(loyaltySettings)
+                .geoLoc(geoLoc)
+                .items(items)
+                .build();
+
+
+        // create order and calculate cost
+        myCheckoutManager.checkoutOrder(cart, this);
+
+    }
+
+
+    @Override
+    public void onCheckoutOrderSuccess(Order order) {
+        // get order info
+        String orderId = order.getOrderId();
+        float finalPrice = order.getFinalPrice();
+        List<PriceBreakdown> breakdowns = order.getBreakdowns();
+        //iterate price breakdown array
+        for (PriceBreakdown breakdown : breakdowns ) {
+            float amount = breakdown.getAmount();
+            String type = breakdown.getType();
+        }
+    }
+}
+```
 
 CheckoutOrder creates an order id and calculates the cost of the order.
 
@@ -698,6 +1708,15 @@ See <a href="#optionvalue-object">`optionValue object`</a>.
 
 ### Method: createPaymentRequest
 
+```objective_c
+
+```
+```java
+PaymentCard card = new PaymentCard(); // in actual use, pass in an existing card object
+String cvv = "123";
+PaymentRequest paymentRequest = myCheckoutManager.createPaymentRequest(card, cvv);
+```
+
 Creates an encrypted paymentRequest object to be used with buyOrder.
 
 Method signature: `session.createPaymentRequest( paymentCard, cvv, [callback or interface] )`
@@ -713,6 +1732,66 @@ You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a 
 
 ### Method: buyOrder
 
+```objective_c
+
+```
+```java
+public class Checkout extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
+
+        // buy Order
+        //first create the payment request from card and cvv
+        PaymentCard card = new PaymentCard(); // in actual use, pass in an existing card object
+        String cvv = "123";
+        PaymentRequest paymentRequest = myCheckoutManager.createPaymentRequest(card, cvv);
+        // then submit the order
+        Order order = new Order(); // in actual use, pass in an existing order object
+        myCheckoutManager.buyOrder(paymentRequest, order, this);
+    }
+
+    @Override
+    public void onBuyOrderSuccess(Transaction transaction) {
+        Map<String, String> deliverySettings = transaction.getDeliverySettings();
+        float finalPrice = transaction.getFinalPrice();
+        Map<String, Double> geoLoc = transaction.getGeoLoc();
+        List<TransactionItem> items = transaction.getItems();
+        Map<String, String> loyaltySettings = transaction.getLoyaltySettings();
+        String merchantId = transaction.getMerchantId();
+        String pan4 = transaction.getPan4();
+        String payWith = transaction.getPayWith();
+        String status = transaction.getStatus();
+        String timestamp = transaction.getTimestamp();
+        String type = transaction.getType();
+
+        // iterate to get delivery settings
+        for (String key : deliverySettings.keySet()) {
+            String label = key;
+            String value = deliverySettings.get(key);
+        }
+        // iterate to get loyalty settings
+        for (String key : loyaltySettings.keySet()) {
+            String label = key;
+            String value = loyaltySettings.get(key);
+        }
+        // iterate to get transaction items
+        for (TransactionItem item : items){
+            String itemId = item.getId();
+            String itemTitle = item.getTitle();
+            String qty = item.getQty();
+            String price = item.getPrice();
+            String imageUrl = item.getImageUrl();
+        }
+    }
+}
+```
+
 BuyOrder references an order id and supplies payment for the order.
 
 Method signature: `session.buyOrder( paymentRequest, order, [callback or interface] )`
@@ -723,7 +1802,7 @@ The method returns a <a href="#transaction-object">`transaction object`</a>.
 
 ### Method: signOrderUpdates
 
-In environments where transactions can take a very long time (minutes to tens of minutes), this method provides a way to subscribe and be notified of transaction success.
+In environments where transactions can take a very long time (minutes to tens of minutes) to return a status, this method provides a way to subscribe and be notified of transaction status updates.
 
 Method signature: `session.buyOrder( entity_id, order_id, [callback or interface] )`
 
