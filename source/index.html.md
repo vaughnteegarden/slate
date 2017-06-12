@@ -71,7 +71,7 @@ You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please vis
 
 The Rezolve Inside<sup>TM</sup> SDK for **IOS** can be downloaded here: <a href="#">TBD</a>
 
-The Rezolve Inside<sup>TM</sup> SDK for **Android** can be downloaded here: <a href="#">TBD</a>
+The Rezolve Inside<sup>TM</sup> SDK for **Android** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-sdk-1.0-release.aar">rezolve-sdk-1.0-release.aar</a>
 
 ## Set up the SDK - IOS
 

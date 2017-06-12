@@ -254,7 +254,7 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 	}
 
 	@Override
-	public void onWalletGetAllSuccess(List<PaymentCard> list) {  
+	public void onWalletGetAllSuccess(List<PaymentCard> list) {
 		// handle getAll response here
 		for(PaymentCard paymentCard : list) {
     		String cardId = paymentCard.getId();
@@ -463,7 +463,13 @@ Display the list of top up choices. You can display each "product" as a currency
 
 ```
 ```java
-
+rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
+    @Override
+    public void onCheckoutOrderSuccess(Order order) {
+        String orderId = order.getOrderId();
+        //handle result
+    }
+});
 ```
 When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
@@ -488,7 +494,17 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 ```
 ```java
+// Create an encrypted payment request using the CheckoutManager.createPaymentRequest
+PaymentRequest paymentRequest = mySession.getCheckoutManager()
+.createPaymentRequest( paymentCard, cvv );
 
+// pass the paymentRequest object, order object, and callback to the buyOrder method
+rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new CheckoutCallback() {
+    @Override
+    public void onBuyOrderSuccess(Transaction transaction) {
+        //handle result
+    }
+});
 ```
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This will create the encrypted `paymentRequest` object needed for checkout.
 

@@ -165,8 +165,6 @@ This module handles maintaining the consumer's contact information and device in
 
 ```
 ```java
-
-
 // get using CustomerProfileInterface
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
 
@@ -176,7 +174,8 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+        CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
 
         // get customer profile
         myProfileManager.get(this);
@@ -206,48 +205,6 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
 }
 
 
-
-// get using CustomerProfileManager
-public class Profile2 extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-		...
-        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession( entityId,
-        partnerId, deviceProfile, new RezolveInterface() {
-            @Override
-            public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
-
-                rezolveSession.getCustomerProfileManager().get(new CustomerProfileCallback() {
-                    @Override
-                    public void onGetSuccess(CustomerProfile customerProfile) {
-                        super.onGetSuccess(customerProfile);
-                        // access profile info
-                        String dateCreated = customerProfile.getDateCreated();
-                        String dateUpdated = customerProfile.getDateUpdated();
-                        List devices = customerProfile.getDevices();
-                        String email = customerProfile.getEmail();
-                        String entityId = customerProfile.getEntityId();
-                        String firstName = customerProfile.getFirstName();
-                        String lastName = customerProfile.getLastName();
-                        String locale = customerProfile.getLocale();
-                        String name = customerProfile.getName();
-                        String timezone = customerProfile.getTimezone();
-                        String title = customerProfile.getTitle();
-
-                        // access device profile info
-                        String deviceId = customerProfile.getDevices().get(1).getDeviceId();
-                        String make = customerProfile.getDevices().get(1).getMake();
-                        String osType = customerProfile.getDevices().get(1).getOsType();
-                        Integer osVersion = customerProfile.getDevices().get(1).getOsVersion();
-                    }
-                });
-            }
-        });
-    }
-}
 ```
 
 Method signature: `session.customerProfileManager.get( [callback or interface] )`
@@ -297,7 +254,8 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+        CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
 
 
         //update customer profile
@@ -367,7 +325,8 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
 
         // create a new address
         Address address = new Address();
@@ -771,7 +730,8 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+        FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
+        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
 
         // list all favourites
         myFavouriteManager.getAll(this);
@@ -1747,17 +1707,21 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
 
         // buy Order
-        //first create the payment request from card and cvv
-        PaymentCard card = new PaymentCard(); // in actual use, pass in an existing card object
+        // first create the payment request from card and cvv
+        // in actual use, pass in an existing card object
+        PaymentCard card = new PaymentCard();
         String cvv = "123";
         PaymentRequest paymentRequest = myCheckoutManager.createPaymentRequest(card, cvv);
+        
         // then submit the order
-        Order order = new Order(); // in actual use, pass in an existing order object
+        // in actual use, pass in an existing order object
+        Order order = new Order();
         myCheckoutManager.buyOrder(paymentRequest, order, this);
     }
 
     @Override
     public void onBuyOrderSuccess(Transaction transaction) {
+    	// get transaction info
         Map<String, String> deliverySettings = transaction.getDeliverySettings();
         float finalPrice = transaction.getFinalPrice();
         Map<String, Double> geoLoc = transaction.getGeoLoc();
