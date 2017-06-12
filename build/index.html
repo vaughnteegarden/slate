@@ -378,13 +378,75 @@ You can switch between IOS and Android by clicking the tabs above.
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
 
 </code></pre>
-<p>To get started, import the SDK into your file.</p>
+<p>To get started, import the SDK into your code file.</p>
 
 <p>The SDK must be initialized before use. When initializing the SDK, you must specify your <code class="prettyprint">API Key</code>, and the <code class="prettyprint">server environment</code> you are targeting.</p>
 
 <p>Your <code class="prettyprint">API Key</code> is supplied to you when you set up a developer account with Rezolve.</p>
 
 <p>Your <code class="prettyprint">server environment</code> is an enum. See values, right.</p>
+
+<h2 id="android-specific-instructions-on-managers">Android-specific instructions on Managers</h2>
+<pre class="highlight java tab-java"><code><span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
+
+<span class="c1">// </span>
+<span class="c1">// Using MANAGER, you must handle the response in a WalletCallback:</span>
+<span class="c1">//</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> 
+            <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
+
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// handle getAll response here</span>
+                        <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+                            <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
+                            <span class="c1">// ...etc</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">});</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// </span>
+<span class="c1">// Using INTERFACE, you can save some development time</span>
+<span class="c1">// </span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle getAll response here</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
+            <span class="c1">// ...etc</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+<p>In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface. </p>
+
+<p>For example, if you want to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activty for convenience. See Android code at right for comparison.</p>
+
+<p>The Module Reference section exclusively documents using Feature Interfaces, as this is the preferred method.</p>
 
 <h2 id="user-management-session-management">User Management, Session Management</h2>
 
@@ -515,68 +577,6 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>AddressbookManager, FavouriteManager, and WalletManager support the following CRUD operations: <code class="prettyprint">create</code>, <code class="prettyprint">update</code>, <code class="prettyprint">delete</code>, <code class="prettyprint">getAll</code>, <code class="prettyprint">get</code>.</p>
 
 <p>ProfileManager supports only <code class="prettyprint">update</code> and <code class="prettyprint">get</code>.</p>
-
-<h4 id="android-specific-instructions-on-managers">Android-specific instructions on Managers</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
-
-<span class="c1">// </span>
-<span class="c1">// Using MANAGER, you must handle the response in a WalletCallback:</span>
-<span class="c1">//</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="o">...</span>
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
-
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> 
-            <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
-
-                    <span class="nd">@Override</span>
-                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c1">// handle getAll response here</span>
-                        <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-                            <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
-                            <span class="o">...</span><span class="na">etc</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
-                <span class="o">});</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="c1">// </span>
-<span class="c1">// Using INTERFACE, you can save some development time</span>
-<span class="c1">// </span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
-    <span class="o">...</span>
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">()</span>
-        <span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// handle getAll response here</span>
-        <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
-            <span class="o">...</span><span class="na">etc</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-
-
-
-</code></pre>
-<p>In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each Manager has an equivalent Interface. For example, if you want to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activty for convenience. See right for comparison.</p>
 
 <h2 id="shoppable-ads-flow">Shoppable Ads flow</h2>
 
