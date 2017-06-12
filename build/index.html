@@ -368,6 +368,15 @@ You can switch between IOS and Android by clicking the tabs above.
 <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"1234567890"</span><span class="o">;</span>
 <span class="n">RezolveSDK</span> <span class="n">sdk</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">DEVELOPMENT</span><span class="o">);</span>
 
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
+<span class="c1">// On Android 6.0+, you will have to specifically request the last two. </span>
+<span class="c1">// See https://developer.android.com/training/permissions/requesting.html</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.INTERNET"</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.ACCESS_WIFI_STATE"</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.WRITE_EXTERNAL_STORAGE"</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.RECORD_AUDIO"</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
+
 </code></pre>
 <p>To get started, import the SDK into your file.</p>
 
@@ -448,7 +457,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <span class="n">sdk</span><span class="p">.</span><span class="n">createSession</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">session</span><span class="o">:</span> <span class="n">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
     <span class="c1">// use created session to access managers
-</span>    <span class="c1">// example: session.CustomerProfileService.get
+</span>    <span class="c1">// example: session.CustomerProfileManager.get
 </span><span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
 <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
@@ -482,11 +491,11 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code> and a <code class="prettyprint">deviceProfile</code> object. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.</p>
 
 <p>When the session is established, you can begin to access services, for example:
-<code class="prettyprint">session.CustomerProfileService.get</code></p>
+<code class="prettyprint">session.CustomerProfileManager.get</code></p>
 
 <h3 id="logout-session">Logout Session</h3>
 <pre class="highlight objective_c tab-objective_c"><code><span class="c1">// When session ends you should inform the sdk by calling
-</span><span class="n">session</span><span class="p">.</span><span class="n">authenticationService</span><span class="p">.</span><span class="n">logout</span><span class="p">();</span>
+</span><span class="n">session</span><span class="p">.</span><span class="n">authenticationManager</span><span class="p">.</span><span class="n">logout</span><span class="p">();</span>
 
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAuthenticationManager</span><span class="o">().</span><span class="na">logout</span><span class="o">(</span><span class="n">entityId</span><span class="o">);</span>
@@ -496,23 +505,56 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <h2 id="consumer-profile-management">Consumer Profile Management</h2>
 
 <p>Once logged in, you have access to the consumer&rsquo;s records. These include:
-* Consumer Profile - Via the <code class="prettyprint">ConsumerProfileService</code>. Name, email, and device profile (phone info) for the consumer
-* Address Book - Via the <code class="prettyprint">AddressbookService</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes.
-* Favorites - Via the <code class="prettyprint">FavouriteService</code>. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
-* Wallet - Via the <code class="prettyprint">WalletService</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</p>
+* Consumer Profile - Via the <code class="prettyprint">ConsumerProfileManager</code>. Name, email, and device profile (phone info) for the consumer
+* Address Book - Via the <code class="prettyprint">AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Favorites - Via the <code class="prettyprint">FavouriteManager</code>. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
+* Wallet - Via the <code class="prettyprint">WalletManager</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</p>
 
 <p>There are no specific flows to consider when managing the customer profile and assicated records.</p>
 
-<p>AddressbookService, FavouriteService, and WalletService support the following CRUD operations: <code class="prettyprint">create</code>, <code class="prettyprint">update</code>, <code class="prettyprint">delete</code>, <code class="prettyprint">getAll</code>, <code class="prettyprint">get</code>.</p>
+<p>AddressbookManager, FavouriteManager, and WalletManager support the following CRUD operations: <code class="prettyprint">create</code>, <code class="prettyprint">update</code>, <code class="prettyprint">delete</code>, <code class="prettyprint">getAll</code>, <code class="prettyprint">get</code>.</p>
 
-<p>ProfileService supports only <code class="prettyprint">update</code> and <code class="prettyprint">get</code>.</p>
+<p>ProfileManager supports only <code class="prettyprint">update</code> and <code class="prettyprint">get</code>.</p>
 
 <h4 id="android-specific-instructions-on-managers">Android-specific instructions on Managers</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
-</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
 
+<span class="c1">// </span>
+<span class="c1">// Using MANAGER, you must handle the response in a WalletCallback:</span>
+<span class="c1">//</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">...</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> 
+            <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
+
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// handle getAll response here</span>
+                        <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+                            <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
+                            <span class="o">...</span><span class="na">etc</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">});</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// </span>
+<span class="c1">// Using INTERFACE, you can save some development time</span>
+<span class="c1">// </span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
     <span class="o">...</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">()</span>
@@ -523,44 +565,18 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>  
         <span class="c1">// handle getAll response here</span>
         <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
             <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
+            <span class="o">...</span><span class="na">etc</span>
         <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetSuccess</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span><span class="o">)</span> <span class="o">{</span>  
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletUpdateSuccess</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span><span class="o">)</span> <span class="o">{</span> 
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletCreateSuccess</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletDeleteSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span> 
     <span class="o">}</span>
 <span class="o">}</span>
 
 
-<span class="c1">// Alternately, if you only intend to use one of the methods provided by the </span>
-<span class="c1">// manager, you can handle the response in a WalletCallback:</span>
-<span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// handle getAll response here</span>
-    <span class="o">}</span>
-<span class="o">});</span>
+
 
 </code></pre>
-<p>To use a method from a manager you need to pass a corresponding interface. For example, if you want to use <code class="prettyprint">WalletManager</code> methods your current activity should implement <code class="prettyprint">WalletInterface</code>:</p>
+<p>In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each Manager has an equivalent Interface. For example, if you want to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activty for convenience. See right for comparison.</p>
 
 <h2 id="shoppable-ads-flow">Shoppable Ads flow</h2>
 
@@ -576,7 +592,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <h4 id="2-fetch-product-info">2. Fetch product info</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getProductManager</span><span class="o">().</span><span class="na">getProduct</span><span class="o">(</span><span class="n">merchant</span><span class="o">,</span> <span class="n">catalog</span><span class="o">,</span> <span class="n">productId</span><span class="o">,</span> <span class="k">new</span> <span class="n">ProductCallback</span><span class="o">()</span> <span class="o">{</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getProductManager</span><span class="o">().</span><span class="na">getProduct</span><span class="o">(</span><span class="n">merchant</span><span class="o">,</span> 
+ <span class="n">catalog</span><span class="o">,</span> <span class="n">productId</span><span class="o">,</span> <span class="k">new</span> <span class="n">ProductCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetProductSuccess</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
@@ -640,14 +657,15 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
+<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletManager.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="5-submit-payment-for-order">5. Submit payment for order</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// Create an encrypted payment request using the CheckoutManager.createPaymentRequest</span>
-<span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">mySession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">().</span><span class="na">createPaymentRequest</span><span class="o">(</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="n">cvv</span> <span class="o">);</span>
+<span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">mySession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">()</span>
+<span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="n">cvv</span> <span class="o">);</span>
 
 <span class="c1">// pass the paymentRequest object, order object, and callback to the buyOrder method</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">().</span><span class="na">buyOrder</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">order</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
@@ -676,7 +694,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <span class="o">});</span>
 
 </code></pre>
-<p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteService.create</code> method.</p>
+<p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteManager.create</code> method.</p>
 
 <h4 id="2-list-available-favorites">2. List available favorites</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
@@ -690,7 +708,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteService.getAll</code> method to list them. The customer will choose a favorite.</p>
+<p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteManager.getAll</code> method to list them. The customer will choose a favorite.</p>
 
 <h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
 <pre class="highlight objective_c tab-objective_c"><code>
@@ -729,7 +747,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletService.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
+<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletManager.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
@@ -785,7 +803,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
           <h1 id="module-reference-docs">Module Reference Docs</h1>
 
-<h2 id="module-authentication">Module: Authentication</h2>
+<h2 id="module-authenticationmanager">Module: AuthenticationManager</h2>
 
 <p>Authentication services are an aggregate of SDK.</p>
 
@@ -1003,15 +1021,99 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p><code class="prettyprint">entity_id</code> is a string, returned from <code class="prettyprint">sdk.register</code>.</p>
 
-<h2 id="module-profileservice">Module: ProfileService</h2>
+<h2 id="module-profilemanager">Module: ProfileManager</h2>
 
-<p>The ProfileService is an aggregate of Session.</p>
+<p>The ProfileManager is an aggregate of Session.</p>
 
 <p>This module handles maintaining the consumer&rsquo;s contact information and device info.</p>
 
-<h3 id="method-get">Method: get</h3>
+<h3 id="method-customerprofilemanager-get">Method: customerProfileManager.get</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code>
 
-<p>Method signature: <code class="prettyprint">session.customerProfileService.get( [callback or interface] )</code></p>
+<span class="c1">// get using CustomerProfileInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Profile</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CustomerProfileInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">CustomerProfileManager</span> <span class="n">myProfileManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCustomerProfileManager</span><span class="o">();</span>
+
+        <span class="c1">// get customer profile</span>
+        <span class="n">myProfileManager</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetSuccess</span><span class="o">(</span><span class="n">CustomerProfile</span> <span class="n">customerProfile</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// access profile info</span>
+        <span class="n">String</span> <span class="n">dateCreated</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDateCreated</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">dateUpdated</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDateUpdated</span><span class="o">();</span>
+        <span class="n">List</span> <span class="n">devices</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getEmail</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getEntityId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">firstName</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">lastName</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getLastName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">locale</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getLocale</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">timezone</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getTimezone</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+
+        <span class="c1">// access device profile info</span>
+        <span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getDeviceId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">make</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getMake</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">osType</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getOsType</span><span class="o">();</span>
+        <span class="n">Integer</span> <span class="n">osVersion</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getOsVersion</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+
+<span class="c1">// get using CustomerProfileManager</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Profile2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+        <span class="o">...</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span> <span class="n">entityId</span><span class="o">,</span>
+        <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getCustomerProfileManager</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="k">new</span> <span class="n">CustomerProfileCallback</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetSuccess</span><span class="o">(</span><span class="n">CustomerProfile</span> <span class="n">customerProfile</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kd">super</span><span class="o">.</span><span class="na">onGetSuccess</span><span class="o">(</span><span class="n">customerProfile</span><span class="o">);</span>
+                        <span class="c1">// access profile info</span>
+                        <span class="n">String</span> <span class="n">dateCreated</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDateCreated</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">dateUpdated</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDateUpdated</span><span class="o">();</span>
+                        <span class="n">List</span> <span class="n">devices</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getEmail</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getEntityId</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">firstName</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">lastName</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getLastName</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">locale</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getLocale</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">timezone</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getTimezone</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+
+                        <span class="c1">// access device profile info</span>
+                        <span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getDeviceId</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">make</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getMake</span><span class="o">();</span>
+                        <span class="n">String</span> <span class="n">osType</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getOsType</span><span class="o">();</span>
+                        <span class="n">Integer</span> <span class="n">osVersion</span> <span class="o">=</span> <span class="n">customerProfile</span><span class="o">.</span><span class="na">getDevices</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getOsVersion</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">});</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.customerProfileManager.get( [callback or interface] )</code></p>
 
 <p>No parameters are required to be passed in. It will always fetch the profile for the authenticated consumer.</p>
 
@@ -1109,7 +1211,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 <tr>
 <td>os_version</td>
-<td>string</td>
+<td>int</td>
 <td>10.3</td>
 </tr>
 <tr>
@@ -1119,9 +1221,52 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="method-update">Method: update</h3>
+<h3 id="method-customerprofilemanager-update">Method: customerProfileManager.update</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// update using CustomerProfileInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Profile</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CustomerProfileInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.customerProfileService.update( customerProfile, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">CustomerProfileManager</span> <span class="n">myProfileManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCustomerProfileManager</span><span class="o">();</span>
+
+
+        <span class="c1">//update customer profile</span>
+        <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"1234567890"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="s">"62c7c7042511c086"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">deviceManufacturer</span> <span class="o">=</span> <span class="s">"HTC"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">locale</span> <span class="o">=</span> <span class="s">"en-US"</span><span class="o">;</span>
+        <span class="n">DeviceProfile</span> <span class="n">deviceProfile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeviceProfile</span><span class="o">(</span><span class="n">deviceId</span><span class="o">,</span> <span class="n">deviceManufacturer</span><span class="o">,</span> <span class="n">locale</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">DeviceProfile</span><span class="o">&gt;</span> <span class="n">devices</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">DeviceProfile</span><span class="o">&gt;();</span>
+        <span class="n">devices</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">deviceProfile</span><span class="o">);</span>
+
+        <span class="n">CustomerProfile</span> <span class="n">profile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CustomerProfile</span><span class="o">();</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setDevices</span><span class="o">(</span><span class="n">devices</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="s">"johndoe@gmail.com"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setEntityId</span><span class="o">(</span><span class="s">"123"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setFirstName</span><span class="o">(</span><span class="s">"John"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setLastName</span><span class="o">(</span><span class="s">"Doe"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setLocale</span><span class="o">(</span><span class="s">"en-US"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setTimezone</span><span class="o">(</span><span class="s">"America/New_York"</span><span class="o">);</span>
+        <span class="n">profile</span><span class="o">.</span><span class="na">setTitle</span><span class="o">(</span><span class="s">"Mr."</span><span class="o">);</span>
+
+        <span class="n">myProfileManager</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">profile</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdateSuccess</span><span class="o">(</span><span class="n">CustomerProfile</span> <span class="n">customerProfile</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show success message</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.customerProfileManager.update( customerProfile, [callback or interface] )</code></p>
 
 <p>The profile update method works only for the updating of consumer personal data. Device profiles and date stamps are not editable.</p>
 
@@ -1129,14 +1274,44 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>The modified <code class="prettyprint">customerProfile</code> object is returned upon success.</p>
 
-<h2 id="module-addressbookservice">Module: AddressbookService</h2>
+<h2 id="module-addressbookmanager">Module: AddressbookManager</h2>
 
-<p>The AddressbookService is an aggregate of Session.</p>
+<p>The AddressbookManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.</p>
 
-<h3 id="method-create">Method: create</h3>
+<h3 id="method-addressbookmanager-create">Method: addressbookManager.create</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create address using addressBookInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">AddressbookManager</span> <span class="n">myAddressManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAddressbookManager</span><span class="o">();</span>
+
+        <span class="c1">// create a new address</span>
+        <span class="n">Address</span> <span class="n">address</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Address</span><span class="o">();</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setShortName</span><span class="o">(</span><span class="s">"Home"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setCity</span><span class="o">(</span><span class="s">"Boston"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setCountry</span><span class="o">(</span><span class="s">"US"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setLine1</span><span class="o">(</span><span class="s">"123 Some Street"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setLine2</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="s">"MA"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setZip</span><span class="o">(</span><span class="s">"02110"</span><span class="o">);</span>
+        <span class="n">myAddressManager</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">address</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddressbookCreateSuccess</span><span class="o">(</span><span class="n">Address</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show create success update message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.addressbookService.create( address, [callback or interface] )</code></p>
 
 <p>You must pass in a valid <code class="prettyprint">address</code> object with the <code class="prettyprint">id</code> field blank.</p>
@@ -1194,43 +1369,193 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="method-update">Method: update</h3>
+<h3 id="method-addressbookmanager-update">Method: addressbookManager.update</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// update address using addressBookInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.addressbookService.update( address, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">AddressbookManager</span> <span class="n">myAddressManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAddressbookManager</span><span class="o">();</span>
+
+        <span class="c1">// update an address</span>
+        <span class="n">Address</span> <span class="n">address</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Address</span><span class="o">();</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setShortName</span><span class="o">(</span><span class="s">"Home"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setCity</span><span class="o">(</span><span class="s">"Boston"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setCountry</span><span class="o">(</span><span class="s">"US"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setLine1</span><span class="o">(</span><span class="s">"123 Some Street"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setLine2</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="s">"MA"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setZip</span><span class="o">(</span><span class="s">"02110"</span><span class="o">);</span>
+        <span class="n">myAddressManager</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">address</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddressbookUpdateSuccess</span><span class="o">(</span><span class="n">Address</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show update success message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.addressbookManager.update( address, [callback or interface] )</code></p>
 
 <p>You must pass in a valid <code class="prettyprint">address</code> object with <code class="prettyprint">id</code> populated.</p>
 
 <p>The method returns the updated <code class="prettyprint">address</code> object upon success.</p>
 
-<h3 id="method-delete">Method: delete</h3>
+<h3 id="method-addressbookmanager-delete">Method: addressbookManager.delete</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// delete address using AddressbookInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.addressbookService.delete( id, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 
-<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">address</code> to delete.</p>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
-<h3 id="method-get">Method: get</h3>
+        <span class="n">AddressbookManager</span> <span class="n">myAddressManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAddressbookManager</span><span class="o">();</span>
 
-<p>Method signature: <code class="prettyprint">session.addressbookService.get( id, [callback or interface] )</code></p>
+        <span class="c1">// delete an address</span>
+        <span class="n">Address</span> <span class="n">address</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Address</span><span class="o">();</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setShortName</span><span class="o">(</span><span class="s">"Home"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setCity</span><span class="o">(</span><span class="s">"Boston"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setCountry</span><span class="o">(</span><span class="s">"US"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setLine1</span><span class="o">(</span><span class="s">"123 Some Street"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setLine2</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="s">"MA"</span><span class="o">);</span>
+        <span class="n">address</span><span class="o">.</span><span class="na">setZip</span><span class="o">(</span><span class="s">"02110"</span><span class="o">);</span>
+        <span class="n">myAddressManager</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">address</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddressbookDeleteSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show delete update message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.addressbookManager.delete( id, [callback or interface] )</code></p>
+
+<p>You must pass in the <code class="prettyprint">address</code> object to delete.</p>
+
+<h3 id="method-addressbookmanager-get">Method: addressbookManager.get</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get address using AddressbookInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">AddressbookManager</span> <span class="n">myAddressManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAddressbookManager</span><span class="o">();</span>
+
+        <span class="c1">// get a single address</span>
+        <span class="n">String</span> <span class="n">address_id</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myAddressManager</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">address_id</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddressbookGetSuccess</span><span class="o">(</span><span class="n">Address</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// get address info</span>
+        <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">shortName</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getShortName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">city</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getCity</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">country</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getCountry</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">line1</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getLine1</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">line2</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getLine2</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">state</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getState</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">zip</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getZip</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.addressbookManager.get( id, [callback or interface] )</code></p>
 
 <p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">address</code> to get.</p>
 
 <p>The method returns an <code class="prettyprint">address</code> object.</p>
 
-<h3 id="method-getall">Method: getAll</h3>
+<h3 id="method-addressbookmanager-getall">Method: addressbookManager.getAll</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get all addresses using AddressbookInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.addressbookService.getAll( [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">AddressbookManager</span> <span class="n">myAddressManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAddressbookManager</span><span class="o">();</span>
+
+        <span class="c1">// list all addresses</span>
+        <span class="n">myAddressManager</span><span class="o">.</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddressbookGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Address</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// get address list info</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Address</span> <span class="n">address</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">shortName</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getShortName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">city</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getCity</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">country</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getCountry</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">line1</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getLine1</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">line2</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getLine2</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">state</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getState</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">zip</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="na">getZip</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.addressbookManager.getAll( [callback or interface] )</code></p>
 
 <p>The method returns an array of <code class="prettyprint">address</code> objects.</p>
 
-<h2 id="module-favoriteservice">Module: FavoriteService</h2>
+<h2 id="module-favoritemanager">Module: FavoriteManager</h2>
 
-<p>The FavoriteService is an aggregate of Session.</p>
+<p>The FavoriteManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for Favorites. The term &ldquo;Favorite&rdquo; refers to the target of a top up operation, in which money is added to a remote account associated with a device or service. The consumer may add one or more favorites to their account.</p>
 
-<h3 id="method-create">Method: create</h3>
+<h3 id="method-favouritemanager-create">Method: favouriteManager.create</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create favorite using FavouriteInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.favouriteService.create( [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">FavouriteManager</span> <span class="n">myFavouriteManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getFavouriteManager</span><span class="o">();</span>
+
+        <span class="c1">// create a favourite</span>
+        <span class="n">Favourite</span> <span class="n">favourite</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Favourite</span><span class="o">();</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="s">"9310c880695c"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setProvider</span><span class="o">(</span><span class="s">"AT&amp;T"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"phone"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">"549912341234"</span><span class="o">);</span>
+        <span class="n">myFavouriteManager</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">favourite</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFavouriteCreateSuccess</span><span class="o">(</span><span class="n">Favourite</span> <span class="n">favourite</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show favourite created message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.favouriteManager.create( [callback or interface] )</code></p>
 
 <p>You must pass in a <code class="prettyprint">favourite</code> object with the <code class="prettyprint">id</code> field blank.</p>
 
@@ -1267,43 +1592,181 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="method-update">Method: update</h3>
+<h3 id="method-favouritemanager-update">Method: favouriteManager.update</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// update favorite using FavouriteInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.favouriteService.update( favourite, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">FavouriteManager</span> <span class="n">myFavouriteManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getFavouriteManager</span><span class="o">();</span>
+
+        <span class="c1">// update a favourite</span>
+        <span class="n">Favourite</span> <span class="n">favourite</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Favourite</span><span class="o">();</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="s">"9310c880695c"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setProvider</span><span class="o">(</span><span class="s">"AT&amp;T"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"phone"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">"549912341234"</span><span class="o">);</span>
+        <span class="n">myFavouriteManager</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">favourite</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFavouriteUpdateSuccess</span><span class="o">(</span><span class="n">Favourite</span> <span class="n">favourite</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show favourite updated message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.favouriteManager.update( favourite, [callback or interface] )</code></p>
 
 <p>You must pass in a valid <code class="prettyprint">favourite</code> object with <code class="prettyprint">id</code> populated.</p>
 
 <p>The method returns the updated <code class="prettyprint">favourite</code> object upon success.</p>
 
-<h3 id="method-delete">Method: delete</h3>
+<h3 id="method-favouritemanager-delete">Method: favouriteManager.delete</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// delete favorite using FavouriteInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.favouriteService.delete( id, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 
-<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">favourite</code> to delete.</p>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
-<h3 id="method-get">Method: get</h3>
+        <span class="n">FavouriteManager</span> <span class="n">myFavouriteManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getFavouriteManager</span><span class="o">();</span>
 
-<p>Method signature: <code class="prettyprint">session.favouriteService.get( id, [callback or interface] )</code></p>
+        <span class="c1">// delete a favourite</span>
+        <span class="n">Favourite</span> <span class="n">favourite</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Favourite</span><span class="o">();</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="s">"9310c880695c"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setProvider</span><span class="o">(</span><span class="s">"AT&amp;T"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"phone"</span><span class="o">);</span>
+        <span class="n">favourite</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">"549912341234"</span><span class="o">);</span>
+        <span class="n">myFavouriteManager</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">favourite</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFavouriteDeleteSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show favourite deleted message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.favouriteManager.delete( id, [callback or interface] )</code></p>
+
+<p>You must pass in the <code class="prettyprint">favourite</code> object to delete.</p>
+
+<h3 id="method-favouritemanager-get">Method: favouriteManager.get</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a favorite using FavouriteInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">FavouriteManager</span> <span class="n">myFavouriteManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getFavouriteManager</span><span class="o">();</span>
+
+        <span class="c1">// get a single favourite</span>
+        <span class="n">String</span> <span class="n">favourite_id</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myFavouriteManager</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">favourite_id</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFavouriteGetSuccess</span><span class="o">(</span><span class="n">Favourite</span> <span class="n">favourite</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// get favourite info</span>
+        <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">provider</span> <span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getProvider</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">type</span><span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.favouriteManager.get( id, [callback or interface] )</code></p>
 
 <p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">favourite</code> to get.</p>
 
 <p>The method returns an <code class="prettyprint">favourite</code> object.</p>
 
-<h3 id="method-getall">Method: getAll</h3>
+<h3 id="method-favouritemanager-getall">Method: favouriteManager.getAll</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.favouriteService.getAll( [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">FavouriteManager</span> <span class="n">myFavouriteManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getFavouriteManager</span><span class="o">();</span>
+
+        <span class="c1">// list all favourites</span>
+        <span class="n">myFavouriteManager</span><span class="o">.</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFavouriteGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Favourite</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// get favourite list info</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Favourite</span> <span class="n">favourite</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">provider</span> <span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getProvider</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">type</span><span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">favourite</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.favouriteManager.getAll( [callback or interface] )</code></p>
 
 <p>The method returns an array of <code class="prettyprint">favourite</code> objects.</p>
 
-<h2 id="module-walletservice">Module: WalletService</h2>
+<h2 id="module-walletmanager">Module: WalletManager</h2>
 
-<p>The WalletService is an aggregate of Session.</p>
+<p>The WalletManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for payment cards.  The consumer may add one or more payment cards to their account.</p>
 
-<h3 id="method-create">Method: create</h3>
+<h3 id="method-walletmanager-create">Method: walletManager.create</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create payment card using WalletInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.walletService.create( [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">WalletManager</span> <span class="n">myWalletManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getWalletManager</span><span class="o">();</span>
+
+        <span class="c1">// create a new payment card</span>
+        <span class="n">PaymentCard</span> <span class="n">myCard</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setAddressId</span><span class="o">(</span><span class="s">"123"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setBrand</span><span class="o">(</span><span class="s">"Bank of America"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setExpiresOn</span><span class="o">(</span><span class="s">"08/19"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setNameOnCard</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setPan</span><span class="o">(</span><span class="s">"4111111111111111"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setShortName</span><span class="o">(</span><span class="s">"My Amex"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"Amex"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setValidFrom</span><span class="o">(</span><span class="s">"08/16"</span><span class="o">);</span>
+        <span class="n">myWalletManager</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">myCard</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletCreateSuccess</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// display success message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.walletManager.create( [callback or interface] )</code></p>
 
 <p>You must pass in a <code class="prettyprint">paymentCard</code> object with the <code class="prettyprint">id</code> field blank.</p>
 
@@ -1377,42 +1840,200 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h3 id="method-update">Method: update</h3>
+<h3 id="method-walletmanager-update">Method: walletManager.update</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// update payment card using WalletInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.walletService.update( paymentCard, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">WalletManager</span> <span class="n">myWalletManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getWalletManager</span><span class="o">();</span>
+
+        <span class="c1">// update a payment card</span>
+        <span class="n">PaymentCard</span> <span class="n">myCard2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setAddressId</span><span class="o">(</span><span class="s">"123"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setBrand</span><span class="o">(</span><span class="s">"Bank of America"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setExpiresOn</span><span class="o">(</span><span class="s">"08/19"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setNameOnCard</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setPan</span><span class="o">(</span><span class="s">"4111111111111111"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setShortName</span><span class="o">(</span><span class="s">"My Amex"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"Amex"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setValidFrom</span><span class="o">(</span><span class="s">"08/16"</span><span class="o">);</span>
+        <span class="n">myWalletManager</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">myCard</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletUpdateSuccess</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// display success message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.walletManager.update( paymentCard, [callback or interface] )</code></p>
 
 <p>You must pass in a valid <code class="prettyprint">paymentCard</code> object with <code class="prettyprint">id</code> populated.</p>
 
 <p>The method returns the updated <code class="prettyprint">paymentCard</code> object upon success.</p>
 
-<h3 id="method-delete">Method: delete</h3>
+<h3 id="method-walletmanager-delete">Method: walletManager.delete</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// delete payment card using WalletInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.walletService.delete( id, [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 
-<p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">paymentCard</code> to delete.</p>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
-<h3 id="method-get">Method: get</h3>
+        <span class="n">WalletManager</span> <span class="n">myWalletManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getWalletManager</span><span class="o">();</span>
 
-<p>Method signature: <code class="prettyprint">session.walletService.get( id, [callback or interface] )</code></p>
+        <span class="c1">// delete a payment card</span>
+        <span class="n">PaymentCard</span> <span class="n">myCard3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setAddressId</span><span class="o">(</span><span class="s">"123"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setBrand</span><span class="o">(</span><span class="s">"Bank of America"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setExpiresOn</span><span class="o">(</span><span class="s">"08/19"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setNameOnCard</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setPan</span><span class="o">(</span><span class="s">"4111111111111111"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setShortName</span><span class="o">(</span><span class="s">"My Amex"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">"Amex"</span><span class="o">);</span>
+        <span class="n">myCard</span><span class="o">.</span><span class="na">setValidFrom</span><span class="o">(</span><span class="s">"08/16"</span><span class="o">);</span>
+        <span class="n">myWalletManager</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">myCard</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletDeleteSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// display success message</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.walletManager.delete( id, [callback or interface] )</code></p>
+
+<p>You must pass in the <code class="prettyprint">paymentCard</code> object to delete.</p>
+
+<h3 id="method-walletmanager-get">Method: walletManager.get</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a payment card using WalletInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">WalletManager</span> <span class="n">myWalletManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getWalletManager</span><span class="o">();</span>
+
+        <span class="c1">// list a single payment card</span>
+        <span class="n">String</span> <span class="n">card_id</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myWalletManager</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">card_id</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetSuccess</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// show Card info</span>
+        <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">addressId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getAddressId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">brand</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getBrand</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">nameOnCard</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getNameOnCard</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">pan4</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getPan4</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">pan6</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getPan6</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">shortName</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getShortName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">validFrom</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getValidFrom</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.walletManager.get( id, [callback or interface] )</code></p>
 
 <p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">paymentCard</code> to get.</p>
 
 <p>The method returns a <code class="prettyprint">paymentCard</code> object.</p>
 
-<h3 id="method-getall">Method: getAll</h3>
+<h3 id="method-walletmanager-getall">Method: walletManager.getAll</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get all payment cards using WalletInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
-<p>Method signature: <code class="prettyprint">session.walletService.getAll( [callback or interface] )</code></p>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">WalletManager</span> <span class="n">myWalletManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getWalletManager</span><span class="o">();</span>
+
+        <span class="c1">// list all payment cards</span>
+        <span class="n">myWalletManager</span><span class="o">.</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle getAll response here</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">addressId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getAddressId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">brand</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getBrand</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">nameOnCard</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getNameOnCard</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">pan4</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getPan4</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">pan6</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getPan6</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">shortName</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getShortName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">validFrom</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getValidFrom</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.walletManager.getAll( [callback or interface] )</code></p>
 
 <p>The method returns an array of <code class="prettyprint">paymentCard</code> objects.</p>
 
-<h2 id="module-shop">Module: Shop</h2>
+<h2 id="module-productmanager">Module: ProductManager</h2>
 
 <p>Shop is an aggregate of Session.</p>
 
 <p>The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.</p>
 
 <h3 id="method-getmerchants">Method: getMerchants</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get merchants using ProductInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+
+        <span class="c1">// get merchants</span>
+        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getMerchants</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetMerchantsSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Merchant</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// list merchants</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Merchant</span> <span class="n">merchant</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">merchant_id</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">imageUrl</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getImageUrl</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">logoUrl</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getLogoUrl</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.getMerchants( [callback or interface] )</code></p>
 
 <p>The method returns an array of <code class="prettyprint">merchant</code> objects.</p>
@@ -1451,7 +2072,37 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.</p>
 
 <h3 id="method-getcatalogs">Method: getCatalogs</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get catalogs using ProductInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+
+        <span class="c1">// get catalogs</span>
+        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getCatalogs</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetCatalogsSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Catalog</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Catalog</span> <span class="n">catalog</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">catalog_id</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">parent_id</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getParentCatalogId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">imageUrl</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getImageUrl</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+            <span class="n">Boolean</span> <span class="n">hasCatalog</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">hasCatalog</span><span class="o">();</span>
+            <span class="n">Boolean</span> <span class="n">hasProduct</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">hasProduct</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.getCatalogs( merchant_id, [callback or interface] )</code></p>
 
 <p>You must pass in the <code class="prettyprint">id</code> of the <code class="prettyprint">merchant</code> to whose catalogs you wish to get.</p>
@@ -1511,13 +2162,91 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>If <code class="prettyprint">has_products</code> is <code class="prettyprint">true</code>, call <code class="prettyprint">getProducts</code> with the category <code class="prettyprint">id</code> to get a product list.</p>
 
 <h3 id="method-getcatalog">Method: getCatalog</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single catalog using ProductInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+
+        <span class="c1">// get single catalog</span>
+        <span class="n">String</span> <span class="n">catalogId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getCatalog</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">catalogId</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetCatalogSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Catalog</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Catalog</span> <span class="n">catalog</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">catalog_id</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">parent_id</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getParentCatalogId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">imageUrl</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getImageUrl</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+            <span class="n">Boolean</span> <span class="n">hasCatalog</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">hasCatalog</span><span class="o">();</span>
+            <span class="n">Boolean</span> <span class="n">hasProduct</span> <span class="o">=</span> <span class="n">catalog</span><span class="o">.</span><span class="na">hasProduct</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.getCatalog( merchant_id, catalog_id, [callback or interface] )</code></p>
 
 <p>The method returns a <code class="prettyprint">catalog</code> object.</p>
 
 <h3 id="method-getproducts">Method: getProducts</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get products using ProductInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+
+        <span class="c1">// get products</span>
+        <span class="n">Catalog</span> <span class="n">catalog</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Catalog</span><span class="o">();</span>
+        <span class="n">Integer</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">16</span><span class="o">;</span>
+        <span class="n">Integer</span> <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">sort_by_field</span> <span class="o">=</span> <span class="s">"title"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">sort_direction</span> <span class="o">=</span> <span class="s">"ASC"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">merchantId3</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">catalogId2</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getProducts</span><span class="o">(</span><span class="n">merchantId3</span><span class="o">,</span> <span class="n">catalogId2</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">page</span><span class="o">,</span> 
+        <span class="n">sort_by_field</span><span class="o">,</span> <span class="n">sort_direction</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetProductsSuccess</span><span class="o">(</span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">DisplayProduct</span><span class="o">&gt;</span> <span class="n">pageResult</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Integer</span> <span class="n">count</span> <span class="o">=</span> <span class="n">pageResult</span><span class="o">.</span><span class="na">getCount</span><span class="o">();</span>
+        <span class="n">Integer</span> <span class="n">total</span> <span class="o">=</span> <span class="n">pageResult</span><span class="o">.</span><span class="na">getTotal</span><span class="o">();</span>
+        <span class="n">Link</span><span class="o">[]</span> <span class="n">links</span> <span class="o">=</span> <span class="n">pageResult</span><span class="o">.</span><span class="na">getLinks</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">DisplayProduct</span><span class="o">&gt;</span> <span class="n">embed</span> <span class="o">=</span> <span class="n">pageResult</span><span class="o">.</span><span class="na">getEmbedded</span><span class="o">();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Link</span> <span class="nl">link:</span> <span class="n">links</span><span class="o">){</span>
+            <span class="n">Integer</span> <span class="n">linkcount</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="na">getCount</span><span class="o">();</span>
+            <span class="n">Integer</span> <span class="n">page</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="na">getPage</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">sort</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="na">getSort</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">sortBy</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="na">getSortBy</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">DisplayProduct</span> <span class="n">displayProduct</span> <span class="o">:</span> <span class="n">embed</span><span class="o">){</span>
+            <span class="n">displayProduct</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">displayProduct</span><span class="o">.</span><span class="na">getImageUrl</span><span class="o">();</span>
+            <span class="n">displayProduct</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+            <span class="n">displayProduct</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.getProducts( merchant_id, catalog_id, pageNavigation, [callback or interface] )</code></p>
 
 <p>You must pass a <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code>, and a <code class="prettyprint">pageNavivation</code> object. </p>
@@ -1784,21 +2513,132 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-getproduct">Method: getProduct</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single product using ProductInterface</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+
+        <span class="c1">// get single product</span>
+        <span class="n">Product</span> <span class="n">product2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Product</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">productId</span> <span class="o">=</span> <span class="s">"123abc"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">merchantId4</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">catalogId3</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getProduct</span><span class="o">(</span><span class="n">merchantId4</span><span class="o">,</span> <span class="n">catalogId3</span><span class="o">,</span> <span class="n">productId</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetProductSuccess</span><span class="o">(</span><span class="n">com</span><span class="o">.</span><span class="na">rezolve</span><span class="o">.</span><span class="na">sdk</span><span class="o">.</span><span class="na">model</span><span class="o">.</span><span class="na">shop</span><span class="o">.</span><span class="na">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// get product info</span>
+        <span class="n">String</span> <span class="n">product_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">subtitle</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getSubtitle</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">description</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getDescription</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">images</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getImages</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">merchant_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getMerchantId</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">price</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Option</span><span class="o">&gt;</span> <span class="n">options</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptions</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Variant</span><span class="o">&gt;</span> <span class="n">optionsAvail</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptionAvailable</span><span class="o">();</span>
+
+        <span class="c1">// iterate to get values of options hashmap</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">options</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">optionName</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+            <span class="n">Option</span> <span class="n">optionValue</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+
+            <span class="n">String</span> <span class="n">extraInfo</span> <span class="o">=</span> <span class="n">optionValue</span><span class="o">.</span><span class="na">getExtraInfo</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">label</span> <span class="o">=</span> <span class="n">optionValue</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">OptionValue</span><span class="o">&gt;</span> <span class="n">values</span> <span class="o">=</span> <span class="n">optionValue</span><span class="o">.</span><span class="na">getValues</span><span class="o">();</span>
+
+            <span class="k">for</span><span class="o">(</span><span class="n">OptionValue</span> <span class="nl">opVal:</span> <span class="n">values</span><span class="o">){</span>
+                <span class="n">String</span> <span class="n">opValLabel</span> <span class="o">=</span> <span class="n">opVal</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">opValValue</span> <span class="o">=</span> <span class="n">opVal</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// iterate to get values of variant array</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Variant</span> <span class="n">variant</span> <span class="o">:</span> <span class="n">optionsAvail</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">composition</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="na">getCompositions</span><span class="o">();</span>
+            <span class="c1">// iterate to get values of composition hashmap</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">composition</span><span class="o">.</span><span class="na">keySet</span><span class="o">()</span> <span class="o">){</span>
+                <span class="n">String</span> <span class="n">compLabel</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+                <span class="n">String</span> <span class="n">compValue</span> <span class="o">=</span> <span class="n">composition</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )</code></p>
 
 <p>You must pass a <code class="prettyprint">merchant_id</code>, <code class="prettyprint">catalog_id</code>, and a <code class="prettyprint">product_id</code>.</p>
 
 <p>The method returns a <a href="#product-object"><code class="prettyprint">product object</code></a> .</p>
 
-<h2 id="module-activity">Module: Activity</h2>
+<h2 id="module-useractivitymanager">Module: UserActivityManager</h2>
 
 <p>Activity is an aggregate of Session.</p>
 
 <p>The activity module handles order history and other historical data.</p>
 
 <h3 id="method-getorders">Method: getOrders</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get transactions using UserActivityManager</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Activities</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">UserActivityInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">UserActivityManager</span> <span class="n">myActivityManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getUserActivityManager</span><span class="o">();</span>
+
+        <span class="c1">// get transactions from User Activity Manager</span>
+        <span class="n">myActivityManager</span><span class="o">.</span><span class="na">getOrders</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetOrdersSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Transaction</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Transaction</span> <span class="n">transaction</span> <span class="o">:</span> <span class="n">list</span><span class="o">){</span>
+            <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">deliverySettings</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getDeliverySettings</span><span class="o">();</span>
+            <span class="kt">float</span> <span class="n">finalPrice</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
+            <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">geoLoc</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getGeoLoc</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">TransactionItem</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
+            <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">loyaltySettings</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getLoyaltySettings</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">merchant_id</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getMerchantId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">pan4</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getPan4</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">payWith</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getPayWith</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">status</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getStatus</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getTimestamp</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">geoLoc</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">String</span> <span class="n">label</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+                <span class="n">Double</span> <span class="n">value</span> <span class="o">=</span> <span class="n">geoLoc</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="n">TransactionItem</span> <span class="n">transactionItem</span> <span class="o">:</span> <span class="n">items</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">transactionItem</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+                <span class="n">transactionItem</span><span class="o">.</span><span class="na">getImageUrl</span><span class="o">();</span>
+                <span class="n">transactionItem</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+                <span class="n">transactionItem</span><span class="o">.</span><span class="na">getQty</span><span class="o">();</span>
+                <span class="n">transactionItem</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">loyaltySettings</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">String</span> <span class="n">label</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+                <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">loyaltySettings</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>Method signature: <code class="prettyprint">session.getOrders( [callback or interface] )</code></p>
 
 <p>The method returns an array of <code class="prettyprint">transaction objects</code>.</p>
@@ -1921,14 +2761,82 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<h2 id="module-checkout">Module: Checkout</h2>
+<h2 id="module-checkoutmanager">Module: CheckoutManager</h2>
 
 <p>Checkout is an aggregate of Session.</p>
 
 <p>The checkout module creates orders and completes orders with payment.</p>
 
 <h3 id="method-checkoutorder">Method: checkoutOrder</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create an order and calculate cart cost</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">CheckoutManager</span> <span class="n">myCheckoutManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
+
+        <span class="c1">// create a cart object for demo use</span>
+        <span class="c1">// in actual use, pass an existing cart object</span>
+        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">options</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"color"</span><span class="o">,</span> <span class="s">"red"</span><span class="o">);</span>
+
+        <span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CheckoutProduct</span><span class="o">();</span>
+        <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="s">"123"</span><span class="o">);</span>
+        <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setPrice</span><span class="o">(</span><span class="mi">125</span><span class="o">);</span>
+        <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setTitle</span><span class="o">(</span><span class="s">"Fitbit 2"</span><span class="o">);</span>
+        <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setQty</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+        <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setOptions</span><span class="o">(</span><span class="n">options</span><span class="o">);</span>
+
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">CheckoutProduct</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">items</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">checkoutProduct</span><span class="o">);</span>
+
+        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">geoLoc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">geoLoc</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"lat"</span><span class="o">,</span> <span class="mf">12.3123</span><span class="o">);</span>
+        <span class="n">geoLoc</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"long"</span><span class="o">,</span> <span class="mf">31.1323</span><span class="o">);</span>
+
+        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">deliverySettings</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">deliverySettings</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"delivery_address_id"</span><span class="o">,</span> <span class="s">"123123"</span><span class="o">);</span>
+
+        <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">loyaltySettings</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">loyaltySettings</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"loyalty_id"</span><span class="o">,</span> <span class="s">"123123"</span><span class="o">);</span>
+
+        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+
+        <span class="n">Cart</span> <span class="n">cart</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Cart</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">merchantId</span><span class="o">(</span><span class="n">merchantId</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">type</span><span class="o">(</span><span class="s">"scan"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">deliverySettings</span><span class="o">(</span><span class="n">deliverySettings</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">loyaltySettings</span><span class="o">(</span><span class="n">loyaltySettings</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">geoLoc</span><span class="o">(</span><span class="n">geoLoc</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">items</span><span class="o">(</span><span class="n">items</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+
+        <span class="c1">// create order and calculate cost</span>
+        <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">checkoutOrder</span><span class="o">(</span><span class="n">cart</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCheckoutOrderSuccess</span><span class="o">(</span><span class="n">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// get order info</span>
+        <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">finalPrice</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">breakdowns</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
+        <span class="c1">//iterate price breakdown array</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">PriceBreakdown</span> <span class="n">breakdown</span> <span class="o">:</span> <span class="n">breakdowns</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="kt">float</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">breakdown</span><span class="o">.</span><span class="na">getAmount</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">breakdown</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>CheckoutOrder creates an order id and calculates the cost of the order.</p>
 
 <p>Method signature: <code class="prettyprint">session.checkoutOrder( cart, [callback or interface] )</code></p>
@@ -2127,7 +3035,11 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-createpaymentrequest">Method: createPaymentRequest</h3>
-
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">PaymentCard</span> <span class="n">card</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// in actual use, pass in an existing card object</span>
+<span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+<span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">card</span><span class="o">,</span> <span class="n">cvv</span><span class="o">);</span>
+</code></pre>
 <p>Creates an encrypted paymentRequest object to be used with buyOrder.</p>
 
 <p>Method signature: <code class="prettyprint">session.createPaymentRequest( paymentCard, cvv, [callback or interface] )</code></p>
@@ -2156,7 +3068,62 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-buyorder">Method: buyOrder</h3>
+<pre class="highlight objective_c tab-objective_c"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
 
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">CheckoutManager</span> <span class="n">myCheckoutManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
+
+        <span class="c1">// buy Order</span>
+        <span class="c1">//first create the payment request from card and cvv</span>
+        <span class="n">PaymentCard</span> <span class="n">card</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// in actual use, pass in an existing card object</span>
+        <span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">card</span><span class="o">,</span> <span class="n">cvv</span><span class="o">);</span>
+        <span class="c1">// then submit the order</span>
+        <span class="n">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Order</span><span class="o">();</span> <span class="c1">// in actual use, pass in an existing order object</span>
+        <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">buyOrder</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">order</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onBuyOrderSuccess</span><span class="o">(</span><span class="n">Transaction</span> <span class="n">transaction</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">deliverySettings</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getDeliverySettings</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">finalPrice</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">geoLoc</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getGeoLoc</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">TransactionItem</span><span class="o">&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">loyaltySettings</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getLoyaltySettings</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getMerchantId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">pan4</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getPan4</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">payWith</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getPayWith</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">status</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getStatus</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getTimestamp</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+
+        <span class="c1">// iterate to get delivery settings</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">deliverySettings</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">label</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+            <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">deliverySettings</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// iterate to get loyalty settings</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">loyaltySettings</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">label</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+            <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">loyaltySettings</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// iterate to get transaction items</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">TransactionItem</span> <span class="n">item</span> <span class="o">:</span> <span class="n">items</span><span class="o">){</span>
+            <span class="n">String</span> <span class="n">itemId</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">itemTitle</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">qty</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="na">getQty</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">price</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">imageUrl</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="na">getImageUrl</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 <p>BuyOrder references an order id and supplies payment for the order.</p>
 
 <p>Method signature: <code class="prettyprint">session.buyOrder( paymentRequest, order, [callback or interface] )</code></p>
@@ -2167,7 +3134,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <h3 id="method-signorderupdates">Method: signOrderUpdates</h3>
 
-<p>In environments where transactions can take a very long time (minutes to tens of minutes), this method provides a way to subscribe and be notified of transaction success.</p>
+<p>In environments where transactions can take a very long time (minutes to tens of minutes) to return a status, this method provides a way to subscribe and be notified of transaction status updates.</p>
 
 <p>Method signature: <code class="prettyprint">session.buyOrder( entity_id, order_id, [callback or interface] )</code></p>
 
