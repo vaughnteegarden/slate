@@ -200,7 +200,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;objective_c&quot;,&quot;java&quot;]">
+  <body class="index" data-languages="[&quot;swift&quot;,&quot;java&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -210,7 +210,7 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" alt="Logo" />
         <div class="lang-selector">
-              <a href="#" data-language-name="objective_c">IOS</a>
+              <a href="#" data-language-name="swift">IOS</a>
               <a href="#" data-language-name="java">Android</a>
         </div>
         <div class="search">
@@ -337,15 +337,28 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>This section describes the intended usage of the SDK to build specific feature-related functionalities.</p>
 
 <h2 id="basic-usage">Basic Usage</h2>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">import</span> <span class="n">RezolveSDK</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 
-<span class="p">...</span>
+<span class="c1">// Import the following library:</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
-<span class="n">let</span> <span class="n">API_KEY</span><span class="o">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s">"ABC123"</span>           <span class="c1">//substitute your api key here
-</span><span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
+<span class="kd">class</span> <span class="kt">RezolveSDK1ViewController</span><span class="p">:</span> <span class="kt">ViewController</span> <span class="p">{</span>
 
-<span class="c1">// possible values for env: enum are .Development , .Sandbox, and .Production
-</span></code></pre><pre class="highlight java tab-java"><code><span class="c1">// Import the following classes:</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+        <span class="c1">// initialize SDK</span>
+        <span class="c1">// possible values for RezolveEnv enum are .Development , .Sandbox, .Production</span>
+        <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span>  <span class="o">=</span> <span class="s">"1234567890"</span>
+        <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">RezolveEnv</span><span class="o">.</span><span class="kt">Sandbox</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Import the following classes:</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveInterface</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSDK</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSession</span><span class="o">;</span>
@@ -463,14 +476,35 @@ You can switch between IOS and Android by clicking the tabs above.
 <p><img src="images/loginsequencediagram.png" style="margin:6px 0;"><br/>[ <a href="images/loginsequencediagram.png">View full size</a> ]</p>
 
 <h3 id="register-user">Register User</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
-<span class="c1">// TODO populate authenticationRequest object
-</span>
-<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
+      <span class="nv">deviceId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
+      <span class="nv">make</span><span class="p">:</span> <span class="s">"Apple"</span><span class="p">,</span>
+      <span class="nv">osType</span><span class="p">:</span> <span class="s">"iOS"</span><span class="p">,</span>
+      <span class="nv">osVersion</span><span class="p">:</span> <span class="s">"10"</span><span class="p">,</span>
+      <span class="nv">locale</span><span class="p">:</span> <span class="s">"Europe/London"</span>
+  <span class="p">)</span>
 
-<span class="n">sdk</span><span class="p">.</span><span class="n">registerUser</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span>  <span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">partnerId</span><span class="p">)</span> <span class="k">in</span> 
-    <span class="c1">// persist the entity_id and partner_id values here
-</span><span class="p">}</span>
+  <span class="k">let</span> <span class="nv">signUpRequest</span><span class="p">:</span> <span class="kt">SignUpRequest</span> <span class="o">=</span> <span class="kt">SignUpRequest</span><span class="p">(</span>
+      <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
+      <span class="nv">firtName</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
+      <span class="nv">lastName</span><span class="p">:</span> <span class="s">"Doe"</span><span class="p">,</span>
+      <span class="nv">name</span><span class="p">:</span> <span class="s">"John Doe"</span><span class="p">,</span>
+      <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span>
+  <span class="p">)</span>
+
+
+  <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">entityId</span> <span class="o">=</span> <span class="n">entityId</span><span class="p">;</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span> <span class="o">=</span> <span class="n">partnerId</span>
+
+      <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+          <span class="nv">entityId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">entityId</span><span class="o">!</span><span class="p">,</span>
+          <span class="nv">partnerId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span><span class="o">!</span><span class="p">,</span>
+          <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+
+              <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="n">session</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">DeviceProfile</span> <span class="n">deviceProfile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeviceProfile</span><span class="o">(</span><span class="n">deviceId</span><span class="o">,</span> <span class="n">deviceManufacturer</span><span class="o">,</span> <span class="n">locale</span><span class="o">);</span>
 <span class="n">SignUpRequest</span> <span class="n">signUpRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SignUpRequest</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
     <span class="o">.</span><span class="na">email</span><span class="o">(</span><span class="s">"john.doe@domain.com"</span><span class="o">)</span>
@@ -512,15 +546,21 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 </aside>
 
 <h3 id="create-session">Create Session</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
-<span class="c1">// TODO populate authenticationRequest object
-</span>
-<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
+<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
+  <span class="nv">deviceId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
+  <span class="nv">make</span><span class="p">:</span> <span class="s">"Apple"</span><span class="p">,</span>
+  <span class="nv">osType</span><span class="p">:</span> <span class="s">"iOS"</span><span class="p">,</span>
+  <span class="nv">osVersion</span><span class="p">:</span> <span class="s">"10"</span><span class="p">,</span>
+  <span class="nv">locale</span><span class="p">:</span> <span class="s">"Europe/London"</span>
+<span class="p">)</span>
 
-<span class="n">sdk</span><span class="p">.</span><span class="n">createSession</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">session</span><span class="o">:</span> <span class="n">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
-    <span class="c1">// use created session to access managers
-</span>    <span class="c1">// example: session.CustomerProfileManager.get
-</span><span class="p">}</span>
+<span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+  <span class="nv">entityId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">entityId</span><span class="o">!</span><span class="p">,</span>
+  <span class="nv">partnerId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span><span class="o">!</span><span class="p">,</span>
+  <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="n">session</span>
+<span class="p">}</span>
+
 </code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
 <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
@@ -556,9 +596,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <code class="prettyprint">session.CustomerProfileManager.get</code></p>
 
 <h3 id="logout-session">Logout Session</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="c1">// When session ends you should inform the sdk by calling
-</span><span class="n">session</span><span class="p">.</span><span class="n">authenticationManager</span><span class="p">.</span><span class="n">logout</span><span class="p">();</span>
-
+<pre class="highlight swift tab-swift"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
+<span class="n">session</span><span class="o">.</span><span class="n">authenticationManager</span><span class="o">.</span><span class="nf">logout</span><span class="p">();</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAuthenticationManager</span><span class="o">().</span><span class="na">logout</span><span class="o">(</span><span class="n">entityId</span><span class="o">);</span>
 </code></pre>
@@ -585,7 +624,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
 <h4 id="1-capture-image-and-get-product-url">1. Capture image and get product URL</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span><span class="o">,</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
     <span class="c1">//...</span>
 
@@ -620,7 +659,43 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>First, initialize <code class="prettyprint">scanManager</code>, and enable the scan screen using <code class="prettyprint">session.startVideo()</code>, and capture a watermarked image. The scanManager will recognize the encoded product data, and extract <code class="prettyprint">merchantId</code>, <code class="prettyprint">catalogId</code>, and <code class="prettyprint">productId</code> from the image, and automatically call <code class="prettyprint">getProduct</code>. The scanManager will return a <code class="prettyprint">product</code> object. </p>
 
 <h4 id="2-create-an-order-and-get-an-order-total">2. Create an order and get an order total</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s">"color"</span><span class="p">:</span> <span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">"color"</span><span class="p">]?</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">!</span>
+  <span class="p">]</span>
+
+  <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="kt">CheckoutProduct</span><span class="p">(</span>
+      <span class="nv">productId</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+      <span class="nv">productTitle</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+      <span class="nv">quantity</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nv">finalPrice</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+      <span class="nv">options</span><span class="p">:</span> <span class="n">options</span>
+  <span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">loyalty</span><span class="p">:</span> <span class="kt">Loyalty</span> <span class="o">=</span> <span class="kt">Loyalty</span><span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">delivery</span><span class="p">:</span> <span class="kt">Delivery</span> <span class="o">=</span> <span class="kt">Delivery</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span> <span class="c1">// address.id</span>
+
+  <span class="k">let</span> <span class="nv">geoLoc</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s">"lat"</span><span class="p">:</span> <span class="mf">12.000</span><span class="p">,</span>
+      <span class="s">"long"</span><span class="p">:</span> <span class="mf">21.000</span>
+  <span class="p">]</span>
+
+  <span class="k">let</span> <span class="nv">myCart</span><span class="p">:</span> <span class="kt">Cart</span> <span class="o">=</span> <span class="kt">Cart</span><span class="p">(</span>
+      <span class="nv">merchantId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span>
+      <span class="nv">loyaltySettings</span><span class="p">:</span> <span class="n">loyalty</span><span class="p">,</span>
+      <span class="nv">deliverySettings</span><span class="p">:</span> <span class="n">delivery</span><span class="p">,</span>
+      <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
+      <span class="nv">type</span><span class="p">:</span> <span class="s">"scan"</span><span class="p">,</span>
+      <span class="nv">products</span><span class="p">:</span> <span class="p">[</span><span class="n">checkoutProduct</span><span class="p">],</span>
+      <span class="nv">geoLoc</span><span class="p">:</span> <span class="n">geoLoc</span>
+  <span class="p">)</span>
+
+
+  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkoutOrder</span><span class="p">(</span><span class="nv">cart</span><span class="p">:</span> <span class="n">myCart</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">Order</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="nv">orderId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">id</span>
+      <span class="k">let</span> <span class="nv">finalPrice</span><span class="p">:</span> <span class="kt">Decimal</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">finalPrice</span>
+      <span class="c1">// ... etc</span>
+  <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// pull info from the product to build a checkoutProduct, and add it to the cart. </span>
 <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">options</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
 <span class="n">options</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"color"</span><span class="o">,</span> <span class="s">"red"</span><span class="o">);</span>
@@ -667,7 +742,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>Once you have product information, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). </p>
 
 <h4 id="3-show-payment-card-choices">3. Show payment card choices</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
@@ -680,7 +755,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="4-submit-payment-for-order">4. Submit payment for order</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// Create an encrypted payment request using the CheckoutManager.createPaymentRequest</span>
 <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">mySession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">()</span>
 <span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="n">cvv</span> <span class="o">);</span>
@@ -702,7 +777,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p><img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]</p>
 
 <h4 id="1-add-the-top-up-target-as-a-favorite">1. Add the top up target as a Favorite</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">Favourite</span> <span class="n">favourite</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Favourite</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">type</span><span class="o">,</span> <span class="n">provider</span><span class="o">);</span>
 
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getFavouriteManager</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="n">favourite</span><span class="o">,</span> <span class="k">new</span> <span class="n">FavouriteCallback</span><span class="o">()</span> <span class="o">{</span>
@@ -715,7 +790,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the <code class="prettyprint">FavouriteManager.create</code> method.</p>
 
 <h4 id="2-list-available-favorites">2. List available favorites</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getFavouriteManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">FavouriteCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFavouriteGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Favourite</span><span class="o">&gt;</span> <span class="n">favourites</span><span class="o">)</span> <span class="o">{</span>
@@ -729,7 +804,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteManager.getAll</code> method to list them. The customer will choose a favorite.</p>
 
 <h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getProductManager</span><span class="o">().</span><span class="na">getProducts</span><span class="o">(</span><span class="n">merchant</span><span class="o">,</span> <span class="n">catalog</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> 
 <span class="n">pageIndex</span><span class="o">,</span> <span class="n">sortBy</span><span class="o">,</span> <span class="n">sortDirection</span><span class="o">,</span> <span class="k">new</span> <span class="n">ProductCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
@@ -751,7 +826,43 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>Display the list of top up choices. You can display each &ldquo;product&rdquo; as a currency amount, or utilize the &ldquo;description&rdquo; field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.</p>
 
 <h4 id="4-get-an-order-total">4. Get an order total</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s">"color"</span><span class="p">:</span> <span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">"color"</span><span class="p">]?</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">!</span>
+  <span class="p">]</span>
+
+  <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="kt">CheckoutProduct</span><span class="p">(</span>
+      <span class="nv">productId</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+      <span class="nv">productTitle</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+      <span class="nv">quantity</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nv">finalPrice</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+      <span class="nv">options</span><span class="p">:</span> <span class="n">options</span>
+  <span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">loyalty</span><span class="p">:</span> <span class="kt">Loyalty</span> <span class="o">=</span> <span class="kt">Loyalty</span><span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">delivery</span><span class="p">:</span> <span class="kt">Delivery</span> <span class="o">=</span> <span class="kt">Delivery</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span> <span class="c1">// address.id</span>
+
+  <span class="k">let</span> <span class="nv">geoLoc</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s">"lat"</span><span class="p">:</span> <span class="mf">12.000</span><span class="p">,</span>
+      <span class="s">"long"</span><span class="p">:</span> <span class="mf">21.000</span>
+  <span class="p">]</span>
+
+  <span class="k">let</span> <span class="nv">myCart</span><span class="p">:</span> <span class="kt">Cart</span> <span class="o">=</span> <span class="kt">Cart</span><span class="p">(</span>
+      <span class="nv">merchantId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span>
+      <span class="nv">loyaltySettings</span><span class="p">:</span> <span class="n">loyalty</span><span class="p">,</span>
+      <span class="nv">deliverySettings</span><span class="p">:</span> <span class="n">delivery</span><span class="p">,</span>
+      <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
+      <span class="nv">type</span><span class="p">:</span> <span class="s">"scan"</span><span class="p">,</span>
+      <span class="nv">products</span><span class="p">:</span> <span class="p">[</span><span class="n">checkoutProduct</span><span class="p">],</span>
+      <span class="nv">geoLoc</span><span class="p">:</span> <span class="n">geoLoc</span>
+  <span class="p">)</span>
+
+
+  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkoutOrder</span><span class="p">(</span><span class="nv">cart</span><span class="p">:</span> <span class="n">myCart</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">Order</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="nv">orderId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">id</span>
+      <span class="k">let</span> <span class="nv">finalPrice</span><span class="p">:</span> <span class="kt">Decimal</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">finalPrice</span>
+      <span class="c1">// ... etc</span>
+  <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">().</span><span class="na">checkoutOrder</span><span class="o">(</span><span class="n">cart</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCheckoutOrderSuccess</span><span class="o">(</span><span class="n">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
@@ -763,7 +874,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>When you have the product choice, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).</p>
 
 <h4 id="5-show-payment-card-choices">5. Show payment card choices</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
@@ -776,7 +887,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="6-submit-payment-for-order">6. Submit payment for order</h4>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// Create an encrypted payment request using the CheckoutManager.createPaymentRequest</span>
 <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">mySession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">()</span>
 <span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="n">cvv</span> <span class="o">);</span>
@@ -844,14 +955,35 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>This module handles consumer user creation and authentication.</p>
 
 <h3 id="method-register">Method: Register</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
-<span class="c1">// TODO populate authenticationRequest object
-</span>
-<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
+      <span class="nv">deviceId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
+      <span class="nv">make</span><span class="p">:</span> <span class="s">"Apple"</span><span class="p">,</span>
+      <span class="nv">osType</span><span class="p">:</span> <span class="s">"iOS"</span><span class="p">,</span>
+      <span class="nv">osVersion</span><span class="p">:</span> <span class="s">"10"</span><span class="p">,</span>
+      <span class="nv">locale</span><span class="p">:</span> <span class="s">"Europe/London"</span>
+  <span class="p">)</span>
 
-<span class="n">sdk</span><span class="p">.</span><span class="n">registerUser</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span>  <span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">partnerId</span><span class="p">)</span> <span class="k">in</span> 
-    <span class="c1">// persist the entity_id and partner_id values here
-</span><span class="p">}</span>
+  <span class="k">let</span> <span class="nv">signUpRequest</span><span class="p">:</span> <span class="kt">SignUpRequest</span> <span class="o">=</span> <span class="kt">SignUpRequest</span><span class="p">(</span>
+      <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
+      <span class="nv">firtName</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
+      <span class="nv">lastName</span><span class="p">:</span> <span class="s">"Doe"</span><span class="p">,</span>
+      <span class="nv">name</span><span class="p">:</span> <span class="s">"John Doe"</span><span class="p">,</span>
+      <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span>
+  <span class="p">)</span>
+
+
+  <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">entityId</span> <span class="o">=</span> <span class="n">entityId</span><span class="p">;</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span> <span class="o">=</span> <span class="n">partnerId</span>
+
+      <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+          <span class="nv">entityId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">entityId</span><span class="o">!</span><span class="p">,</span>
+          <span class="nv">partnerId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span><span class="o">!</span><span class="p">,</span>
+          <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+
+              <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="n">session</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">DeviceProfile</span> <span class="n">deviceProfile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeviceProfile</span><span class="o">(</span><span class="n">deviceId</span><span class="o">,</span> <span class="n">deviceManufacturer</span><span class="o">,</span> <span class="n">locale</span><span class="o">);</span>
 <span class="n">SignUpRequest</span> <span class="n">signUpRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SignUpRequest</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
     <span class="o">.</span><span class="na">email</span><span class="o">(</span><span class="s">"john.doe@domain.com"</span><span class="o">)</span>
@@ -984,15 +1116,21 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-create-session">Method: Create Session</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="n">let</span> <span class="n">request</span><span class="o">:</span> <span class="n">AuthenticationRequest</span> <span class="o">=</span> <span class="n">authenticationRequest</span><span class="p">()</span>
-<span class="c1">// TODO populate authenticationRequest object
-</span>
-<span class="n">let</span> <span class="n">sdk</span><span class="o">:</span> <span class="n">RezolveSDK</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="p">(</span><span class="n">apiKey</span><span class="o">:</span> <span class="n">API_KEY</span><span class="p">,</span> <span class="n">env</span><span class="o">:</span> <span class="p">.</span><span class="n">Development</span><span class="p">)</span>
+<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
+  <span class="nv">deviceId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
+  <span class="nv">make</span><span class="p">:</span> <span class="s">"Apple"</span><span class="p">,</span>
+  <span class="nv">osType</span><span class="p">:</span> <span class="s">"iOS"</span><span class="p">,</span>
+  <span class="nv">osVersion</span><span class="p">:</span> <span class="s">"10"</span><span class="p">,</span>
+  <span class="nv">locale</span><span class="p">:</span> <span class="s">"Europe/London"</span>
+<span class="p">)</span>
 
-<span class="n">sdk</span><span class="p">.</span><span class="n">createSession</span><span class="p">(</span><span class="n">authenticationRequest</span><span class="o">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">session</span><span class="o">:</span> <span class="n">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
-    <span class="c1">// use created session to access managers
-</span>    <span class="c1">// example: session.CustomerProfileService.get
-</span><span class="p">}</span>
+<span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+  <span class="nv">entityId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">entityId</span><span class="o">!</span><span class="p">,</span>
+  <span class="nv">partnerId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span><span class="o">!</span><span class="p">,</span>
+  <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="n">session</span>
+<span class="p">}</span>
+
 </code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
 <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
@@ -1045,9 +1183,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-logout">Method: Logout</h3>
-<pre class="highlight objective_c tab-objective_c"><code><span class="c1">// When session ends you should inform the sdk by calling
-</span><span class="n">session</span><span class="p">.</span><span class="n">authenticationService</span><span class="p">.</span><span class="n">logout</span><span class="p">();</span>
-
+<pre class="highlight swift tab-swift"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
+<span class="n">session</span><span class="o">.</span><span class="n">authenticationManager</span><span class="o">.</span><span class="nf">logout</span><span class="p">();</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAuthenticationManager</span><span class="o">().</span><span class="na">logout</span><span class="o">(</span><span class="n">entityId</span><span class="o">);</span>
 </code></pre>
@@ -1062,7 +1199,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>This module handles maintaining the consumer&rsquo;s contact information and device info.</p>
 
 <h3 id="method-customerprofilemanager-get">Method: customerProfileManager.get</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get using CustomerProfileInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Profile</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CustomerProfileInterface</span> <span class="o">{</span>
 
@@ -1215,7 +1352,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-customerprofilemanager-update">Method: customerProfileManager.update</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// update using CustomerProfileInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Profile</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CustomerProfileInterface</span> <span class="o">{</span>
 
@@ -1275,7 +1412,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.</p>
 
 <h3 id="method-addressbookmanager-create">Method: addressbookManager.create</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// create address using addressBookInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
@@ -1365,7 +1502,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-addressbookmanager-update">Method: addressbookManager.update</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// update address using addressBookInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
@@ -1403,7 +1540,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns the updated <code class="prettyprint">address</code> object upon success.</p>
 
 <h3 id="method-addressbookmanager-delete">Method: addressbookManager.delete</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// delete address using AddressbookInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
@@ -1439,7 +1576,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in the <code class="prettyprint">address</code> object to delete.</p>
 
 <h3 id="method-addressbookmanager-get">Method: addressbookManager.get</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get address using AddressbookInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
@@ -1478,7 +1615,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns an <code class="prettyprint">address</code> object.</p>
 
 <h3 id="method-addressbookmanager-getall">Method: addressbookManager.getAll</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get all addresses using AddressbookInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">addressBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">AddressbookInterface</span> <span class="o">{</span>
 
@@ -1522,7 +1659,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>This module provides CRUD functions for Favorites. The term &ldquo;Favorite&rdquo; refers to the target of a top up operation, in which money is added to a remote account associated with a device or service. The consumer may add one or more favorites to their account.</p>
 
 <h3 id="method-favouritemanager-create">Method: favouriteManager.create</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// create favorite using FavouriteInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
@@ -1587,7 +1724,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-favouritemanager-update">Method: favouriteManager.update</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// update favorite using FavouriteInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
@@ -1621,7 +1758,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns the updated <code class="prettyprint">favourite</code> object upon success.</p>
 
 <h3 id="method-favouritemanager-delete">Method: favouriteManager.delete</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// delete favorite using FavouriteInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
@@ -1653,7 +1790,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in the <code class="prettyprint">favourite</code> object to delete.</p>
 
 <h3 id="method-favouritemanager-get">Method: favouriteManager.get</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a favorite using FavouriteInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
@@ -1688,7 +1825,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns an <code class="prettyprint">favourite</code> object.</p>
 
 <h3 id="method-favouritemanager-getall">Method: favouriteManager.getAll</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
@@ -1727,7 +1864,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>This module provides CRUD functions for payment cards.  The consumer may add one or more payment cards to their account.</p>
 
 <h3 id="method-walletmanager-create">Method: walletManager.create</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// create payment card using WalletInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
@@ -1834,7 +1971,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-walletmanager-update">Method: walletManager.update</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// update payment card using WalletInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
@@ -1873,7 +2010,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns the updated <code class="prettyprint">paymentCard</code> object upon success.</p>
 
 <h3 id="method-walletmanager-delete">Method: walletManager.delete</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// delete payment card using WalletInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
@@ -1910,7 +2047,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in the <code class="prettyprint">paymentCard</code> object to delete.</p>
 
 <h3 id="method-walletmanager-get">Method: walletManager.get</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a payment card using WalletInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
@@ -1951,7 +2088,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns a <code class="prettyprint">paymentCard</code> object.</p>
 
 <h3 id="method-walletmanager-getall">Method: walletManager.getAll</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get all payment cards using WalletInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Wallet</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
 
@@ -1997,7 +2134,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.</p>
 
 <h3 id="method-getmerchants">Method: getMerchants</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get merchants using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -2067,7 +2204,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.</p>
 
 <h3 id="method-getcatalogs">Method: getCatalogs</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get catalogs using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -2163,7 +2300,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>If <code class="prettyprint">has_products</code> is <code class="prettyprint">true</code>, call <code class="prettyprint">getProducts</code> with the category <code class="prettyprint">id</code> to get a product list.</p>
 
 <h3 id="method-getcatalog">Method: getCatalog</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single catalog using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -2201,7 +2338,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns a <code class="prettyprint">catalog</code> object.</p>
 
 <h3 id="method-getproducts">Method: getProducts</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get products using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -2515,7 +2652,14 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-getproduct">Method: getProduct</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code><span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span> <span class="nv">catalogId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span> <span class="nv">productId</span><span class="p">:</span> <span class="s">"2"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="k">var</span> <span class="nv">product_id</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span>
+    <span class="k">var</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span>
+    <span class="k">var</span> <span class="nv">subtitle</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">subtitle</span>
+    <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">description</span>
+    <span class="c1">// ... etc</span>
+<span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single product using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -2589,7 +2733,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The activity module handles order history and other historical data.</p>
 
 <h3 id="method-getorders">Method: getOrders</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get transactions using UserActivityManager</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Activities</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">UserActivityInterface</span> <span class="o">{</span>
 
@@ -2770,7 +2914,42 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The checkout module creates orders and completes orders with payment.</p>
 
 <h3 id="method-checkoutorder">Method: checkoutOrder</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s">"color"</span><span class="p">:</span> <span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">"color"</span><span class="p">]?</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">!</span>
+  <span class="p">]</span>
+
+  <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="kt">CheckoutProduct</span><span class="p">(</span>
+      <span class="nv">productId</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+      <span class="nv">productTitle</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+      <span class="nv">quantity</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nv">finalPrice</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+      <span class="nv">options</span><span class="p">:</span> <span class="n">options</span>
+  <span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">loyalty</span><span class="p">:</span> <span class="kt">Loyalty</span> <span class="o">=</span> <span class="kt">Loyalty</span><span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">delivery</span><span class="p">:</span> <span class="kt">Delivery</span> <span class="o">=</span> <span class="kt">Delivery</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span> <span class="c1">// address.id</span>
+
+  <span class="k">let</span> <span class="nv">geoLoc</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s">"lat"</span><span class="p">:</span> <span class="mf">12.000</span><span class="p">,</span>
+      <span class="s">"long"</span><span class="p">:</span> <span class="mf">21.000</span>
+  <span class="p">]</span>
+
+  <span class="k">let</span> <span class="nv">myCart</span><span class="p">:</span> <span class="kt">Cart</span> <span class="o">=</span> <span class="kt">Cart</span><span class="p">(</span>
+      <span class="nv">merchantId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span>
+      <span class="nv">loyaltySettings</span><span class="p">:</span> <span class="n">loyalty</span><span class="p">,</span>
+      <span class="nv">deliverySettings</span><span class="p">:</span> <span class="n">delivery</span><span class="p">,</span>
+      <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
+      <span class="nv">type</span><span class="p">:</span> <span class="s">"scan"</span><span class="p">,</span>
+      <span class="nv">products</span><span class="p">:</span> <span class="p">[</span><span class="n">checkoutProduct</span><span class="p">],</span>
+      <span class="nv">geoLoc</span><span class="p">:</span> <span class="n">geoLoc</span>
+  <span class="p">)</span>
+
+  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkoutOrder</span><span class="p">(</span><span class="nv">cart</span><span class="p">:</span> <span class="n">myCart</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">Order</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="nv">orderId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">id</span>
+      <span class="k">let</span> <span class="nv">finalPrice</span><span class="p">:</span> <span class="kt">Decimal</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">finalPrice</span>
+      <span class="c1">// ... etc</span>
+  <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// create an order and calculate cart cost</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
 
@@ -3037,7 +3216,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-createpaymentrequest">Method: createPaymentRequest</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">PaymentCard</span> <span class="n">card</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// in actual use, pass in an existing card object</span>
 <span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
 <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">card</span><span class="o">,</span> <span class="n">cvv</span><span class="o">);</span>
@@ -3070,7 +3249,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-buyorder">Method: buyOrder</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
@@ -3185,7 +3364,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>ScanManager is different than other Managers as it relies on a user interface component.</p>
 
 <h3 id="methods-startvideoscan-stopvideoscan">Methods: startVideoScan, stopVideoScan</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
@@ -3270,7 +3449,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Method signature: <code class="prettyprint">session.scanManager.stopVideoScan()</code></p>
 
 <h3 id="methods-startaudioscan-stopaudioscan">Methods: startAudioScan, stopAudioScan</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
     <span class="c1">// same vars as above</span>
 
@@ -3300,7 +3479,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Method signature: <code class="prettyprint">session.scanManager.stopAudioScan()</code></p>
 
 <h3 id="method-destroy">Method: destroy</h3>
-<pre class="highlight objective_c tab-objective_c"><code>
+<pre class="highlight swift tab-swift"><code>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
     <span class="c1">// same vars as above</span>
 
@@ -3348,7 +3527,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="objective_c">IOS</a>
+                <a href="#" data-language-name="swift">IOS</a>
                 <a href="#" data-language-name="java">Android</a>
           </div>
       </div>
