@@ -1586,9 +1586,10 @@ The checkout module creates orders and completes orders with payment.
       geoLoc: geoLoc
   )
 
-
   mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
       let orderId: String = order.id
+      let finalPrice: Decimal = order.finalPrice
+      // ... etc
   }
 ```
 ```java

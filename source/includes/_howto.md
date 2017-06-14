@@ -392,6 +392,8 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 
   mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
       let orderId: String = order.id
+      let finalPrice: Decimal = order.finalPrice
+      // ... etc
   }
 ```
 ```java
@@ -587,6 +589,8 @@ Display the list of top up choices. You can display each "product" as a currency
 
   mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
       let orderId: String = order.id
+      let finalPrice: Decimal = order.finalPrice
+      // ... etc
   }
 ```
 ```java
