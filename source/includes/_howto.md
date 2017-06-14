@@ -4,15 +4,28 @@ This section describes the intended usage of the SDK to build specific feature-r
 
 ## Basic Usage
 
-``` objective_c
+```swift
+import UIKit
+
+// Import the following library:
 import RezolveSDK
 
-...
+class RezolveSDK1ViewController: ViewController {
 
-let API_KEY: String = "ABC123"           //substitute your api key here
-let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-// possible values for env: enum are .Development , .Sandbox, and .Production
+        // initialize SDK
+        // possible values for RezolveEnv enum are .Development , .Sandbox, .Production
+        let API_KEY: String  = "1234567890"
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: RezolveEnv.Sandbox)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+
+    }
+}
 ```
 ```java
 // Import the following classes:
@@ -140,15 +153,36 @@ This section will describe how to:
 
 ### Register User
 
-```objective_c
-let request: AuthenticationRequest = authenticationRequest()
-// TODO populate authenticationRequest object
+```swift
+  let deviceProfile: DeviceProfile = DeviceProfile(
+      deviceId: "123",
+      make: "Apple",
+      osType: "iOS",
+      osVersion: "10",
+      locale: "Europe/London"
+  )
 
-let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+  let signUpRequest: SignUpRequest = SignUpRequest(
+      email: "johndoe@domain.com",
+      firtName: "John",
+      lastName: "Doe",
+      name: "John Doe",
+      device: deviceProfile
+  )
 
-sdk.registerUser(authenticationRequest: request) {  (entityId, partnerId) in 
-	// persist the entity_id and partner_id values here
-}
+
+  sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+      self.entityId = entityId;
+      self.partnerId = partnerId
+
+      sdk.createSession(
+          entityId: self.entityId!,
+          partnerId: self.partnerId!,
+          device: deviceProfile) { (session: RezolveSession) in
+
+              self.mySession = session
+      }
+  }
 ```
 ```java
 DeviceProfile deviceProfile = new DeviceProfile(deviceId, deviceManufacturer, locale);
@@ -195,16 +229,22 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 ### Create Session
 
-``` objective_c
-let request: AuthenticationRequest = authenticationRequest()
-// TODO populate authenticationRequest object
+```swift
+let deviceProfile: DeviceProfile = DeviceProfile(
+  deviceId: "123",
+  make: "Apple",
+  osType: "iOS",
+  osVersion: "10",
+  locale: "Europe/London"
+)
 
-let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
-
-sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
-	// use created session to access managers
-    // example: session.CustomerProfileManager.get
+sdk.createSession(
+  entityId: self.entityId!,
+  partnerId: self.partnerId!,
+  device: deviceProfile) { (session: RezolveSession) in
+      self.mySession = session
 }
+
 ```
 ```java
 RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, 
@@ -243,10 +283,9 @@ When the session is established, you can begin to access services, for example:
 
 ### Logout Session
 
-``` objective_c
+```swift
 // When session ends you should inform the sdk by calling
 session.authenticationManager.logout();
-
 ```
 ```java
 // When session ends you should inform the sdk by calling
@@ -278,7 +317,7 @@ The premise of Shoppable Ads is to capture an image scan (usually of an advertis
 
 #### 1. Capture image and get product URL
 
-``` objective_c
+```swift
 
 ```
 ```java
@@ -318,8 +357,42 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 
 #### 2. Create an order and get an order total
 
-``` objective_c
- 
+```swift
+  let options: [String: OptionValue] = [
+      "color": (product.options["color"]?.values[0])!
+  ]
+
+  let checkoutProduct = CheckoutProduct(
+      productId: product.id,
+      productTitle: product.title,
+      quantity: 1,
+      finalPrice: product.price,
+      options: options
+  )
+
+  let loyalty: Loyalty = Loyalty(number: "123123")
+
+  let delivery: Delivery = Delivery(addressId: "123123") // address.id
+
+  let geoLoc: [String: Double] = [
+      "lat": 12.000,
+      "long": 21.000
+  ]
+
+  let myCart: Cart = Cart(
+      merchantId: "1",
+      loyaltySettings: loyalty,
+      deliverySettings: delivery,
+      email: "johndoe@domain.com",
+      type: "scan",
+      products: [checkoutProduct],
+      geoLoc: geoLoc
+  )
+
+
+  mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
+      let orderId: String = order.id
+  }
 ```
 ```java
 // pull info from the product to build a checkoutProduct, and add it to the cart. 
@@ -370,7 +443,7 @@ Once you have product information, call the SDK `checkoutOrder` method. Pass in 
 
 #### 3. Show payment card choices
 
-``` objective_c
+```swift
  
 ```
 ```java
@@ -388,7 +461,7 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 #### 4. Submit payment for order
 
-``` objective_c
+```swift
  
 ```
 ```java
@@ -420,7 +493,7 @@ Pass the `paymentRequst` object and the `order` object to the `buyOrder` method.
 <img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]
 
 #### 1. Add the top up target as a Favorite
-``` objective_c
+```swift
  
 ```
 ```java
@@ -436,8 +509,8 @@ rezolveSession.getFavouriteManager().create(favourite, new FavouriteCallback() {
 The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteManager.create` method.
 
 #### 2. List available favorites
-``` objective_c
-
+```swift
+ 
 ```
 ```java
 rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
@@ -453,8 +526,8 @@ rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
 Once there is one or more favorites, use the `FavouriteManager.getAll` method to list them. The customer will choose a favorite.
 
 #### 3. Get a list of topup amounts using getProducts
-``` objective_c
-
+```swift
+ 
 ```
 ```java
 rezolveSession.getProductManager().getProducts(merchant, catalog, count, 
@@ -478,8 +551,43 @@ The customer next wants to see a list of possible top up amounts. Each top up am
 Display the list of top up choices. You can display each "product" as a currency amount, or utilize the "description" field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.
 
 #### 4. Get an order total
-``` objective_c
 
+```swift
+  let options: [String: OptionValue] = [
+      "color": (product.options["color"]?.values[0])!
+  ]
+
+  let checkoutProduct = CheckoutProduct(
+      productId: product.id,
+      productTitle: product.title,
+      quantity: 1,
+      finalPrice: product.price,
+      options: options
+  )
+
+  let loyalty: Loyalty = Loyalty(number: "123123")
+
+  let delivery: Delivery = Delivery(addressId: "123123") // address.id
+
+  let geoLoc: [String: Double] = [
+      "lat": 12.000,
+      "long": 21.000
+  ]
+
+  let myCart: Cart = Cart(
+      merchantId: "1",
+      loyaltySettings: loyalty,
+      deliverySettings: delivery,
+      email: "johndoe@domain.com",
+      type: "scan",
+      products: [checkoutProduct],
+      geoLoc: geoLoc
+  )
+
+
+  mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
+      let orderId: String = order.id
+  }
 ```
 ```java
 rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
@@ -493,8 +601,8 @@ rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
 When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
 #### 5. Show payment card choices
-``` objective_c
-
+```swift
+ 
 ```
 ```java
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
@@ -509,8 +617,8 @@ If the consumer agrees with the price and wishes to complete the order, use `wal
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
 #### 6. Submit payment for order
-``` objective_c
-
+```swift
+ 
 ```
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest

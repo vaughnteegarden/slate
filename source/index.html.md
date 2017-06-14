@@ -2,7 +2,7 @@
 title: Rezolve Inside (TM) SDK Documentation
 
 language_tabs:
-  - objective_c: IOS
+  - swift: IOS
   - java: Android
 
 toc_footers:

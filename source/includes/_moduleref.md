@@ -7,15 +7,36 @@ This module handles consumer user creation and authentication.
 
 ### Method: Register
 
-```objective_c
-let request: AuthenticationRequest = authenticationRequest()
-// TODO populate authenticationRequest object
+```swift
+  let deviceProfile: DeviceProfile = DeviceProfile(
+      deviceId: "123",
+      make: "Apple",
+      osType: "iOS",
+      osVersion: "10",
+      locale: "Europe/London"
+  )
 
-let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
+  let signUpRequest: SignUpRequest = SignUpRequest(
+      email: "johndoe@domain.com",
+      firtName: "John",
+      lastName: "Doe",
+      name: "John Doe",
+      device: deviceProfile
+  )
 
-sdk.registerUser(authenticationRequest: request) {  (entityId, partnerId) in 
-	// persist the entity_id and partner_id values here
-}
+
+  sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+      self.entityId = entityId;
+      self.partnerId = partnerId
+
+      sdk.createSession(
+          entityId: self.entityId!,
+          partnerId: self.partnerId!,
+          device: deviceProfile) { (session: RezolveSession) in
+
+              self.mySession = session
+      }
+  }
 ```
 ```java
 DeviceProfile deviceProfile = new DeviceProfile(deviceId, deviceManufacturer, locale);
@@ -85,16 +106,22 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 ### Method: Create Session
 
-``` objective_c
-let request: AuthenticationRequest = authenticationRequest()
-// TODO populate authenticationRequest object
+```swift
+let deviceProfile: DeviceProfile = DeviceProfile(
+  deviceId: "123",
+  make: "Apple",
+  osType: "iOS",
+  osVersion: "10",
+  locale: "Europe/London"
+)
 
-let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: .Development)
-
-sdk.createSession(authenticationRequest: request) { (session: RezolveSession) in
-	// use created session to access managers
-    // example: session.CustomerProfileService.get
+sdk.createSession(
+  entityId: self.entityId!,
+  partnerId: self.partnerId!,
+  device: deviceProfile) { (session: RezolveSession) in
+      self.mySession = session
 }
+
 ```
 ```java
 RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, 
@@ -133,10 +160,9 @@ The method returns a `rezolveSession` object.
 
 ### Method: Logout
 
-``` objective_c
+```swift
 // When session ends you should inform the sdk by calling
-session.authenticationService.logout();
-
+session.authenticationManager.logout();
 ```
 ```java
 // When session ends you should inform the sdk by calling
@@ -161,8 +187,8 @@ This module handles maintaining the consumer's contact information and device in
 
 ### Method: customerProfileManager.get
 
-``` objective_c
-
+```swift
+ 
 ```
 ```java
 // get using CustomerProfileInterface
@@ -243,8 +269,8 @@ The method returns a `customerProfile` object.
 
 ### Method: customerProfileManager.update
 
-``` objective_c
-
+```swift
+ 
 ```
 ```java
 // update using CustomerProfileInterface
@@ -314,8 +340,8 @@ This module provides CRUD functions for consumer addresses. The consumer may add
 
 ### Method: addressbookManager.create
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // create address using addressBookInterface
@@ -371,8 +397,8 @@ The method returns the created `address` object with `id` upon success.
 
 ### Method: addressbookManager.update
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // update address using addressBookInterface
@@ -414,8 +440,8 @@ The method returns the updated `address` object upon success.
 
 ### Method: addressbookManager.delete
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // delete address using AddressbookInterface
@@ -455,8 +481,8 @@ You must pass in the `address` object to delete.
 
 ### Method: addressbookManager.get
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // get address using AddressbookInterface
@@ -498,8 +524,8 @@ You must pass in the `id` of the `address` to get.
 The method returns an `address` object.
 
 ### Method: addressbookManager.getAll
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // get all addresses using AddressbookInterface
@@ -553,8 +579,8 @@ This module provides CRUD functions for Favorites. The term "Favorite" refers to
 
 ### Method: favouriteManager.create
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // create favorite using FavouriteInterface
@@ -601,8 +627,8 @@ The method returns the created `favourite` object with `id` upon success.
 
 ### Method: favouriteManager.update
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // update favorite using FavouriteInterface
@@ -640,8 +666,8 @@ The method returns the updated `favourite` object upon success.
 
 ### Method: favouriteManager.delete
 
-```objective_c
-
+```swift
+ 
 ```
 ```java
 // delete favorite using FavouriteInterface
@@ -677,7 +703,7 @@ You must pass in the `favourite` object to delete.
 
 ### Method: favouriteManager.get
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -717,7 +743,7 @@ The method returns an `favourite` object.
 
 ### Method: favouriteManager.getAll
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -766,7 +792,7 @@ This module provides CRUD functions for payment cards.  The consumer may add one
 
 ### Method: walletManager.create
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -828,7 +854,7 @@ The method returns the created `paymentCard` object with `id` upon success.
 
 ### Method: walletManager.update
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -872,7 +898,7 @@ The method returns the updated `paymentCard` object upon success.
 
 ### Method: walletManager.delete
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -914,7 +940,7 @@ You must pass in the `paymentCard` object to delete.
 
 ### Method: walletManager.get
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -960,7 +986,7 @@ The method returns a `paymentCard` object.
 
 ### Method: walletManager.getAll
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1016,7 +1042,7 @@ The Shop module offers methods specific to e-commerce; getting catalogs, product
 
 ### Method: getMerchants
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1069,7 +1095,7 @@ Recommended use of images: the image_url is used as a header background, and the
 
 ### Method: getCatalogs
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1132,7 +1158,7 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 
 ### Method: getCatalog
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1175,7 +1201,7 @@ The method returns a `catalog` object.
 
 ### Method: getProducts
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1330,8 +1356,15 @@ A variant has a varying number of key/value string pairs, as determined by the n
 
 ### Method: getProduct
 
-```objective_c
+```swift
+self.mySession?.productManager.getProduct(merchantId: "1", catalogId: "1", productId: "2") { (product: Product) in
 
+	var product_id: String = product.id
+    var title: String = product.title
+    var subtitle: String = product.subtitle
+    var description: String = product.description
+    // ... etc
+}
 ```
 ```java
 // get a single product using ProductInterface
@@ -1414,7 +1447,7 @@ The activity module handles order history and other historical data.
 
 ### Method: getOrders
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1521,8 +1554,42 @@ The checkout module creates orders and completes orders with payment.
 
 ### Method: checkoutOrder
 
-```objective_c
+```swift
+  let options: [String: OptionValue] = [
+      "color": (product.options["color"]?.values[0])!
+  ]
 
+  let checkoutProduct = CheckoutProduct(
+      productId: product.id,
+      productTitle: product.title,
+      quantity: 1,
+      finalPrice: product.price,
+      options: options
+  )
+
+  let loyalty: Loyalty = Loyalty(number: "123123")
+
+  let delivery: Delivery = Delivery(addressId: "123123") // address.id
+
+  let geoLoc: [String: Double] = [
+      "lat": 12.000,
+      "long": 21.000
+  ]
+
+  let myCart: Cart = Cart(
+      merchantId: "1",
+      loyaltySettings: loyalty,
+      deliverySettings: delivery,
+      email: "johndoe@domain.com",
+      type: "scan",
+      products: [checkoutProduct],
+      geoLoc: geoLoc
+  )
+
+
+  mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
+      let orderId: String = order.id
+  }
 ```
 ```java
 // create an order and calculate cart cost
@@ -1672,7 +1739,7 @@ See <a href="#optionvalue-object">`optionValue object`</a>.
 
 ### Method: createPaymentRequest
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1696,7 +1763,7 @@ You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a 
 
 ### Method: buyOrder
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1824,7 +1891,7 @@ ScanManager is different than other Managers as it relies on a user interface co
 
 ### Methods: startVideoScan, stopVideoScan
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1914,7 +1981,7 @@ Method signature: `session.scanManager.stopVideoScan()`
 
 ### Methods: startAudioScan, stopAudioScan
 
-```objective_c
+```swift
 
 ```
 ```java
@@ -1949,7 +2016,7 @@ Method signature: `session.scanManager.stopAudioScan()`
 
 ### Method: destroy
 
-```objective_c
+```swift
 
 ```
 ```java
