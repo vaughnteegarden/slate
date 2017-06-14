@@ -282,35 +282,47 @@ The premise of Shoppable Ads is to capture an image scan (usually of an advertis
 
 ```
 ```java
+public class ScanActivity extends AppCompatActivity implements ScanManagerInterface, View.OnClickListener {
+    //...
 
-```
-First, enable the scan screen using `session.startVideo()`, and capture a watermarked image. The Digimarc SDK will extract an ad id from the image. Use the scanManager to fetch the product URL associated with the id from the Digimarc server. This url will point to a getProduct API endpoint.
-
-#### 2. Fetch product info
-
-``` objective_c
- 
-```
-```java
-rezolveSession.getProductManager().getProduct(merchant, 
- catalog, productId, new ProductCallback() {
     @Override
-    public void onGetProductSuccess(Product product) {
-        String title = product.getTitle();
-        // handle result
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        // set scan view
+        setContentView(R.layout.scan_activity);
+        rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
+        
+        //get scan manager
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+          .getRezolveSession().getScanManager(this, true);
+          
+          //start video scan to acquire image
+          scanManager.startVideoScan(this, rezolveScanView);
     }
-});
 
+	// capture product result
+    @Override
+    public void onProductResult(Product product) {
+        // get product info
+        String product_id = product.getId();
+        String title = product.getTitle();
+        String subtitle = product.getSubtitle();
+        // ...etc
+    }
+
+}
 ```
+First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager will recognize the encoded product data, and extract `merchantId`, `catalogId`, and `productId` from the image, and automatically call `getProduct`. The scanManager will return a `product` object. 
 
-Use the SDK `getProduct` call to retrieve product information. The `partner_id`, `merchant_id`, `catalog_id` and `product_id` will be in the URL received from Digimarc; the body of the request can be empty.  The response will include the title, price, description, variant choices, and images for the product.
 
-#### 3. Create an order and get an order total
+#### 2. Create an order and get an order total
 
 ``` objective_c
  
 ```
 ```java
+// pull info from the product to build a checkoutProduct, and add it to the cart. 
 HashMap<String, String> options = new HashMap<>();
 options.put("color", "red");
 
@@ -334,6 +346,7 @@ geoLoc.put("long", 31.1323);
 List<CheckoutProduct> items = new ArrayList<>();
 items.add(checkoutProduct);
 
+// build the cart
 Cart cart = new Cart.Builder()
         .merchantId(product.getMerchantId())
         .type("scan")
@@ -343,6 +356,7 @@ Cart cart = new Cart.Builder()
         .items(items)
         .build();
 
+// call checkoutOrder. It will return an Order with embedded pricing info.
 rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
     @Override
     public void onCheckoutOrderSuccess(Order order) {
@@ -354,7 +368,7 @@ rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
 
 Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
 
-#### 4. Show payment card choices
+#### 3. Show payment card choices
 
 ``` objective_c
  
@@ -372,7 +386,7 @@ If the consumer agrees with the price and wishes to complete the order, use `wal
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
-#### 5. Submit payment for order
+#### 4. Submit payment for order
 
 ``` objective_c
  
@@ -395,6 +409,12 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response will contain either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
+
+
+
+
+
+
 ## Top Up flow
 
 <img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]
@@ -404,7 +424,7 @@ Pass the `paymentRequst` object and the `order` object to the `buyOrder` method.
  
 ```
 ```java
-Favourite favourite = new Favourite(id, value, type, provider);
+Favourite favourite = new Favourite(value, type, provider);
 
 rezolveSession.getFavouriteManager().create(favourite, new FavouriteCallback() {
     @Override

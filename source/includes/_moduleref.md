@@ -177,6 +177,8 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
 
+		List<DeviceProfile> devices = new ArrayList<DeviceProfile>();
+        
         // get customer profile
         myProfileManager.get(this);
     }
@@ -197,10 +199,10 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         String title = customerProfile.getTitle();
 
         // access device profile info
-        String deviceId = customerProfile.getDevices().get(1).getDeviceId();
-        String make = customerProfile.getDevices().get(1).getMake();
-        String osType = customerProfile.getDevices().get(1).getOsType();
-        Integer osVersion = customerProfile.getDevices().get(1).getOsVersion();
+        String deviceId = customerProfile.getDevices().get(0).getDeviceId();
+        String make = customerProfile.getDevices().get(0).getMake();
+        String osType = customerProfile.getDevices().get(0).getOsType();
+        Integer osVersion = customerProfile.getDevices().get(0).getOsVersion();
     }
 }
 
@@ -569,7 +571,6 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
         // create a favourite
         Favourite favourite = new Favourite();
-        favourite.setId("9310c880695c");
         favourite.setProvider("AT&T");
         favourite.setType("phone");
         favourite.setValue("549912341234");
@@ -618,7 +619,6 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
         // update a favourite
         Favourite favourite = new Favourite();
-        favourite.setId("9310c880695c");
         favourite.setProvider("AT&T");
         favourite.setType("phone");
         favourite.setValue("549912341234");
@@ -658,7 +658,6 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
         // delete a favourite
         Favourite favourite = new Favourite();
-        favourite.setId("9310c880695c");
         favourite.setProvider("AT&T");
         favourite.setType("phone");
         favourite.setValue("549912341234");
@@ -1043,9 +1042,11 @@ public class Products extends AppCompatActivity implements ProductInterface {
         // list merchants
         for(Merchant merchant : list) {
             String merchant_id = merchant.getId();
-            String imageUrl = merchant.getImageUrl();
-            String logoUrl = merchant.getLogoUrl();
-            String title = merchant.getTitle();
+            String name = merchant.getName();
+            String tagline = merchant.getTagline();
+            String banner = merchant.getBanner();
+            List<String> bannerThumb = merchant.getBannerThumbs();
+            List<String> logoThumbs = merchant.getLogoThumbs();
         }
     }
 }
@@ -1093,11 +1094,12 @@ public class Products extends AppCompatActivity implements ProductInterface {
     public void onGetCatalogsSuccess(List<Catalog> list) {
         for (Catalog catalog : list) {
             String catalog_id = catalog.getId();
-            String parent_id = catalog.getParentCatalogId();
-            String imageUrl = catalog.getImageUrl();
-            String title = catalog.getTitle();
+            String parentId = catalog.getParentId();
+            String name = catalog.getName();
             Boolean hasCatalog = catalog.hasCatalog();
             Boolean hasProduct = catalog.hasProduct();
+            String image = catalog.getImage();
+            List<String> imageThumbs = catalog.getImageThumbs();
         }
     }
 }
@@ -1114,12 +1116,13 @@ The method returns an array of `catalog` objects owned by a specific merchant.
 |field|format|example|
 |---|---|---|
 |id|string|2|
-|parent_id|integer|1|
-|title||Fitness Wear|
+|parent_id|string|1|
+|name|String|Fitness Wear|
 |has_products|boolean|true|
 |has_catalogs|boolean|false|
-|image_url|string|http://domain.com/path/image.jpg|
-|catlogs|array of catalog objects| |
+|image|string|http://domain.com/path/image.jpg|
+|imageThumbs|array of url strings|&nbsp;|
+|catlogs|array of catalog objects|&nbsp;|
 
 Notes:
 
@@ -1155,11 +1158,12 @@ public class Products extends AppCompatActivity implements ProductInterface {
     public void onGetCatalogSuccess(List<Catalog> list) {
         for (Catalog catalog : list) {
             String catalog_id = catalog.getId();
-            String parent_id = catalog.getParentCatalogId();
-            String imageUrl = catalog.getImageUrl();
-            String title = catalog.getTitle();
+            String parentId = catalog.getParentId();
+            String name = catalog.getName();
             Boolean hasCatalog = catalog.hasCatalog();
             Boolean hasProduct = catalog.hasProduct();
+            String image = catalog.getImage();
+            List<String> imageThumbs = catalog.getImageThumbs();
         }
     }
 }
@@ -1214,10 +1218,10 @@ public class Products extends AppCompatActivity implements ProductInterface {
         }
 
         for (DisplayProduct displayProduct : embed){
-            displayProduct.getId();
-            displayProduct.getImageUrl();
-            displayProduct.getPrice();
-            displayProduct.getTitle();
+            String id = displayProduct.getId();
+            String imageUrl = displayProduct.getImageUrl();
+            float price = displayProduct.getPrice();
+            String title = displayProduct.getTitle();
         }
     }
 }
@@ -1273,8 +1277,8 @@ The links object is a series of 5 pageNavigation objects (see above), each repre
 |subtitle|string|Heart Rate and Fitness Wristband|
 |price|decimal|129.00|
 |images|array of image urls|http://domain.com/path/image.jpg|
-|options|object||
-|optionAvailable|array of Variant objects||
+|options|object|&nbsp;|
+|optionAvailable|array of Variant objects|&nbsp;|
 
 #### option Object
 
@@ -1282,9 +1286,9 @@ An option represents a choice. For example, Color or Size on a clothing item.
 
 |field|format|example|
 |---|---|---|
-|label|string||
+|label|string|&nbsp;|
 |extraInfo|string displayed to the user, provides additional info about the option|Color may differ from shown.|
-|values|array of optionValue objects||
+|values|array of optionValue objects|&nbsp;|
 
 #### optionValue Object
 OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.
@@ -1482,8 +1486,8 @@ The method returns an array of `transaction objects`.
 |finalPrice|decimal|129.00|
 |deliveryAddressId|String|123|
 |pan4|string|4111|
-|geoLoc|object||
-|items|array of transactionItem objects||
+|geoLoc|object|&nbsp;|
+|items|array of transactionItem objects|&nbsp;|
 
 #### geoLoc Object
 
@@ -1602,12 +1606,12 @@ The method returns an `order` object.
 
 |field|format|example|
 |---|---|---|
-|merchantId|string||
-|loyaltySettings|object||
-|deliverySettings|object||
-|type|string||
-|products|array of checkoutProduct objects||
-|geoLoc|Object||
+|merchantId|string|&nbsp;|
+|loyaltySettings|object|&nbsp;|
+|deliverySettings|object|&nbsp;|
+|type|string|&nbsp;|
+|products|array of checkoutProduct objects|&nbsp;|
+|geoLoc|Object|&nbsp;|
 
 #### loyaltySettings Object
 
@@ -1629,7 +1633,7 @@ The method returns an `order` object.
 |productTitle|string|Fitbit Charge 2|
 |quantity|decimal|1|
 |finalPrice|decimal|159.00|
-|options|map of OptionValue objects||
+|options|map of OptionValue objects|&nbsp;|
 
 See <a href="#optionvalue-object">`optionValue object`</a>.
 
@@ -1646,7 +1650,7 @@ See <a href="#optionvalue-object">`optionValue object`</a>.
 |---|---|---|
 |id|string|123|
 |finalPrice|decimal|129.00|
-|breakdown|array of priceBreakdown objects||
+|breakdown|array of priceBreakdown objects|&nbsp;|
 
 #### priceBreakdown Object
 
@@ -1663,8 +1667,8 @@ See <a href="#optionvalue-object">`optionValue object`</a>.
 
 |field|format|example|
 |---|---|---|
-|type|string||
-|amount|decimal||
+|type|string|tax|
+|amount|decimal|10.00|
 
 ### Method: createPaymentRequest
 
@@ -1771,6 +1775,208 @@ In environments where transactions can take a very long time (minutes to tens of
 Method signature: `session.buyOrder( entity_id, order_id, [callback or interface] )`
 
 This method is reserved for future functionality.
+
+
+
+
+
+
+
+## Module: ScanManager
+
+```java
+//
+// contents of scan_activity.xml
+// 
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScanActivity"
+    android:padding="10dp">
+
+	//this is the video scan UI component
+    <com.rezolve.sdk.views.RezolveScanView
+        android:id="@+id/scan_view"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/start_video_scan">
+    </com.rezolve.sdk.views.RezolveScanView>
+
+	// this is the audio scan UI component
+    <com.rezolve.sdk.views.RezolveAudioVizualizationView
+        android:id="@+id/visualizer"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/scan_view"
+        android:layout_marginTop="1dp"
+        android:background="#000000"
+        android:layerType="hardware" >
+    </com.rezolve.sdk.views.RezolveAudioVizualizationView>
+</RelativeLayout>
+
+```
+ScanManager is different than other Managers as it relies on a user interface component.
+
+### Methods: startVideoScan, stopVideoScan
+
+```objective_c
+
+```
+```java
+public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
+
+    private final static String API_KEY = "your_api_key";
+
+    private final static String TAG = ScanActivity.class.getSimpleName();
+    private ScanManager scanManager;
+    private RezolveScanView rezolveScanView;
+    private RezolveAudioVizualizationView rezolveAudioVizualizationView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // set the content view
+        setContentView(R.layout.scan_activity);
+        // reference our scan_view
+        rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
+        // initialize scan manager
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+                .getRezolveSession().getScanManager(this, true);
+
+        // use startVideo to begin watching for scannable media
+        scanManager.startVideoScan(this, rezolveScanView);
+        // when done, call stopVideoScan
+        scanManager.stopVideoScan();
+    }
+
+    // in response to a scan, the following methods may be called:
+    //
+    // processingStarted  - fires when a scannable asset has been recognized.
+    // onProductResult    - fires if the asset is recognized as a product link
+    // onRezolveResult    - fires if the asset is some other type the SDK can handle,
+    //                      like a tollway transponder barcode
+    // onScanError        - fires if asset is recognized, but cannot be decoded (for
+    //                      example, due to network error)
+    // processingFinished - fires when asset recognition is finished
+    //
+
+    @Override
+    public void processingStarted() {
+        Log.d(TAG, "processingStarted");
+    }
+
+    // if scan media contains a product link, onProductResult fires and
+    // returns a Product object
+    @Override
+    public void onProductResult(Product product) {
+        // get product info
+        String product_id = product.getId();
+        String title = product.getTitle();
+        String subtitle = product.getSubtitle();
+        // ... etc
+    }
+
+    // if scan media is another recognized format, onRezolveResult fires and
+    // returns a RezolveScanResult object. Inspect the object to get the
+    // payload.
+    @Override
+    public void onRezolveResult(RezolveScanResult result) {
+        Log.d(TAG, "Scan success! "+result.mContent);
+        String content = result.mContent;
+        String description = result.mDescription;
+        Bitmap bitmap = result.mBitmap;
+        String payloadId = result.mPayloadId;
+        String reportActionToken = result.mReportActionToken;
+    }
+
+    @Override
+    public void onScanError(String errorTitle, String errorMsg) {
+        // display scan error notification
+    }
+
+    @Override
+    public void processingFinished() {
+        Log.d(TAG, "processingFinished");
+    }
+}
+```
+
+Starts/stops watching the camera video stream to look for tagged media, qr codes, and barcodes.
+
+Method signature: `session.scanManager.startVideoScan()`
+
+Method signature: `session.scanManager.stopVideoScan()`
+
+### Methods: startAudioScan, stopAudioScan
+
+```objective_c
+
+```
+```java
+public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
+    // same vars as above
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // set the content view
+        setContentView(R.layout.scan_activity);
+        // reference our scan_view
+        rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
+        // initialize scan manager
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+                .getRezolveSession().getScanManager(this, true);
+
+        // use startAudioScan to being listening for watermarked media
+        scanManager.startAudioScan(this, rezolveAudioVizualizationView);
+        // use stopAudioScan to cease listening.
+        scanManager.stopAudioScan();
+    }
+    // the same response methods apply to AudioScan as VideoScan. See above.
+}
+```
+
+Starts/stops listening to microphone audio stream for tagged media.
+
+Method signature: `session.scanManager.startAudioScan()`
+
+Method signature: `session.scanManager.stopAudioScan()`
+
+### Method: destroy
+
+```objective_c
+
+```
+```java
+public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
+    // same vars as above
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // set the content view
+        setContentView(R.layout.scan_activity);
+        // reference our scan_view
+        rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
+        // initialize scan manager
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+                .getRezolveSession().getScanManager(this, true);
+
+        // use stopAudioScan to cease listening.
+        scanManager.destroy();
+    }
+    // destroy has no response methods
+}
+```
+
+The destroy() method should always be called when done with scanning. The method destroys the initialized scan manager, and frees the resources it was consuming.
+
+Method signature: `session.scanManager.destroy()`
 
 
 
