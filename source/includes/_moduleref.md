@@ -1295,7 +1295,8 @@ A variant has a varying number of key/value string pairs, as determined by the n
 ### Method: getProduct
 
 ```swift
-self.mySession?.productManager.getProduct(merchantId: "1", catalogId: "1", productId: "2") { (product: Product) in
+self.mySession?.productManager.getProduct(merchantId: "1", catalogId: "1", 
+productId: "2") { (product: Product) in
 
 	var product_id: String = product.id
     var title: String = product.title
