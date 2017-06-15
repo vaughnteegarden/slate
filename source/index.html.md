@@ -18,6 +18,14 @@ search: true
 
 # Introduction
 
+```html
+Note:
+
+Code samples for IOS and Android will appear in this column.
+
+You can switch between IOS and Android by clicking the tabs above.
+```
+
 The **Rezolve Inside<sup>TM</sup> SDK** is a software development kit that enables mobile app developers to integrate Rezolve’s mobile commerce and engagement capabilities into their new or existing mobile apps.
 
 To learn more about what the Rezolve Inside<sup>TM</sup> SDK can offer your app, <a href="images/RezolveOverview-Platform.pdf">click here for a platform overview PDF</a>.
@@ -39,14 +47,6 @@ If you would like access to the demo app, email Stephen Meli (stephenmeli@rezolv
 
 
 ## Capabilities
-
-```html
-Note:
-
-Code samples for IOS and Android will appear in this column.
-
-You can switch between IOS and Android by clicking the tabs above.
-```
 
 The Rezolve Inside<sup>TM</sup> SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
 
