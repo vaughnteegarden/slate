@@ -187,9 +187,6 @@ This module handles maintaining the consumer's contact information and device in
 
 ### Method: customerProfileManager.get
 
-```swift
- 
-```
 ```java
 // get using CustomerProfileInterface
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
@@ -204,7 +201,7 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
 
 		List<DeviceProfile> devices = new ArrayList<DeviceProfile>();
-        
+
         // get customer profile
         myProfileManager.get(this);
     }
@@ -269,9 +266,6 @@ The method returns a `customerProfile` object.
 
 ### Method: customerProfileManager.update
 
-```swift
- 
-```
 ```java
 // update using CustomerProfileInterface
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
@@ -340,9 +334,6 @@ This module provides CRUD functions for consumer addresses. The consumer may add
 
 ### Method: addressbookManager.create
 
-```swift
- 
-```
 ```java
 // create address using addressBookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -397,9 +388,6 @@ The method returns the created `address` object with `id` upon success.
 
 ### Method: addressbookManager.update
 
-```swift
- 
-```
 ```java
 // update address using addressBookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -440,9 +428,6 @@ The method returns the updated `address` object upon success.
 
 ### Method: addressbookManager.delete
 
-```swift
- 
-```
 ```java
 // delete address using AddressbookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -481,9 +466,6 @@ You must pass in the `address` object to delete.
 
 ### Method: addressbookManager.get
 
-```swift
- 
-```
 ```java
 // get address using AddressbookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -524,9 +506,7 @@ You must pass in the `id` of the `address` to get.
 The method returns an `address` object.
 
 ### Method: addressbookManager.getAll
-```swift
- 
-```
+
 ```java
 // get all addresses using AddressbookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -579,9 +559,6 @@ This module provides CRUD functions for Favorites. The term "Favorite" refers to
 
 ### Method: favouriteManager.create
 
-```swift
- 
-```
 ```java
 // create favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -627,9 +604,6 @@ The method returns the created `favourite` object with `id` upon success.
 
 ### Method: favouriteManager.update
 
-```swift
- 
-```
 ```java
 // update favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -666,9 +640,6 @@ The method returns the updated `favourite` object upon success.
 
 ### Method: favouriteManager.delete
 
-```swift
- 
-```
 ```java
 // delete favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -703,9 +674,6 @@ You must pass in the `favourite` object to delete.
 
 ### Method: favouriteManager.get
 
-```swift
-
-```
 ```java
 // get a favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -743,9 +711,6 @@ The method returns an `favourite` object.
 
 ### Method: favouriteManager.getAll
 
-```swift
-
-```
 ```java
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
@@ -792,9 +757,6 @@ This module provides CRUD functions for payment cards.  The consumer may add one
 
 ### Method: walletManager.create
 
-```swift
-
-```
 ```java
 // create payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -854,9 +816,6 @@ The method returns the created `paymentCard` object with `id` upon success.
 
 ### Method: walletManager.update
 
-```swift
-
-```
 ```java
 // update payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -898,9 +857,6 @@ The method returns the updated `paymentCard` object upon success.
 
 ### Method: walletManager.delete
 
-```swift
-
-```
 ```java
 // delete payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -940,9 +896,6 @@ You must pass in the `paymentCard` object to delete.
 
 ### Method: walletManager.get
 
-```swift
-
-```
 ```java
 // get a payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -986,9 +939,6 @@ The method returns a `paymentCard` object.
 
 ### Method: walletManager.getAll
 
-```swift
-
-```
 ```java
 // get all payment cards using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -1042,9 +992,6 @@ The Shop module offers methods specific to e-commerce; getting catalogs, product
 
 ### Method: getMerchants
 
-```swift
-
-```
 ```java
 // get merchants using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1095,9 +1042,6 @@ Recommended use of images: the image_url is used as a header background, and the
 
 ### Method: getCatalogs
 
-```swift
-
-```
 ```java
 // get catalogs using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1158,9 +1102,6 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 
 ### Method: getCatalog
 
-```swift
-
-```
 ```java
 // get a single catalog using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1201,9 +1142,6 @@ The method returns a `catalog` object.
 
 ### Method: getProducts
 
-```swift
-
-```
 ```java
 // get products using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1447,9 +1385,6 @@ The activity module handles order history and other historical data.
 
 ### Method: getOrders
 
-```swift
-
-```
 ```java
 // get transactions using UserActivityManager
 public class Activities extends AppCompatActivity implements UserActivityInterface {
@@ -1764,9 +1699,6 @@ You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a 
 
 ### Method: buyOrder
 
-```swift
-
-```
 ```java
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
@@ -1892,9 +1824,6 @@ ScanManager is different than other Managers as it relies on a user interface co
 
 ### Methods: startVideoScan, stopVideoScan
 
-```swift
-
-```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
 
@@ -1982,9 +1911,6 @@ Method signature: `session.scanManager.stopVideoScan()`
 
 ### Methods: startAudioScan, stopAudioScan
 
-```swift
-
-```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
     // same vars as above
@@ -2017,9 +1943,6 @@ Method signature: `session.scanManager.stopAudioScan()`
 
 ### Method: destroy
 
-```swift
-
-```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
     // same vars as above

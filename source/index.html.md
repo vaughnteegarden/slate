@@ -7,7 +7,7 @@ language_tabs:
 
 toc_footers:
   - <a href='http://www.rezolve.com'>Rezolve Homepage</a>
-  - <a href='https://github.com/tripit/slate'>Documentation powered by Slate</a>
+  - <a href='https://github.com/tripit/slate'>Docs powered by Slate</a>
 
 includes:
 - howto
@@ -19,6 +19,24 @@ search: true
 # Introduction
 
 The **Rezolve Inside<sup>TM</sup> SDK** is a software development kit that enables mobile app developers to integrate Rezolve’s mobile commerce and engagement capabilities into their new or existing mobile apps.
+
+To learn more about what the Rezolve Inside<sup>TM</sup> SDK can offer your app, <a href="images/RezolveOverview-Platform.pdf">click here for a platform overview PDF</a>.
+
+## Demo App
+
+A Rezolve demo app is available, and is a great way to experience Rezolve's offerings. A pdf of the screen flow is <a href="images/RezolveOverview-Platform.pdf">available here</a>.
+
+If you would like access to the demo app, email Stephen Meli (stephenmeli@rezolve.com) the following information:
+1. Your full name
+2. Your company
+3. What country you are located in
+4. Your contact phone number (and Skype ID if you have one)
+5. Your phone OS (Android or IOS), OS version (if you know it), and phone model
+6. The email address associated with your Android or IOS account (the one associated with the Play Store/App Store)
+7. Your contact email, if it differs from your account email
+
+
+
 ## Capabilities
 
 ```html
@@ -31,15 +49,17 @@ You can switch between IOS and Android by clicking the tabs above.
 
 The Rezolve Inside<sup>TM</sup> SDK is a full-featured application suite. Capabilities that can be integrated into your application include:
 
-* Enabling Shoppable Ads - <a href="images/RezolveOverview-ShoppableAds.pdf">see Shoppable Ads PDF</a>
-* Creating a browsable Mall - <a href="images/RezolveOverview-Mall.pdf">see Mall PDF</a>
-* Supporting Pre-pay account Top Up - <a href="images/RezolveOverview-TopUp.pdf">see Top Up PDF</a>
-* Consumer account creation and Rezolve login
-* Consumer profile and wallet management
+* Enabling Shoppable Ads - <a href="images/RezolveOverview-ShoppableAds.pdf">Shoppable Ads PDF</a>
+* Creating a browsable Mall - <a href="images/RezolveOverview-Mall.pdf">Mall PDF</a>
+* Supporting Pre-pay account Top Up - <a href="images/RezolveOverview-TopUp.pdf">Top Up PDF</a>
 * Consumer management of topup devices
 * Scanning of Rezolve Encoded visual media
-* Listening to Rezolve Encoded audio media
-* Purchase history
+* Scanning of Rezolve Encoded audio media
+* Consumer account creation, consumer profile, and purchase history
+* Wallet management
+
+The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-the-art security model (see <a href="images/RezolveOverview-ShoppableAds.pdf">see security overview PDF</a>).
+
 
 ## Intended audience
 
@@ -56,6 +76,8 @@ This document is intended for experienced IOS and Android developer. It is expec
 |SDK|Refers to the Rezolve Inside<sup>TM</sup> SDK, unless otherwise specified.|
 
 
+
+
 ## For more information
 
 For more information on Rezolve, see http://rezolve.com.
@@ -69,9 +91,9 @@ You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please vis
 
 ## Download the SDK
 
-The Rezolve Inside<sup>TM</sup> SDK for **IOS** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-sdk-1.0-release.zip">rezolve-sdk-1.0-release.zip</a>
+The Rezolve Inside<sup>TM</sup> SDK for **IOS** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-sdk-1.3-release.zip">rezolve-sdk-1.3-release.zip</a>
 
-The Rezolve Inside<sup>TM</sup> SDK for **Android** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-sdk-1.0-release.aar">rezolve-sdk-1.0-release.aar</a>
+The Rezolve Inside<sup>TM</sup> SDK for **Android** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-sdk-1.3-release.aar">rezolve-sdk-1.3-release.aar</a>
 
 ## Set up the SDK - IOS
 

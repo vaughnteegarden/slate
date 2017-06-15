@@ -317,9 +317,7 @@ The premise of Shoppable Ads is to capture an image scan (usually of an advertis
 
 #### 1. Capture image and get product URL
 
-```swift
 
-```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface, View.OnClickListener {
     //...
@@ -445,9 +443,6 @@ Once you have product information, call the SDK `checkoutOrder` method. Pass in 
 
 #### 3. Show payment card choices
 
-```swift
- 
-```
 ```java
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
     @Override
@@ -463,9 +458,7 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 #### 4. Submit payment for order
 
-```swift
- 
-```
+
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest
 PaymentRequest paymentRequest = mySession.getCheckoutManager()
@@ -495,9 +488,7 @@ Pass the `paymentRequst` object and the `order` object to the `buyOrder` method.
 <img src="images/Topup%20Flow.png" style="margin:6px 0;"><br/>[ <a href="images/Topup%20Flow.png">View full size</a> ]
 
 #### 1. Add the top up target as a Favorite
-```swift
- 
-```
+
 ```java
 Favourite favourite = new Favourite(value, type, provider);
 
@@ -511,9 +502,7 @@ rezolveSession.getFavouriteManager().create(favourite, new FavouriteCallback() {
 The top up flow gives the mobile consumer the ability to add money to a remote account that is linked with a specific device, such as a mobile phone or tollway transponder. The consumer must have first added the topup device (called a Favorite) to their account, using the `FavouriteManager.create` method.
 
 #### 2. List available favorites
-```swift
- 
-```
+
 ```java
 rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
     @Override
@@ -528,9 +517,7 @@ rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
 Once there is one or more favorites, use the `FavouriteManager.getAll` method to list them. The customer will choose a favorite.
 
 #### 3. Get a list of topup amounts using getProducts
-```swift
- 
-```
+
 ```java
 rezolveSession.getProductManager().getProducts(merchant, catalog, count, 
 pageIndex, sortBy, sortDirection, new ProductCallback() {
@@ -605,9 +592,7 @@ rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
 When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
 #### 5. Show payment card choices
-```swift
- 
-```
+
 ```java
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
     @Override
@@ -621,9 +606,7 @@ If the consumer agrees with the price and wishes to complete the order, use `wal
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
 #### 6. Submit payment for order
-```swift
- 
-```
+
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest
 PaymentRequest paymentRequest = mySession.getCheckoutManager()
