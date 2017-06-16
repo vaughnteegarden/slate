@@ -473,8 +473,9 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 ```
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest
-PaymentRequest paymentRequest = mySession.getCheckoutManager()
-.createPaymentRequest( paymentCard, cvv );
+
+let paymentRequest: PaymentRequest = self.mySession?.checkoutManager.createPaymentRequest(
+paymentCard: paymentCard, cvv: cvv) 
 
 // pass the paymentRequest object, order object, and callback to the buyOrder method
 rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new CheckoutCallback() {
@@ -663,7 +664,8 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 #### 6. Submit payment for order
 
 ```swift
-  let paymentRequest: PaymentRequest = PaymentRequest(paymentCard: paymentCard, cvv: cvv)
+  let paymentRequest: PaymentRequest = self.mySession?.checkoutManager.createPaymentRequest(
+  paymentCard: paymentCard, cvv: cvv) 
 
   self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest, 
    order: order) { (transaction: Transaction) in

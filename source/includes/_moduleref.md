@@ -1852,8 +1852,26 @@ A variant has a varying number of key/value string pairs, as determined by the n
 ### Method: getProduct
 
 ```swift
+import UIKit
+import RezolveSDK
 
+class ProductViewController: UIViewController {
 
+  let API_KEY: String = "your_api_key"
+
+  var mySession: RezolveSession?
+
+  override func viewDidLoad() {
+      super.viewDidLoad()
+
+      self.mySession = ... // initialize session
+
+      self.mySession?.productManager.getProduct(merchantId: "123", catalogId: "A", productId: "ABC") { (product: Product) in
+          let productId: String = product.id
+          let title: String = product.title
+      }
+  }
+}
 ```
 ```java
 // get a single product using ProductInterface
@@ -1936,6 +1954,28 @@ The activity module handles order history and other historical data.
 
 ### Method: getOrders
 
+```swift
+import UIKit
+import RezolveSDK
+
+class UserActivityViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.userActivityManager.getOrders() { (transactions: Array<Transaction>) in
+
+            //handle result
+        }
+    }
+}
+```
 ```java
 // get transactions using UserActivityManager
 public class Activities extends AppCompatActivity implements UserActivityInterface {
@@ -2041,42 +2081,58 @@ The checkout module creates orders and completes orders with payment.
 ### Method: checkoutOrder
 
 ```swift
-  let options: [String: OptionValue] = [
-      "color": (product.options["color"]?.values[0])!
-  ]
+import UIKit
+import RezolveSDK
 
-  let checkoutProduct = CheckoutProduct(
-      productId: product.id,
-      productTitle: product.title,
-      quantity: 1,
-      finalPrice: product.price,
-      options: options
-  )
+class CheckoutViewController: UIViewController {
 
-  let loyalty: Loyalty = Loyalty(number: "123123")
+    let API_KEY: String = "your_api_key"
 
-  let delivery: Delivery = Delivery(addressId: "123123") // address.id
+    var mySession: RezolveSession?
 
-  let geoLoc: [String: Double] = [
-      "lat": 12.000,
-      "long": 21.000
-  ]
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  let myCart: Cart = Cart(
-      merchantId: "1",
-      loyaltySettings: loyalty,
-      deliverySettings: delivery,
-      email: "johndoe@domain.com",
-      type: "scan",
-      products: [checkoutProduct],
-      geoLoc: geoLoc
-  )
+        //self.mySession = ... // initialize session
 
-  mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
-      let orderId: String = order.id
-      let finalPrice: Decimal = order.finalPrice
-      // ... etc
-  }
+        let options: [String: OptionValue] = [
+            "color": (product.options["color"]?.values[0])!
+        ]
+
+        let checkoutProduct = CheckoutProduct(
+            productId: product.id,
+            productTitle: product.title,
+            quantity: 1,
+            finalPrice: product.price,
+            options: options
+        )
+
+        let loyalty: Loyalty = Loyalty(number: "123123")
+
+        let delivery: Delivery = Delivery(addressId: "123123") // address.id
+
+        let geoLoc: [String: Double] = [
+            "lat": 12.000,
+            "long": 21.000
+        ]
+
+        let myCart: Cart = Cart(
+            merchantId: "1",
+            loyaltySettings: loyalty,
+            deliverySettings: delivery,
+            email: "johndoe@domain.com",
+            type: "scan",
+            products: [checkoutProduct],
+            geoLoc: geoLoc
+        )
+
+
+        self.mySession?.checkoutManager.checkoutOrder(cart: cart) { (order: Order) in
+
+            // handle order
+        }
+    }
+}
 ```
 ```java
 // create an order and calculate cart cost
@@ -2227,7 +2283,7 @@ See <a href="#optionvalue-object">`optionValue object`</a>.
 ### Method: createPaymentRequest
 
 ```swift
-
+self.mySession?.checkoutManager.createPaymentRequest(paymentCard: paymentCard, cvv: cvv)
 ```
 ```java
 PaymentCard card = new PaymentCard(); // in actual use, pass in an existing card object
@@ -2250,6 +2306,38 @@ You must pass in a <a href="#paymentcard-object">`paymentCard object`</a> and a 
 
 ### Method: buyOrder
 
+```swift
+import UIKit
+import RezolveSDK
+
+class CheckoutViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.checkoutManager.checkoutOrder(cart: cart) { (order: Order) in
+
+            let paymentCard = ... // initialize paymentCard
+            let cvv = ... // capture cvv
+
+            let paymentRequest: PaymentRequest = 
+            self.mySession?.checkoutManager.createPaymentRequest( paymentCard: paymentCard, 
+            cvv: cvv)
+
+            self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest,
+             order: order) { (transaction: Transaction) in
+                //handle result
+            }
+        }
+    }
+}
+```
 ```java
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
