@@ -1429,6 +1429,33 @@ The Shop module offers methods specific to e-commerce; getting catalogs, product
 
 ### Method: getMerchants
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ProductViewController: UIViewController {
+
+  let API_KEY: String = "your_api_key"
+
+  var mySession: RezolveSession?
+
+  override func viewDidLoad() {
+      super.viewDidLoad()
+
+      self.mySession = ... // initialize session
+
+      self.mySession?.productManager.getMerchants() { (listOfMerchant: Array<Merchant>) in
+
+          listOfMerchant.forEach() { (merchant: Merchant) in
+
+              let merchantId: String = merchant.id
+              let title: String = merchant.title
+          }
+      }
+  }
+}
+
+```
 ```java
 // get merchants using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1479,6 +1506,32 @@ Recommended use of images: the image_url is used as a header background, and the
 
 ### Method: getCatalogs
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ProductViewController: UIViewController {
+
+  let API_KEY: String = "your_api_key"
+
+  var mySession: RezolveSession?
+
+  override func viewDidLoad() {
+      super.viewDidLoad()
+
+      self.mySession = ... // initialize session
+
+      self.mySession?.productManager.getCatalogs(merchantId: "123", catalogId: nil) { (listOfCatalog: Array<Catalog>) in
+
+          listOfCatalog.forEach() { (catalog: Catalog) in
+
+              let catalogId: String = catalog.id
+          }
+      }
+  }
+}
+
+```
 ```java
 // get catalogs using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1539,6 +1592,33 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 
 ### Method: getCatalog
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ProductViewController: UIViewController {
+
+  let API_KEY: String = "your_api_key"
+
+  var mySession: RezolveSession?
+
+  override func viewDidLoad() {
+      super.viewDidLoad()
+
+      self.mySession = ... // initialize session
+
+
+      self.mySession?.productManager.getCatalogs(merchantId: "123", catalogId: "A") { (listOfCatalog: Array<Catalog>) in
+
+          listOfCatalog.forEach() { (catalog: Catalog) in
+
+              let catalogId: String = catalog.id
+          }
+      }
+  }
+}
+
+```
 ```java
 // get a single catalog using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1579,6 +1659,41 @@ The method returns a `catalog` object.
 
 ### Method: getProducts
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ProductViewController: UIViewController {
+
+  let API_KEY: String = "your_api_key"
+
+  var mySession: RezolveSession?
+
+  override func viewDidLoad() {
+      super.viewDidLoad()
+
+      self.mySession = ... // initialize session
+
+      let pageNavigation = PageNavigation(count: 10,
+                                          pageIndex: 0,
+                                          sortBy: nil,
+                                          sort: PageNavigationSort.ASC)
+
+      self.mySession?.productManager.getProducts(
+          merchantId: "123",
+          catalogId: "A",
+          pageNavigation: pageNavigation) { (productPageResult: PageResult<DisplayProduct>) in
+
+              productPageResult.embedded.forEach() { (displayProduct: DisplayProduct) in
+
+                  let productId = displayProduct.id
+              }
+          }
+      }
+  }
+}
+
+```
 ```java
 // get products using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -1732,15 +1847,25 @@ A variant has a varying number of key/value string pairs, as determined by the n
 ### Method: getProduct
 
 ```swift
-self.mySession?.productManager.getProduct(merchantId: "1", catalogId: "1", 
-productId: "2") { (product: Product) in
+import UIKit
+import RezolveSDK
 
-	var product_id: String = product.id
-    var title: String = product.title
-    var subtitle: String = product.subtitle
-    var description: String = product.description
-    // ... etc
+class ProductViewController: UIViewController {
+
+  let API_KEY: String = "your_api_key"
+
+  var mySession: RezolveSession?
+
+  override func viewDidLoad() {
+      super.viewDidLoad()
+
+      self.mySession = ... // initialize session
+
+      // TODO
+
+  }
 }
+
 ```
 ```java
 // get a single product using ProductInterface
