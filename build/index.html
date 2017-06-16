@@ -4000,7 +4000,8 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 
         <span class="k">let</span> <span class="nv">order</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize order</span>
 
-        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">orderUpdate</span><span class="p">:</span> <span class="kt">OrderUpdate</span><span class="p">)</span> <span class="k">in</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> 
+         <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">orderUpdate</span><span class="p">:</span> <span class="kt">OrderUpdate</span><span class="p">)</span> <span class="k">in</span>
 
             <span class="c1">// handle the updates</span>
         <span class="p">})</span>
