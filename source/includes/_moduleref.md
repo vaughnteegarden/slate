@@ -1851,24 +1851,7 @@ A variant has a varying number of key/value string pairs, as determined by the n
 ### Method: getProduct
 
 ```swift
-import UIKit
-import RezolveSDK
 
-class ProductViewController: UIViewController {
-
-  let API_KEY: String = "your_api_key"
-
-  var mySession: RezolveSession?
-
-  override func viewDidLoad() {
-      super.viewDidLoad()
-
-      self.mySession = ... // initialize session
-
-      // TODO
-
-  }
-}
 
 ```
 ```java
