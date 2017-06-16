@@ -90,11 +90,11 @@ For more information on Rezolve, see http://rezolve.com.
 
 You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please visit <a href="https://www.rezolve.com/#sectionForm">the contact page</a> and request an API key. We’ll establish some basic information to form a contract of use, and send for your approval. Upon signature, we will provide an API key for you to use.
 
-## Download the SDK
+## Download the Rezolve Inside<sup>TM</sup> SDK
 
-The Rezolve Inside<sup>TM</sup> SDK for **IOS** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-1.3-release.zip">rezolve-ios-sdk-1.3-release.zip</a>
+The SDK for **IOS** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-1.3-release.zip">rezolve-ios-sdk-1.3-release.zip</a>
 
-The Rezolve Inside<sup>TM</sup> SDK for **Android** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.3-release.aar">rezolve-android-sdk-1.3-release.aar</a>
+The SDK for **Android** can be downloaded here: <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.3-release.aar">rezolve-android-sdk-1.3-release.aar</a>
 
 ## Set up the SDK - IOS
 
