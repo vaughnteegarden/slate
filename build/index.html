@@ -4014,54 +4014,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>This method is reserved for future functionality.</p>
 
 <h2 id="module-scanmanager">Module: ScanManager</h2>
-<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
-<span class="kd">import</span> <span class="kt">RezolveSDK</span>
-
-<span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
-
-    <span class="kd">@IBOutlet</span> <span class="k">var</span> <span class="nv">scanCameraView</span><span class="p">:</span> <span class="kt">ScanCameraView</span><span class="p">?</span>
-
-    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
-
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
-
-        <span class="c1">//self.mySession = ... // initialize session</span>
-
-        <span class="k">let</span> <span class="nv">scanManager</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span>
-
-        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
-        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">rezolveScanResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
-
-        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">scanCameraView</span><span class="o">!</span><span class="p">)</span>
-        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startAudioScan</span><span class="p">()</span>
-    <span class="p">}</span>
-
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
-
-        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">extension</span> <span class="kt">ScanManagerViewController</span> <span class="p">:</span> <span class="kt">ProductDelegate</span><span class="p">,</span> <span class="kt">RezolveScanResultDelegate</span> <span class="p">{</span>
-
-    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">resultDidFetched</span><span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">RezolveScanResult</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="c1">// handle result</span>
-    <span class="p">}</span>
-
-    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">productDidFetched</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="c1">// handle product</span>
-    <span class="p">}</span>
-
-    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">errorHappend</span><span class="p">(</span><span class="nv">error</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="c1">// handle error</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">//</span>
+<pre class="highlight java tab-java"><code><span class="c1">//</span>
 <span class="c1">// contents of scan_activity.xml</span>
 <span class="c1">// </span>
 
@@ -4099,7 +4052,51 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>ScanManager is different than other Managers as it relies on a user interface component.</p>
 
 <h3 id="methods-startvideoscan-stopvideoscan">Methods: startVideoScan, stopVideoScan</h3>
-<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    <span class="kd">@IBOutlet</span> <span class="k">var</span> <span class="nv">scanCameraView</span><span class="p">:</span> <span class="kt">ScanCameraView</span><span class="p">?</span>
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+        <span class="c1">//self.mySession = ... // initialize session</span>
+        <span class="k">let</span> <span class="nv">scanManager</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">rezolveScanResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">scanCameraView</span><span class="o">!</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ScanManagerViewController</span> <span class="p">:</span> <span class="kt">ProductDelegate</span><span class="p">,</span> <span class="kt">RezolveScanResultDelegate</span> <span class="p">{</span>
+
+    <span class="c1">// in response to a scan, the following methods may be called:</span>
+    <span class="c1">//</span>
+    <span class="c1">// resultDidFetched   - fires when a scannable asset has been recognized.</span>
+    <span class="c1">// productDidFetched  - fires if the asset is recognized as a product link</span>
+    <span class="c1">// errorHappened      - fires if asset is recognized, but cannot be decoded (for</span>
+    <span class="c1">//                      example, due to network error)</span>
+    <span class="c1">//</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">resultDidFetched</span><span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">RezolveScanResult</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// handle valid scan result</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">productDidFetched</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// handle product</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">errorHappened</span><span class="p">(</span><span class="nv">error</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// handle error result</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 
@@ -4183,7 +4180,27 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>Method signature: <code class="prettyprint">session.scanManager.stopVideoScan()</code></p>
 
 <h3 id="methods-startaudioscan-stopaudioscan">Methods: startAudioScan, stopAudioScan</h3>
-<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+        <span class="c1">//self.mySession = ... // initialize session</span>
+        <span class="k">let</span> <span class="nv">scanManager</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">rezolveScanResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startAudioScan</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ScanManagerViewController</span> <span class="p">:</span> <span class="kt">ProductDelegate</span><span class="p">,</span> <span class="kt">RezolveScanResultDelegate</span> <span class="p">{</span>
+    <span class="c1">// in response to a scan, the same methods may be called as with .startVideoScan</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
     <span class="c1">// same vars as above</span>
 
     <span class="nd">@Override</span>
@@ -4212,7 +4229,18 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>Method signature: <code class="prettyprint">session.scanManager.stopAudioScan()</code></p>
 
 <h3 id="method-destroy">Method: destroy</h3>
-<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">destroy</span><span class="p">()</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span> <span class="o">{</span>
     <span class="c1">// same vars as above</span>
 
     <span class="nd">@Override</span>
