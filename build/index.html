@@ -782,8 +782,9 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
       <span class="c1">//handle result</span>
   <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// Create an encrypted payment request using the CheckoutManager.createPaymentRequest</span>
-<span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">mySession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">()</span>
-<span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="n">cvv</span> <span class="o">);</span>
+
+<span class="n">let</span> <span class="nl">paymentRequest:</span> <span class="n">PaymentRequest</span> <span class="o">=</span> <span class="n">self</span><span class="o">.</span><span class="na">mySession</span><span class="o">?.</span><span class="na">checkoutManager</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span>
+<span class="nl">paymentCard:</span> <span class="n">paymentCard</span><span class="o">,</span> <span class="nl">cvv:</span> <span class="n">cvv</span><span class="o">)</span> 
 
 <span class="c1">// pass the paymentRequest object, order object, and callback to the buyOrder method</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getCheckoutManager</span><span class="o">().</span><span class="na">buyOrder</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">order</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
@@ -943,7 +944,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="6-submit-payment-for-order">6. Submit payment for order</h4>
-<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="kt">PaymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="n">cvv</span><span class="p">)</span>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="kt">PaymentRequest</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span>
+  <span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="n">cvv</span><span class="p">)</span> 
 
   <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyOrder</span><span class="p">(</span><span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> 
    <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">transaction</span><span class="p">:</span> <span class="kt">Transaction</span><span class="p">)</span> <span class="k">in</span>
@@ -3207,8 +3209,26 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 </tbody></table>
 
 <h3 id="method-getproduct">Method: getProduct</h3>
-<pre class="highlight swift tab-swift"><code>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
+<span class="kd">class</span> <span class="kt">ProductViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+  <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
+
+  <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+  <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
+
+      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span> <span class="nv">catalogId</span><span class="p">:</span> <span class="s">"A"</span><span class="p">,</span> <span class="nv">productId</span><span class="p">:</span> <span class="s">"ABC"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="k">in</span>
+          <span class="k">let</span> <span class="nv">productId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span>
+          <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single product using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -3282,7 +3302,27 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>The activity module handles order history and other historical data.</p>
 
 <h3 id="method-getorders">Method: getOrders</h3>
-<pre class="highlight java tab-java"><code><span class="c1">// get transactions using UserActivityManager</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">UserActivityViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
+
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">userActivityManager</span><span class="o">.</span><span class="nf">getOrders</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">transactions</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Transaction</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
+
+            <span class="c1">//handle result</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// get transactions using UserActivityManager</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Activities</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">UserActivityInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
@@ -3462,42 +3502,58 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>The checkout module creates orders and completes orders with payment.</p>
 
 <h3 id="method-checkoutorder">Method: checkoutOrder</h3>
-<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-      <span class="s">"color"</span><span class="p">:</span> <span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">"color"</span><span class="p">]?</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">!</span>
-  <span class="p">]</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
-  <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="kt">CheckoutProduct</span><span class="p">(</span>
-      <span class="nv">productId</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-      <span class="nv">productTitle</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
-      <span class="nv">quantity</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-      <span class="nv">finalPrice</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
-      <span class="nv">options</span><span class="p">:</span> <span class="n">options</span>
-  <span class="p">)</span>
+<span class="kd">class</span> <span class="kt">CheckoutViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
 
-  <span class="k">let</span> <span class="nv">loyalty</span><span class="p">:</span> <span class="kt">Loyalty</span> <span class="o">=</span> <span class="kt">Loyalty</span><span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
 
-  <span class="k">let</span> <span class="nv">delivery</span><span class="p">:</span> <span class="kt">Delivery</span> <span class="o">=</span> <span class="kt">Delivery</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span> <span class="c1">// address.id</span>
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
 
-  <span class="k">let</span> <span class="nv">geoLoc</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-      <span class="s">"lat"</span><span class="p">:</span> <span class="mf">12.000</span><span class="p">,</span>
-      <span class="s">"long"</span><span class="p">:</span> <span class="mf">21.000</span>
-  <span class="p">]</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-  <span class="k">let</span> <span class="nv">myCart</span><span class="p">:</span> <span class="kt">Cart</span> <span class="o">=</span> <span class="kt">Cart</span><span class="p">(</span>
-      <span class="nv">merchantId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span>
-      <span class="nv">loyaltySettings</span><span class="p">:</span> <span class="n">loyalty</span><span class="p">,</span>
-      <span class="nv">deliverySettings</span><span class="p">:</span> <span class="n">delivery</span><span class="p">,</span>
-      <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
-      <span class="nv">type</span><span class="p">:</span> <span class="s">"scan"</span><span class="p">,</span>
-      <span class="nv">products</span><span class="p">:</span> <span class="p">[</span><span class="n">checkoutProduct</span><span class="p">],</span>
-      <span class="nv">geoLoc</span><span class="p">:</span> <span class="n">geoLoc</span>
-  <span class="p">)</span>
+        <span class="c1">//self.mySession = ... // initialize session</span>
 
-  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkoutOrder</span><span class="p">(</span><span class="nv">cart</span><span class="p">:</span> <span class="n">myCart</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">Order</span><span class="p">)</span> <span class="k">in</span>
-      <span class="k">let</span> <span class="nv">orderId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">id</span>
-      <span class="k">let</span> <span class="nv">finalPrice</span><span class="p">:</span> <span class="kt">Decimal</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="n">finalPrice</span>
-      <span class="c1">// ... etc</span>
-  <span class="p">}</span>
+        <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">"color"</span><span class="p">:</span> <span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">"color"</span><span class="p">]?</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">!</span>
+        <span class="p">]</span>
+
+        <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="kt">CheckoutProduct</span><span class="p">(</span>
+            <span class="nv">productId</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="nv">productTitle</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="nv">quantity</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nv">finalPrice</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+            <span class="nv">options</span><span class="p">:</span> <span class="n">options</span>
+        <span class="p">)</span>
+
+        <span class="k">let</span> <span class="nv">loyalty</span><span class="p">:</span> <span class="kt">Loyalty</span> <span class="o">=</span> <span class="kt">Loyalty</span><span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span>
+
+        <span class="k">let</span> <span class="nv">delivery</span><span class="p">:</span> <span class="kt">Delivery</span> <span class="o">=</span> <span class="kt">Delivery</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">"123123"</span><span class="p">)</span> <span class="c1">// address.id</span>
+
+        <span class="k">let</span> <span class="nv">geoLoc</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Double</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">"lat"</span><span class="p">:</span> <span class="mf">12.000</span><span class="p">,</span>
+            <span class="s">"long"</span><span class="p">:</span> <span class="mf">21.000</span>
+        <span class="p">]</span>
+
+        <span class="k">let</span> <span class="nv">myCart</span><span class="p">:</span> <span class="kt">Cart</span> <span class="o">=</span> <span class="kt">Cart</span><span class="p">(</span>
+            <span class="nv">merchantId</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span>
+            <span class="nv">loyaltySettings</span><span class="p">:</span> <span class="n">loyalty</span><span class="p">,</span>
+            <span class="nv">deliverySettings</span><span class="p">:</span> <span class="n">delivery</span><span class="p">,</span>
+            <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
+            <span class="nv">type</span><span class="p">:</span> <span class="s">"scan"</span><span class="p">,</span>
+            <span class="nv">products</span><span class="p">:</span> <span class="p">[</span><span class="n">checkoutProduct</span><span class="p">],</span>
+            <span class="nv">geoLoc</span><span class="p">:</span> <span class="n">geoLoc</span>
+        <span class="p">)</span>
+
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkoutOrder</span><span class="p">(</span><span class="nv">cart</span><span class="p">:</span> <span class="n">cart</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">Order</span><span class="p">)</span> <span class="k">in</span>
+
+            <span class="c1">// handle order</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// create an order and calculate cart cost</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
 
@@ -3764,7 +3820,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 </tbody></table>
 
 <h3 id="method-createpaymentrequest">Method: createPaymentRequest</h3>
-<pre class="highlight swift tab-swift"><code>
+<pre class="highlight swift tab-swift"><code><span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="n">cvv</span><span class="p">)</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">PaymentCard</span> <span class="n">card</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// in actual use, pass in an existing card object</span>
 <span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
 <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">card</span><span class="o">,</span> <span class="n">cvv</span><span class="o">);</span>
@@ -3797,7 +3853,37 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 </tbody></table>
 
 <h3 id="method-buyorder">Method: buyOrder</h3>
-<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">CheckoutViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
+
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkoutOrder</span><span class="p">(</span><span class="nv">cart</span><span class="p">:</span> <span class="n">cart</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">Order</span><span class="p">)</span> <span class="k">in</span>
+
+            <span class="k">let</span> <span class="nv">paymentCard</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize paymentCard</span>
+            <span class="k">let</span> <span class="nv">cvv</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// capture cvv</span>
+
+            <span class="k">let</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="kt">PaymentRequest</span> <span class="o">=</span> 
+            <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span> <span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> 
+            <span class="nv">cvv</span><span class="p">:</span> <span class="n">cvv</span><span class="p">)</span>
+
+            <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyOrder</span><span class="p">(</span><span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span>
+             <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">transaction</span><span class="p">:</span> <span class="kt">Transaction</span><span class="p">)</span> <span class="k">in</span>
+                <span class="c1">//handle result</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checkout</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">CheckoutInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 
