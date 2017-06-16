@@ -1608,9 +1608,7 @@ class ProductViewController: UIViewController {
 
       self.mySession = ... // initialize session
 
-
-      self.mySession?.productManager.getCatalogs(merchantId: "123", 
-       catalogId: "A") { (listOfCatalog: Array<Catalog>) in
+      self.mySession?.productManager.getCatalogs(merchantId: "123", catalogId: "A") { (listOfCatalog: Array<Catalog>) in
 
           listOfCatalog.forEach() { (catalog: Catalog) in
 
@@ -1658,6 +1656,10 @@ public class Products extends AppCompatActivity implements ProductInterface {
 Method signature: `session.getCatalog( merchant_id, catalog_id, [callback or interface] )`
 
 The method returns a `catalog` object.
+
+<aside class="notice">
+Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
+</aside>
 
 ### Method: getProducts
 
