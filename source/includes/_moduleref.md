@@ -1866,7 +1866,8 @@ class ProductViewController: UIViewController {
 
       self.mySession = ... // initialize session
 
-      self.mySession?.productManager.getProduct(merchantId: "123", catalogId: "A", productId: "ABC") { (product: Product) in
+      self.mySession?.productManager.getProduct(merchantId: "123", catalogId: "A", 
+       productId: "ABC") { (product: Product) in
           let productId: String = product.id
           let title: String = product.title
       }
