@@ -322,8 +322,8 @@ class CustomerProfilerViewController: UIViewController {
 
             customerProfile.name = "Mary Doe"
 
-            self.mySession?.customerProfileManager.update( customerProfile: customerProfile, callback: { 
-             (remoteCustomerProfile: CustomerProfile) in
+            self.mySession?.customerProfileManager.update( customerProfile: 
+             customerProfile, callback: { (remoteCustomerProfile: CustomerProfile) in
 
                 // handle result
             }, errorCallback: { (errors: Array<HttpRequestError>) in
@@ -349,7 +349,7 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         super.onCreate(savedInstanceState);
 
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
 
 
         //update customer profile
@@ -1012,7 +1012,7 @@ The method returns an `favourite` object.
 
 ### Method: favouriteManager.getAll
 
-```swfit
+```swift
 class FavouriteViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"

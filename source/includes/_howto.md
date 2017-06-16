@@ -504,7 +504,8 @@ Pass the `paymentRequst` object and the `order` object to the `buyOrder` method.
 ```swift
   let favourite: Favourite = Favourite(value: "", type: "", provider: "")
 
-  self.mySession?.favouriteManager.create(favourite: favourite) { (remoteFavourite: Favourite) in
+  self.mySession?.favouriteManager.create(favourite: favourite) { 
+   (remoteFavourite: Favourite) in
       // handle result
   }
 ```
@@ -547,7 +548,8 @@ Once there is one or more favorites, use the `FavouriteManager.getAll` method to
 #### 3. Get a list of topup amounts using getProducts
 
 ```swift
-  let page: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
+  let page: PageNavigation = PageNavigation(count: 10, pageIndex: 0, 
+   sortBy: nil, sort: PageNavigationSort.ASC)
 
   self.mySession?.productManager.getProducts(
      merchantId: "123",
@@ -663,7 +665,8 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 ```swift
   let paymentRequest: PaymentRequest = PaymentRequest(paymentCard: paymentCard, cvv: cvv)
 
-  self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest, order: order) { (transaction: Transaction) in
+  self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest, 
+   order: order) { (transaction: Transaction) in
       //handle result
   }
 ```
