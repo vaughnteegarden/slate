@@ -48,11 +48,11 @@ SignUpRequest signUpRequest = new SignUpRequest.Builder()
     .device(deviceProfile)
     .build();
 
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(signUpRequest, 
-new RezolveInterface() {
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(
+signUpRequest, new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
-    String entityId) {
+     String entityId) {
     	// persist the entity_id and partner_id values here
         ...
 
@@ -202,7 +202,8 @@ This module handles maintaining the consumer's contact information and device in
 
         self.mySession = ... // initialize session
 
-        self.mySession?.customerProfileManager.get(callback: { (customerProfile:CustomerProfile) in
+        self.mySession?.customerProfileManager.get(callback: { 
+          (customerProfile:CustomerProfile) in
 
             let dateCreated: Date?  = customerProfile.dateCreated
             let dateUpdated: Date?  = customerProfile.dateUpdated
@@ -233,7 +234,7 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         super.onCreate(savedInstanceState);
 
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
 
 		List<DeviceProfile> devices = new ArrayList<DeviceProfile>();
 
@@ -316,11 +317,13 @@ class CustomerProfilerViewController: UIViewController {
 
         //self.mySession = ... // initialize session
 
-        self.mySession?.customerProfileManager.get(callback: { (customerProfile:CustomerProfile) in
+        self.mySession?.customerProfileManager.get(callback: { 
+         (customerProfile:CustomerProfile) in
 
             customerProfile.name = "Mary Doe"
 
-            self.mySession?.customerProfileManager.update(customerProfile: customerProfile, callback: { (remoteCustomerProfile: CustomerProfile) in
+            self.mySession?.customerProfileManager.update( customerProfile: customerProfile, callback: { 
+             (remoteCustomerProfile: CustomerProfile) in
 
                 // handle result
             }, errorCallback: { (errors: Array<HttpRequestError>) in
@@ -515,7 +518,8 @@ class AddressBookViewController: UIViewController {
 
            remoteAddress.shortName = "My Company"
 
-           self.mySession?.addressbookManager.update(address:  remoteAddress) { (remoteAddress2: Address) in
+           self.mySession?.addressbookManager.update(address: remoteAddress) { 
+            (remoteAddress2: Address) in
 
                let addressId: String = remoteAddress2.id
            }
@@ -851,7 +855,8 @@ class FavouriteViewController: UIViewController {
 
             remoteFavourite.value = "555488888888"
 
-            self.mySession?.favouriteManager.update(favourite: remoteFavourite) { (remoteFavourite2: Favourite) in
+            self.mySession?.favouriteManager.update(favourite: remoteFavourite) {
+             (remoteFavourite2: Favourite) in
 
                 //handle result
             }
@@ -870,7 +875,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
 
         // update a favourite
         Favourite favourite = new Favourite();
@@ -928,7 +933,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
 
         // delete a favourite
         Favourite favourite = new Favourite();
@@ -981,7 +986,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
 
         // get a single favourite
         String favourite_id = "123";
@@ -1173,11 +1178,13 @@ class WalletViewController: UIViewController {
 
         self.mySession = ... // initialize session
 
-        self.mySession?.walletManager.get(id: "123") { (remotePaymentCard: PaymentCard) in
+        self.mySession?.walletManager.get(id: "123") { 
+         (remotePaymentCard: PaymentCard) in
 
             remotePaymentCard.shortName = "My Visa"
 
-            self.mySession?.walletManager.update(paymentCard: remotePaymentCard) { (remotePaymentCard2: PaymentCard) in
+            self.mySession?.walletManager.update(paymentCard: remotePaymentCard) {
+             (remotePaymentCard2: PaymentCard) in
 
                 //handle result
             }
@@ -1361,7 +1368,8 @@ class WalletViewController: UIViewController {
 
         self.mySession = ... // initialize session
 
-        self.mySession?.walletManager.getAll() { (listOfPaymentCard: Array<PaymentCard>) in
+        self.mySession?.walletManager.getAll() { 
+         (listOfPaymentCard: Array<PaymentCard>) in
 
             //handle the results
         }
@@ -1379,7 +1387,7 @@ public class Wallet extends AppCompatActivity implements WalletInterface {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
 
         // list all payment cards
         myWalletManager.getAll(this);
