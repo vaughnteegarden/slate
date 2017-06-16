@@ -2427,7 +2427,8 @@ class CheckoutViewController: UIViewController {
 
         let order = ... // initialize order
 
-        self.mySession?.checkoutManager.signOrderUpdate(order: order, callback: { (orderUpdate: OrderUpdate) in
+        self.mySession?.checkoutManager.signOrderUpdate(order: order, 
+         callback: { (orderUpdate: OrderUpdate) in
 
             // handle the updates
         })
