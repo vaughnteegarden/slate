@@ -2809,9 +2809,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
       <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
 
-
-      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getCatalogs</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span> 
-       <span class="nv">catalogId</span><span class="p">:</span> <span class="s">"A"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCatalog</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Catalog</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getCatalogs</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span> <span class="nv">catalogId</span><span class="p">:</span> <span class="s">"A"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCatalog</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Catalog</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
 
           <span class="n">listOfCatalog</span><span class="o">.</span><span class="nf">forEach</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">catalog</span><span class="p">:</span> <span class="kt">Catalog</span><span class="p">)</span> <span class="k">in</span>
 
@@ -2856,6 +2854,10 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Method signature: <code class="prettyprint">session.getCatalog( merchant_id, catalog_id, [callback or interface] )</code></p>
 
 <p>The method returns a <code class="prettyprint">catalog</code> object.</p>
+
+<aside class="notice">
+Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
+</aside>
 
 <h3 id="method-getproducts">Method: getProducts</h3>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
@@ -3204,24 +3206,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <h3 id="method-getproduct">Method: getProduct</h3>
-<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
-<span class="kd">import</span> <span class="kt">RezolveSDK</span>
-
-<span class="kd">class</span> <span class="kt">ProductViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
-
-  <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
-
-  <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
-
-  <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
-
-      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
-
-      <span class="c1">// TODO</span>
-
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight swift tab-swift"><code>
 
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single product using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
