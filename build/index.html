@@ -2809,7 +2809,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
       <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
 
-      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getCatalogs</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span> <span class="nv">catalogId</span><span class="p">:</span> <span class="s">"A"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCatalog</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Catalog</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getCatalogs</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span> 
+       <span class="nv">catalogId</span><span class="p">:</span> <span class="s">"A"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCatalog</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Catalog</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
 
           <span class="n">listOfCatalog</span><span class="o">.</span><span class="nf">forEach</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">catalog</span><span class="p">:</span> <span class="kt">Catalog</span><span class="p">)</span> <span class="k">in</span>
 
@@ -2829,7 +2830,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
         <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
 
         <span class="c1">// get single catalog</span>
         <span class="n">String</span> <span class="n">catalogId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
