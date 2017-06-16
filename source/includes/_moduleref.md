@@ -1521,7 +1521,8 @@ class ProductViewController: UIViewController {
 
       self.mySession = ... // initialize session
 
-      self.mySession?.productManager.getCatalogs(merchantId: "123", catalogId: nil) { (listOfCatalog: Array<Catalog>) in
+      self.mySession?.productManager.getCatalogs(merchantId: "123", 
+       catalogId: nil) { (listOfCatalog: Array<Catalog>) in
 
           listOfCatalog.forEach() { (catalog: Catalog) in
 
@@ -1608,7 +1609,8 @@ class ProductViewController: UIViewController {
       self.mySession = ... // initialize session
 
 
-      self.mySession?.productManager.getCatalogs(merchantId: "123", catalogId: "A") { (listOfCatalog: Array<Catalog>) in
+      self.mySession?.productManager.getCatalogs(merchantId: "123", 
+       catalogId: "A") { (listOfCatalog: Array<Catalog>) in
 
           listOfCatalog.forEach() { (catalog: Catalog) in
 
