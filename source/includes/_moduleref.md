@@ -2410,6 +2410,31 @@ The method returns a <a href="#transaction-object">`transaction object`</a>.
 
 ### Method: signOrderUpdates
 
+```swift
+import UIKit
+import RezolveSDK
+
+class CheckoutViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        let order = ... // initialize order
+
+        self.mySession?.checkoutManager.signOrderUpdate(order: order, callback: { (orderUpdate: OrderUpdate) in
+
+            // handle the updates
+        })
+    }
+}
+```
+
 In environments where transactions can take a very long time (minutes to tens of minutes) to return a status, this method provides a way to subscribe and be notified of transaction status updates.
 
 Method signature: `session.buyOrder( entity_id, order_id, [callback or interface] )`
@@ -2424,6 +2449,55 @@ This method is reserved for future functionality.
 
 ## Module: ScanManager
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ScanManagerViewController: UIViewController {
+
+    @IBOutlet var scanCameraView: ScanCameraView?
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //self.mySession = ... // initialize session
+
+        let scanManager = self.mySession?.getScanManager()
+
+        scanManager?.productResultDelegate = self
+        scanManager?.rezolveScanResultDelegate = self
+
+        scanManager?.startVideoScan(scanCameraView: self.scanCameraView!)
+        scanManager?.startAudioScan()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+
+        scanManager?.stop()
+    }
+}
+
+extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate {
+
+    public func resultDidFetched(result: RezolveScanResult) {
+
+        // handle result
+    }
+
+    public func productDidFetched(product: Product) {
+
+        // handle product
+    }
+
+    public func errorHappend(error: String) {
+
+        // handle error
+    }
+}
+```
 ```java
 //
 // contents of scan_activity.xml

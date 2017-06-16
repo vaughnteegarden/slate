@@ -317,7 +317,40 @@ The premise of Shoppable Ads is to capture an image scan (usually of an advertis
 
 #### 1. Capture image and get product
 
+```swift
+import UIKit
+import RezolveSDK
 
+class ScanManagerViewController: UIViewController {
+
+    @IBOutlet var scanCameraView: ScanCameraView?
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //self.mySession = ... // initialize session
+        let scanManager = self.mySession?.getScanManager()
+        scanManager?.productResultDelegate = self
+        scanManager?.rezolveScanResultDelegate = self
+        scanManager?.startVideoScan(scanCameraView: self.scanCameraView!)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        scanManager?.stop()
+    }
+}
+
+extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate {
+    public func productDidFetched(product: Product) {
+        // handle product
+        let productId: String  = product.id
+        let title: String = product.title
+        let subtitle: String = product.subtitle
+        // ...etc
+    }
+}
+```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface, View.OnClickListener {
     //...
@@ -342,7 +375,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
     @Override
     public void onProductResult(Product product) {
         // get product info
-        String product_id = product.getId();
+        String productId = product.getId();
         String title = product.getTitle();
         String subtitle = product.getSubtitle();
         // ...etc
