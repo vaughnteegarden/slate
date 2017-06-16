@@ -1608,7 +1608,8 @@ class ProductViewController: UIViewController {
 
       self.mySession = ... // initialize session
 
-      self.mySession?.productManager.getCatalogs(merchantId: "123", catalogId: "A") { (listOfCatalog: Array<Catalog>) in
+      self.mySession?.productManager.getCatalogs(merchantId: "123", 
+       catalogId: "A") { (listOfCatalog: Array<Catalog>) in
 
           listOfCatalog.forEach() { (catalog: Catalog) in
 
@@ -1630,7 +1631,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+         RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
 
         // get single catalog
         String catalogId = "123";
