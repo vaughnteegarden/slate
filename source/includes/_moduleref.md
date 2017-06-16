@@ -187,6 +187,41 @@ This module handles maintaining the consumer's contact information and device in
 
 ### Method: customerProfileManager.get
 
+```swift
+  import UIKit
+  import RezolveSDK
+
+  class CustomerProfilerViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.customerProfileManager.get(callback: { (customerProfile:CustomerProfile) in
+
+            let dateCreated: Date?  = customerProfile.dateCreated
+            let dateUpdated: Date?  = customerProfile.dateUpdated
+            let devices: Array<DeviceProfile>?  = customerProfile.devices
+            let email: String  = customerProfile.email
+            let entityId: String  = customerProfile.entityId
+            let firstName: String?  = customerProfile.firstName
+            let lastName: String  = customerProfile.lastName
+
+            let name: String  = customerProfile.name
+            let timezone: String  = customerProfile.timezone
+            let title: String  = customerProfile.title
+
+        }, errorCallback: { (errors: Array<HttpRequestError>) in
+            // handle error
+        })
+    }
+  }
+```
 ```java
 // get using CustomerProfileInterface
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
@@ -266,6 +301,40 @@ The method returns a `customerProfile` object.
 
 ### Method: customerProfileManager.update
 
+```swift
+import UIKit
+import RezolveSDK
+
+class CustomerProfilerViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //self.mySession = ... // initialize session
+
+        self.mySession?.customerProfileManager.get(callback: { (customerProfile:CustomerProfile) in
+
+            customerProfile.name = "Mary Doe"
+
+            self.mySession?.customerProfileManager.update(customerProfile: customerProfile, callback: { (remoteCustomerProfile: CustomerProfile) in
+
+                // handle result
+            }, errorCallback: { (errors: Array<HttpRequestError>) in
+
+                // handle errors
+            })
+
+        }, errorCallback: { (errors: Array<HttpRequestError>) in
+
+            // handle error
+        })
+    }
+}
+```
 ```java
 // update using CustomerProfileInterface
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
@@ -334,6 +403,45 @@ This module provides CRUD functions for consumer addresses. The consumer may add
 
 ### Method: addressbookManager.create
 
+```swift
+import UIKit
+import RezolveSDK
+
+class AddressBookViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //self.mySession = ... // initialize session
+
+        let address: Address = Address()
+
+        address.city = "London"
+        address.country = "UK"
+        address.line1 = "St..."
+        address.line2 = "111"
+        address.shortName = "House"
+        address.zip = "000999"
+        address.state = "State"
+
+        self.mySession?.addressbookManager.create(
+            address: address) { (remoteAddress: Address) in
+
+                let addressId: String = address.id
+        }
+
+
+        self.mySession?.addressbookManager.get(id: "123") { (remoteAddress: Address) in
+
+            let addressId: String = remoteAddress.id
+        }
+    }
+}
+```
 ```java
 // create address using addressBookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -388,6 +496,33 @@ The method returns the created `address` object with `id` upon success.
 
 ### Method: addressbookManager.update
 
+```swift
+import UIKit
+import RezolveSDK
+
+class AddressBookViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.addressbookManager.get(id: "123") { (remoteAddress: Address) in
+
+           remoteAddress.shortName = "My Company"
+
+           self.mySession?.addressbookManager.update(address:  remoteAddress) { (remoteAddress2: Address) in
+
+               let addressId: String = remoteAddress2.id
+           }
+       }
+    }
+}
+```
 ```java
 // update address using addressBookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -428,6 +563,32 @@ The method returns the updated `address` object upon success.
 
 ### Method: addressbookManager.delete
 
+```swift
+import UIKit
+import RezolveSDK
+
+class AddressBookViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.addressbookManager.get(id: "123") { (remoteAddress: Address) in
+
+
+          self.mySession?.addressbookManager.delete(address: remoteAddress) { () in
+
+              //handle callback
+          }
+      }
+    }
+}
+```
 ```java
 // delete address using AddressbookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -466,6 +627,28 @@ You must pass in the `address` object to delete.
 
 ### Method: addressbookManager.get
 
+```swift
+import UIKit
+import RezolveSDK
+
+class AddressBookViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.addressbookManager.get(id: "123") { (remoteAddress: Address) in
+
+            let addressId: String = remoteAddress.id
+        }
+    }
+}
+```
 ```java
 // get address using AddressbookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -507,6 +690,28 @@ The method returns an `address` object.
 
 ### Method: addressbookManager.getAll
 
+```swift
+import UIKit
+import RezolveSDK
+
+class AddressBookViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.addressbookManager.getAll() { (listOfAddress: Array<Address>) in
+
+           //handle the result
+       }
+    }
+}
+```
 ```java
 // get all addresses using AddressbookInterface
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
@@ -559,6 +764,32 @@ This module provides CRUD functions for Favorites. The term "Favorite" refers to
 
 ### Method: favouriteManager.create
 
+```swift
+class FavouriteViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //self.mySession = ... // initialize session
+
+        let favourite: Favourite = Favourite()
+
+        favourite.provider = "AT&T"
+        favourite.type = "phone"
+        favourite.value = "555499999999"
+
+        self.mySession?.favouriteManager.create(
+            favourite: favourite) { (remoteFavourite: Favourite) in
+
+                let favouriteId: String = remoteFavourite.id
+        }
+    }
+}
+```
 ```java
 // create favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -604,6 +835,30 @@ The method returns the created `favourite` object with `id` upon success.
 
 ### Method: favouriteManager.update
 
+```swift
+class FavouriteViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.favouriteManager.get(id: "123") { (remoteFavourite: Favourite) in
+
+            remoteFavourite.value = "555488888888"
+
+            self.mySession?.favouriteManager.update(favourite: remoteFavourite) { (remoteFavourite2: Favourite) in
+
+                //handle result
+            }
+        }
+    }
+}
+```
 ```java
 // update favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -640,6 +895,28 @@ The method returns the updated `favourite` object upon success.
 
 ### Method: favouriteManager.delete
 
+```swift
+class FavouriteViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.favouriteManager.get(id: "123") { (remoteFavourite: Favourite) in
+
+            self.mySession?.favouriteManager.delete(favourite: remoteFavourite) { () in
+
+                //handle callback
+            }
+        }
+    }
+}
+```
 ```java
 // delete favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -674,6 +951,25 @@ You must pass in the `favourite` object to delete.
 
 ### Method: favouriteManager.get
 
+```swift
+class FavouriteViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.favouriteManager.get(id: "123") { (remoteFavourite: Favourite) in
+
+            let favouriteId: String = remoteFavourite.id
+        }
+    }
+}
+```
 ```java
 // get a favorite using FavouriteInterface
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
@@ -711,6 +1007,25 @@ The method returns an `favourite` object.
 
 ### Method: favouriteManager.getAll
 
+```swfit
+class FavouriteViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.favouriteManager.getAll() { (listOfFavourites: Array<Favourite>) in
+
+            //handle the results
+        }
+    }
+}
+```
 ```java
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
@@ -757,6 +1072,36 @@ This module provides CRUD functions for payment cards.  The consumer may add one
 
 ### Method: walletManager.create
 
+```swift
+class WalletViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        let paymentCard = PaymentCard()
+
+        paymentCard.brand = "MASTER"
+        paymentCard.type = "credit"
+        paymentCard.cardHolderName = "John Doe"
+        paymentCard.expiresOn = "12/18"
+        paymentCard.pan = "9999999999999999"
+        paymentCard.addressId = "123" // address.id
+        paymentCard.shortName = "My Mastercard"
+
+        self.mySession?.walletManager.create(
+            paymentCard: paymentCard) { (remotePaymentCard: PaymentCard) in
+
+                let paymentCardId: String = remotePaymentCard.id
+        }
+    }
+}
+```
 ```java
 // create payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -816,6 +1161,30 @@ The method returns the created `paymentCard` object with `id` upon success.
 
 ### Method: walletManager.update
 
+```swift
+class WalletViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.walletManager.get(id: "123") { (remotePaymentCard: PaymentCard) in
+
+            remotePaymentCard.shortName = "My Visa"
+
+            self.mySession?.walletManager.update(paymentCard: remotePaymentCard) { (remotePaymentCard2: PaymentCard) in
+
+                //handle result
+            }
+        }
+    }
+}
+```
 ```java
 // update payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -857,6 +1226,28 @@ The method returns the updated `paymentCard` object upon success.
 
 ### Method: walletManager.delete
 
+```swift
+class WalletViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.walletManager.get(id: "123") { (remotePaymentCard: PaymentCard) in
+
+            self.mySession?.walletManager.delete(paymentCard: remotePaymentCard) { () in
+
+                //handle callback
+            }
+        }
+    }
+}
+```
 ```java
 // delete payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -896,6 +1287,25 @@ You must pass in the `paymentCard` object to delete.
 
 ### Method: walletManager.get
 
+```swift
+class WalletViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.walletManager.get(id: "123") { (remotePaymentCard: PaymentCard) in
+
+            let paymentCardId: String = remotePaymentCard.id
+        }
+    }
+}
+```
 ```java
 // get a payment card using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
@@ -939,6 +1349,25 @@ The method returns a `paymentCard` object.
 
 ### Method: walletManager.getAll
 
+```swift
+class WalletViewController: UIViewController {
+
+    let API_KEY: String = "your_api_key"
+
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.mySession = ... // initialize session
+
+        self.mySession?.walletManager.getAll() { (listOfPaymentCard: Array<PaymentCard>) in
+
+            //handle the results
+        }
+    }
+}
+```
 ```java
 // get all payment cards using WalletInterface
 public class Wallet extends AppCompatActivity implements WalletInterface {
