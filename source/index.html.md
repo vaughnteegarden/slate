@@ -59,7 +59,7 @@ The Rezolve Inside<sup>TM</sup> SDK is a full-featured application suite. Capabi
 * Consumer account creation, consumer profile, and purchase history
 * Wallet management
 
-The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-the-art security model (see <a href="images/RezolveOverview-ShoppableAds.pdf">see security overview PDF</a>).
+The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-the-art security model (see <a href="images/RezolveOverview-Security.pdf">see security overview PDF</a>).
 
 
 ## Intended audience
