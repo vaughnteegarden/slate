@@ -2449,55 +2449,7 @@ This method is reserved for future functionality.
 
 ## Module: ScanManager
 
-```swift
-import UIKit
-import RezolveSDK
 
-class ScanManagerViewController: UIViewController {
-
-    @IBOutlet var scanCameraView: ScanCameraView?
-
-    var mySession: RezolveSession?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //self.mySession = ... // initialize session
-
-        let scanManager = self.mySession?.getScanManager()
-
-        scanManager?.productResultDelegate = self
-        scanManager?.rezolveScanResultDelegate = self
-
-        scanManager?.startVideoScan(scanCameraView: self.scanCameraView!)
-        scanManager?.startAudioScan()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-
-        scanManager?.stop()
-    }
-}
-
-extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate {
-
-    public func resultDidFetched(result: RezolveScanResult) {
-
-        // handle result
-    }
-
-    public func productDidFetched(product: Product) {
-
-        // handle product
-    }
-
-    public func errorHappend(error: String) {
-
-        // handle error
-    }
-}
-```
 ```java
 //
 // contents of scan_activity.xml
@@ -2538,6 +2490,52 @@ ScanManager is different than other Managers as it relies on a user interface co
 
 ### Methods: startVideoScan, stopVideoScan
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ScanManagerViewController: UIViewController {
+    @IBOutlet var scanCameraView: ScanCameraView?
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //self.mySession = ... // initialize session
+        let scanManager = self.mySession?.getScanManager()
+        scanManager?.productResultDelegate = self
+        scanManager?.rezolveScanResultDelegate = self
+
+        scanManager?.startVideoScan(scanCameraView: self.scanCameraView!)
+    }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        scanManager?.stop()
+    }
+}
+
+extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate {
+
+    // in response to a scan, the following methods may be called:
+    //
+    // resultDidFetched   - fires when a scannable asset has been recognized.
+    // productDidFetched  - fires if the asset is recognized as a product link
+    // errorHappened      - fires if asset is recognized, but cannot be decoded (for
+    //                      example, due to network error)
+    //
+
+    public func resultDidFetched(result: RezolveScanResult) {
+        // handle valid scan result
+    }
+
+    public func productDidFetched(product: Product) {
+        // handle product
+    }
+
+    public func errorHappened(error: String) {
+        // handle error result
+    }
+}
+```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
 
@@ -2625,6 +2623,28 @@ Method signature: `session.scanManager.stopVideoScan()`
 
 ### Methods: startAudioScan, stopAudioScan
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ScanManagerViewController: UIViewController {
+    var mySession: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //self.mySession = ... // initialize session
+        let scanManager = self.mySession?.getScanManager()
+        scanManager?.productResultDelegate = self
+        scanManager?.rezolveScanResultDelegate = self
+
+        scanManager?.startAudioScan()
+    }
+}
+
+extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate {
+    // in response to a scan, the same methods may be called as with .startVideoScan
+}
+```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
     // same vars as above
@@ -2657,6 +2677,19 @@ Method signature: `session.scanManager.stopAudioScan()`
 
 ### Method: destroy
 
+```swift
+import UIKit
+import RezolveSDK
+
+class ScanManagerViewController: UIViewController {
+	// ...
+    override func viewDidLoad() {
+    	// ...
+        scanManager?.destroy()
+    }
+
+}
+```
 ```java
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
     // same vars as above
