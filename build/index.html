@@ -804,7 +804,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <h4 id="1-add-the-top-up-target-as-a-favorite">1. Add the top up target as a Favorite</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">favourite</span><span class="p">:</span> <span class="kt">Favourite</span> <span class="o">=</span> <span class="kt">Favourite</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span> <span class="nv">provider</span><span class="p">:</span> <span class="s">""</span><span class="p">)</span>
 
-  <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">favouriteManager</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">favourite</span><span class="p">:</span> <span class="n">favourite</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">remoteFavourite</span><span class="p">:</span> <span class="kt">Favourite</span><span class="p">)</span> <span class="k">in</span>
+  <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">favouriteManager</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">favourite</span><span class="p">:</span> <span class="n">favourite</span><span class="p">)</span> <span class="p">{</span> 
+   <span class="p">(</span><span class="nv">remoteFavourite</span><span class="p">:</span> <span class="kt">Favourite</span><span class="p">)</span> <span class="k">in</span>
       <span class="c1">// handle result</span>
   <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">Favourite</span> <span class="n">favourite</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Favourite</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">type</span><span class="o">,</span> <span class="n">provider</span><span class="o">);</span>
@@ -839,7 +840,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteManager.getAll</code> method to list them. The customer will choose a favorite.</p>
 
 <h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
-<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">page</span><span class="p">:</span> <span class="kt">PageNavigation</span> <span class="o">=</span> <span class="kt">PageNavigation</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nv">pageIndex</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">sortBy</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">sort</span><span class="p">:</span> <span class="kt">PageNavigationSort</span><span class="o">.</span><span class="kt">ASC</span><span class="p">)</span>
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">page</span><span class="p">:</span> <span class="kt">PageNavigation</span> <span class="o">=</span> <span class="kt">PageNavigation</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nv">pageIndex</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+   <span class="nv">sortBy</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">sort</span><span class="p">:</span> <span class="kt">PageNavigationSort</span><span class="o">.</span><span class="kt">ASC</span><span class="p">)</span>
 
   <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getProducts</span><span class="p">(</span>
      <span class="nv">merchantId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
@@ -943,7 +945,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <h4 id="6-submit-payment-for-order">6. Submit payment for order</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="kt">PaymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="n">cvv</span><span class="p">)</span>
 
-  <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyOrder</span><span class="p">(</span><span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">transaction</span><span class="p">:</span> <span class="kt">Transaction</span><span class="p">)</span> <span class="k">in</span>
+  <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyOrder</span><span class="p">(</span><span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> 
+   <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">transaction</span><span class="p">:</span> <span class="kt">Transaction</span><span class="p">)</span> <span class="k">in</span>
       <span class="c1">//handle result</span>
   <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// Create an encrypted payment request using the CheckoutManager.createPaymentRequest</span>
@@ -1462,8 +1465,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
             <span class="n">customerProfile</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Mary Doe"</span>
 
-            <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">customerProfileManager</span><span class="o">.</span><span class="nf">update</span><span class="p">(</span> <span class="nv">customerProfile</span><span class="p">:</span> <span class="n">customerProfile</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> 
-             <span class="p">(</span><span class="nv">remoteCustomerProfile</span><span class="p">:</span> <span class="kt">CustomerProfile</span><span class="p">)</span> <span class="k">in</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">customerProfileManager</span><span class="o">.</span><span class="nf">update</span><span class="p">(</span> <span class="nv">customerProfile</span><span class="p">:</span> 
+             <span class="n">customerProfile</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">remoteCustomerProfile</span><span class="p">:</span> <span class="kt">CustomerProfile</span><span class="p">)</span> <span class="k">in</span>
 
                 <span class="c1">// handle result</span>
             <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">HttpRequestError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
@@ -1487,7 +1490,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
         <span class="n">CustomerProfileManager</span> <span class="n">myProfileManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCustomerProfileManager</span><span class="o">();</span>
+         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCustomerProfileManager</span><span class="o">();</span>
 
 
         <span class="c1">//update customer profile</span>
@@ -2151,23 +2154,23 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns an <code class="prettyprint">favourite</code> object.</p>
 
 <h3 id="method-favouritemanager-getall">Method: favouriteManager.getAll</h3>
-<pre class="highlight plaintext"><code>class FavouriteViewController: UIViewController {
+<pre class="highlight swift tab-swift"><code><span class="kd">class</span> <span class="kt">FavouriteViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
 
-    let API_KEY: String = "your_api_key"
+    <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
 
-    var mySession: RezolveSession?
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-        self.mySession = ... // initialize session
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
 
-        self.mySession?.favouriteManager.getAll() { (listOfFavourites: Array&lt;Favourite&gt;) in
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">favouriteManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfFavourites</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Favourite</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
 
-            //handle the results
-        }
-    }
-}
+            <span class="c1">//handle the results</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Favorites</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">FavouriteInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
