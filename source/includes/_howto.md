@@ -315,7 +315,7 @@ ProfileManager supports only `update` and `get`.
 
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
-#### 1. Capture image and get product URL
+#### 1. Capture image and get product
 
 
 ```java
@@ -325,15 +325,15 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // set scan view
         setContentView(R.layout.scan_activity);
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
-        
+
         //get scan manager
         scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
           .getRezolveSession().getScanManager(this, true);
-          
+
           //start video scan to acquire image
           scanManager.startVideoScan(this, rezolveScanView);
     }
@@ -443,6 +443,11 @@ Once you have product information, call the SDK `checkoutOrder` method. Pass in 
 
 #### 3. Show payment card choices
 
+```swift
+  mySession?.walletManager.getAll() { (listOfCards: Array<PaymentCard>) in
+      // handle list of cards here
+  }
+```
 ```java
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
     @Override
@@ -458,7 +463,14 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 #### 4. Submit payment for order
 
+```swift
+  let paymentRequest: PaymentRequest = PaymentRequest(paymentCard: paymentCard, cvv: cvv)
 
+  self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest, 
+  order: order) { (transaction: Transaction) in
+      //handle result
+  }
+```
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest
 PaymentRequest paymentRequest = mySession.getCheckoutManager()
@@ -489,6 +501,13 @@ Pass the `paymentRequst` object and the `order` object to the `buyOrder` method.
 
 #### 1. Add the top up target as a Favorite
 
+```swift
+  let favourite: Favourite = Favourite(value: "", type: "", provider: "")
+
+  self.mySession?.favouriteManager.create(favourite: favourite) { (remoteFavourite: Favourite) in
+      // handle result
+  }
+```
 ```java
 Favourite favourite = new Favourite(value, type, provider);
 
@@ -503,6 +522,15 @@ The top up flow gives the mobile consumer the ability to add money to a remote a
 
 #### 2. List available favorites
 
+```swift
+  self.mySession?.favouriteManager.getAll() { (listOfFavourite: Array<Favourite>) in
+
+      listOfFavourite.forEach{ (favourite: Favourite) in
+
+          let favouriteId: String = favourite.id
+      }
+  }
+```
 ```java
 rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
     @Override
@@ -518,6 +546,26 @@ Once there is one or more favorites, use the `FavouriteManager.getAll` method to
 
 #### 3. Get a list of topup amounts using getProducts
 
+```swift
+  let page: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
+
+  self.mySession?.productManager.getProducts(
+     merchantId: "123",
+     catalogId: "123",
+     pageNavigation: page) { (pageResult: PageResult<DisplayProduct>) in
+
+     let count: Int32 = pageResult.count
+     let total: Int32 = pageResult.total
+     let links: [String: PageNavigation?] = pageResult.links
+
+     let products: Array<DisplayProduct> = pageResult.embedded
+
+     products.forEach({ (product: DisplayProduct) in
+
+         let title: String = product.title
+     }
+  }
+```
 ```java
 rezolveSession.getProductManager().getProducts(merchant, catalog, count, 
 pageIndex, sortBy, sortDirection, new ProductCallback() {
@@ -593,6 +641,11 @@ When you have the product choice, call the SDK `checkoutOrder` method. Pass in t
 
 #### 5. Show payment card choices
 
+```swift
+  mySession?.walletManager.getAll() { (listOfCards: Array<PaymentCard>) in
+      // handle list of cards here
+  }
+```
 ```java
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
     @Override
@@ -607,6 +660,13 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 #### 6. Submit payment for order
 
+```swift
+  let paymentRequest: PaymentRequest = PaymentRequest(paymentCard: paymentCard, cvv: cvv)
+
+  self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest, order: order) { (transaction: Transaction) in
+      //handle result
+  }
+```
 ```java
 // Create an encrypted payment request using the CheckoutManager.createPaymentRequest
 PaymentRequest paymentRequest = mySession.getCheckoutManager()
