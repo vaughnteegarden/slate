@@ -643,7 +643,39 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
 <h4 id="1-capture-image-and-get-product">1. Capture image and get product</h4>
-<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span><span class="o">,</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="kd">@IBOutlet</span> <span class="k">var</span> <span class="nv">scanCameraView</span><span class="p">:</span> <span class="kt">ScanCameraView</span><span class="p">?</span>
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+        <span class="c1">//self.mySession = ... // initialize session</span>
+        <span class="k">let</span> <span class="nv">scanManager</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">rezolveScanResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">scanCameraView</span><span class="o">!</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ScanManagerViewController</span> <span class="p">:</span> <span class="kt">ProductDelegate</span><span class="p">,</span> <span class="kt">RezolveScanResultDelegate</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">productDidFetched</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// handle product</span>
+        <span class="k">let</span> <span class="nv">productId</span><span class="p">:</span> <span class="kt">String</span>  <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">let</span> <span class="nv">subtitle</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">subtitle</span>
+        <span class="c1">// ...etc</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span><span class="o">,</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
     <span class="c1">//...</span>
 
     <span class="nd">@Override</span>
@@ -666,7 +698,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductResult</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// get product info</span>
-        <span class="n">String</span> <span class="n">product_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">productId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">subtitle</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getSubtitle</span><span class="o">();</span>
         <span class="c1">// ...etc</span>
@@ -3952,7 +3984,29 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>The method returns a <a href="#transaction-object"><code class="prettyprint">transaction object</code></a>.</p>
 
 <h3 id="method-signorderupdates">Method: signOrderUpdates</h3>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
+<span class="kd">class</span> <span class="kt">CheckoutViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
+
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize session</span>
+
+        <span class="k">let</span> <span class="nv">order</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// initialize order</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">orderUpdate</span><span class="p">:</span> <span class="kt">OrderUpdate</span><span class="p">)</span> <span class="k">in</span>
+
+            <span class="c1">// handle the updates</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 <p>In environments where transactions can take a very long time (minutes to tens of minutes) to return a status, this method provides a way to subscribe and be notified of transaction status updates.</p>
 
 <p>Method signature: <code class="prettyprint">session.buyOrder( entity_id, order_id, [callback or interface] )</code></p>
@@ -3960,7 +4014,54 @@ Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple cata
 <p>This method is reserved for future functionality.</p>
 
 <h2 id="module-scanmanager">Module: ScanManager</h2>
-<pre class="highlight java tab-java"><code><span class="c1">//</span>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+<span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="kd">@IBOutlet</span> <span class="k">var</span> <span class="nv">scanCameraView</span><span class="p">:</span> <span class="kt">ScanCameraView</span><span class="p">?</span>
+
+    <span class="k">var</span> <span class="nv">mySession</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+        <span class="c1">//self.mySession = ... // initialize session</span>
+
+        <span class="k">let</span> <span class="nv">scanManager</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span>
+
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="n">rezolveScanResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">scanCameraView</span><span class="o">!</span><span class="p">)</span>
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">startAudioScan</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
+
+        <span class="n">scanManager</span><span class="p">?</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ScanManagerViewController</span> <span class="p">:</span> <span class="kt">ProductDelegate</span><span class="p">,</span> <span class="kt">RezolveScanResultDelegate</span> <span class="p">{</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">resultDidFetched</span><span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">RezolveScanResult</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// handle result</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">productDidFetched</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// handle product</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">errorHappend</span><span class="p">(</span><span class="nv">error</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// handle error</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//</span>
 <span class="c1">// contents of scan_activity.xml</span>
 <span class="c1">// </span>
 
