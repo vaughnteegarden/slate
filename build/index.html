@@ -285,7 +285,7 @@ You can switch between IOS and Android by clicking the tabs above.
 </thead><tbody>
 <tr>
 <td>Partner</td>
-<td>The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app.</td>
+<td>The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK capabilities with their app.</td>
 </tr>
 <tr>
 <td>Developer</td>
@@ -325,7 +325,7 @@ You can switch between IOS and Android by clicking the tabs above.
 
 <p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
-<p>The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
+<p>The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
 
 <ol>
 <li>Open your existing project.<br/><br/></li>
@@ -353,7 +353,7 @@ You can switch between IOS and Android by clicking the tabs above.
 
           <h1 id="sdk-feature-use">SDK Feature Use</h1>
 
-<p>This section describes the intended usage of the SDK to build specific feature-related functionalities.</p>
+<p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>
 
 <h2 id="basic-usage">Basic Usage</h2>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
@@ -421,7 +421,7 @@ You can switch between IOS and Android by clicking the tabs above.
 <h2 id="android-specific-instructions-on-managers">Android-specific instructions on Managers</h2>
 <pre class="highlight java tab-java"><code><span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
 
-<span class="c1">// </span>
+<span class="c1">//</span>
 <span class="c1">// Using MANAGER, you must handle the response in a WalletCallback:</span>
 <span class="c1">//</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
@@ -451,9 +451,9 @@ You can switch between IOS and Android by clicking the tabs above.
     <span class="o">}</span>
 <span class="o">}</span>
 
-<span class="c1">// </span>
+<span class="c1">//</span>
 <span class="c1">// Using INTERFACE, you can save some development time</span>
-<span class="c1">// </span>
+<span class="c1">//</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
     <span class="o">...</span>
     <span class="nd">@Override</span>
@@ -474,9 +474,9 @@ You can switch between IOS and Android by clicking the tabs above.
 <span class="o">}</span>
 
 </code></pre>
-<p>In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface. </p>
+<p>In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface.</p>
 
-<p>For example, if you want to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activty for convenience. See Android code at right for comparison.</p>
+<p>For example, to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activty for convenience. See Android code at right for comparison.</p>
 
 <p>The Module Reference section exclusively documents using Feature Interfaces, as this is the preferred method.</p>
 
@@ -552,9 +552,9 @@ You can switch between IOS and Android by clicking the tabs above.
 <span class="o">});</span>
 
 </code></pre>
-<p>To register a user, you will need to call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">SignUpRequest object</code>. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
+<p>To register a user, call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">SignUpRequest object</code>. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
 
-<p>The <code class="prettyprint">registerUser</code> method is used as shown to the right. Upon successful registration, the response will contain a <code class="prettyprint">partner_id</code> and an <code class="prettyprint">entity_id</code>. <strong>Persist both these values for the life of the app.</strong></p>
+<p>The <code class="prettyprint">registerUser</code> method is used as shown to the right. Upon successful registration, the response contains a <code class="prettyprint">partner_id</code> and an <code class="prettyprint">entity_id</code>. <strong>Persist both these values for the life of the app.</strong></p>
 
 <aside class="notice">
 You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
@@ -606,12 +606,12 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <li>Verifies the validity of the mobile app, through the API key</li>
 <li>Identifies the consumer and pairs them with a session token</li>
 <li>Verifies each request from the mobile app by passing API Key and session token</li>
-<li>establishes a public key for the session, for encrypting transmitted credit card info</li>
+<li>Establishes a public key for the session, for encrypting transmitted credit card info</li>
 </ul>
 
-<p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code> and a <code class="prettyprint">deviceProfile</code> object. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.</p>
+<p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code> and a <code class="prettyprint">deviceProfile</code> object. The server response contains a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.</p>
 
-<p>When the session is established, you can begin to access services, for example:
+<p>Once the session is established, you can access services, for example:
 <code class="prettyprint">session.CustomerProfileManager.get</code></p>
 
 <h3 id="logout-session">Logout Session</h3>
@@ -626,7 +626,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>Once logged in, you have access to the consumer&rsquo;s records. These include:
 * Consumer Profile - Via the <code class="prettyprint">ConsumerProfileManager</code>. Name, email, and device profile (phone info) for the consumer
-* Address Book - Via the <code class="prettyprint">AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Address Book - Via the <code class="prettyprint">AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes
 * Favorites - Via the <code class="prettyprint">FavouriteManager</code>. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
 * Wallet - Via the <code class="prettyprint">WalletManager</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</p>
 
@@ -706,7 +706,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <span class="o">}</span>
 </code></pre>
-<p>First, initialize <code class="prettyprint">scanManager</code>, and enable the scan screen using <code class="prettyprint">session.startVideo()</code>, and capture a watermarked image. The scanManager will recognize the encoded product data, and extract <code class="prettyprint">merchantId</code>, <code class="prettyprint">catalogId</code>, and <code class="prettyprint">productId</code> from the image, and automatically call <code class="prettyprint">getProduct</code>. The scanManager will return a <code class="prettyprint">product</code> object. </p>
+<p>First, initialize <code class="prettyprint">scanManager</code>, and enable the scan screen using <code class="prettyprint">session.startVideo()</code>, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts <code class="prettyprint">merchantId</code>, <code class="prettyprint">catalogId</code>, and <code class="prettyprint">productId</code> from the image, automatically calling <code class="prettyprint">getProduct</code>. The scanManager returns a <code class="prettyprint">product</code> object.</p>
 
 <h4 id="2-create-an-order-and-get-an-order-total">2. Create an order and get an order total</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -789,7 +789,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>Once you have product information, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). </p>
+<p>Once you have product information, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response includes an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax).</p>
 
 <h4 id="3-show-payment-card-choices">3. Show payment card choices</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
@@ -802,7 +802,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletManager.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
+<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletManager.getAll</code> to list the available card choices. The consumer then chooses a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
@@ -826,9 +826,9 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This will create the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
+<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This creates the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
 
-<p>Pass the <code class="prettyprint">paymentRequst</code> object and the <code class="prettyprint">order</code> object to the <code class="prettyprint">buyOrder</code> method. The response will contain either a <code class="prettyprint">transaction</code> object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
+<p>Pass the <code class="prettyprint">paymentRequst</code> object and the <code class="prettyprint">order</code> object to the <code class="prettyprint">buyOrder</code> method. The response contains either a <code class="prettyprint">transaction</code> object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h2 id="top-up-flow">Top Up flow</h2>
 
@@ -870,7 +870,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteManager.getAll</code> method to list them. The customer will choose a favorite.</p>
+<p>Once there is one or more favorites, use the <code class="prettyprint">FavouriteManager.getAll</code> method to list them. The customer then chooses a favorite.</p>
 
 <h4 id="3-get-a-list-of-topup-amounts-using-getproducts">3. Get a list of topup amounts using getProducts</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">page</span><span class="p">:</span> <span class="kt">PageNavigation</span> <span class="o">=</span> <span class="kt">PageNavigation</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nv">pageIndex</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
@@ -908,9 +908,9 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <span class="o">});</span>
 
 </code></pre>
-<p>The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, we use the <code class="prettyprint">getProducts</code> method, passing in a fixed category id. </p>
+<p>The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, use the <code class="prettyprint">getProducts</code> method, passing in a fixed category id.</p>
 
-<p>Display the list of top up choices. You can display each &ldquo;product&rdquo; as a currency amount, or utilize the &ldquo;description&rdquo; field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.</p>
+<p>Display the list of top up choices. You can display each &ldquo;product&rdquo; as a currency amount, or utilize the &ldquo;description&rdquo; field of the product to give more information about the topup. It depends on your application. The consumer then chooses a top up amount.</p>
 
 <h4 id="4-get-an-order-total">4. Get an order total</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">OptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -958,7 +958,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>When you have the product choice, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).</p>
+<p>When you have the product choice, call the SDK <code class="prettyprint">checkoutOrder</code> method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response includes an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).</p>
 
 <h4 id="5-show-payment-card-choices">5. Show payment card choices</h4>
 <pre class="highlight swift tab-swift"><code>  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
@@ -971,7 +971,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletManager.getAll</code> to list the available card choices. The consumer will choose a payment card.</p>
+<p>If the consumer agrees with the price and wishes to complete the order, use <code class="prettyprint">walletManager.getAll</code> to list the available card choices. The consumer then chooses a payment card.</p>
 
 <p>At this point, we recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
@@ -995,9 +995,9 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
-<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This will create the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
+<p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This creates the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
 
-<p>Pass the <code class="prettyprint">paymentRequst</code> object and the <code class="prettyprint">order</code> object to the <code class="prettyprint">buyOrder</code> method. The response will contain either a <code class="prettyprint">transaction</code> object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
+<p>Pass the <code class="prettyprint">paymentRequst</code> object and the <code class="prettyprint">order</code> object to the <code class="prettyprint">buyOrder</code> method. The response contains either a <code class="prettyprint">transaction</code> object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.</p>
 
 <h1 id="error-handling">Error Handling</h1>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
@@ -1373,7 +1373,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </code></pre>
 <p>Method signature: <code class="prettyprint">session.customerProfileManager.get( [callback or interface] )</code></p>
 
-<p>No parameters are required to be passed in. It will always fetch the profile for the authenticated consumer.</p>
+<p>No parameters are required to be passed in. The method always fetches the profile for the authenticated consumer.</p>
 
 <p>The method returns a <code class="prettyprint">customerProfile</code> object.</p>
 
@@ -2706,7 +2706,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<p>Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.</p>
+<p>How to use the returned images: the <code class="prettyprint">image_url</code> is typically used as a header background, and the image represented by <code class="prettyprint">logo_url</code> is overlayed on top.</p>
 
 <h3 id="method-getcatalogs">Method: getCatalogs</h3>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
