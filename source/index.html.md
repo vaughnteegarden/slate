@@ -70,7 +70,7 @@ This document is intended for experienced IOS and Android developer. It is expec
 
 |term|definition|
 |---|---|
-|Partner|The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK cababilities with their app. |
+|Partner|The Partner is the owner of a mobile application and audience. It is the Partner who wishes to integrate the Rezolve Inside<sup>TM</sup> SDK capabilities with their app. |
 |Developer|The Developer is the mobile app developer of the Partner.|
 |Merchant|A merchant runs an ecommerce site that offers products for sale. Merchants also create Shoppable Ads and link them to products. A merchant may also offer device accounts that need Top Up. |
 |Consumer|The end user of the Partner's mobile app. The customer who buys merchant products.|
@@ -100,7 +100,7 @@ The SDK for **Android** can be downloaded here: <a href="https://www.rezolve.com
 
 The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
-The IOS SDK is distributed as a .framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
+The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
 
 1. Open your existing project.<br/><br/>
 2. Go to the app target’s General configuration page.<br/><br/>

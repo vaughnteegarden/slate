@@ -1,6 +1,6 @@
 # SDK Feature Use
 
-This section describes the intended usage of the SDK to build specific feature-related functionalities.
+This section describes the usage of the SDK to build specific feature-related functionalities.
 
 ## Basic Usage
 
@@ -78,7 +78,7 @@ Your `server environment` is an enum. See values, right.
 ```java
 // 	THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort
 
-// 
+//
 // Using MANAGER, you must handle the response in a WalletCallback:
 //
 public class MyActivity extends AppCompatActivity {
@@ -87,12 +87,12 @@ public class MyActivity extends AppCompatActivity {
  		...
         RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
         .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
-        
+
             @Override
             public void onInitializationSuccess(RezolveSession rezolveSession, String 
             entityId, String partnerId) {
                 rezolveSession.getWalletManager().getAll(new WalletCallback() {
-                
+
                     @Override
                     public void onWalletGetAllSuccess(List<PaymentCard> list) {
                     // handle getAll response here
@@ -108,9 +108,9 @@ public class MyActivity extends AppCompatActivity {
     }
 }
 
-// 
+//
 // Using INTERFACE, you can save some development time
-// 
+//
 public class MyActivity extends AppCompatActivity implements WalletInterface {
 	...
 	@Override
@@ -132,9 +132,9 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 
 ```
 
-In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface. 
+In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface.
 
-For example, if you want to use `WalletManager` methods, you can either do so directly, or implement `WalletInterface` in your current activty for convenience. See Android code at right for comparison.
+For example, to use `WalletManager` methods, you can either do so directly, or implement `WalletInterface` in your current activty for convenience. See Android code at right for comparison.
 
 The Module Reference section exclusively documents using Feature Interfaces, as this is the preferred method.
 
@@ -214,9 +214,9 @@ new RezolveInterface() {
 
 ```
 
-To register a user, you will need to call the sdk `registerUser` method, passing in an `SignUpRequest object`. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
+To register a user, call the sdk `registerUser` method, passing in an `SignUpRequest object`. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
 
-The `registerUser` method is used as shown to the right. Upon successful registration, the response will contain a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
+The `registerUser` method is used as shown to the right. Upon successful registration, the response contains a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
 
 <aside class="notice">
 You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
@@ -273,11 +273,11 @@ To log in and interact with Rezolve services, you must establish a session. A se
 * Verifies the validity of the mobile app, through the API key
 * Identifies the consumer and pairs them with a session token
 * Verifies each request from the mobile app by passing API Key and session token
-* establishes a public key for the session, for encrypting transmitted credit card info
+* Establishes a public key for the session, for encrypting transmitted credit card info
 
-Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id` and a `deviceProfile` object. The server will respond with a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
+Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id` and a `deviceProfile` object. The server response contains a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
 
-When the session is established, you can begin to access services, for example:
+Once the session is established, you can access services, for example:
 `session.CustomerProfileManager.get`
 
 
@@ -297,7 +297,7 @@ When a seession is over, you should notify the SDK by passing the `entity_id` to
 
 Once logged in, you have access to the consumer's records. These include:
 * Consumer Profile - Via the `ConsumerProfileManager`. Name, email, and device profile (phone info) for the consumer
-* Address Book - Via the `AddressbookManager`. A collection of postal addresses, to be used for ship-to and bill-to purposes.
+* Address Book - Via the `AddressbookManager`. A collection of postal addresses, to be used for ship-to and bill-to purposes
 * Favorites - Via the `FavouriteManager`. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
 * Wallet - Via the `WalletManager`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
 
@@ -383,7 +383,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
 
 }
 ```
-First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager will recognize the encoded product data, and extract `merchantId`, `catalogId`, and `productId` from the image, and automatically call `getProduct`. The scanManager will return a `product` object. 
+First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts `merchantId`, `catalogId`, and `productId` from the image, automatically calling `getProduct`. The scanManager returns a `product` object.
 
 
 #### 2. Create an order and get an order total
@@ -472,7 +472,7 @@ rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
 });
 ```
 
-Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response will include an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax). 
+Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response includes an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax).
 
 #### 3. Show payment card choices
 
@@ -490,7 +490,7 @@ rezolveSession.getWalletManager().getAll(new WalletCallback() {
 });
 ```
 
-If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer will choose a payment card.
+If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer then chooses a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
@@ -519,9 +519,9 @@ rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new Checkout
 });
 ```
 
-When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This will create the encrypted `paymentRequest` object needed for checkout.
+When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response will contain either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response contains either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 
 
@@ -577,7 +577,7 @@ rezolveSession.getFavouriteManager().getAll(new FavouriteCallback() {
     }
 });
 ```
-Once there is one or more favorites, use the `FavouriteManager.getAll` method to list them. The customer will choose a favorite.
+Once there is one or more favorites, use the `FavouriteManager.getAll` method to list them. The customer then chooses a favorite.
 
 #### 3. Get a list of topup amounts using getProducts
 
@@ -619,9 +619,9 @@ pageIndex, sortBy, sortDirection, new ProductCallback() {
 });
 
 ```
-The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, we use the `getProducts` method, passing in a fixed category id. 
+The customer next wants to see a list of possible top up amounts. Each top up amount is stored as a separate product with its own SKU, and these products are grouped into a catalog. To list the top up amounts, use the `getProducts` method, passing in a fixed category id.
 
-Display the list of top up choices. You can display each "product" as a currency amount, or utilize the "description" field of the product to give more information about the topup. It depends on your application. The consumer will choose a top up amount.
+Display the list of top up choices. You can display each "product" as a currency amount, or utilize the "description" field of the product to give more information about the topup. It depends on your application. The consumer then chooses a top up amount.
 
 #### 4. Get an order total
 
@@ -673,7 +673,7 @@ rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
     }
 });
 ```
-When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response will include an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
+When you have the product choice, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the chosen product.  The response includes an order id, final total price, and a price breakdown (composed of base price, shipping, and tax).
 
 #### 5. Show payment card choices
 
@@ -690,7 +690,7 @@ rezolveSession.getWalletManager().getAll(new WalletCallback() {
     }
 });
 ```
-If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer will choose a payment card.
+If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer then chooses a payment card.
 
 At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
@@ -718,9 +718,9 @@ rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new Checkout
     }
 });
 ```
-When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This will create the encrypted `paymentRequest` object needed for checkout.
+When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response will contain either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response contains either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
 
 
 # Error Handling

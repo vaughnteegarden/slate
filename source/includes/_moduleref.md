@@ -270,7 +270,7 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
 
 Method signature: `session.customerProfileManager.get( [callback or interface] )`
 
-No parameters are required to be passed in. It will always fetch the profile for the authenticated consumer.
+No parameters are required to be passed in. The method always fetches the profile for the authenticated consumer.
 
 The method returns a `customerProfile` object.
 
@@ -1502,7 +1502,7 @@ The method returns an array of `merchant` objects.
 |logo_url|string|http://domain.com/path/logo.jpg|
 |image_url|string|http://domain.com/path/image.jpg|
 
-Recommended use of images: the image_url is used as a header background, and the logo is overlayed on top.
+How to use the returned images: the `image_url` is typically used as a header background, and the image represented by `logo_url` is overlayed on top.
 
 ### Method: getCatalogs
 
