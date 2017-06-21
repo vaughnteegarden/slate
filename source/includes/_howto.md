@@ -16,7 +16,7 @@ class RezolveSDK1ViewController: ViewController {
         super.viewDidLoad()
 
         // initialize SDK
-        // possible values for RezolveEnv enum are .Development , .Sandbox, .Production
+        // possible values for RezolveEnv enum are .Sandbox, .Production
         let API_KEY: String  = "1234567890"
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: RezolveEnv.Sandbox)
     }
@@ -47,9 +47,9 @@ import com.rezolve.sdk.core.interfaces.*;
 import com.rezolve.sdk.model.shop.Merchant;
 
 // initialize SDK
-// possible values for RezolveSDK.Env enum are .DEVELOPMENT , .SANDBOX, .PRODUCTION
+// possible values for RezolveSDK.Env enum are .SANDBOX, .PRODUCTION
 String API_KEY = "1234567890";
-RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.DEVELOPMENT);
+RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX);
 
 ```
 ```java
@@ -85,7 +85,7 @@ public class MyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
  		...
-        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
         .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
 
             @Override
@@ -115,7 +115,7 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 	...
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession()
+		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession()
         .getWalletManager().getAll(this);
 	}
 
@@ -194,7 +194,7 @@ SignUpRequest signUpRequest = new SignUpRequest.Builder()
     .device(deviceProfile)
     .build();
 
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(signUpRequest, 
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).registerUser(signUpRequest, 
 new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
@@ -247,7 +247,7 @@ sdk.createSession(
 
 ```
 ```java
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, 
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).createSession(entityId, 
 partnerId, deviceProfile, new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String s, 
@@ -264,7 +264,7 @@ partnerId, deviceProfile, new RezolveInterface() {
 
 // Note: You don't need to create a new session if user navigatess to another activity. 
 // After the session is created, you can access it by calling:
-RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
 .getRezolveSession();
 ```
 
@@ -364,7 +364,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
           .getRezolveSession().getScanManager(this, true);
 
           //start video scan to acquire image
@@ -610,9 +610,9 @@ pageIndex, sortBy, sortDirection, new ProductCallback() {
         int count = pageResult.getCount();
         int total = pageResult.getTotal();
         Link[] links = pageResult.getLinks();
-        List<DisplayProduct> displayProducts = pageResult.getEmbedded();
-        for(DisplayProduct displayProduct : displayProducts) {
-            String title = displayProduct.getTitle();
+        List<DisplayProduct> products = pageResult.getProducts();
+        for(DisplayProduct displayProduct : products) {
+            String name = displayProduct.getName();
             // fetch other params as needed
         }
     }

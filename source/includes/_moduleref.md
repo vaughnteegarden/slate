@@ -48,7 +48,7 @@ SignUpRequest signUpRequest = new SignUpRequest.Builder()
     .device(deviceProfile)
     .build();
 
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).registerUser(
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).registerUser(
 signUpRequest, new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
@@ -124,7 +124,7 @@ sdk.createSession(
 
 ```
 ```java
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).createSession(entityId, 
+RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).createSession(entityId, 
 partnerId, deviceProfile, new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String s, 
@@ -234,7 +234,7 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         super.onCreate(savedInstanceState);
 
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getCustomerProfileManager();
 
 		List<DeviceProfile> devices = new ArrayList<DeviceProfile>();
 
@@ -349,7 +349,7 @@ public class Profile extends AppCompatActivity implements CustomerProfileInterfa
         super.onCreate(savedInstanceState);
 
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getCustomerProfileManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getCustomerProfileManager();
 
 
         //update customer profile
@@ -456,7 +456,7 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
 
         // create a new address
         Address address = new Address();
@@ -538,7 +538,7 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
 
         // update an address
         Address address = new Address();
@@ -604,7 +604,7 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
 
         // delete an address
         Address address = new Address();
@@ -664,7 +664,7 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
 
         // get a single address
         String address_id = "123";
@@ -727,7 +727,7 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getAddressbookManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
 
         // list all addresses
         myAddressManager.getAll(this);
@@ -805,7 +805,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
 
         // create a favourite
         Favourite favourite = new Favourite();
@@ -875,7 +875,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
 
         // update a favourite
         Favourite favourite = new Favourite();
@@ -933,7 +933,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
 
         // delete a favourite
         Favourite favourite = new Favourite();
@@ -986,7 +986,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
 
         // get a single favourite
         String favourite_id = "123";
@@ -1041,7 +1041,7 @@ public class Favorites extends AppCompatActivity implements FavouriteInterface {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getFavouriteManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
 
         // list all favourites
         myFavouriteManager.getAll(this);
@@ -1118,7 +1118,7 @@ public class Wallet extends AppCompatActivity implements WalletInterface {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
 
         // create a new payment card
         PaymentCard myCard = new PaymentCard();
@@ -1203,7 +1203,7 @@ public class Wallet extends AppCompatActivity implements WalletInterface {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
 
         // update a payment card
         PaymentCard myCard2 = new PaymentCard();
@@ -1266,7 +1266,7 @@ public class Wallet extends AppCompatActivity implements WalletInterface {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
 
         // delete a payment card
         PaymentCard myCard3 = new PaymentCard();
@@ -1324,7 +1324,7 @@ public class Wallet extends AppCompatActivity implements WalletInterface {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
 
         // list a single payment card
         String card_id = "123";
@@ -1387,7 +1387,7 @@ public class Wallet extends AppCompatActivity implements WalletInterface {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getWalletManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
 
         // list all payment cards
         myWalletManager.getAll(this);
@@ -1467,7 +1467,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
         // get merchants
         myProductManager.getMerchants(this);
@@ -1544,7 +1544,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
 		// get catalogs
         String merchantId = "123";
@@ -1631,7 +1631,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+         RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
         // get single catalog
         String catalogId = "123";
@@ -1710,7 +1710,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
         // get products
         Catalog catalog = new Catalog();
@@ -1729,7 +1729,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         Integer count = pageResult.getCount();
         Integer total = pageResult.getTotal();
         Link[] links = pageResult.getLinks();
-        List<DisplayProduct> embed = pageResult.getEmbedded();
+        List<DisplayProduct> products = pageResult.getProducts();
 
         for (Link link: links){
             Integer linkcount = link.getCount();
@@ -1738,11 +1738,13 @@ public class Products extends AppCompatActivity implements ProductInterface {
             String sortBy = link.getSortBy();
         }
 
-        for (DisplayProduct displayProduct : embed){
+        for (DisplayProduct displayProduct : products){
             String id = displayProduct.getId();
-            String imageUrl = displayProduct.getImageUrl();
+            List<String> imageThumbs = displayProduct.getImageThumbs();
+            String image = displayProduct.getImage();
             float price = displayProduct.getPrice();
-            String title = displayProduct.getTitle();
+            String name = displayProduct.getName();
+            String categoryId = displayProduct.getCategoryId();
         }
     }
 }
@@ -1750,13 +1752,13 @@ public class Products extends AppCompatActivity implements ProductInterface {
 
 Method signature: `session.getProducts( merchant_id, catalog_id, pageNavigation, [callback or interface] )`
 
-You must pass a `merchant_id`, `catalog_id`, and a `pageNavivation` object. 
+You must pass a `merchant_id`, `catalog_id`, and a `pageNavivation` object.
 
 The method returns a `pageResult` object.
 
 #### pageNavigation Object
 
-The pageNavigation object controls pagignation and sorting of paginated results. 
+The pageNavigation object controls pagignation and sorting of paginated results.
 
 |field|format|example|explanation|
 |---|---|---|---|
@@ -1885,7 +1887,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
         // get single product
         Product product2 = new Product();
@@ -1987,7 +1989,7 @@ public class Activities extends AppCompatActivity implements UserActivityInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getUserActivityManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getUserActivityManager();
 
         // get transactions from User Activity Manager
         myActivityManager.getOrders(this);
@@ -2145,7 +2147,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
 
         // create a cart object for demo use
         // in actual use, pass an existing cart object
@@ -2348,7 +2350,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
 
         // buy Order
         // first create the payment request from card and cvv
@@ -2555,7 +2557,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
         // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
                 .getRezolveSession().getScanManager(this, true);
 
         // use startVideo to begin watching for scannable media
@@ -2658,7 +2660,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
         // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
                 .getRezolveSession().getScanManager(this, true);
 
         // use startAudioScan to being listening for watermarked media
@@ -2703,7 +2705,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
         // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION)
+        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
                 .getRezolveSession().getScanManager(this, true);
 
         // use stopAudioScan to cease listening.
