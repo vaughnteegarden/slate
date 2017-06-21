@@ -92,7 +92,7 @@ You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please vis
 
 ## Download the Rezolve Inside<sup>TM</sup> SDK
 
-The SDK for **IOS** can be downloaded here: 
+The SDK for **IOS** can be downloaded here:
 
 * <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-1.4-release_arm64.zip">rezolve-ios-sdk-1.4-release_arm64.zip</a> - for testing on iPhone and iPad
 * <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-1.4-release_x86_64.zip">rezolve-ios-sdk-1.4-release_x86_64.zip</a> - for testing on x86 emulator
@@ -107,10 +107,12 @@ The target IDE for IOS instructions is **XCode**. If you use a different IDE you
 
 The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
 
-1. Open your existing project.<br/><br/>
-2. Go to the app target’s General configuration page.<br/><br/>
-3. Add the framework target to the Embedded Binaries section by clicking the Add icon, and picking the framework file you downloaded. Do not drag in the framework from Finder. <br/><img src="images/add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
-4. Select the Rezolve framework from the list of binaries that can be embedded.
+1. Open your existing project root directory.<br/><br/>
+2. Create a directory called Rezolve.<br/><img src="images/ios-step2.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
+3. Copy all zip content to this new directory.<br/><img src="images/ios-step3.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
+4. Next, go to the app target’s General configuration page. Add the framework target to the Embedded Binaries section by clicking the Add icon,<br/><img src="images/ios-add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
+6. Click "Add Other", <br/><img src="images/ios-step5a.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
+7. ...and pick the framework file from the Rezolve directory you created in step 2. Do NOT drag in the framework from Finder.<br/><img src="images/ios-step5b.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
 
 
 ## Set up the SDK - Android
