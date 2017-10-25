@@ -1504,9 +1504,13 @@ The method returns an array of `merchant` objects.
 
 How to use the returned images: the `image_url` is typically used as a header background, and the image represented by `logo_url` is overlayed on top.
 
-### Method: getCatalogs
+
+
+### Method: getCatgories
 
 ```swift
+TODO
+
 import UIKit
 import RezolveSDK
 
@@ -1534,7 +1538,7 @@ class ProductViewController: UIViewController {
 
 ```
 ```java
-// get catalogs using ProductInterface
+// get root category and first level child categories using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
@@ -1546,33 +1550,35 @@ public class Products extends AppCompatActivity implements ProductInterface {
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
         RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
-		// get catalogs
+		// get categories
         String merchantId = "123";
-        myProductManager.getCatalogs(merchantId, this);
+        myProductManager.getCategories(merchantId,this);
     }
 
     @Override
-    public void onGetCatalogsSuccess(List<Catalog> list) {
-        for (Catalog catalog : list) {
-            String catalog_id = catalog.getId();
-            String parentId = catalog.getParentId();
-            String name = catalog.getName();
-            Boolean hasCatalog = catalog.hasCatalog();
-            Boolean hasProduct = catalog.hasProduct();
-            String image = catalog.getImage();
-            List<String> imageThumbs = catalog.getImageThumbs();
-        }
+    public void onGetCategoriesSuccess(Category category) {
+        String category_id = category.getId();
+        String parentId = category.getParentId();
+        String name = category.getName();
+        Boolean hascategories = category.hasCategories();
+        Boolean hasProduct = category.hasProducts();
+        String image = category.getImage();
+        List<String> imageThumbs = category.getImageThumbs();
+        String catparentId = category.getParentId();
+        List<Category> children = category.getCategories();
     }
 }
 ```
 
-Method signature: `session.getCatalogs( merchant_id, [callback or interface] )`
+Method signature: `session.getCategories( merchant_id, [callback or interface] )`
 
-You must pass in the `id` of the `merchant` to whose catalogs you wish to get.
+You must pass in the `id` of the `merchant` to whose categories you wish to get.
 
-The method returns an array of `catalog` objects owned by a specific merchant.
+The method returns an array of `category` objects owned by a specific merchant.
 
-#### catalog Object
+This method returns the *root category* and *first level of child categories*.
+
+#### category Object
 
 |field|format|example|
 |---|---|---|
@@ -1580,20 +1586,25 @@ The method returns an array of `catalog` objects owned by a specific merchant.
 |parent_id|string|1|
 |name|String|Fitness Wear|
 |has_products|boolean|true|
-|has_catalogs|boolean|false|
+|has_categories|boolean|false|
 |image|string|http://domain.com/path/image.jpg|
 |imageThumbs|array of url strings|&nbsp;|
-|catlogs|array of catalog objects|&nbsp;|
+|categoryParentId|string|123|
+|categories|array of category objects|&nbsp;|
 
 Notes:
 
-If `has_catalogs` is `false`, the `catalogs` array should be empty.
+If `has_categories` is `false`, the `categories` array should be empty.
 
 If `has_products` is `true`, call `getProducts` with the category `id` to get a product list.
 
-### Method: getCatalog
+This method takes a category id, and returns *that category*, and *all its child categories*.
+
+### Method: getCategory
 
 ```swift
+TODO
+
 import UIKit
 import RezolveSDK
 
@@ -1621,7 +1632,7 @@ class ProductViewController: UIViewController {
 
 ```
 ```java
-// get a single catalog using ProductInterface
+// get a single category using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
@@ -1633,38 +1644,41 @@ public class Products extends AppCompatActivity implements ProductInterface {
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
          RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
-        // get single catalog
-        String catalogId = "123";
+        // get single category
+        String categoryId = "123";
         String merchantId = "123";
-        myProductManager.getCatalog(merchantId, catalogId, this);
+        myProductManager.getCategory(merchantId, categoryId, this);
     }
 
     @Override
-    public void onGetCatalogSuccess(List<Catalog> list) {
-        for (Catalog catalog : list) {
-            String catalog_id = catalog.getId();
-            String parentId = catalog.getParentId();
-            String name = catalog.getName();
-            Boolean hasCatalog = catalog.hasCatalog();
-            Boolean hasProduct = catalog.hasProduct();
-            String image = catalog.getImage();
-            List<String> imageThumbs = catalog.getImageThumbs();
-        }
+    public void onGetCategorySuccess(Category category) {
+        String category_id = category.getId();
+        String parentId = category.getParentId();
+        String name = category.getName();
+        Boolean hasCategories = category.hasCategories();
+        Boolean hasProduct = category.hasProducts();
+        String image = category.getImage();
+        List<String> imageThumbs = category.getImageThumbs();
+        String catParentId = category.getParentId();
+        List<Category> children = category.getCategories();
     }
 }
 ```
 
-Method signature: `session.getCatalog( merchant_id, catalog_id, [callback or interface] )`
+Method signature: `session.getCategory( merchant_id, categgory_id, [callback or interface] )`
 
-The method returns a `catalog` object.
+The method returns a `category` object.
 
 <aside class="notice">
+TODO
 Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
 
 ### Method: getProducts
 
 ```swift
+TODO
+
 import UIKit
 import RezolveSDK
 
@@ -1713,14 +1727,13 @@ public class Products extends AppCompatActivity implements ProductInterface {
         RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
         // get products
-        Catalog catalog = new Catalog();
         Integer count = 16;
         Integer page = 1;
         String sort_by_field = "title";
         String sort_direction = "ASC";
         String merchantId3 = "123";
-        String catalogId2 = "123";
-        myProductManager.getProducts(merchantId3, catalogId2, count, page, 
+        String categoryId = "123";
+        myProductManager.getProducts(merchantId3, categoryId, count, page, 
         sort_by_field, sort_direction, this);
     }
 
@@ -1750,110 +1763,55 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-Method signature: `session.getProducts( merchant_id, catalog_id, pageNavigation, [callback or interface] )`
+Method signature: `session.getProducts( merchant_id, category_id, pageNavigation, [callback or interface] )`
 
-You must pass a `merchant_id`, `catalog_id`, and a `pageNavivation` object.
+You must pass a `merchant_id`, `category_id`, and a `pageNavivation` object.
 
 The method returns a `pageResult` object.
 
-#### pageNavigation Object
-
-The pageNavigation object controls pagignation and sorting of paginated results.
-
-|field|format|example|explanation|
-|---|---|---|---|
-|count|integer|10|number of items per page|
-|pageIndex|integer|1|what page of results you are requesting|
-|sortBy|string|productName|must be a field of the pageResult > SDKEntity object array (see below)|
-|sort|enum|one of: ASC, DESC|
 
 #### pageResult Object
 
-pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of products.
+pageResult is a generic object used for combining pagination info with an array of returned objects. In the case of getProducts, this is an array of DisplayProducts.
 
 |field|format|example|explanation|
 |---|---|---|---|
 |links|object| |object containing First, Next, Previous, Last links|
 |count|integer|10|items per page, as requested in pageNavigation.count|
 |total|integer|50|total items in SDKEntity array|
-|SDKEntity|array| |array of Product objects|
+|SDKEntity|array| |array of DisplayProduct objects|
 
 #### links Object
 
-The links object is a series of 5 pageNavigation objects (see above), each representing a particular pagination navigation goal:
+The links object controls pagignation and sorting of paginated results.
 
-|field|format|explanation|
-|---|---|---|
-|current|pageNavigation object|The current page of results|
-|first|pageNavigation object|The first page of results|
-|last|pageNavigation object|The last page of results|
-|prev|pageNavigation object|The previous page of results. If you are on the first page, this should be blank|
-|next|pageNavigation object|The next page of results. If you are on the last page, this should be blank.|
+|field|format|example|explanation|
+|---|---|---|---|
+|count|integer|10|number of items per page|
+|page|integer|1|what page of results you are requesting|
+|sortBy|string|productName|must be a field of the pageResult > SDKEntity object array (see below)|
+|sort|enum|one of: ASC, DESC|
 
-#### product Object
+
+#### displayProduct Object
+
+The displayProduct object is used when rending a series of products. It contains a subset of the product object, suitable for displaying so the user can choose a product to view.
 
 |field|format|example|
 |---|---|---|
 |id|auto-populated string|123|
-|merchant_id|string|brookstone|
-|title|string|Fitbit Charge 2|
-|subtitle|string|Heart Rate and Fitness Wristband|
+|categoryId|string|123|
+|name|string|Fitbit Charge 2|
 |price|decimal|129.00|
-|images|array of image urls|http://domain.com/path/image.jpg|
-|options|object|&nbsp;|
-|optionAvailable|array of Variant objects|&nbsp;|
+|imageThumbs|array of thumbnail image urls (as strings)|http://domain.com/path/image.jpg|
+|image|main product imaage url (as a string)|http://domain.com/path/image.jpg|
 
-#### option Object
-
-An option represents a choice. For example, Color or Size on a clothing item.
-
-|field|format|example|
-|---|---|---|
-|label|string|&nbsp;|
-|extraInfo|string displayed to the user, provides additional info about the option|Color may differ from shown.|
-|values|array of optionValue objects|&nbsp;|
-
-#### optionValue Object
-OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.
-
-|field|format|example|
-|---|---|---|
-|label|string|Red|
-|value|string|C001|
-
-#### variant Object
-
-> Example data for a product with three sizes, two colors, two patterns:
-
-```json
-"option_available": [
-	{ "size": "SI01", "color": "C001", "pattern": "P001" },
-	{ "size": "SI02", "color": "C001", "pattern": "P001" },
-	{ "size": "SI03", "color": "C001", "pattern": "P001" },
-	{ "size": "SI01", "color": "C002", "pattern": "P001" },
-	{ "size": "SI02", "color": "C002", "pattern": "P001" },
-	{ "size": "SI03", "color": "C002", "pattern": "P001" },
-	{ "size": "SI01", "color": "C001", "pattern": "P002" },
-	{ "size": "SI02", "color": "C001", "pattern": "P002" },
-	{ "size": "SI03", "color": "C001", "pattern": "P002" },
-	{ "size": "SI01", "color": "C002", "pattern": "P002" },
-	{ "size": "SI02", "color": "C002", "pattern": "P002" },
-	{ "size": "SI03", "color": "C002", "pattern": "P002" },
-]
-```
-
-A variant represents a unique combination of  option values for a product. For example, if the product is a shirt, one variant might be Small, Red, Striped. There would be additional variants for each size/color/pattern combo.
-
-A variant has a varying number of key/value string pairs, as determined by the number of options in a product. A product with three options will have three key/value pairs in it's variants.
-
-|field|format|example|
-|---|---|---|
-|label|string|Size|
-|value|string|SI01|
 
 ### Method: getProduct
 
 ```swift
+TODO 
+
 import UIKit
 import RezolveSDK
 
@@ -1890,11 +1848,11 @@ public class Products extends AppCompatActivity implements ProductInterface {
         RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
 
         // get single product
-        Product product2 = new Product();
+        Product product = new Product();
         String productId = "123abc";
-        String merchantId4 = "123";
-        String catalogId3 = "123";
-        myProductManager.getProduct(merchantId4, catalogId3, productId, this);
+        String merchantId = "123";
+        String categoryId = "123";
+        myProductManager.getProduct(merchantId, categoryId3, productId, this);
     }
 
     @Override
@@ -1905,35 +1863,53 @@ public class Products extends AppCompatActivity implements ProductInterface {
         String subtitle = product.getSubtitle();
         String description = product.getDescription();
         List<String> images = product.getImages();
+        List<String[]> thumbs = product.getImageThumbs();
         String merchant_id = product.getMerchantId();
         float price = product.getPrice();
-        HashMap<String, Option> options = product.getOptions();
+        List<Option> options = product.getOptions();
         List<Variant> optionsAvail = product.getOptionAvailable();
+        List<CustomOption> customOptions = product.getCustomOptions();
 
-        // iterate to get values of options hashmap
-        for (String key : options.keySet()) {
-            String optionName = key;
-            Option optionValue = options.get(key);
 
-            String extraInfo = optionValue.getExtraInfo();
-            String label = optionValue.getLabel();
-            List<OptionValue> values = optionValue.getValues();
+        // iterate to get values of options list
+        for (Option option : options) {
+            String optionLabel = option.getLabel();
+            String extraInfo = option.getExtraInfo();
+            String optionCode = option.getCode();
+            List<OptionValue> optionValues = option.getValues();
 
-            for(OptionValue opVal: values){
-                String opValLabel = opVal.getLabel();
-                String opValValue = opVal.getValue();
+            for(OptionValue optionValue: optionValues){
+                String value = optionValue.getValue();
+                String label = optionValue.getLabel();
             }
         }
 
-        // iterate to get values of variant array
+        // iterate to get values of variant list
         for (Variant variant : optionsAvail) {
-            HashMap<String, String> composition = variant.getCompositions();
+            List<Combination> combinations = variant.getCombinations();
             // iterate to get values of composition hashmap
-            for (String key : composition.keySet() ){
-                String compLabel = key;
-                String compValue = composition.get(key);
+            for (Combination combination : combinations ){
+                String comboValue = combination.getValue();
+                String comboCode = combination.getCode();
             }
         }
+
+        //iterate to get values of CustomOptions list
+        for (CustomOption customOption : customOptions){
+            List<CustomOptionValue> customOptionValues = customOption.getValues();
+            int customOptionId = customOption.getOptionId();
+            int customOptionSortOrder = customOption.getSortOrder();
+            String customOptiontitle = customOption.getTitle();
+            Boolean customOptionIsRequired = customOption.isRequired();
+
+            // iterate to get values of customOptionValues
+            for( CustomOptionValue customOptionValue : customOptionValues ){
+                String customOptionValueTitle = customOptionValue.getTitle();
+                int customOptionValuesSortOrder = customOptionValue.getSortOrder();
+                String customOptionValueId = customOptionValue.getValueId();
+            }
+        }
+
     }
 }
 ```
@@ -1945,8 +1921,118 @@ You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
 The method returns a <a href="#product-object">`product object`</a> .
 
 
+#### product Object
+
+The displayProduct object is used when rending a series of products. It contains a subset of the product object, suitable for displaying so the user can choose a product to view.
+
+|field|format|example|
+|---|---|---|
+|id|auto-populated string|123|
+|merchant_id|string|brookstone|
+|title|string|Fitbit Charge 2|
+|subtitle|string|Heart Rate and Fitness Wristband|
+|description|string|Make every beat count with Fitbit Charge 2 - a heart rate and fitness wristband that tracks activity, exercise and sleep, includes advanced fitness features and displays real-time stats on a large display.
+|price|decimal|129.00|
+|images|array of image urls|http://domain.com/path/image.jpg|
+|thumbs|array of thumbnail image url arrays.|[ http://domain.com/path/thumb400.jpg, http://domain.com/path/thumb800.jpg, http://domain.com/path/thumb1600.jpg ]|
+|options|array of Option objects|&nbsp;|
+|optionAvailable|array of Variant objects|&nbsp;|
+|customOptions|array of customOption objects|&nbsp;|
+
+#### option Object
+
+An option represents a choice. For example, Color or Size on a clothing item.
+
+|field|format|example|
+|---|---|---|
+|label|string|Color|
+|optionCode|string|color|
+|extraInfo|string displayed to the user, provides additional info about the option|Color may differ from shown.|
+|optionValues|array of optionValue objects|&nbsp;|
+
+#### optionValue Object
+OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.
+
+|field|format|example|
+|---|---|---|
+|label|string|Red|
+|value|string|5|
+
+#### variant Object
+
+|field|format|example|
+|---|---|---|
+|array of Combination objects|array|&nbsp;|
+
+#### combination Object
+A combination object represents one unique combination of options for this product. For example, if a shirt has 4 sizes, and 3 colors, it should have 12 combination objects (assuming all combinations are available). The number of key/value pairs in a combination object will vary, and is dependent upon the number of options in the product. A product with size, color, and pattern, would have three key/value pairs in each combination.
+
+|field|format|example|
+|---|---|---|
+|code|string|color|
+|value|string|Red|
 
 
+> Example data for a product with three sizes, one color:
+
+```json
+"options_available": [
+        {
+            "combination": [
+                {
+                    "code": "colour",
+                    "value": "Indigo"
+                },
+                {
+                    "code": "size",
+                    "value": "S"
+                }
+            ]
+        },
+        {
+            "combination": [
+                {
+                    "code": "colour",
+                    "value": "Indigo"
+                },
+                {
+                    "code": "size",
+                    "value": "XS"
+                }
+            ]
+        },
+        {
+            "combination": [
+                {
+                    "code": "colour",
+                    "value": "Indigo"
+                },
+                {
+                    "code": "size",
+                    "value": "L"
+                }
+            ]
+        }
+    ]
+```
+
+
+#### customOption Object
+
+|field|format|example|
+|---|---|---|
+|id|integer|123|
+|sortOrder|integer|Items will be sorted sequentially by this integer. Exaple: 1 would come first, 2 next, etc.|
+|title|string|Ring Size|
+|isRequired|boolean|TRUE|
+|customOptionValues|array of customOptionValue objects|&nbsp:|
+
+#### customOptionValue Object
+|field|format|example|
+|---|---|---|
+|id|string|123|
+|title|string|Size 7|
+|sortOrder|integer|Items will be sorted sequentially by this integer. Exaple: 1 would come first, 2 next, etc.|
 
 
 ## Module: UserActivityManager
@@ -2592,6 +2678,21 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         String subtitle = product.getSubtitle();
         // ... etc
     }
+
+    // if scan media contains a category link, onCategoryResult fires and
+    // returns a Category object
+    @Override
+    public void onCategoryResult(Category category, String s) {
+        String categoryId = category.getId();
+        String categoryParentId = category.getParentId();
+        String categoryName = category.getName();
+        List<String> categoryImageThumbs = category.getImageThumbs();
+        String categoryImage = category.getImage();
+        List<Category> categoryChildren = category.getCategories();
+        Boolean hasCategories = category.hasCategories();
+        Boolean hasProduct = category.hasProducts();
+    }
+
 
     // if scan media is another recognized format, onRezolveResult fires and
     // returns a RezolveScanResult object. Inspect the object to get the

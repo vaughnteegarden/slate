@@ -138,6 +138,33 @@ For example, to use `WalletManager` methods, you can either do so directly, or i
 
 The Module Reference section exclusively documents using Feature Interfaces, as this is the preferred method.
 
+## Automatic thumbnail generation
+
+> Example JSON for 1 large image, and 4 associated "thumbnail" images
+
+```JSON
+      "image": "https:\/\/s3.amazonaws.com\/1\/27\/Image.png",
+      "image_thumbs": [
+        "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_400x550.png",
+        "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_800x1100.png",
+        "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_1200x1651.png",
+        "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_1600x2201.png"
+      ],
+```
+
+When large images are uploaded to the merchant portal, the portal automatically generates a series of smaller images, which are referred to as thumbnails even though some are fairly large. The rules for thumbnail generation are as follows:
+
+* Generated images respect the aspect ratio of the original image; their height/width ratio will not be distorted
+* If the uploaded image is: 
+	* smaller or equal to 400px maxium dimension (width or height), no resized image is produced.
+	* larger than 400px maxium dimension, it makes a 400px max dimension image. (referred to as the "thumbnail" image)
+    * larger than 800px maxium dimension, it makes a 800px max dimension image, and all smaller sizes.
+    * larger than 1200px maxium dimension, it makes a 1200px max dimension image, and all smaller sizes.
+	* larger than 1600px maxium dimension, it makes a 1600px max dimension image, and all smaller sizes.
+* Additionally, the original upload image always returned, even if gigantic. Consider if you need images larger than 1600x1600 in your app.
+* This applies to all merchant uploaded images that are supplied to the SDK. 
+
+Each uploaded image will have a corresponding array of thumbnails. If an object can have an array of images, it will have an array of thumbnail arrays.
 
 ##  User Management, Session Management
 
