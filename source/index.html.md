@@ -12,6 +12,16 @@ toc_footers:
 includes:
 - howto
 - moduleref
+- authenticationmanager
+- profilemanager
+- addressbookmanager
+- favoritemanager
+- walletmanager
+- productmanager
+- useractivitymanager
+- checkoutmanager
+- scanmanager
+- apicheck
 
 search: true
 ---
