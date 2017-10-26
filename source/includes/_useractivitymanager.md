@@ -39,7 +39,7 @@ class UserActivityViewController: UIViewController {
 }
 ```
 ```java
-// get transactions using UserActivityManager
+// get orders using UserActivityManager
 public class userActivity extends AppCompatActivity implements UserActivityInterface {
 
     private final static String API_KEY = "your_api_key";
@@ -47,8 +47,7 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getUserActivityManager();
+        UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getUserActivityManager();
 
         // get transactions from User Activity Manager
         myActivityManager.getOrders(this);
@@ -58,6 +57,127 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
         // myActivityManager.getActById();
         // myActivityManager.getScansHistory();
         // myActivityManager.getScanById();
+    }
+
+    @Override
+    public void onGetOrdersSuccess(OrderHistoryObject orderHistoryObject) {
+
+        String orderHistoryCount = orderHistoryObject.getCount();
+        String orderHistoryFrom = orderHistoryObject.getFrom();
+        String orderHistoryTo = orderHistoryObject.getTo();
+        List<OrderDetails> orderHistoryOrders = orderHistoryObject.getOrders();
+
+        // get properties of orderDetails array
+        for (OrderDetails orderDetails : orderHistoryOrders) {
+            String orderMerchantId = orderDetails.getMerchantId();
+            String orderId = orderDetails.getOrderId();
+            String orderPan4 = orderDetails.getPan4();
+            String orderPayWith = orderDetails.getPayWith();
+            String orderStatus = orderDetails.getStatus();
+            String orderTimestamp = orderDetails.getTimestamp();
+            String orderType = orderDetails.getType();
+            Order orderFinalPrice = orderDetails.getFinalPrice();
+            RezolveLocation orderLocation = orderDetails.getGeoloc();
+            List<HistoryItem> orderItems = orderDetails.getItems();
+
+            // get properties of finalPrice object
+            String orderFinalPriceOrderId = orderFinalPrice.getOrderId();
+            float orderFinalPriceFinalPrice = orderFinalPrice.getFinalPrice();
+            List<PriceBreakdown> orderFinalPriceBreakdowns = orderFinalPrice.getBreakdowns();
+
+            // get properties of PriceBreakdown array
+            for (PriceBreakdown priceBreakdown : orderFinalPriceBreakdowns) {
+                float breakdownAmount = priceBreakdown.getAmount();
+                String breakdownType = priceBreakdown.getType();
+            }
+
+            // get properties of orderLocation  object
+            String orderLocationType = orderLocation.getLocationType();
+            double orderLatitude = orderLocation.getLatitude();
+            double orderLongitude = orderLocation.getLongitude();
+
+            // get properties of orderItems array
+            for (HistoryItem historyItem : orderItems) {
+                Address historyItemAddressDetails = historyItem.getAddressDetails();
+                CustomerDetails historyItemCustomerDetails = historyItem.getCustomerDetails();
+                List<Product> historyItemProducts = historyItem.getProducts();
+
+                // get properties of historyItemAddressDetails object
+                String historyAddressId = historyItemAddressDetails.getId();
+                String historyAddressShortName = historyItemAddressDetails.getShortName();
+                String historyAddressCity = historyItemAddressDetails.getCity();
+                String historyAddressCountry = historyItemAddressDetails.getCountry();
+                String historyAddressLine1 = historyItemAddressDetails.getLine1();
+                String historyAddressLine2 = historyItemAddressDetails.getLine2();
+                String historyAddressState = historyItemAddressDetails.getState();
+                String historyAddressZip = historyItemAddressDetails.getZip();
+
+                // get properties of historyItemCustomerDetails object
+                String historyCustomerId = historyItemCustomerDetails.getCustomerId();
+                String historyCustomerEmail = historyItemCustomerDetails.getEmail();
+                String historyCustomerFirstName = historyItemCustomerDetails.getFirstName();
+                String historyCustomerLastName = historyItemCustomerDetails.getLastName();
+                String historyCustomerLoyaltyCardNo = historyItemCustomerDetails.getLoyaltyCardNumber();
+                Boolean historyCustomerHasLoyalty = historyItemCustomerDetails.isHasLoyaltyCard();
+
+                // get properties of historyItemProducts array
+                for (Product product : historyItemProducts) {
+                    List<CustomOption> productCustomOptions = product.getCustomOptions();
+                    String productDescription = product.getDescription();
+                    String productId = product.getId();
+                    List<String> productImages = product.getImages();
+                    List<String[]> productThumbs = product.getImageThumbs();
+                    String productMerchantId = product.getMerchantId();
+                    List<Variant> productOptionsAvailable = product.getOptionsAvailable();
+                    List<Option> productOptions = product.getOptions();
+                    List<Variant> productOptionAvailable = product.getOptionAvailable();
+                    float productPrice = product.getPrice();
+                    String productSubtitle = product.getSubtitle();
+                    String productTitle = product.getTitle();
+
+                    // get properties of productCustomOptions array
+                    for (CustomOption customOption : productCustomOptions) {
+                        int customOptionId = customOption.getOptionId();
+                        int customOptionsSortOrder = customOption.getSortOrder();
+                        String customOptionsTitle = customOption.getTitle();
+                        String customOptionsType = customOption.getType();
+                        List<CustomOptionValue> customOptionValues = customOption.getValues();
+
+                        // get properties of customOptionValues array
+                        for (CustomOptionValue customOptionValue : customOptionValues) {
+                            int customOptionValueSortOrder = customOptionValue.getSortOrder();
+                            String customOptionValueTitle = customOptionValue.getTitle();
+                            String customOptionValueValueId = customOptionValue.getValueId();
+                        }
+                    }
+
+                    // get properties of productOptionsAvailable array
+                    for(Variant variant : productOptionsAvailable){
+                        List<Combination> variantCombinations = variant.getCombinations();
+
+                        // get properties of variantCombinations array
+                        for(Combination combination : variantCombinations){
+                            String combinationCode = combination.getCode();
+                            String combinationValue = combination.getValue();
+                        }
+                    }
+
+                    // get properties of productOptions array
+                    for(Option option : productOptions){
+                        String optionCode = option.getCode();
+                        String optionLabel = option.getLabel();
+                        List<OptionValue> optionValues = option.getValues();
+                        String optionExtraInfo = option.getExtraInfo();
+                        
+                        // get properties of optionValues array
+                        for(OptionValue optionValue:optionValues) {
+                            String optionValueLabel = optionValue.getLabel();
+                            String optionValueValue = optionValue.getValue();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -92,89 +212,79 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
 
     @Override
     public void onFailure(HttpResponse httpResponse) {
-        // handle error 
-    }
-
-    @Override
-    public void onGetOrdersSuccess(List<Transaction> list) {
-        for(Transaction transaction : list){
-
-            String transactionStatus = transaction.getStatus();
-            String transactionTimestamp = transaction.getTimestamp();
-            float transactionAmount = transaction.getAmount();
-            String transactionOrderId = transaction.getOrderId();
-            String transactionLastUpdated = transaction.getLastUpdated();
-            TransactionItem transactionItem = transaction.getItem();
-
-            // get properties of transactionItem  object
-            Address transactionItemAddressDetails = transactionItem.getAddressDetails();
-            CustomerDetails transactionItemCustomerDetails = transactionItem.getCustomerDetails();
-            RezolveLocation transactionItemLocation = transactionItem.getLocation();
-            List<CheckoutProduct> transactionItemProducts = transactionItem.getProducts();
-
-            // get properties of transactionItemAddressdetails object
-            String transAddressId = transactionItemAddressDetails.getId();
-            String transAddressShortName = transactionItemAddressDetails.getShortName();
-            String transAddressCity = transactionItemAddressDetails.getCity();
-            String transAddressCountry = transactionItemAddressDetails.getCountry();
-            String transAddressLine1 = transactionItemAddressDetails.getLine1();
-            String transAddressLine2 = transactionItemAddressDetails.getLine2();
-            String transAddressState = transactionItemAddressDetails.getState();
-            String transAddressZip = transactionItemAddressDetails.getZip();
-
-            // get properties of transactionItemCustomerDetails object
-            String transCustomerId = transactionItemCustomerDetails.getCustomerId();
-            String transCustomerEmail = transactionItemCustomerDetails.getEmail();
-            String transCustomerFirstName = transactionItemCustomerDetails.getFirstName();
-            String transCustomerLastName = transactionItemCustomerDetails.getLastName();
-            String transCustomerLoyaltyCardNo = transactionItemCustomerDetails.getLoyaltyCardNumber();
-            Boolean transCustomerHasLoyalty = transactionItemCustomerDetails.isHasLoyaltyCard();
-
-            // get properties of transactionItemLocation object
-            String transLocationType = transactionItemLocation.getLocationType();
-            double transLatitude = transactionItemLocation.getLatitude();
-            double transLongitude = transactionItemLocation.getLongitude();
-
-            // get properties of transactionItemProducts array
-            for(CheckoutProduct checkoutProduct : transactionItemProducts){
-                int checkoutProductId = checkoutProduct.getId();
-                float checkoutProductQty = checkoutProduct.getQty();
-                List<ConfigurableOption> checkoutProductConfigurableOptions = checkoutProduct.getConfigurableOptions();
-
-                // get name/value pairs of productConfigurableOptions array
-                for(ConfigurableOption checkoutProductConfigurableOption : checkoutProductConfigurableOptions){
-                    String checkoutProductConfigurableOptionCode = checkoutProductConfigurableOption.getCode();
-                    int checkoutProductConfigurableOptionValue = checkoutProductConfigurableOption.getValue();
-                }
-            }
-        }
+        // handle error
     }
 }
 ```
 
 Method signature: `session.getOrders( [callback or interface] )`
 
-The method returns an array of `transaction objects`.
+The method returns a `orderHistory object`.
 
-#### transaction Object
-
-|field|format|example|
-|---|---|---|
-|status|string|Complete|
-|timestamp|long (unix timestamp)|1493130773|
-|amount|decimal|129.00|
-|orderId|string|abc1234|
-|lastUpdated|long (unix timestamp)|1493130773|
-|transactionItem|TransactionItem object|&nbsp;|
-
-#### transactionItem object
+#### orderHistoryObject Object
 
 |field|format|example|
 |---|---|---|
-|transactionItemAddressDetails|Address object|&nbsp;|
-|transactionItemCustomerDetails|CustomerDetails object|&nbsp;|
-|transactionItemLocation|RezolveLocation object|&nbsp;|
-|transactionItemProducts|array of CheckoutProduct objects|&nbsp;|
+|orderHistoryCount|string|15|
+|orderHistoryFrom|date string in format YYYYMMDD|20171201|
+|orderHistoryTo|date string in format YYYYMMDD|20180101|
+|orderHistoryOrders|array of OrderDetails objects|&nbsp;|
+
+
+#### orderDetails object
+
+|field|format|example|
+|---|---|---|
+|orderMerchantId|string|123|
+|orderId|string|123|
+|orderPan4|string|5546|
+|orderPayWith|string|VISA|
+|orderStatus|string|Complete|
+|orderTimestamp|string|(unix timestamp)|1493130773|
+|orderType|string|TODO|
+|orderFinalPrice|Order object|&nbsp;|
+|orderLocation|RezolveLocation object|&nbsp;|
+|orderItems |array of HistoryItem objects|&nbsp;|
+
+
+#### order object
+
+<!-- TODO needs currency with price -->
+
+|field|format|example|
+|---|---|---|
+|orderFinalPriceOrderId|string|123|
+|orderFinalPriceFinalPrice|float|123.45|
+|orderFinalPriceBreakdowns|array of PriceBreakdown objects|&nbsp;|
+
+
+#### priceBreakdown object
+
+<!-- TODO needs currency with price -->
+
+|field|format|example|
+|---|---|---|
+|breakdownAmount|float|123.45|
+|breakdownType|string|Subtotal|
+
+
+#### rezolveLocation object
+
+|field|format|example|
+|---|---|---|
+|orderLocationType|string| TODO |
+|orderLatitude|double|66.123|
+|orderLongitude|double|-140.889|
+
+
+#### historyItem object
+
+|field|format|example|
+|---|---|---|
+|historyItemAddressDetails|Address object|&nbsp;|
+|historyItemCustomerDetails|CustomerDetails object|&nbsp;|
+|historyItemProducts|array of Product objects|&nbsp;|
+
 
 #### address Object
 
@@ -189,6 +299,7 @@ The method returns an array of `transaction objects`.
 |zip|string|39531|
 |country|string|USA|
 
+
 #### customerDetails Object
 
 |field|format|example|
@@ -200,26 +311,76 @@ The method returns an array of `transaction objects`.
 |transCustomerLoyaltyCardNo|string|ABC123DEF456|
 |transCustomerHasLoyalty|boolean|true|
 
-#### rezolveLocation Object
+
+#### product Object
 
 |field|format|example|
 |---|---|---|
-|transLocationType|string||
-|transLatitude|decimal|66.123|
-|transLongitude|decimal|-140.889|
+|productCustomOptions|array of customOption objects|&nbsp;|
+|description|string|Make every beat count with Fitbit Charge 2 - a heart rate and fitness wristband that tracks activity, exercise and sleep, includes advanced fitness features and displays real-time stats on a large display.|
+|productId|auto-populated string|123|
+|productImages|array of image urls|http://domain.com/path/image.jpg|
+|productThumbs|array of thumbnail image url arrays.|[ http://domain.com/path/thumb400.jpg, http://domain.com/path/thumb800.jpg, http://domain.com/path/thumb1600.jpg ]|
+|productMerchantId|string|brookstone|
+|productOptionsAvailable|array of Variant objects|&nbsp;|
+|productOptions|array of Option objects|&nbsp;|
+|productPrice|decimal|129.00|
+|productSubtitle|string|Heart Rate and Fitness Wristband|
+|productTitle|string|Fitbit Charge 2|
 
-#### checkoutProduct Object
+#### customOption object
 
 |field|format|example|
 |---|---|---|
-|checkoutProductId|integer|123|
-|checkoutProductQty|decimal|123|
-|checkoutProductConfigurableOptions|array of configurableOption objects (key/value pairs)|&nbsp;|
+|customOptionId|int|123|
+|customOptionsSortOrder|int|123|
+|customOptionsTitle|string|Material|
+|customOptionsType|string|TODO|
+|customOptionValues|array of CustomOptionValue objects|&nbsp;|
 
-#### configurableOption Object
+
+#### customOptionValue object
 
 |field|format|example|
 |---|---|---|
-|checkoutProductConfigurableOptionCode|string|Color|
-|checkoutProductConfigurableOptionValue|integer|123|
+|customOptionValueSortOrder|int|123|
+|customOptionValueTitle|string|cotton|
+|customOptionValueValueId|string|100% Cotton|
+
+
+#### variant Object
+
+|field|format|example|
+|---|---|---|
+|array of Combination objects|array|&nbsp;|
+
+#### combination Object
+A combination object represents one unique combination of options for this product. For example, if a shirt has 4 sizes, and 3 colors, it should have 12 combination objects (assuming all combinations are available). The number of key/value pairs in a combination object will vary, and is dependent upon the number of options in the product. A product with size, color, and pattern, would have three key/value pairs in each combination.
+
+|field|format|example|
+|---|---|---|
+|code|string|color|
+|value|string|Red|
+
+
+#### option Object
+
+An option represents a choice. For example, Color or Size on a clothing item.
+
+|field|format|example|
+|---|---|---|
+|optionLabel|string|Color|
+|optionCode|string|color|
+|optionExtraInfo|string displayed to the user, provides additional info about the option|Color may differ from shown.|
+|optionValues|array of optionValue objects|&nbsp;|
+
+
+#### optionValue Object
+OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.
+
+|field|format|example|
+|---|---|---|
+|optionValueLabel|string|Red|
+|optionValueValue|string|5|
+
 
