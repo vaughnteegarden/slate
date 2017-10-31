@@ -86,33 +86,38 @@ How to use the returned images: the `image_url` is typically used as a header ba
 ### Method: getCatgories
 
 ```swift
-TODO
-
 import UIKit
 import RezolveSDK
 
-class ProductViewController: UIViewController {
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(70)
 
-  let API_KEY: String = "your_api_key"
+class ViewController: UIViewController {
 
-  var mySession: RezolveSession?
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-      super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
 
-      self.mySession = ... // initialize session
+        let signUpRequest = createSingUpRequest()
 
-      self.mySession?.productManager.getCatalogs(merchantId: "123", 
-       catalogId: nil) { (listOfCatalog: Array<Catalog>) in
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
 
-          listOfCatalog.forEach() { (catalog: Catalog) in
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
-              let catalogId: String = catalog.id
-          }
-      }
-  }
+                session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: nil, callback:  { category in
+
+
+
+                }, errorCallback: {
+
+                    print($0) // handle error
+
+                })
+            })
+        }
+    }
 }
-
 ```
 ```java
 // get root category and first level child categories using ProductInterface
@@ -180,33 +185,36 @@ This method takes a category id, and returns *that category*, and *all its child
 ### Method: getCategory
 
 ```swift
-TODO
-
 import UIKit
 import RezolveSDK
 
-class ProductViewController: UIViewController {
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(70)
 
-  let API_KEY: String = "your_api_key"
+class ViewController: UIViewController {
 
-  var mySession: RezolveSession?
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-      super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
 
-      self.mySession = ... // initialize session
+        let signUpRequest = createSingUpRequest()
 
-      self.mySession?.productManager.getCatalogs(merchantId: "123", 
-       catalogId: "A") { (listOfCatalog: Array<Catalog>) in
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
 
-          listOfCatalog.forEach() { (catalog: Catalog) in
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
-              let catalogId: String = catalog.id
-          }
-      }
-  }
+                session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, callback: { category in
+
+
+                }, errorCallback: {
+
+                    print($0) // handle error
+                })
+            })
+        }
+    }
 }
-
 ```
 ```java
 // get a single category using ProductInterface
@@ -248,47 +256,45 @@ The method returns a `category` object.
 
 <aside class="notice">
 TODO
-Note: IOS uses the `getCatalogs` method to fetch both singuler and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
+Note: IOS uses the `getCatalogs` method to fetch both singular and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
 
 ### Method: getProducts
 
 ```swift
-TODO
-
 import UIKit
 import RezolveSDK
 
-class ProductViewController: UIViewController {
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(102)
 
-  let API_KEY: String = "your_api_key"
+class ViewController: UIViewController {
 
-  var mySession: RezolveSession?
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-      super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
 
-      self.mySession = ... // initialize session
+        let signUpRequest = createSingUpRequest()
 
-      let pageNavigation = PageNavigation(count: 10,
-                                          pageIndex: 0,
-                                          sortBy: nil,
-                                          sort: PageNavigationSort.ASC)
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
 
-      self.mySession?.productManager.getProducts(
-          merchantId: "123",
-          catalogId: "A",
-          pageNavigation: pageNavigation) { (productPageResult: PageResult<DisplayProduct>) in
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
-              productPageResult.embedded.forEach() { (displayProduct: DisplayProduct) in
+                let pageNavigation: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
 
-                  let productId = displayProduct.id
-              }
-          }
-      }
-  }
+                session.productManager.getProducts(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, pageNavigation: pageNavigation, callback: { (pageResult: PageResult<DisplayProduct>) in
+
+                    print(pageResult.embedded.count)
+
+                }, errorCallback: {
+
+                    print($0) // handle error
+                })
+            })
+        }
+    }
 }
-
 ```
 ```java
 // get products using ProductInterface
@@ -387,28 +393,37 @@ The displayProduct object is used when rending a series of products. It contains
 ### Method: getProduct
 
 ```swift
-TODO 
-
 import UIKit
 import RezolveSDK
 
-class ProductViewController: UIViewController {
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(102)
+let PRODUCT_ID = "6"
 
-  let API_KEY: String = "your_api_key"
+class ViewController: UIViewController {
 
-  var mySession: RezolveSession?
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-  override func viewDidLoad() {
-      super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
 
-      self.mySession = ... // initialize session
+        let signUpRequest = createSingUpRequest()
 
-      self.mySession?.productManager.getProduct(merchantId: "123", catalogId: "A", 
-       productId: "ABC") { (product: Product) in
-          let productId: String = product.id
-          let title: String = product.title
-      }
-  }
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+                session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, productId: PRODUCT_ID, callback:  { (product: Product) in
+
+
+
+                }, errorCallback: {
+
+                    print($0) // handle error
+                })
+            })
+        }
+    }
 }
 ```
 ```java

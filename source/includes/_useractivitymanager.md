@@ -15,25 +15,29 @@ Thse functions are NOT implemented server-side, and should not be used at this t
 ### Method: getOrders
 
 ```swift
-TODO
-
 import UIKit
 import RezolveSDK
 
-class UserActivityViewController: UIViewController {
-
-    let API_KEY: String = "your_api_key"
-
-    var mySession: RezolveSession?
+class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.mySession = ... // initialize session
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
 
-        self.mySession?.userActivityManager.getOrders() { (transactions: Array<Transaction>) in
+        let signUpRequest = createSingUpRequest()
 
-            //handle result
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+                session.userActivityManager.getOrders(callback: { orders in
+
+
+                }, errorCallback: {
+                    print($0) // handle error
+                })
+            })
         }
     }
 }
@@ -226,8 +230,8 @@ The method returns a `orderHistory object`.
 |field|format|example|
 |---|---|---|
 |orderHistoryCount|string|15|
-|orderHistoryFrom|date string in format YYYYMMDD|20171201|
-|orderHistoryTo|date string in format YYYYMMDD|20180101|
+|orderHistoryFrom|date string in format YYYY-MM-DD|2017-12-01|
+|orderHistoryTo|date string in format YYYY-MM-DD|2018-01-01|
 |orderHistoryOrders|array of OrderDetails objects|&nbsp;|
 
 
@@ -240,7 +244,7 @@ The method returns a `orderHistory object`.
 |orderPan4|string|5546|
 |orderPayWith|string|VISA|
 |orderStatus|string|Complete|
-|orderTimestamp|string|(unix timestamp)|1493130773|
+|orderTimestamp|string (unix timestamp)|1493130773|
 |orderType|string|TODO|
 |orderFinalPrice|Order object|&nbsp;|
 |orderLocation|RezolveLocation object|&nbsp;|

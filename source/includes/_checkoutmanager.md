@@ -2,7 +2,548 @@
 
 Checkout is an aggregate of Session.
 
-The checkout module creates orders and completes orders with payment.
+The checkout module handles the shopping cart, and creates, modifies, and completes orders with payment.
+
+### Method: addProductToCart
+
+```swift
+TODO
+```
+```java
+public class Checkout extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    String merchantId;
+    RezolveLocation rezolveLocation;
+    CheckoutInterface checkoutInterface;
+    CheckoutProduct checkoutProduct;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+
+
+        // add product to cart
+        myCheckoutManager.addProductToCart(checkoutProduct, merchantId, checkoutInterface);
+    }
+
+
+    @Override
+    public void onAddProductsToCartSuccess(CartDetails cartDetails) {
+        // get properties of cartDetails object
+        String cartDateCreated = cartDetails.getDateCreated();
+        String cartDateUpdated = cartDetails.getDateUpdated();
+        String cartId = cartDetails.getId();
+        String cartMerchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+        // get properties of cartProducts array
+        for(CheckoutProduct checkoutProduct:cartProducts){
+            int checkoutProductId = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+            float checkoutProductQty = checkoutProduct.getQty();
+
+            // get properties of configurableOptions array
+            for(ConfigurableOption configurableOption:configurableOptions){
+                String configurableOptionCode = configurableOption.getCode();
+                int configurableOptionValue = configurableOption.getValue();
+            }
+        }
+    }
+
+
+    @Override
+    public void onFailure(HttpResponse httpResponse) {
+        // handle error
+    }
+}
+```
+
+AddProductToCart adds a product to the cart for a particular merchant.
+
+Method signature: `session.addProductToCart( CheckoutProduct, String TOTO, [callback or interface] )`
+
+You must pass in a `CheckoutProduct` object, the merchantId as a string, and a `CheckoutInterface` object (or callback).
+
+The method returns an `CartDetails` object.
+
+#### CheckoutProduct object
+
+|field|format|example|
+|---|---|---|
+|checkoutProductId|int|123|
+|checkoutProductQty|float|1|
+|configurableOptions|array of configurableOption objects|@nbsp;|
+
+#### ConfigurableOption object
+
+|field|format|example|
+|---|---|---|
+|configurableOptionCode|string|Logo|
+|configurableOptionValue|int|123|
+
+#### CartDetails object
+|field|format|example|
+|---|---|---|
+|cartDateCreated|date string in format YYYY-MM-DD|2017-12-25|
+|cartDateUpdated|date string in format YYYY-MM-DD|2017-12-25|
+|cartId|string|abc123|
+|cartMerchantId|string|abc123|
+|cartProducts|array of CheckoutProduct objects|&nbsp;|
+
+
+
+
+
+### Method: buyCart
+
+```swift
+TODO
+```
+```java
+public class Checkout extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    String addressId;
+    String cartId;
+    String merchantId;
+    RezolveLocation rezolveLocation;
+    PaymentRequest paymentRequest;
+    CheckoutInterface checkoutInterface;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+
+
+        // buy cart; returns an order id
+        myCheckoutManager.buyCart(merchantId, cartId, addressId, rezolveLocation, paymentRequest, checkoutInterface);
+
+    }
+
+    @Override
+    public void onGetCartsSuccess(List<CartDetails> successCartDetails) {
+        // get properties of successCartDetails array
+        for(CartDetails cartDetails: successCartDetails){
+            String cartDateCreated = cartDetails.getDateCreated();
+            String cartDateUpdated = cartDetails.getDateUpdated();
+            String cartId = cartDetails.getId();
+            String cartMerchantId = cartDetails.getMerchantId();
+            List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+            // get properties of cartProducts array
+            for(CheckoutProduct checkoutProduct:cartProducts){
+                int checkoutProductId = checkoutProduct.getId();
+                List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+                float checkoutProductQty = checkoutProduct.getQty();
+
+                // get properties of configurableOptions array
+                for(ConfigurableOption configurableOption:configurableOptions){
+                    String configurableOptionCode = configurableOption.getCode();
+                    int configurableOptionValue = configurableOption.getValue();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAddProductsToCartSuccess(CartDetails cartDetails) {
+        // get properties of cartDetails object
+        String cartDateCreated = cartDetails.getDateCreated();
+        String cartDateUpdated = cartDetails.getDateUpdated();
+        String cartId = cartDetails.getId();
+        String cartMerchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+        // get properties of cartProducts array
+        for(CheckoutProduct checkoutProduct:cartProducts){
+            int checkoutProductId = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+            float checkoutProductQty = checkoutProduct.getQty();
+
+            // get properties of configurableOptions array
+            for(ConfigurableOption configurableOption:configurableOptions){
+                String configurableOptionCode = configurableOption.getCode();
+                int configurableOptionValue = configurableOption.getValue();
+            }
+        }
+    }
+
+    @Override
+    public void onGetCartByIdSuccess(CartDetails cartDetails) {
+        // get properties of cartDetails array
+        String cartDateCreated = cartDetails.getDateCreated();
+        String cartDateUpdated = cartDetails.getDateUpdated();
+        String cartId = cartDetails.getId();
+        String cartMerchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+        // get properties of cartProducts array
+        for(CheckoutProduct checkoutProduct:cartProducts){
+            int checkoutProductId = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+            float checkoutProductQty = checkoutProduct.getQty();
+
+            // get properties of configurableOptions array
+            for(ConfigurableOption configurableOption:configurableOptions){
+                String configurableOptionCode = configurableOption.getCode();
+                int configurableOptionValue = configurableOption.getValue();
+            }
+        }
+    }
+
+    @Override
+    public void onRemoveProductFromCartSuccess(CartDetails cartDetails) {
+        // get properties of cartDetails array
+        String cartDateCreated = cartDetails.getDateCreated();
+        String cartDateUpdated = cartDetails.getDateUpdated();
+        String cartId = cartDetails.getId();
+        String cartMerchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+        // get properties of cartProducts array
+        for(CheckoutProduct checkoutProduct:cartProducts){
+            int checkoutProductId = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+            float checkoutProductQty = checkoutProduct.getQty();
+
+            // get properties of configurableOptions array
+            for(ConfigurableOption configurableOption:configurableOptions){
+                String configurableOptionCode = configurableOption.getCode();
+                int configurableOptionValue = configurableOption.getValue();
+            }
+        }
+    }
+
+    @Override
+    public void onUpdateProductInCartSuccess(CartDetails cartDetails) {
+        // get properties of cartDetails array
+        String cartDateCreated = cartDetails.getDateCreated();
+        String cartDateUpdated = cartDetails.getDateUpdated();
+        String cartId = cartDetails.getId();
+        String cartMerchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+        // get properties of cartProducts array
+        for(CheckoutProduct checkoutProduct:cartProducts){
+            int checkoutProductId = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+            float checkoutProductQty = checkoutProduct.getQty();
+
+            // get properties of configurableOptions array
+            for(ConfigurableOption configurableOption:configurableOptions){
+                String configurableOptionCode = configurableOption.getCode();
+                int configurableOptionValue = configurableOption.getValue();
+            }
+        }
+    }
+
+    @Override
+    public void onCheckoutCartSuccess(Order order) {
+        // get properties of order array
+        List<PriceBreakdown> breakdowns = order.getBreakdowns();
+        float finalPrice = order.getFinalPrice();
+        String orderId = order.getOrderId();
+
+        // get properties of PriceBreakdown array
+        for (PriceBreakdown priceBreakdown : breakdowns) {
+            float breakdownAmount = priceBreakdown.getAmount();
+            String breakdownType = priceBreakdown.getType();
+        }
+    }
+
+    @Override
+    public void onCheckoutProductSuccess(Order order) {
+        // get properties of order array
+        List<PriceBreakdown> breakdowns = order.getBreakdowns();
+        float finalPrice = order.getFinalPrice();
+        String orderId = order.getOrderId();
+
+        // get properties of PriceBreakdown array
+        for (PriceBreakdown priceBreakdown : breakdowns) {
+            float breakdownAmount = priceBreakdown.getAmount();
+            String breakdownType = priceBreakdown.getType();
+        }
+    }
+
+    @Override
+    public void onProductOrderPlaced(String s) {
+        String orderId = s;
+    }
+
+    @Override
+    public void onCartOrderPlaced(String s) {
+        String orderId = s;
+    }
+
+    @Override
+    public void onOrderUpdateReceived(Transaction.Status status, Transaction transaction) {
+        // get properties of status object
+        String statusLabel = status.getLabel();
+
+        // get properties of transaction object
+        Order transAmount = transaction.getAmount();
+        List<TransactionItem> transItems = transaction.getItems();
+        String transLastUpdated = transaction.getLastUpdated();
+        String transOrderId = transaction.getOrderId();
+        String transStatus = transaction.getStatus();
+        String transTimestamp = transaction.getTimestamp();
+
+        // get properties of transItems array
+        for(TransactionItem transactionItem : transItems){
+            Address addressDetails = transactionItem.getAddressDetails();
+            CustomerDetails customerDetails = transactionItem.getCustomerDetails();
+            RezolveLocation location = transactionItem.getLocation();
+            List<CheckoutProduct> products = transactionItem.getProducts();
+
+            // get properties of addressDetails object
+            String id = addressDetails.getId();
+            String shortName = addressDetails.getShortName();
+            String city = addressDetails.getCity();
+            String country = addressDetails.getCountry();
+            String line1 = addressDetails.getLine1();
+            String line2 = addressDetails.getLine2();
+            String state = addressDetails.getState();
+            String zip = addressDetails.getZip();
+
+            // get properties of customerDetails object
+            String customerDetailsId = customerDetails.getCustomerId();
+            String customerDetailsEmail = customerDetails.getEmail();
+            String customerDetailsFirstName = customerDetails.getFirstName();
+            String customerDetailsLastName = customerDetails.getLastName();
+            String customerDetailsLoyaltyCardNo = customerDetails.getLoyaltyCardNumber();
+            Boolean customerDetailsHasLoyalty = customerDetails.isHasLoyaltyCard();
+        }
+    }
+
+    @Override
+    public void onFailure(HttpResponse httpResponse) {
+        // handle error
+    }
+}
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: buyProduct
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: checkoutCart
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: createPaymentRequest
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: getCartById
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: getCarts
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: removeProductFromCart
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: signOrderUpdates
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+
+### Method: updateProductInCart
+
+```swift
+TODO
+```
+```java
+
+```
+
+methodname does something.
+
+Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+
+You must pass in a `cart` object.
+
+The method returns an `order` object.
+
+#### objectname object
+
+|field|format|example|
+|---|---|---|
+||||
+
+
+<!-- ****************************************************************************-->
+<!-- ****************************************************************************-->
+<!-- ****************************************************************************-->
+
 
 ### Method: checkoutOrder
 
