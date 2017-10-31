@@ -672,50 +672,184 @@ The method returns an `PaymentRequest` object.
 ### Method: getCartById
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+              session.cartManager.getCart(merchantId: MERCHANT_ID, id: cartDetails.id, callback: { remoteCart in
+
+
+              }, errorCallback: { print($0) })
+
+            }, errorCallback: { print($0) })
+        })
+    }
+}
 ```
 ```java
+public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
+    private final static String API_KEY = "your_api_key";
+    String cartId;
+    String merchantId;
+    CheckoutInterface checkoutInterface;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+
+        // get cart by id: returns a CartDetails object
+        myCheckoutManager.getCartById(cartId, merchantId, checkoutInterface);
+    }
+
+
+    @Override
+    public void onGetCartByIdSuccess(CartDetails cartDetails) {
+        // get properties of cartDetails array
+        String cartDateCreated = cartDetails.getDateCreated();
+        String cartDateUpdated = cartDetails.getDateUpdated();
+        String cartId = cartDetails.getId();
+        String cartMerchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+        // get properties of cartProducts array
+        for(CheckoutProduct checkoutProduct:cartProducts){
+            int checkoutProductId = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+            float checkoutProductQty = checkoutProduct.getQty();
+
+            // get properties of configurableOptions array
+            for(ConfigurableOption configurableOption:configurableOptions){
+                String configurableOptionCode = configurableOption.getCode();
+                int configurableOptionValue = configurableOption.getValue();
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(HttpResponse httpResponse) {
+        // handle error
+    }
+}
 ```
 
-methodname does something.
+GetCardById returns the contents of a cart, as specified by cartId.
 
-Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+Method signature: `session.CheckoutManager.getCartById( CartId, MerchantId, [callback or interface] )`
 
-You must pass in a `cart` object.
+You must pass in a `Cartid` string, a `MerchantId` string, and a CheckoutInterface (or callback).
 
-The method returns an `order` object.
+The method returns an `CartDetails` object.
 
-#### objectname object
-
-|field|format|example|
-|---|---|---|
-||||
 
 
 
 ### Method: getCarts
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+                session.cartManager.getCarts(callback: { carts in
+
+
+                }, errorCallback: { print($0) })
+
+            }, errorCallback: { print($0) })
+        })
+    }
+}
 ```
 ```java
+public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
+    private final static String API_KEY = "your_api_key";
+    CheckoutInterface checkoutInterface;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+
+        // gets carts for the current session: returns an array of CartDetail objects
+        myCheckoutManager.getCarts(checkoutInterface);
+    }
+
+    @Override
+    public void onGetCartsSuccess(List<CartDetails> successCartDetails) {
+        // get properties of successCartDetails array
+        for(CartDetails cartDetails: successCartDetails){
+            String cartDateCreated = cartDetails.getDateCreated();
+            String cartDateUpdated = cartDetails.getDateUpdated();
+            String cartId = cartDetails.getId();
+            String cartMerchantId = cartDetails.getMerchantId();
+            List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+            // get properties of cartProducts array
+            for(CheckoutProduct checkoutProduct:cartProducts){
+                int checkoutProductId = checkoutProduct.getId();
+                List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+                float checkoutProductQty = checkoutProduct.getQty();
+
+                // get properties of configurableOptions array
+                for(ConfigurableOption configurableOption:configurableOptions){
+                    String configurableOptionCode = configurableOption.getCode();
+                    int configurableOptionValue = configurableOption.getValue();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(HttpResponse httpResponse) {
+        // handle error
+    }
+}
 ```
 
-methodname does something.
+GetCarts gets a list of carts associated with the user.
 
-Method signature: `session.checkoutOrder( cart, [callback or interface] )`
+Method signature: `session.CheckoutManager.getCarts( [callback or interface] )`
 
-You must pass in a `cart` object.
+You must pass in a `CheckoutInterface` (or callout).
 
-The method returns an `order` object.
+The method returns an array of `CartDetail` objects.
 
-#### objectname object
 
-|field|format|example|
-|---|---|---|
-||||
 
 
 
