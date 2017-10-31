@@ -172,7 +172,7 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
                         String optionLabel = option.getLabel();
                         List<OptionValue> optionValues = option.getValues();
                         String optionExtraInfo = option.getExtraInfo();
-                        
+
                         // get properties of optionValues array
                         for(OptionValue optionValue:optionValues) {
                             String optionValueLabel = optionValue.getLabel();
@@ -225,7 +225,7 @@ Method signature: `session.getOrders( [callback or interface] )`
 
 The method returns a `orderHistory object`.
 
-#### orderHistoryObject Object
+#### OrderHistoryObject Object
 
 |field|format|example|
 |---|---|---|
@@ -235,7 +235,7 @@ The method returns a `orderHistory object`.
 |orderHistoryOrders|array of OrderDetails objects|&nbsp;|
 
 
-#### orderDetails object
+#### OrderDetails object
 
 |field|format|example|
 |---|---|---|
@@ -251,9 +251,7 @@ The method returns a `orderHistory object`.
 |orderItems |array of HistoryItem objects|&nbsp;|
 
 
-#### order object
-
-<!-- TODO needs currency with price -->
+#### Order object
 
 |field|format|example|
 |---|---|---|
@@ -262,9 +260,7 @@ The method returns a `orderHistory object`.
 |orderFinalPriceBreakdowns|array of PriceBreakdown objects|&nbsp;|
 
 
-#### priceBreakdown object
-
-<!-- TODO needs currency with price -->
+#### PriceBreakdown object
 
 |field|format|example|
 |---|---|---|
@@ -272,7 +268,7 @@ The method returns a `orderHistory object`.
 |breakdownType|string|Subtotal|
 
 
-#### rezolveLocation object
+#### RezolveLocation object
 
 |field|format|example|
 |---|---|---|
