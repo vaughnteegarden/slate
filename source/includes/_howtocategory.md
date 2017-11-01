@@ -4,7 +4,7 @@
 
 
 
-<img src="images/ShoppableAdFlowInstantBuy.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdFlowInstantBuy.png">View full size</a> ]
+<img src="images/ShoppableAdFlowCategoryScan.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdFlowCategoryScan.png">View full size</a> ]
 
 Shoppable Ads can do more than link to a single product, it can link to a category of products in your Rezolve Commerce Engine. Scanning an ad that contains a category link will bring up a list of subcategories and products in that category.
 
