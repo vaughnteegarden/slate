@@ -12,6 +12,8 @@ toc_footers:
 includes:
 - howtobasic
 - howtoinstantbuy
+- howtocartbuy
+- howtocategory
 - errorhandling
 - moduleref
 - authenticationmanager
