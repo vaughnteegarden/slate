@@ -19,69 +19,56 @@ In the Instant Buy flow, we purchase the product immediately, without first addi
 
 
 ```swift
+class ViewController: UIViewController, ProductDelegate {
 
-import UIKit
-
-import RezolveSDK
-
-
-
-class ScanManagerViewController: UIViewController {
-
-
-
-    @IBOutlet var scanCameraView: ScanCameraView?
-
-    var mySession: RezolveSession?
-
-
+    var session: RezolveSession?
 
     override func viewDidLoad() {
-
         super.viewDidLoad()
 
-        //self.mySession = ... // initialize session
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
 
-        let scanManager = self.mySession?.getScanManager()
+        let signUpRequest = createSingUpRequest()
 
-        scanManager?.productResultDelegate = self
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
 
-        scanManager?.rezolveScanResultDelegate = self
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
-        scanManager?.startVideoScan(scanCameraView: self.scanCameraView!)
+                self.session = session
+                self.session?.getScanManager().productResultDelegate = self
+                self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
 
+            }, errorCallback: { print($0) })
+        }
     }
 
 
+    func onError(error: String) -> Void {
 
-    override func didReceiveMemoryWarning() {
+      // handle error
+    }
 
-        super.didReceiveMemoryWarning()
+    func onStartRecognizeImage() -> Void {
 
-        scanManager?.stop()
+      // suggestion: show a loading indicator
+    }
+
+    func onFinishRecognizeImage() -> Void {
+
+      // suggestion: alert user with some sound
+    }
+
+    func onProductResult(product: Product) -> Void {
 
     }
 
-}
-
-
-
-extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate {
-
-    public func productDidFetched(product: Product) {
-
-        // handle product
-
-        let productId: String  = product.id
-
-        let title: String = product.title
-
-        let subtitle: String = product.subtitle
-
-        // ...etc
+    func onCategoryResult(category: RezolveCategory) -> Void {
 
     }
 
+    func onCategoryProductsResult(category: RezolveCategory, productsPage: PageResult<DisplayProduct>) -> Void {
+
+    }
 }
 
 ```
@@ -90,62 +77,35 @@ extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate
 
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface, View.OnClickListener {
 
-    //...
-
-
 
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
-
-
         // set scan view
-
         setContentView(R.layout.scan_activity);
-
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
-
-
         //get scan manager
-
         scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
-
           .getRezolveSession().getScanManager(this, true);
 
-
-
           //start video scan to acquire image
-
           scanManager.startVideoScan(this, rezolveScanView);
-
     }
-
 
 
 	// capture product result
-
     @Override
-
     public void onProductResult(Product product) {
 
         // get product info
-
         String productId = product.getId();
-
         String title = product.getTitle();
-
         String subtitle = product.getSubtitle();
 
         // ...etc
-
     }
-
-
-
 }
 
 ```
@@ -161,174 +121,62 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 
 
 ```swift
+func onProductResult(product: Product) -> Void {
 
-  let options: [String: OptionValue] = [
+    session.addressbookManager.get(id: "1") { (remoteAddress: Address) in
 
-      "color": (product.options["color"]?.values[0])!
+      let checkoutProduct = createCheckoutProductWithVariant(product: product)
 
-  ]
-
-
-
-  let checkoutProduct = CheckoutProduct(
-
-      productId: product.id,
-
-      productTitle: product.title,
-
-      quantity: 1,
-
-      finalPrice: product.price,
-
-      options: options
-
-  )
+      session.checkoutManager.checkoutProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, callback: { (order: CheckoutOrder) in
 
 
-
-  let loyalty: Loyalty = Loyalty(number: "123123")
-
-
-
-  let delivery: Delivery = Delivery(addressId: "123123") // address.id
-
-
-
-  let geoLoc: [String: Double] = [
-
-      "lat": 12.000,
-
-      "long": 21.000
-
-  ]
-
-
-
-  let myCart: Cart = Cart(
-
-      merchantId: "1",
-
-      loyaltySettings: loyalty,
-
-      deliverySettings: delivery,
-
-      email: "johndoe@domain.com",
-
-      type: "scan",
-
-      products: [checkoutProduct],
-
-      geoLoc: geoLoc
-
-  )
-
-
-
-
-
-  mySession?.checkoutManager.checkoutOrder(cart: myCart) { (order: Order) in
-
-      let orderId: String = order.id
-
-      let finalPrice: Decimal = order.finalPrice
-
-      // ... etc
-
-  }
+      }, errorCallback: { print($0) })
+    }
+}
 
 ```
 
 ```java
 
-// pull info from the product to build a checkoutProduct, and add it to the cart. 
-
-HashMap<String, String> options = new HashMap<>();
-
-options.put("color", "red");
-
-
-
-CheckoutProduct checkoutProduct = new CheckoutProduct();
-
-checkoutProduct.setId(product.getId());
-
-checkoutProduct.setPrice(product.getPrice());
-
-checkoutProduct.setTitle(product.getTitle());
-
-checkoutProduct.setQty(5);
-
-checkoutProduct.setOptions(options);
+@Override
+public void onProductResult(Product product) {
+    // get product info
+    String product_id = product.getId();
+    String title = product.getTitle();
+    String subtitle = product.getSubtitle();
+    // ... etc
 
 
+    // instant buy example
 
-HashMap<String, String> deliverySettings = new HashMap<>();
+    // create a CheckoutProduct object with the product id , and set the quantity
+    CheckoutProduct checkoutProduct = new CheckoutProduct();
+    checkoutProduct.setId(Integer.parseInt(product_id));
+    checkoutProduct.setQty(1);
 
-deliverySettings.put("delivery_address_id", "123123");
+    // call the CheckoutProduct method to get and order object and totals
+    CheckoutManager checkout = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
 
+    String merchantId = "123"; // use real merchant id
+    String addressId = "123"; // use real consumer address id
 
+    checkout.checkoutProduct(merchantId, checkoutProduct, addressId, new CheckoutCallback() {
+        @Override
+        public void onCheckoutProductSuccess(Order order) {
+            super.onCheckoutProductSuccess(order);
 
-HashMap<String, String> loyaltySettings = new HashMap<>();
-
-loyaltySettings.put("loyalty_id", "123123");
-
-
-
-HashMap<String, Double> geoLoc = new HashMap<>();
-
-geoLoc.put("lat", 12.3123);
-
-geoLoc.put("long", 31.1323);
-
-
-
-List<CheckoutProduct> items = new ArrayList<>();
-
-items.add(checkoutProduct);
-
-
-
-// build the cart
-
-Cart cart = new Cart.Builder()
-
-        .merchantId(product.getMerchantId())
-
-        .type("scan")
-
-        .deliverySettings(deliverySettings)
-
-        .loyaltySettings(loyaltySettings)
-
-        .geoLoc(geoLoc)
-
-        .items(items)
-
-        .build();
-
-
-
-// call checkoutOrder. It will return an Order with embedded pricing info.
-
-rezolveSession.getCheckoutManager().checkoutOrder(cart, new CheckoutCallback() {
-
-    @Override
-
-    public void onCheckoutOrderSuccess(Order order) {
-
-        String orderId = order.getOrderId();
-
-        //handle result
-
-    }
-
-});
+            String orderId = order.getOrderId();
+            List<PriceBreakdown> orderBreakdown = order.getBreakdowns();
+            float orderTotal = order.getFinalPrice();
+        }
+    });
+}
 
 ```
 
 
 
-Once you have product information, call the SDK `checkoutOrder` method. Pass in the merchant, type, delivery address id, loyalty info (if any), geolocation if available, and finally the information on the desired product, including variant choices.  The response includes an order id, final total price, and a price breakdown (composed of base price, variant price premium if any, shipping, and tax).
+Once you have product information, create a CheckoutProduct object. Then call the SDK `CheckoutManager.checkoutProduct` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
 
 
 
@@ -339,9 +187,7 @@ Once you have product information, call the SDK `checkoutOrder` method. Pass in 
 ```swift
 
   mySession?.walletManager.getAll() { (listOfCards: Array<PaymentCard>) in
-
       // handle list of cards here
-
   }
 
 ```
@@ -351,11 +197,8 @@ Once you have product information, call the SDK `checkoutOrder` method. Pass in 
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
 
     @Override
-
     public void onWalletGetAllSuccess(List<PaymentCard> list) {
-
         // handle getAll response here
-
     }
 
 });
@@ -364,11 +207,10 @@ rezolveSession.getWalletManager().getAll(new WalletCallback() {
 
 
 
-If the consumer agrees with the price and wishes to complete the order, use `walletManager.getAll` to list the available card choices. The consumer then chooses a payment card.
+Use `walletManager.getAll` to list the available card choices. If the consumer wishes to buy, they will select a payment card to use, and provide confirmation of ordering intent.
 
 
-
-At this point, we recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
+We recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
 
 
@@ -377,56 +219,43 @@ At this point, we recommend using a "slide to buy" button to confirm purchase in
 
 
 ```swift
+let PARIS_LOCATION = RezolveLocation(type: .point, coordinates: (latitude: 48.8736645, longitude: 2.2910793))
 
-  let paymentRequest: PaymentRequest = PaymentRequest(paymentCard: paymentCard, cvv: cvv)
+let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
+
+session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, callback: { (order: CheckoutOrder) in
 
 
-
-  self.mySession?.checkoutManager.buyOrder(paymentRequest: paymentRequest, 
-
-  order: order) { (transaction: Transaction) in
-
-      //handle result
-
-  }
-
+}, errorCallback: { print($0) })
 ```
 
 ```java
+// create a paymentRequest object, and then use this with the checkoutProduct object and rezolveLocation object to purchase the item.
 
-// Create an encrypted payment request using the CheckoutManager.createPaymentRequest
+// create paymentRequest object
+PaymentCard paymentCard = new PaymentCard(); // use consumer's chosen payment card from step 3
+String cvv = "123"; // use actual cvv
+PaymentRequest paymentRequest = checkout.createPaymentRequest(paymentCard,cvv);
 
+// add consumer's location
+RezolveLocation rezolveLocation = new RezolveLocation();
+rezolveLocation.setLatitude(48.8736645);
+rezolveLocation.setLongitude(2.2910793);
+rezolveLocation.setLocationType("POINT");
 
-
-let paymentRequest: PaymentRequest = self.mySession?.checkoutManager.createPaymentRequest(
-
-paymentCard: paymentCard, cvv: cvv) 
-
-
-
-// pass the paymentRequest object, order object, and callback to the buyOrder method
-
-rezolveSession.getCheckoutManager().buyOrder(paymentRequest, order, new CheckoutCallback() {
-
+checkout.buyProduct(merchantId, checkoutProduct, addressId, rezolveLocation, paymentRequest, new CheckoutCallback() {
     @Override
-
-    public void onBuyOrderSuccess(Transaction transaction) {
-
-        //handle result
-
+    public void onProductOrderPlaced(String s) {
+        super.onProductOrderPlaced(s);
     }
-
 });
-
 ```
 
 
 
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-
-
-Pass the `paymentRequst` object and the `order` object to the `buyOrder` method. The response contains either a `transaction` object with order confirmation with receipt info, or if rejected, an error with the reason for the order rejection.
+Pass the `merchantId` and `addressId` strings, the `checkoutProduct` object, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyProduct` method. The response will be the `order id` as a string.
 
 
 

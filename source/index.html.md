@@ -10,7 +10,9 @@ toc_footers:
   - <a href='https://github.com/tripit/slate'>Docs powered by Slate</a>
 
 includes:
-- howto
+- howtobasic
+- howtoinstantbuy
+- errorhandling
 - moduleref
 - authenticationmanager
 - profilemanager
