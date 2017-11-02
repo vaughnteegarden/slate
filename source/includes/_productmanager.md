@@ -79,7 +79,7 @@ The method returns an array of `merchant` objects.
 |logo_url|string|http://domain.com/path/logo.jpg|
 |image_url|string|http://domain.com/path/image.jpg|
 
-How to use the returned images: the `image_url` is typically used as a header background, and the image represented by `logo_url` is overlayed on top.
+How to use the returned images: the `image_url` is typically used as a header background, and the image represented by `logo_url` is overlaid on top.
 
 
 
@@ -250,7 +250,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-Method signature: `session.getCategory( merchant_id, categgory_id, [callback or interface] )`
+Method signature: `session.getCategory( merchant_id, category_id, [callback or interface] )`
 
 The method returns a `category` object.
 
@@ -386,7 +386,7 @@ The displayProduct object is used when rending a series of products. It contains
 |name|string|Fitbit Charge 2|
 |price|decimal|129.00|
 |imageThumbs|array of thumbnail image urls (as strings)|http://domain.com/path/image.jpg|
-|image|main product imaage url (as a string)|http://domain.com/path/image.jpg|
+|image|main product image url (as a string)|http://domain.com/path/image.jpg|
 
 
 ### Method: getProduct
@@ -613,7 +613,7 @@ A combination object represents one unique combination of options for this produ
 |field|format|example|
 |---|---|---|
 |id|integer|123|
-|sortOrder|integer|Items will be sorted sequentially by this integer. Exaple: 1 would come first, 2 next, etc.|
+|sortOrder|integer|Items will be sorted sequentially by this integer. Example: 1 would come first, 2 next, etc.|
 |title|string|Ring Size|
 |isRequired|boolean|TRUE|
 |customOptionValues|array of customOptionValue objects|&nbsp:|

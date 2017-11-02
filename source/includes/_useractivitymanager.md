@@ -5,12 +5,13 @@ Activity is an aggregate of Session.
 The user activity module handles order history and other historical data.
 
 Note that this module contains some functions reserved for future functionality, namely:
+
 * getActsHistory()
 * getActById()
 * getScansHistory()
 * getScanById()
 
-Thse functions are NOT implemented server-side, and should not be used at this time.
+These functions are NOT implemented server-side, and should not be used at this time.
 
 ### Method: getOrders
 
