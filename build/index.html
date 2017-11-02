@@ -366,80 +366,41 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>
 
 <h2 id="basic-usage">Basic Usage</h2>
-<pre class="highlight swift tab-swift"><code>
-<span class="kd">import</span> <span class="kt">UIKit</span>
-
-
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 
 <span class="c1">// Import the following library:</span>
-
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
-
-
 <span class="kd">class</span> <span class="kt">RezolveSDK1ViewController</span><span class="p">:</span> <span class="kt">ViewController</span> <span class="p">{</span>
-
-
-
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-
         <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-
-
         <span class="c1">// initialize SDK</span>
-
         <span class="c1">// possible values for RezolveEnv enum are .Sandbox, .Production</span>
-
         <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span>  <span class="o">=</span> <span class="s">"1234567890"</span>
-
         <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">RezolveEnv</span><span class="o">.</span><span class="kt">Sandbox</span><span class="p">)</span>
-
     <span class="p">}</span>
-
-
 
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
-
         <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
-
-
-
     <span class="p">}</span>
-
 <span class="p">}</span>
 
-</code></pre><pre class="highlight java tab-java"><code>
-<span class="c1">// Import the following classes:</span>
-
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Import the following classes:</span>
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveInterface</span><span class="o">;</span>
-
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSDK</span><span class="o">;</span>
-
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSession</span><span class="o">;</span>
-
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.customer.DeviceProfile</span><span class="o">;</span>
-
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.foreign.SignUpRequest</span><span class="o">;</span>
 
-
-
 <span class="c1">// To handle server responses you will need to import interfaces or</span>
-
 <span class="c1">// abstract classes from the following packages:</span>
-
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.*</span><span class="o">;</span>
-
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.*</span><span class="o">;</span>
 
 
-
-
-
 <span class="c1">// Rezolve SDK operates on models from com.rezolve.sdk.model subpackages. </span>
-
 <span class="c1">// For example to handle a response from getMerchants query you will need </span>
-
 <span class="c1">// a Merchant model:</span>
 
 <span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.Merchant</span><span class="o">;</span>
@@ -447,33 +408,22 @@ You can switch between IOS and Android by clicking the tabs above.
 
 
 <span class="c1">// initialize SDK</span>
-
 <span class="c1">// possible values for RezolveSDK.Env enum are .SANDBOX, .PRODUCTION</span>
 
 <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"1234567890"</span><span class="o">;</span>
-
 <span class="n">RezolveSDK</span> <span class="n">sdk</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">);</span>
 
 
 
-</code></pre><pre class="highlight java tab-java"><code>
-<span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
-
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
 <span class="c1">// On Android 6.0+, you will have to specifically request the last two. </span>
-
 <span class="c1">// See https://developer.android.com/training/permissions/requesting.html</span>
 
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.INTERNET"</span> <span class="o">/&gt;</span>
-
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.ACCESS_WIFI_STATE"</span> <span class="o">/&gt;</span>
-
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.WRITE_EXTERNAL_STORAGE"</span> <span class="o">/&gt;</span>
-
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.RECORD_AUDIO"</span> <span class="o">/&gt;</span>
-
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
-
-
 
 </code></pre>
 <p>To get started, import the SDK into your code file.</p>
@@ -488,116 +438,66 @@ You can switch between IOS and Android by clicking the tabs above.
 <pre class="highlight java tab-java"><code>
 <span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
 
-
-
 <span class="c1">//</span>
-
 <span class="c1">// Using MANAGER, you must handle the response in a WalletCallback:</span>
-
 <span class="c1">//</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
-
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-
         <span class="o">...</span>
-
         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">)</span>
-
         <span class="o">.</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
 
-
-
             <span class="nd">@Override</span>
-
             <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> 
-
             <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
-
                 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
 
-
-
                     <span class="nd">@Override</span>
-
                     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
 
                     <span class="c1">// handle getAll response here</span>
-
                         <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-
                             <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-
                             <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
-
                             <span class="c1">// ...etc</span>
-
                         <span class="o">}</span>
-
                     <span class="o">}</span>
-
                 <span class="o">});</span>
-
             <span class="o">}</span>
-
         <span class="o">});</span>
-
     <span class="o">}</span>
-
 <span class="o">}</span>
 
 
-
 <span class="c1">//</span>
-
 <span class="c1">// Using INTERFACE, you can save some development time</span>
-
 <span class="c1">//</span>
 
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">WalletInterface</span> <span class="o">{</span>
-
     <span class="o">...</span>
-
     <span class="nd">@Override</span>
-
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-
         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">()</span>
-
         <span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-
     <span class="o">}</span>
-
-
 
     <span class="nd">@Override</span>
-
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWalletGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentCard</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-
         <span class="c1">// handle getAll response here</span>
-
         <span class="k">for</span><span class="o">(</span><span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
-
             <span class="n">String</span> <span class="n">cardId</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-
             <span class="n">String</span> <span class="n">expiresOn</span> <span class="o">=</span> <span class="n">paymentCard</span><span class="o">.</span><span class="na">getExpiresOn</span><span class="o">();</span>
-
             <span class="c1">// ...etc</span>
-
         <span class="o">}</span>
-
     <span class="o">}</span>
-
 <span class="o">}</span>
-
-
-
 </code></pre>
 <p>In the Android version of the Rezolve Inside<sup>TM</sup> SDK, each FeatureManager has an equivalent FeatureInterface.</p>
 
-<p>For example, to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activty for convenience. See Android code at right for comparison.</p>
+<p>For example, to use <code class="prettyprint">WalletManager</code> methods, you can either do so directly, or implement <code class="prettyprint">WalletInterface</code> in your current activity for convenience. See Android code at right for comparison.</p>
 
 <p>The Module Reference section exclusively documents using Feature Interfaces, as this is the preferred method.</p>
 
@@ -606,37 +506,29 @@ You can switch between IOS and Android by clicking the tabs above.
 <blockquote>
 <p>Example JSON for 1 large image, and 4 associated &ldquo;thumbnail&rdquo; images</p>
 </blockquote>
-<pre class="highlight plaintext"><code>
-      "image": "https:\/\/s3.amazonaws.com\/1\/27\/Image.png",
-
+<pre class="highlight plaintext"><code>      "image": "https:\/\/s3.amazonaws.com\/1\/27\/Image.png",
       "image_thumbs": [
-
         "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_400x550.png",
-
         "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_800x1100.png",
-
         "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_1200x1651.png",
-
         "https:\/\/s3.amazonaws.com\/1\/27\/Image_thumb_1600x2201.png"
-
       ],
-
 </code></pre>
 <p>When large images are uploaded to the merchant portal, the portal automatically generates a series of smaller images, which are referred to as thumbnails even though some are fairly large. The rules for thumbnail generation are as follows:</p>
 
 <ul>
-<li><p>Generated images respect the aspect ratio of the original image; their height/width ratio will not be distorted</p></li>
-<li><p>If the uploaded image is: </p>
+<li>Generated images respect the aspect ratio of the original image; their height/width ratio will not be distorted</li>
+<li>If the uploaded image is: 
 
 <ul>
-<li>smaller or equal to 400px maxium dimension (width or height), no resized image is produced.</li>
-<li>larger than 400px maxium dimension, it makes a 400px max dimension image. (referred to as the &ldquo;thumbnail&rdquo; image)</li>
-<li>larger than 800px maxium dimension, it makes a 800px max dimension image, and all smaller sizes.</li>
-<li>larger than 1200px maxium dimension, it makes a 1200px max dimension image, and all smaller sizes.</li>
-<li>larger than 1600px maxium dimension, it makes a 1600px max dimension image, and all smaller sizes.</li>
+<li>smaller or equal to 400px maximum dimension (width or height), no resized image is produced.</li>
+<li>larger than 400px maximum dimension, it makes a 400px max dimension image. (referred to as the &ldquo;thumbnail&rdquo; image)</li>
+<li>larger than 800px maximum dimension, it makes a 800px max dimension image, and all smaller sizes.</li>
+<li>larger than 1200px maximum dimension, it makes a 1200px max dimension image, and all smaller sizes.</li>
+<li>larger than 1600px maximum dimension, it makes a 1600px max dimension image, and all smaller sizes.</li>
 </ul></li>
-<li><p>Additionally, the original upload image always returned, even if gigantic. Consider if you need images larger than 1600x1600 in your app.</p></li>
-<li><p>This applies to all merchant uploaded images that are supplied to the SDK. </p></li>
+<li>Additionally, the original upload image always returned, even if gigantic. Consider if you need images larger than 1600x1600 in your app.</li>
+<li>This applies to all merchant uploaded images that are supplied to the SDK. </li>
 </ul>
 
 <p>Each uploaded image will have a corresponding array of thumbnails. If an object can have an array of images, it will have an array of thumbnail arrays.</p>
@@ -648,127 +540,72 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>This section will describe how to:</p>
 
 <ol>
-<li><p>Register a Rezolve user via the SDK</p></li>
-<li><p>Create a Session for that user</p></li>
-<li><p>When the user is done, log them out</p></li>
+<li>Register a Rezolve user via the SDK</li>
+<li>Create a Session for that user</li>
+<li>When the user is done, log them out</li>
 </ol>
 
 <p><img src="images/loginsequencediagram.png" style="margin:6px 0;"><br/>[ <a href="images/loginsequencediagram.png">View full size</a> ]</p>
 
 <h3 id="register-user">Register User</h3>
-<pre class="highlight swift tab-swift"><code>
-  <span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
-
+<pre class="highlight swift tab-swift"><code>  <span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
       <span class="nv">deviceId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
-
       <span class="nv">make</span><span class="p">:</span> <span class="s">"Apple"</span><span class="p">,</span>
-
       <span class="nv">osType</span><span class="p">:</span> <span class="s">"iOS"</span><span class="p">,</span>
-
       <span class="nv">osVersion</span><span class="p">:</span> <span class="s">"10"</span><span class="p">,</span>
-
       <span class="nv">locale</span><span class="p">:</span> <span class="s">"Europe/London"</span>
-
   <span class="p">)</span>
-
-
 
   <span class="k">let</span> <span class="nv">signUpRequest</span><span class="p">:</span> <span class="kt">SignUpRequest</span> <span class="o">=</span> <span class="kt">SignUpRequest</span><span class="p">(</span>
-
       <span class="nv">email</span><span class="p">:</span> <span class="s">"johndoe@domain.com"</span><span class="p">,</span>
-
-      <span class="nv">firtName</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
-
+      <span class="nv">firstName</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
       <span class="nv">lastName</span><span class="p">:</span> <span class="s">"Doe"</span><span class="p">,</span>
-
       <span class="nv">name</span><span class="p">:</span> <span class="s">"John Doe"</span><span class="p">,</span>
-
       <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span>
-
   <span class="p">)</span>
-
-
-
 
 
   <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
-
       <span class="k">self</span><span class="o">.</span><span class="n">entityId</span> <span class="o">=</span> <span class="n">entityId</span><span class="p">;</span>
-
       <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span> <span class="o">=</span> <span class="n">partnerId</span>
 
-
-
       <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
-
           <span class="nv">entityId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">entityId</span><span class="o">!</span><span class="p">,</span>
-
           <span class="nv">partnerId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span><span class="o">!</span><span class="p">,</span>
-
           <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
 
-
-
               <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="n">session</span>
-
       <span class="p">}</span>
-
   <span class="p">}</span>
-
-</code></pre><pre class="highlight java tab-java"><code>
-<span class="n">DeviceProfile</span> <span class="n">deviceProfile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeviceProfile</span><span class="o">(</span><span class="n">deviceId</span><span class="o">,</span> <span class="n">deviceManufacturer</span><span class="o">,</span> <span class="n">locale</span><span class="o">);</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">DeviceProfile</span> <span class="n">deviceProfile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeviceProfile</span><span class="o">(</span><span class="n">deviceId</span><span class="o">,</span> <span class="n">deviceManufacturer</span><span class="o">,</span> <span class="n">locale</span><span class="o">);</span>
 
 <span class="n">SignUpRequest</span> <span class="n">signUpRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SignUpRequest</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
-
     <span class="o">.</span><span class="na">email</span><span class="o">(</span><span class="s">"john.doe@domain.com"</span><span class="o">)</span>
-
     <span class="o">.</span><span class="na">firstName</span><span class="o">(</span><span class="s">"John"</span><span class="o">)</span>
-
     <span class="o">.</span><span class="na">lastName</span><span class="o">(</span><span class="s">"Doe"</span><span class="o">)</span>
-
     <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"JDoe"</span><span class="o">)</span>
-
     <span class="o">.</span><span class="na">device</span><span class="o">(</span><span class="n">deviceProfile</span><span class="o">)</span>
-
     <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
-
-
 <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">registerUser</span><span class="o">(</span><span class="n">signUpRequest</span><span class="o">,</span> 
-
 <span class="k">new</span> <span class="nf">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
-
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">,</span> 
-
     <span class="n">String</span> <span class="n">entityId</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="c1">// persist the entity_id and partner_id values here</span>
-
         <span class="o">...</span>
 
-
-
         <span class="c1">// set session for convenience</span>
-
         <span class="n">mySession</span> <span class="o">=</span> <span class="n">rezolveSession</span><span class="o">;</span>
-
     <span class="o">}</span>
-
-
 
     <span class="nd">@Override</span>
-
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationFailure</span><span class="o">()</span> <span class="o">{</span>
-
         <span class="c1">// handle failure here</span>
-
     <span class="o">}</span>
-
 <span class="o">});</span>
-
-
 
 </code></pre>
 <p>To register a user, call the sdk <code class="prettyprint">registerUser</code> method, passing in an <code class="prettyprint">SignUpRequest object</code>. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.</p>
@@ -776,130 +613,86 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>The <code class="prettyprint">registerUser</code> method is used as shown to the right. Upon successful registration, the response contains a <code class="prettyprint">partner_id</code> and an <code class="prettyprint">entity_id</code>. <strong>Persist both these values for the life of the app.</strong></p>
 
 <aside class="notice">
-
 You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
-
 </aside>
 
 <aside class="warning">
-
 It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
-
 </aside>
 
 <h3 id="create-session">Create Session</h3>
-<pre class="highlight swift tab-swift"><code>
-<span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
-
+<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">deviceProfile</span><span class="p">:</span> <span class="kt">DeviceProfile</span> <span class="o">=</span> <span class="kt">DeviceProfile</span><span class="p">(</span>
   <span class="nv">deviceId</span><span class="p">:</span> <span class="s">"123"</span><span class="p">,</span>
-
   <span class="nv">make</span><span class="p">:</span> <span class="s">"Apple"</span><span class="p">,</span>
-
   <span class="nv">osType</span><span class="p">:</span> <span class="s">"iOS"</span><span class="p">,</span>
-
   <span class="nv">osVersion</span><span class="p">:</span> <span class="s">"10"</span><span class="p">,</span>
-
   <span class="nv">locale</span><span class="p">:</span> <span class="s">"Europe/London"</span>
-
 <span class="p">)</span>
 
-
-
 <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
-
   <span class="nv">entityId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">entityId</span><span class="o">!</span><span class="p">,</span>
-
   <span class="nv">partnerId</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">partnerId</span><span class="o">!</span><span class="p">,</span>
-
   <span class="nv">device</span><span class="p">:</span> <span class="n">deviceProfile</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
-
       <span class="k">self</span><span class="o">.</span><span class="n">mySession</span> <span class="o">=</span> <span class="n">session</span>
-
 <span class="p">}</span>
 
-
-
-</code></pre><pre class="highlight java tab-java"><code>
-<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
-
+</code></pre><pre class="highlight java tab-java"><code><span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span><span class="n">entityId</span><span class="o">,</span> 
 <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
-
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">s</span><span class="o">,</span> 
-
     <span class="n">String</span> <span class="n">s1</span><span class="o">)</span> <span class="o">{</span>
-
         <span class="n">mySession</span> <span class="o">=</span> <span class="n">rezolveSession</span><span class="o">;</span>
-
         <span class="c1">// use created session to access managers</span>
-
     <span class="o">}</span>
-
-
 
     <span class="nd">@Override</span>
-
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationFailure</span><span class="o">()</span> <span class="o">{</span>
-
         <span class="c1">// handle failed initialization</span>
-
     <span class="o">}</span>
-
 <span class="o">});</span>
 
 
-
-<span class="c1">// Note: You don't need to create a new session if user navigatess to another activity. </span>
-
+<span class="c1">// Note: You don't need to create a new session if user navigates to another activity. </span>
 <span class="c1">// After the session is created, you can access it by calling:</span>
-
 <span class="n">RezolveSession</span> <span class="n">rezolveSession</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">)</span>
-
 <span class="o">.</span><span class="na">getRezolveSession</span><span class="o">();</span>
 
 </code></pre>
 <p>To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:</p>
 
 <ul>
-<li><p>Verifies the validity of the mobile app, through the API key</p></li>
-<li><p>Identifies the consumer and pairs them with a session token</p></li>
-<li><p>Verifies each request from the mobile app by passing API Key and session token</p></li>
-<li><p>Establishes a public key for the session, for encrypting transmitted credit card info</p></li>
+<li>Verifies the validity of the mobile app, through the API key</li>
+<li>Identifies the consumer and pairs them with a session token</li>
+<li>Verifies each request from the mobile app by passing API Key and session token</li>
+<li>Establishes a public key for the session, for encrypting transmitted credit card info</li>
 </ul>
 
 <p>Once the user is authenticated on the partner side, make a call to <code class="prettyprint">createSession{}</code>, passing in the <code class="prettyprint">entity_id</code> and a <code class="prettyprint">deviceProfile</code> object. The server response contains a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.</p>
 
-<p>Once the session is established, you can access services, for example:</p>
-
-<p><code class="prettyprint">session.CustomerProfileManager.get</code></p>
+<p>Once the session is established, you can access services, for example:
+<code class="prettyprint">session.CustomerProfileManager.get</code></p>
 
 <h3 id="logout-session">Logout Session</h3>
-<pre class="highlight swift tab-swift"><code>
-<span class="c1">// When session ends you should inform the sdk by calling</span>
-
+<pre class="highlight swift tab-swift"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
 <span class="n">session</span><span class="o">.</span><span class="n">authenticationManager</span><span class="o">.</span><span class="nf">logout</span><span class="p">();</span>
-
-</code></pre><pre class="highlight java tab-java"><code>
-<span class="c1">// When session ends you should inform the sdk by calling</span>
-
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// When session ends you should inform the sdk by calling</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAuthenticationManager</span><span class="o">().</span><span class="na">logout</span><span class="o">(</span><span class="n">entityId</span><span class="o">);</span>
-
 </code></pre>
-<p>When a seession is over, you should notify the SDK by passing the <code class="prettyprint">entity_id</code> to the logout method.</p>
+<p>When a session is over, you should notify the SDK by passing the <code class="prettyprint">entity_id</code> to the logout method.</p>
 
 <h2 id="consumer-profile-management">Consumer Profile Management</h2>
 
 <p>Once logged in, you have access to the consumer&rsquo;s records. These include:</p>
 
 <ul>
-<li><p>Consumer Profile - Via the <code class="prettyprint">ConsumerProfileManager</code>. Name, email, and device profile (phone info) for the consumer</p></li>
-<li><p>Address Book - Via the <code class="prettyprint">AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes</p></li>
-<li><p>Favorites - Via the <code class="prettyprint">FavouriteManager</code>. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.</p></li>
-<li><p>Wallet - Via the <code class="prettyprint">WalletManager</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</p></li>
+<li>Consumer Profile - Via the <code class="prettyprint">ConsumerProfileManager</code>. Name, email, and device profile (phone info) for the consumer</li>
+<li>Address Book - Via the <code class="prettyprint">AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes</li>
+<li>Favorites - Via the <code class="prettyprint">FavouriteManager</code>. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.</li>
+<li>Wallet - Via the <code class="prettyprint">WalletManager</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</li>
 </ul>
 
-<p>There are no specific flows to consider when managing the customer profile and assicated records.</p>
+<p>There are no specific flows to consider when managing the customer profile and associated records.</p>
 
 <p>AddressbookManager, FavouriteManager, and WalletManager support the following CRUD operations: <code class="prettyprint">create</code>, <code class="prettyprint">update</code>, <code class="prettyprint">delete</code>, <code class="prettyprint">getAll</code>, <code class="prettyprint">get</code>.</p>
 
@@ -1115,7 +908,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 
 <p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
-<p>In the Cart Buy flow, one or more products are added to a cart. Each merchant will have a separate cart, and mutliple carts can contain products at a time. For this example we are assuming only one cart is active, but you can check for multiple carts using <code class="prettyprint">CheckoutManager.getCarts</code>.</p>
+<p>In the Cart Buy flow, one or more products are added to a cart. Each merchant will have a separate cart, and multiple carts can contain products at a time. For this example we are assuming only one cart is active, but you can check for multiple carts using <code class="prettyprint">CheckoutManager.getCarts</code>.</p>
 
 <h4 id="1-capture-image-and-get-product">1. Capture image and get product</h4>
 <pre class="highlight swift tab-swift"><code><span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">ProductDelegate</span> <span class="p">{</span>
@@ -4129,7 +3922,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </tbody></table>
 
-<p>How to use the returned images: the <code class="prettyprint">image_url</code> is typically used as a header background, and the image represented by <code class="prettyprint">logo_url</code> is overlayed on top.</p>
+<p>How to use the returned images: the <code class="prettyprint">image_url</code> is typically used as a header background, and the image represented by <code class="prettyprint">logo_url</code> is overlaid on top.</p>
 
 <h3 id="method-getcatgories">Method: getCatgories</h3>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
@@ -4330,7 +4123,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>Method signature: <code class="prettyprint">session.getCategory( merchant_id, categgory_id, [callback or interface] )</code></p>
+<p>Method signature: <code class="prettyprint">session.getCategory( merchant_id, category_id, [callback or interface] )</code></p>
 
 <p>The method returns a <code class="prettyprint">category</code> object.</p>
 
@@ -4540,7 +4333,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </tr>
 <tr>
 <td>image</td>
-<td>main product imaage url (as a string)</td>
+<td>main product image url (as a string)</td>
 <td>http://domain.com/path/image.jpg</td>
 </tr>
 </tbody></table>
@@ -4884,7 +4677,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <tr>
 <td>sortOrder</td>
 <td>integer</td>
-<td>Items will be sorted sequentially by this integer. Exaple: 1 would come first, 2 next, etc.</td>
+<td>Items will be sorted sequentially by this integer. Example: 1 would come first, 2 next, etc.</td>
 </tr>
 <tr>
 <td>title</td>
@@ -5480,13 +5273,16 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
 <p>The user activity module handles order history and other historical data.</p>
 
-<p>Note that this module contains some functions reserved for future functionality, namely:
-* getActsHistory()
-* getActById()
-* getScansHistory()
-* getScanById()</p>
+<p>Note that this module contains some functions reserved for future functionality, namely:</p>
 
-<p>Thse functions are NOT implemented server-side, and should not be used at this time.</p>
+<ul>
+<li>getActsHistory()</li>
+<li>getActById()</li>
+<li>getScansHistory()</li>
+<li>getScanById()</li>
+</ul>
+
+<p>These functions are NOT implemented server-side, and should not be used at this time.</p>
 
 <h3 id="method-getorders">Method: getOrders</h3>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
