@@ -8,7 +8,7 @@
 
 Shoppable Ads can do more than link to a single product, it can link to a category of products in your Rezolve Commerce Engine. Scanning an ad that contains a category link will bring up a list of subcategories and products in that category.
 
-Once you have navigated to a product, purchasing follows one of the previous two examples (either Instant Buy or Cart Buy).
+Once a product has been selected, purchasing follows one of the previous examples of Instant Buy Flow or Cart Buy Flow (minus the scan step).
 
 
 
@@ -160,7 +160,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-By looking at the Boolean `hasCategories`, we can tell if the category contains any subcategories. If so, we can use `ProductManager.getCaategories` to fetch them.
+By looking at the Boolean `hasCategories`, we can tell if the category contains any subcategories. If so, we can use `ProductManager.getCategories` to fetch them.
 
 
 ### 3. If boolean hasProducts is true, get product info (onCategoryProductsResult)
