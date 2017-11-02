@@ -245,7 +245,7 @@ The method returns a `orderHistory object`.
 |orderPayWith|string|VISA|
 |orderStatus|string|Complete|
 |orderTimestamp|string (unix timestamp)|1493130773|
-|orderType|string|TODO|
+|orderType|string, must be "order"|order|
 |orderFinalPrice|Order object|&nbsp;|
 |orderLocation|RezolveLocation object|&nbsp;|
 |orderItems |array of HistoryItem objects|&nbsp;|
@@ -272,7 +272,7 @@ The method returns a `orderHistory object`.
 
 |field|format|example|
 |---|---|---|
-|orderLocationType|string| TODO |
+|orderLocationType|string, must be "point"| point |
 |orderLatitude|double|66.123|
 |orderLongitude|double|-140.889|
 
@@ -335,7 +335,7 @@ The method returns a `orderHistory object`.
 |customOptionId|int|123|
 |customOptionsSortOrder|int|123|
 |customOptionsTitle|string|Material|
-|customOptionsType|string|TODO|
+|customOptionsType|string, must be one of `full_name`, `address`, `email`, `mobile`, `location`, `dob`, `phone_unique_id`, `gender`, `national_id`, `passport_number`, `field`, `area`, `drop_down`, `radio`, `checkbox`, `multiple`, `date`, `date_time`, or `time`|field|
 |customOptionValues|array of CustomOptionValue objects|&nbsp;|
 
 

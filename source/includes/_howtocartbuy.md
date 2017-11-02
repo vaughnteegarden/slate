@@ -119,20 +119,49 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 
 
 ```swift
-TODO
-func onProductResult(product: Product) -> Void {
+import UIKit
+import RezolveSDK
 
-    session.addressbookManager.get(id: "1") { (remoteAddress: Address) in
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
 
-      let checkoutProduct = createCheckoutProductWithVariant(product: product)
+class ViewController: UIViewController {
 
-      session.checkoutManager.checkoutProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, callback: { (order: CheckoutOrder) in
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+              session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, productId: PRODUCT_ID, callback: { (remoteProduct: Product) in
+
+                   let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
+
+                   session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
 
 
-      }, errorCallback: { print($0) })
+
+                   }, errorCallback: { print($0) })
+
+               }, errorCallback: { print($0) })
+
+            }, errorCallback: { print($0) })
+        })
+    }
+
+    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
+
+        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
+
+        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
     }
 }
-
 ```
 ```java
 // add product to cart

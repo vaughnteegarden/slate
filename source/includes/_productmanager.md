@@ -255,7 +255,6 @@ Method signature: `session.getCategory( merchant_id, categgory_id, [callback or 
 The method returns a `category` object.
 
 <aside class="notice">
-TODO
 Note: IOS uses the `getCatalogs` method to fetch both singular and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
 

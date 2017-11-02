@@ -14,6 +14,7 @@ includes:
 - howtoinstantbuy
 - howtocartbuy
 - howtocategory
+- howtomall
 - errorhandling
 - moduleref
 - authenticationmanager
@@ -108,12 +109,11 @@ You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please vis
 
 The SDK for **IOS** can be downloaded here:
 
-* <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-1.4-release_arm64.zip">rezolve-ios-sdk-1.4-release_arm64.zip</a> - for testing on iPhone and iPad
-* <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-1.4-release_x86_64.zip">rezolve-ios-sdk-1.4-release_x86_64.zip</a> - for testing on x86 emulator
+* <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-.1.5.0.zip">rezolve-ios-sdk-.1.5.0.zip</a> - contains libraries for both ARM and x86. 
 
 The SDK for **Android** can be downloaded here: 
 
-* <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.4-release.aar">rezolve-android-sdk-1.4-release.aar</a> - for all platforms
+* <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.5.17-release.aar">rezolve-android-sdk-1.5.17-release.aar</a> - for all platforms
 
 ## Set up the SDK - IOS
 
