@@ -17,15 +17,15 @@ includes:
 - howtomall
 - errorhandling
 - moduleref
-- authenticationmanager
-- profilemanager
 - addressbookmanager
-- favoritemanager
-- walletmanager
-- productmanager
-- useractivitymanager
+- authenticationmanager
 - checkoutmanager
+- favoritemanager
+- productmanager
+- profilemanager
 - scanmanager
+- useractivitymanager
+- walletmanager
 - apicheck
 
 search: true

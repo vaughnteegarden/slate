@@ -1,6 +1,6 @@
 
 
-## Shoppable Ads, Instant Buy flow
+## Product Scan, Instant Buy flow
 
 
 

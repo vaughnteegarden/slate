@@ -1,6 +1,6 @@
 
 
-## Shoppable Ads, Mall flow
+## Mall flow
 
 
 <img src="images/MallFlow.png" style="margin:6px 0;"><br/>[ <a href="images/MallFlow.png">View full size</a> ]

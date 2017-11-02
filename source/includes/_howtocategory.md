@@ -1,6 +1,6 @@
 
 
-## Shoppable Ads, Category Scan flow
+## Category Scan flow
 
 
 

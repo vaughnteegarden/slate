@@ -1,6 +1,6 @@
 
 
-## Shoppable Ads, Cart Buy flow
+## Product Scan, Cart flow
 
 
 
