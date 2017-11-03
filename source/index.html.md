@@ -113,7 +113,7 @@ The SDK for **IOS** can be downloaded here:
 
 The SDK for **Android** can be downloaded here: 
 
-* <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.5.17-release.aar">rezolve-android-sdk-1.5.17-release.aar</a> - for all platforms
+* <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.5.20-release.aar">rezolve-android-sdk-1.5.20-release.aar</a> - for all platforms
 
 ## Set up the SDK - IOS
 
