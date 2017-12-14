@@ -16,32 +16,7 @@ These functions are NOT implemented server-side, and should not be used at this 
 ### Method: getOrders
 
 ```swift
-import UIKit
-import RezolveSDK
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                session.userActivityManager.getOrders(callback: { orders in
-
-
-                }, errorCallback: {
-                    print($0) // handle error
-                })
-            })
-        }
-    }
-}
+TODO
 ```
 ```java
 // get orders using UserActivityManager
@@ -52,10 +27,15 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getUserActivityManager();
+        UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY,
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getUserActivityManager();
+
+        // these strings represent dates in yyyy-MM-dd format. Both are nullable.
+        String from = "2016-09-30";
+        String to = "2016-12-30";
 
         // get transactions from User Activity Manager
-        myActivityManager.getOrders(this);
+        myActivityManager.getOrders( this, from, to);
 
         // The following are reserved for future functionality:
         // myActivityManager.getActsHistory();
@@ -80,15 +60,28 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
             String orderPayWith = orderDetails.getPayWith();
             String orderStatus = orderDetails.getStatus();
             String orderTimestamp = orderDetails.getTimestamp();
-            String orderType = orderDetails.getType();
-            Order orderFinalPrice = orderDetails.getFinalPrice();
             RezolveLocation orderLocation = orderDetails.getGeoloc();
-            List<HistoryItem> orderItems = orderDetails.getItems();
+            List<OrderProduct> orderItems = orderDetails.getItems();
+
+            Order price = orderDetails.getPrice();
+            String partnerId = orderDetails.getPartnerId();
+            Address billingAddress = orderDetails.getBillingAddressDetails();
+            Address shippingAddress = orderDetails.getShippingAddressDetails();
+            String email = orderDetails.getEmail();
+            String firstName = orderDetails.getFirstName();
+            String lastName = orderDetails.getLastName();
+            Phone phone = orderDetails.getPhone();
+            String merchantEmail = orderDetails.getMerchantEmail();
+            String merchantName = orderDetails.getMerchantName();
+            String merchantPhone = orderDetails.getMerchantPhone();
+
+
+
 
             // get properties of finalPrice object
-            String orderFinalPriceOrderId = orderFinalPrice.getOrderId();
-            float orderFinalPriceFinalPrice = orderFinalPrice.getFinalPrice();
-            List<PriceBreakdown> orderFinalPriceBreakdowns = orderFinalPrice.getBreakdowns();
+            String orderFinalPriceOrderId = price.getOrderId();
+            float orderFinalPriceFinalPrice = price.getFinalPrice();
+            List<PriceBreakdown> orderFinalPriceBreakdowns = price.getBreakdowns();
 
             // get properties of PriceBreakdown array
             for (PriceBreakdown priceBreakdown : orderFinalPriceBreakdowns) {
@@ -97,89 +90,19 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
             }
 
             // get properties of orderLocation  object
-            String orderLocationType = orderLocation.getLocationType();
             double orderLatitude = orderLocation.getLatitude();
             double orderLongitude = orderLocation.getLongitude();
 
             // get properties of orderItems array
-            for (HistoryItem historyItem : orderItems) {
-                Address historyItemAddressDetails = historyItem.getAddressDetails();
-                CustomerDetails historyItemCustomerDetails = historyItem.getCustomerDetails();
-                List<Product> historyItemProducts = historyItem.getProducts();
+            for (OrderProduct orderProduct : orderItems) {
+                List<ConfigurableOptionValue> configurableOptionValues = orderProduct.getConfigurableOptionValues();
+                int quantity = orderProduct.getQuantity();
 
-                // get properties of historyItemAddressDetails object
-                String historyAddressId = historyItemAddressDetails.getId();
-                String historyAddressShortName = historyItemAddressDetails.getShortName();
-                String historyAddressCity = historyItemAddressDetails.getCity();
-                String historyAddressCountry = historyItemAddressDetails.getCountry();
-                String historyAddressLine1 = historyItemAddressDetails.getLine1();
-                String historyAddressLine2 = historyItemAddressDetails.getLine2();
-                String historyAddressState = historyItemAddressDetails.getState();
-                String historyAddressZip = historyItemAddressDetails.getZip();
-
-                // get properties of historyItemCustomerDetails object
-                String historyCustomerId = historyItemCustomerDetails.getCustomerId();
-                String historyCustomerEmail = historyItemCustomerDetails.getEmail();
-                String historyCustomerFirstName = historyItemCustomerDetails.getFirstName();
-                String historyCustomerLastName = historyItemCustomerDetails.getLastName();
-                String historyCustomerLoyaltyCardNo = historyItemCustomerDetails.getLoyaltyCardNumber();
-                Boolean historyCustomerHasLoyalty = historyItemCustomerDetails.isHasLoyaltyCard();
-
-                // get properties of historyItemProducts array
-                for (Product product : historyItemProducts) {
-                    List<CustomOption> productCustomOptions = product.getCustomOptions();
-                    String productDescription = product.getDescription();
-                    String productId = product.getId();
-                    List<String> productImages = product.getImages();
-                    List<String[]> productThumbs = product.getImageThumbs();
-                    String productMerchantId = product.getMerchantId();
-                    List<Variant> productOptionsAvailable = product.getOptionsAvailable();
-                    List<Option> productOptions = product.getOptions();
-                    List<Variant> productOptionAvailable = product.getOptionAvailable();
-                    float productPrice = product.getPrice();
-                    String productSubtitle = product.getSubtitle();
-                    String productTitle = product.getTitle();
-
-                    // get properties of productCustomOptions array
-                    for (CustomOption customOption : productCustomOptions) {
-                        int customOptionId = customOption.getOptionId();
-                        int customOptionsSortOrder = customOption.getSortOrder();
-                        String customOptionsTitle = customOption.getTitle();
-                        String customOptionsType = customOption.getType();
-                        List<CustomOptionValue> customOptionValues = customOption.getValues();
-
-                        // get properties of customOptionValues array
-                        for (CustomOptionValue customOptionValue : customOptionValues) {
-                            int customOptionValueSortOrder = customOptionValue.getSortOrder();
-                            String customOptionValueTitle = customOptionValue.getTitle();
-                            String customOptionValueValueId = customOptionValue.getValueId();
-                        }
-                    }
-
-                    // get properties of productOptionsAvailable array
-                    for(Variant variant : productOptionsAvailable){
-                        List<Combination> variantCombinations = variant.getCombinations();
-
-                        // get properties of variantCombinations array
-                        for(Combination combination : variantCombinations){
-                            String combinationCode = combination.getCode();
-                            String combinationValue = combination.getValue();
-                        }
-                    }
-
-                    // get properties of productOptions array
-                    for(Option option : productOptions){
-                        String optionCode = option.getCode();
-                        String optionLabel = option.getLabel();
-                        List<OptionValue> optionValues = option.getValues();
-                        String optionExtraInfo = option.getExtraInfo();
-
-                        // get properties of optionValues array
-                        for(OptionValue optionValue:optionValues) {
-                            String optionValueLabel = optionValue.getLabel();
-                            String optionValueValue = optionValue.getValue();
-                        }
-                    }
+                for (ConfigurableOptionValue configurableOptionValue : configurableOptionValues) {
+                    String configurableOptionValueCode = configurableOptionValue.getCode();
+                    String configurableOptionValueLabel = configurableOptionValue.getLabel();
+                    String configurableOptionValueValue = configurableOptionValue.getValue();
+                    int configurableOptionValueValueId = configurableOptionValue.getValueId();
                 }
             }
         }
@@ -246,11 +169,39 @@ The method returns a `orderHistory object`.
 |orderPayWith|string|VISA|
 |orderStatus|string|Complete|
 |orderTimestamp|string (unix timestamp)|1493130773|
-|orderType|string, must be "order"|order|
-|orderFinalPrice|Order object|&nbsp;|
 |orderLocation|RezolveLocation object|&nbsp;|
-|orderItems |array of HistoryItem objects|&nbsp;|
+|partnerId|string|123|
+|billingAddress|Address object|&nbsp;|
+|shippingAddress|Address object|&nbsp;|
+|email|string|user@example.com|
+|firstName|string|John|
+|lastName|string|Everyman|
+|phone|Phone object|&nbsp;|
+|merchantEmail|string|merchant@email.com|
+|merchantName|string|Adam's Apples|
+|merchantPhone|string|555-555-1212|
+|price|Order object|&nbsp;|
+|orderItems |array of OrderProduct objects|&nbsp;|
 
+#### Phone Object
+|field|format|example|
+|---|---|---|
+|phoneId|string|123abc|
+|phoneName|string|Home phone|
+|phoneNumber|string|555-555-1212|
+
+#### Address Object
+
+|field|format|example|
+|---|---|---|
+|id|auto-assigned string|123abc|
+|short_name|string|My house|
+|line1|string|Theodore Lowe|
+|line2|string|Ap #867-859 Sit Rd.|
+|city|string|New York|
+|state|string|NY|
+|zip|string|39531|
+|country|string|USA|
 
 #### Order object
 
@@ -273,115 +224,24 @@ The method returns a `orderHistory object`.
 
 |field|format|example|
 |---|---|---|
-|orderLocationType|string, must be "point"| point |
 |orderLatitude|double|66.123|
 |orderLongitude|double|-140.889|
 
 
-#### historyItem object
+#### OrderProduct object
 
 |field|format|example|
 |---|---|---|
-|historyItemAddressDetails|Address object|&nbsp;|
-|historyItemCustomerDetails|CustomerDetails object|&nbsp;|
-|historyItemProducts|array of Product objects|&nbsp;|
+|configurableOptionValues|array of ConfigurableOptionValue objects|&nbsp;|
+|quantity|integer|1|
 
 
-#### address Object
-
-|field|format|example|
-|---|---|---|
-|id|auto-assigned string|123abc|
-|short_name|string|My house|
-|line1|string|Theodore Lowe|
-|line2|string|Ap #867-859 Sit Rd.|
-|city|string|New York|
-|state|string|NY|
-|zip|string|39531|
-|country|string|USA|
-
-
-#### customerDetails Object
+#### ConfigurableOptionValue object
 
 |field|format|example|
 |---|---|---|
-|transCustomerId|string|12345|
-|transCustomerEmail|string|example@email.com|
-|transCustomerFirstName|string|John|
-|transCustomerLastName|string|Doe|
-|transCustomerLoyaltyCardNo|string|ABC123DEF456|
-|transCustomerHasLoyalty|boolean|true|
-
-
-#### product Object
-
-|field|format|example|
-|---|---|---|
-|productCustomOptions|array of customOption objects|&nbsp;|
-|description|string|Make every beat count with Fitbit Charge 2 - a heart rate and fitness wristband that tracks activity, exercise and sleep, includes advanced fitness features and displays real-time stats on a large display.|
-|productId|auto-populated string|123|
-|productImages|array of image urls|http://domain.com/path/image.jpg|
-|productThumbs|array of thumbnail image url arrays.|[ http://domain.com/path/thumb400.jpg, http://domain.com/path/thumb800.jpg, http://domain.com/path/thumb1600.jpg ]|
-|productMerchantId|string|brookstone|
-|productOptionsAvailable|array of Variant objects|&nbsp;|
-|productOptions|array of Option objects|&nbsp;|
-|productPrice|decimal|129.00|
-|productSubtitle|string|Heart Rate and Fitness Wristband|
-|productTitle|string|Fitbit Charge 2|
-
-#### customOption object
-
-|field|format|example|
-|---|---|---|
-|customOptionId|int|123|
-|customOptionsSortOrder|int|123|
-|customOptionsTitle|string|Material|
-|customOptionsType|string, must be one of `full_name`, `address`, `email`, `mobile`, `location`, `dob`, `phone_unique_id`, `gender`, `national_id`, `passport_number`, `field`, `area`, `drop_down`, `radio`, `checkbox`, `multiple`, `date`, `date_time`, or `time`|field|
-|customOptionValues|array of CustomOptionValue objects|&nbsp;|
-
-
-#### customOptionValue object
-
-|field|format|example|
-|---|---|---|
-|customOptionValueSortOrder|int|123|
-|customOptionValueTitle|string|cotton|
-|customOptionValueValueId|string|100% Cotton|
-
-
-#### variant Object
-
-|field|format|example|
-|---|---|---|
-|array of Combination objects|array|&nbsp;|
-
-#### combination Object
-A combination object represents one unique combination of options for this product. For example, if a shirt has 4 sizes, and 3 colors, it should have 12 combination objects (assuming all combinations are available). The number of key/value pairs in a combination object will vary, and is dependent upon the number of options in the product. A product with size, color, and pattern, would have three key/value pairs in each combination.
-
-|field|format|example|
-|---|---|---|
-|code|string|color|
-|value|string|Red|
-
-
-#### option Object
-
-An option represents a choice. For example, Color or Size on a clothing item.
-
-|field|format|example|
-|---|---|---|
-|optionLabel|string|Color|
-|optionCode|string|color|
-|optionExtraInfo|string displayed to the user, provides additional info about the option|Color may differ from shown.|
-|optionValues|array of optionValue objects|&nbsp;|
-
-
-#### optionValue Object
-OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.
-
-|field|format|example|
-|---|---|---|
-|optionValueLabel|string|Red|
-|optionValueValue|string|5|
-
+|configurableOptionValueCode|string|pl123|
+|configurableOptionValueLabel|string|Pattern|
+|configurableOptionValueValue|string|plaid|
+|configurableOptionValueValueId|integer|123|
 

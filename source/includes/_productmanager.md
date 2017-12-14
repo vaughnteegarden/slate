@@ -458,7 +458,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         String merchant_id = product.getMerchantId();
         float price = product.getPrice();
         List<Option> options = product.getOptions();
-        List<Variant> optionsAvail = product.getOptionAvailable();
+        List<Variant> optionsAvail = product.getOptionsAvailable();
         List<CustomOption> customOptions = product.getCustomOptions();
 
 

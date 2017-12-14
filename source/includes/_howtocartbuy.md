@@ -222,11 +222,12 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 #### 4. Submit payment for order
 
 ```swift
-let PARIS_LOCATION = RezolveLocation(type: .point, coordinates: (latitude: 48.8736645, longitude: 2.2910793))
+let PARIS_LOCATION = RezolveLocation(longitude: 2.2910793, latitude: 48.8736645)
+
 
 let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
 
-session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, callback: { (order: CheckoutOrder) in
+session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, phone: phone, callback: { (order: CheckoutOrder) in
 
 
 }, errorCallback: { print($0) })
@@ -242,11 +243,10 @@ PaymentRequest paymentRequest2 = checkout.createPaymentRequest(paymentCard,cvv);
 RezolveLocation rezolveLocation2 = new RezolveLocation();
 rezolveLocation.setLatitude(48.8736645);
 rezolveLocation.setLongitude(2.2910793);
-rezolveLocation.setLocationType("POINT");
 
 // buy the cart
 String cartId = "123"; // either buy current cart, or use getCarts to choose a cart
-checkout.buyCart(merchantId, cartId, addressId, rezolveLocation, paymentRequest,  new CheckoutCallback() {
+checkout.buyCart(merchantId, cartId, addressId, phonebookId, rezolveLocation, paymentRequest,  new CheckoutCallback() {
     @Override
     public void onCartOrderPlaced(String orderId) {
         super.onCartOrderPlaced(orderId);
@@ -258,9 +258,48 @@ checkout.buyCart(merchantId, cartId, addressId, rezolveLocation, paymentRequest,
 
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass the `merchantId` and `addressId` strings, the `checkoutProduct` object, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyProduct` method. The response will be the `order id` as a string.
+Pass the `merchantId`, `phonebookId` and `addressId` strings, the `checkoutProduct` object, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
+
+When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback. 
 
 
+
+#### 5. Wait for signOrderUpdate to return a final order status.
+
+```swift
+session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
+
+session.checkoutManager.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
+
+    print(status)
+
+    if status == .completed {
+
+
+    }
+})
+
+}, errorCallback: { print($0) })
+```
+```java
+@Override
+public void onOrderUpdateReceived(Transaction.Status status, Transaction transaction) {
+    // get properties of status object
+    String statusLabel = status.getLabel();   // will return one of: completed, canceled, or processing
+
+    // get properties of transaction object
+    String transStatus = transaction.getStatus();
+    String transOrderId = transaction.getOrderId();
+    String transLastUpdated = transaction.getLastUpdated();
+}
+```
+
+SignOrderUpdate starts a socket listener with the order id, and waits for the server to return an order status. The server will return one of three status: 
+- completed
+- canceled
+- processing
+
+If either `completed` or `canceled` is returned, the listener stops and the socket closes. If `processing` is returned, the listener will remain active until the order status is updated to either `completed` or `canceled`.
 
 
 

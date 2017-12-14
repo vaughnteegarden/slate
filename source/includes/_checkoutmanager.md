@@ -63,7 +63,8 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
+        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
 
 
         // add product to cart
@@ -174,7 +175,7 @@ class ViewController: UIViewController {
 
                       session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
 
-                          session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, callback: { (order: CheckoutOrder) in
+                          session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
 
 
                           }, errorCallback: { print($0) })
@@ -205,16 +206,17 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     RezolveLocation rezolveLocation;
     PaymentRequest paymentRequest;
     CheckoutInterface checkoutInterface;
+    String phonebookId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, 
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
         RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
 
 
         // buy cart; returns an order id
-        myCheckoutManager.buyCart(merchantId, cartId, addressId, 
+        myCheckoutManager.buyCart(merchantId, cartId, addressId, phonebookId,
         rezolveLocation, paymentRequest, checkoutInterface);
 
     }
@@ -233,6 +235,8 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 BuyCart sends payment information to the backend to purchase the contents of a cart. 
 
+If this method returns successfully, it will automatically call `signOrderUpdate` and start listening on a socket for the server to return an order status. 
+
 Method signature: `session.CheckoutManager.buyCart( MerchantId, CartId, AddressId, 
         RezolveLocation, PaymentRequest, [callback or interface] )`
 
@@ -246,7 +250,6 @@ The method returns an `OrderId` string.
 |---|---|---|
 |latitude|double|38.9072|
 |longitude|double|-77.0369|
-|locationType|string (must be POINT)|POINT|
 
 #### PaymentRequest object
 
@@ -293,7 +296,7 @@ class ViewController: UIViewController {
                         let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
                         let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
 
-                        session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, callback: { (order: CheckoutOrder) in
+                        session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
 
 
 
@@ -323,6 +326,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     PaymentRequest paymentRequest;
     CheckoutInterface checkoutInterface;
     CheckoutProduct checkoutProduct;
+    String phonebookId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -331,7 +335,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
         RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
 
         // buy product directly, bypassing cart; returns an order id
-        myCheckoutManager.buyProduct(merchantId, checkoutProduct, addressId, 
+        myCheckoutManager.buyProduct(merchantId, checkoutProduct, addressId, phonebookId,
         rezolveLocation, paymentRequest, checkoutInterface);
     }
 
@@ -348,7 +352,9 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 ```
 
-BuyProduct purchases a product directly, bypassing the cart. 
+BuyProduct purchases a product directly, bypassing the cart.
+
+If this method returns successfully, it will automatically call `signOrderUpdate` and start listening on a socket for the server to return an order status.
 
 Method signature: `session.buyProduct( MerchantId, CheckoutProduct, AddressId, 
         RezolveLocation, PaymentRequest, [callback or interface] )`
@@ -1062,46 +1068,12 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     @Override
     public void onOrderUpdateReceived(Transaction.Status status, Transaction transaction) {
         // get properties of status object
-        String statusLabel = status.getLabel();
+        String statusLabel = status.getLabel();   // will return one of: completed, canceled, or processing
 
         // get properties of transaction object
-        Order transAmount = transaction.getAmount();
-        List<TransactionItem> transItems = transaction.getItems();
-        String transLastUpdated = transaction.getLastUpdated();
-        String transOrderId = transaction.getOrderId();
         String transStatus = transaction.getStatus();
-        String transTimestamp = transaction.getTimestamp();
-
-        // get properties of Order object
-        String transOrderAmount = transAmount.getOrderId();
-        float transOrderFinalPrice = transAmount.getFinalPrice();
-        List<PriceBreakdown> transOrderBreakdowns = transAmount.getBreakdowns();
-
-        // get properties of transItems array
-        for(TransactionItem transactionItem : transItems){
-            Address addressDetails = transactionItem.getAddressDetails();
-            CustomerDetails customerDetails = transactionItem.getCustomerDetails();
-            RezolveLocation location = transactionItem.getLocation();
-            List<CheckoutProduct> products = transactionItem.getProducts();
-
-            // get properties of addressDetails object
-            String id = addressDetails.getId();
-            String shortName = addressDetails.getShortName();
-            String city = addressDetails.getCity();
-            String country = addressDetails.getCountry();
-            String line1 = addressDetails.getLine1();
-            String line2 = addressDetails.getLine2();
-            String state = addressDetails.getState();
-            String zip = addressDetails.getZip();
-
-            // get properties of customerDetails object
-            String customerDetailsId = customerDetails.getCustomerId();
-            String customerDetailsEmail = customerDetails.getEmail();
-            String customerDetailsFirstName = customerDetails.getFirstName();
-            String customerDetailsLastName = customerDetails.getLastName();
-            String customerDetailsLoyaltyCardNo = customerDetails.getLoyaltyCardNumber();
-            Boolean customerDetailsHasLoyalty = customerDetails.isHasLoyaltyCard();
-        }
+        String transOrderId = transaction.getOrderId();
+        String transLastUpdated = transaction.getLastUpdated();
     }
 
     @Override
@@ -1111,7 +1083,12 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 }
 ```
 
-methodname does something.
+This method is called automatically if `buyCart` or `buyProduct` return successfully. SignOrderUpdates starts a listener on a socket, waiting for the server to return one of the following order status:
+* completed
+* canceled
+* processing
+
+If the orders status is "completed" or "canceled", the listener will close. If the order status returns as "processing", the listener will remain open until an update of either "completed" or "canceled" is received.
 
 Method signature: `session.CheckoutManager.signOrderUpdates( OrderId, MerchantId, [callback or interface] )`
 
@@ -1123,12 +1100,9 @@ The method returns a `Transaction` object, and a `Transaction.Status` object.
 
 |field|format|example|
 |---|---|---|
-|transactionAmount|Order object|&nbsp;|
-|transactionItems|array of TransactionItem objects|&nbsp;|
 |transactionLastUpdated|date string in YYYY-MM-DD format|2017-10-31|
 |transactionOrderId|string|abc123|
 |transactionStatus|string|Complete|
-|transactionTimestamp|date string in YYYY-MM-DD format|2017-10-28|
 
 #### Order object
 
@@ -1266,11 +1240,6 @@ You must pass in a `Cartid` as a string, a `MerchantId` as a string, a CheckoutP
 
 The method returns a `CartDetails` object.
 
-#### objectname object
-
-|field|format|example|
-|---|---|---|
-||||
 
 
 
