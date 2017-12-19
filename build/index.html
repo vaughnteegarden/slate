@@ -870,11 +870,11 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>We recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="4-submit-payment-for-order">4. Submit payment for order</h4>
-<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">PARIS_LOCATION</span> <span class="o">=</span> <span class="kt">RezolveLocation</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">point</span><span class="p">,</span> <span class="nv">coordinates</span><span class="p">:</span> <span class="p">(</span><span class="nv">latitude</span><span class="p">:</span> <span class="mf">48.8736645</span><span class="p">,</span> <span class="nv">longitude</span><span class="p">:</span> <span class="mf">2.2910793</span><span class="p">))</span>
+<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">PARIS_LOCATION</span> <span class="o">=</span> <span class="kt">RezolveLocation</span><span class="p">(</span><span class="nv">longitude</span><span class="p">:</span> <span class="mf">2.2910793</span><span class="p">,</span> <span class="nv">latitude</span><span class="p">:</span> <span class="mf">48.8736645</span><span class="p">)</span>
 
 <span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">remoteCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="kt">CVV</span><span class="p">)</span>
 
-<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">PARIS_LOCATION</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">PARIS_LOCATION</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
 
 <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
@@ -889,9 +889,8 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <span class="n">RezolveLocation</span> <span class="n">rezolveLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveLocation</span><span class="o">();</span>
 <span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="mf">48.8736645</span><span class="o">);</span>
 <span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(</span><span class="mf">2.2910793</span><span class="o">);</span>
-<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLocationType</span><span class="o">(</span><span class="s">"POINT"</span><span class="o">);</span>
 
-<span class="n">checkout</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">checkout</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span> <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductOrderPlaced</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onProductOrderPlaced</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
@@ -900,7 +899,41 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 </code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This creates the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
 
-<p>Pass the <code class="prettyprint">merchantId</code> and <code class="prettyprint">addressId</code> strings, the <code class="prettyprint">checkoutProduct</code> object, a <code class="prettyprint">rezolveLocation</code> object, the <code class="prettyprint">paymentRequest</code> object, and an interface or callback to the <code class="prettyprint">buyProduct</code> method. The response will be the <code class="prettyprint">order id</code> as a string.</p>
+<p>Pass the <code class="prettyprint">merchantId</code>, <code class="prettyprint">phonebookId</code> and <code class="prettyprint">addressId</code> strings, the <code class="prettyprint">checkoutProduct</code> object, a <code class="prettyprint">rezolveLocation</code> object, the <code class="prettyprint">paymentRequest</code> object, and an interface or callback to the <code class="prettyprint">buyProduct</code> method. The success response will be the <code class="prettyprint">order id</code> as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
+
+<p>When the method returns successfully, it will automatically initiate the signOrderUpdate method.</p>
+
+<h4 id="5-wait-for-signorderupdate-to-return-a-final-order-status">5. Wait for signOrderUpdate to return a final order status.</h4>
+<pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+
+<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="o">.</span><span class="n">completed</span> <span class="p">{</span>
+
+
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onOrderUpdateReceived</span><span class="o">(</span><span class="n">Transaction</span><span class="o">.</span><span class="na">Status</span> <span class="n">status</span><span class="o">,</span> <span class="n">Transaction</span> <span class="n">transaction</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// get properties of status object</span>
+    <span class="n">String</span> <span class="n">statusLabel</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>   <span class="c1">// will return one of: completed, canceled, or processing</span>
+
+    <span class="c1">// get properties of transaction object</span>
+    <span class="n">String</span> <span class="n">transStatus</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getStatus</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">transOrderId</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">transLastUpdated</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getLastUpdated</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre>
+<p>SignOrderUpdate starts a socket listener with the order id, and waits for the server to return an order status. The server will return one of three status: 
+- completed
+- canceled
+- processing</p>
+
+<p>If either <code class="prettyprint">completed</code> or <code class="prettyprint">canceled</code> is returned, the listener stops and the socket closes. If <code class="prettyprint">processing</code> is returned, the listener will remain active until the order status is updated to either <code class="prettyprint">completed</code> or <code class="prettyprint">canceled</code>.</p>
 
           <h2 id="product-scan-cart-flow">Product Scan, Cart flow</h2>
 
@@ -1088,11 +1121,12 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <p>We recommend using a &ldquo;slide to buy&rdquo; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 
 <h4 id="4-submit-payment-for-order">4. Submit payment for order</h4>
-<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">PARIS_LOCATION</span> <span class="o">=</span> <span class="kt">RezolveLocation</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">point</span><span class="p">,</span> <span class="nv">coordinates</span><span class="p">:</span> <span class="p">(</span><span class="nv">latitude</span><span class="p">:</span> <span class="mf">48.8736645</span><span class="p">,</span> <span class="nv">longitude</span><span class="p">:</span> <span class="mf">2.2910793</span><span class="p">))</span>
+<pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">PARIS_LOCATION</span> <span class="o">=</span> <span class="kt">RezolveLocation</span><span class="p">(</span><span class="nv">longitude</span><span class="p">:</span> <span class="mf">2.2910793</span><span class="p">,</span> <span class="nv">latitude</span><span class="p">:</span> <span class="mf">48.8736645</span><span class="p">)</span>
+
 
 <span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">remoteCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="kt">CVV</span><span class="p">)</span>
 
-<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">PARIS_LOCATION</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">PARIS_LOCATION</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
 
 <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
@@ -1106,11 +1140,10 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 <span class="n">RezolveLocation</span> <span class="n">rezolveLocation2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveLocation</span><span class="o">();</span>
 <span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="mf">48.8736645</span><span class="o">);</span>
 <span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(</span><span class="mf">2.2910793</span><span class="o">);</span>
-<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLocationType</span><span class="o">(</span><span class="s">"POINT"</span><span class="o">);</span>
 
 <span class="c1">// buy the cart</span>
 <span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// either buy current cart, or use getCarts to choose a cart</span>
-<span class="n">checkout</span><span class="o">.</span><span class="na">buyCart</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span>  <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">checkout</span><span class="o">.</span><span class="na">buyCart</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span> <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span>  <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCartOrderPlaced</span><span class="o">(</span><span class="n">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCartOrderPlaced</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
@@ -1119,7 +1152,41 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
 </code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code class="prettyprint">createPaymentRequest</code> method. This creates the encrypted <code class="prettyprint">paymentRequest</code> object needed for checkout.</p>
 
-<p>Pass the <code class="prettyprint">merchantId</code> and <code class="prettyprint">addressId</code> strings, the <code class="prettyprint">checkoutProduct</code> object, a <code class="prettyprint">rezolveLocation</code> object, the <code class="prettyprint">paymentRequest</code> object, and an interface or callback to the <code class="prettyprint">buyProduct</code> method. The response will be the <code class="prettyprint">order id</code> as a string.</p>
+<p>Pass the <code class="prettyprint">merchantId</code>, <code class="prettyprint">phonebookId</code> and <code class="prettyprint">addressId</code> strings, the <code class="prettyprint">checkoutProduct</code> object, a <code class="prettyprint">rezolveLocation</code> object, the <code class="prettyprint">paymentRequest</code> object, and an interface or callback to the <code class="prettyprint">buyCart</code> method. The success response will be the <code class="prettyprint">order id</code> as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
+
+<p>When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback. </p>
+
+<h4 id="5-wait-for-signorderupdate-to-return-a-final-order-status">5. Wait for signOrderUpdate to return a final order status.</h4>
+<pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+
+<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="o">.</span><span class="n">completed</span> <span class="p">{</span>
+
+
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onOrderUpdateReceived</span><span class="o">(</span><span class="n">Transaction</span><span class="o">.</span><span class="na">Status</span> <span class="n">status</span><span class="o">,</span> <span class="n">Transaction</span> <span class="n">transaction</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// get properties of status object</span>
+    <span class="n">String</span> <span class="n">statusLabel</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>   <span class="c1">// will return one of: completed, canceled, or processing</span>
+
+    <span class="c1">// get properties of transaction object</span>
+    <span class="n">String</span> <span class="n">transStatus</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getStatus</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">transOrderId</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">transLastUpdated</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getLastUpdated</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre>
+<p>SignOrderUpdate starts a socket listener with the order id, and waits for the server to return an order status. The server will return one of three status: 
+- completed
+- canceled
+- processing</p>
+
+<p>If either <code class="prettyprint">completed</code> or <code class="prettyprint">canceled</code> is returned, the listener stops and the socket closes. If <code class="prettyprint">processing</code> is returned, the listener will remain active until the order status is updated to either <code class="prettyprint">completed</code> or <code class="prettyprint">canceled</code>.</p>
 
           <h2 id="category-scan-flow">Category Scan flow</h2>
 
@@ -1796,7 +1863,7 @@ It is recommended that <code>entity_id</code> and <code>partner_id</code> be per
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>Method signature: <code class="prettyprint">session.addressbookManager.delete( id, [callback or interface] )</code></p>
+<p>Method signature: <code class="prettyprint">session.addressbookManager.delete( address, [callback or interface] )</code></p>
 
 <p>You must pass in the <code class="prettyprint">address</code> object to delete.</p>
 
@@ -2220,7 +2287,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">CheckoutManager</span> <span class="n">myCheckoutManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
+        <span class="n">CheckoutManager</span> <span class="n">myCheckoutManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
 
 
         <span class="c1">// add product to cart</span>
@@ -2383,7 +2451,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
                       <span class="n">session</span><span class="o">.</span><span class="n">cartManager</span><span class="o">.</span><span class="nf">createCartWithProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">product</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">cartDetails</span> <span class="k">in</span>
 
-                          <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+                          <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
 
                           <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
@@ -2412,16 +2480,17 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     <span class="n">RezolveLocation</span> <span class="n">rezolveLocation</span><span class="o">;</span>
     <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span><span class="o">;</span>
     <span class="n">CheckoutInterface</span> <span class="n">checkoutInterface</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">phonebookId</span><span class="o">;</span>
 
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">CheckoutManager</span> <span class="n">myCheckoutManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
+        <span class="n">CheckoutManager</span> <span class="n">myCheckoutManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span>
         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
 
 
         <span class="c1">// buy cart; returns an order id</span>
-        <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">buyCart</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> 
+        <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">buyCart</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span>
         <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span> <span class="n">checkoutInterface</span><span class="o">);</span>
 
     <span class="o">}</span>
@@ -2438,6 +2507,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <span class="o">}</span>
 </code></pre>
 <p>BuyCart sends payment information to the backend to purchase the contents of a cart. </p>
+
+<p>If this method returns successfully, it will automatically call <code class="prettyprint">signOrderUpdate</code> and start listening on a socket for the server to return an order status. </p>
 
 <p>Method signature: <code class="prettyprint">session.CheckoutManager.buyCart( MerchantId, CartId, AddressId, 
         RezolveLocation, PaymentRequest, [callback or interface] )</code></p>
@@ -2464,11 +2535,6 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <td>longitude</td>
 <td>double</td>
 <td>-77.0369</td>
-</tr>
-<tr>
-<td>locationType</td>
-<td>string (must be POINT)</td>
-<td>POINT</td>
 </tr>
 </tbody></table>
 
@@ -2525,7 +2591,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
                         <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="nf">createCheckoutProductWithVariant</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="n">remoteProduct</span><span class="p">)</span>
                         <span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">remoteCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="kt">CVV</span><span class="p">)</span>
 
-                        <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+                        <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
 
 
@@ -2553,6 +2619,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span><span class="o">;</span>
     <span class="n">CheckoutInterface</span> <span class="n">checkoutInterface</span><span class="o">;</span>
     <span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">phonebookId</span><span class="o">;</span>
 
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
@@ -2561,7 +2628,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
         <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
 
         <span class="c1">// buy product directly, bypassing cart; returns an order id</span>
-        <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> 
+        <span class="n">myCheckoutManager</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span>
         <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span> <span class="n">checkoutInterface</span><span class="o">);</span>
     <span class="o">}</span>
 
@@ -2577,7 +2644,9 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <span class="o">}</span>
 
 </code></pre>
-<p>BuyProduct purchases a product directly, bypassing the cart. </p>
+<p>BuyProduct purchases a product directly, bypassing the cart.</p>
+
+<p>If this method returns successfully, it will automatically call <code class="prettyprint">signOrderUpdate</code> and start listening on a socket for the server to return an order status.</p>
 
 <p>Method signature: <code class="prettyprint">session.buyProduct( MerchantId, CheckoutProduct, AddressId, 
         RezolveLocation, PaymentRequest, [callback or interface] )</code></p>
@@ -3265,46 +3334,12 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onOrderUpdateReceived</span><span class="o">(</span><span class="n">Transaction</span><span class="o">.</span><span class="na">Status</span> <span class="n">status</span><span class="o">,</span> <span class="n">Transaction</span> <span class="n">transaction</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// get properties of status object</span>
-        <span class="n">String</span> <span class="n">statusLabel</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">statusLabel</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>   <span class="c1">// will return one of: completed, canceled, or processing</span>
 
         <span class="c1">// get properties of transaction object</span>
-        <span class="n">Order</span> <span class="n">transAmount</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getAmount</span><span class="o">();</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">TransactionItem</span><span class="o">&gt;</span> <span class="n">transItems</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">transLastUpdated</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getLastUpdated</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">transOrderId</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">transStatus</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getStatus</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">transTimestamp</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getTimestamp</span><span class="o">();</span>
-
-        <span class="c1">// get properties of Order object</span>
-        <span class="n">String</span> <span class="n">transOrderAmount</span> <span class="o">=</span> <span class="n">transAmount</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
-        <span class="kt">float</span> <span class="n">transOrderFinalPrice</span> <span class="o">=</span> <span class="n">transAmount</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">transOrderBreakdowns</span> <span class="o">=</span> <span class="n">transAmount</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
-
-        <span class="c1">// get properties of transItems array</span>
-        <span class="k">for</span><span class="o">(</span><span class="n">TransactionItem</span> <span class="n">transactionItem</span> <span class="o">:</span> <span class="n">transItems</span><span class="o">){</span>
-            <span class="n">Address</span> <span class="n">addressDetails</span> <span class="o">=</span> <span class="n">transactionItem</span><span class="o">.</span><span class="na">getAddressDetails</span><span class="o">();</span>
-            <span class="n">CustomerDetails</span> <span class="n">customerDetails</span> <span class="o">=</span> <span class="n">transactionItem</span><span class="o">.</span><span class="na">getCustomerDetails</span><span class="o">();</span>
-            <span class="n">RezolveLocation</span> <span class="n">location</span> <span class="o">=</span> <span class="n">transactionItem</span><span class="o">.</span><span class="na">getLocation</span><span class="o">();</span>
-            <span class="n">List</span><span class="o">&lt;</span><span class="n">CheckoutProduct</span><span class="o">&gt;</span> <span class="n">products</span> <span class="o">=</span> <span class="n">transactionItem</span><span class="o">.</span><span class="na">getProducts</span><span class="o">();</span>
-
-            <span class="c1">// get properties of addressDetails object</span>
-            <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">shortName</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getShortName</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">city</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getCity</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">country</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getCountry</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">line1</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getLine1</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">line2</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getLine2</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">state</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getState</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">zip</span> <span class="o">=</span> <span class="n">addressDetails</span><span class="o">.</span><span class="na">getZip</span><span class="o">();</span>
-
-            <span class="c1">// get properties of customerDetails object</span>
-            <span class="n">String</span> <span class="n">customerDetailsId</span> <span class="o">=</span> <span class="n">customerDetails</span><span class="o">.</span><span class="na">getCustomerId</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">customerDetailsEmail</span> <span class="o">=</span> <span class="n">customerDetails</span><span class="o">.</span><span class="na">getEmail</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">customerDetailsFirstName</span> <span class="o">=</span> <span class="n">customerDetails</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">customerDetailsLastName</span> <span class="o">=</span> <span class="n">customerDetails</span><span class="o">.</span><span class="na">getLastName</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">customerDetailsLoyaltyCardNo</span> <span class="o">=</span> <span class="n">customerDetails</span><span class="o">.</span><span class="na">getLoyaltyCardNumber</span><span class="o">();</span>
-            <span class="n">Boolean</span> <span class="n">customerDetailsHasLoyalty</span> <span class="o">=</span> <span class="n">customerDetails</span><span class="o">.</span><span class="na">isHasLoyaltyCard</span><span class="o">();</span>
-        <span class="o">}</span>
+        <span class="n">String</span> <span class="n">transOrderId</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">transLastUpdated</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="na">getLastUpdated</span><span class="o">();</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
@@ -3313,7 +3348,12 @@ Note, the values in the SignUpResponse should be persisted at least for the life
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>methodname does something.</p>
+<p>This method is called automatically if <code class="prettyprint">buyCart</code> or <code class="prettyprint">buyProduct</code> return successfully. SignOrderUpdates starts a listener on a socket, waiting for the server to return one of the following order status:
+* completed
+* canceled
+* processing</p>
+
+<p>If the orders status is &ldquo;completed&rdquo; or &ldquo;canceled&rdquo;, the listener will close. If the order status returns as &ldquo;processing&rdquo;, the listener will remain open until an update of either &ldquo;completed&rdquo; or &ldquo;canceled&rdquo; is received.</p>
 
 <p>Method signature: <code class="prettyprint">session.CheckoutManager.signOrderUpdates( OrderId, MerchantId, [callback or interface] )</code></p>
 
@@ -3331,16 +3371,6 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tr>
 </thead><tbody>
 <tr>
-<td>transactionAmount</td>
-<td>Order object</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>transactionItems</td>
-<td>array of TransactionItem objects</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
 <td>transactionLastUpdated</td>
 <td>date string in YYYY-MM-DD format</td>
 <td>2017-10-31</td>
@@ -3354,11 +3384,6 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <td>transactionStatus</td>
 <td>string</td>
 <td>Complete</td>
-</tr>
-<tr>
-<td>transactionTimestamp</td>
-<td>date string in YYYY-MM-DD format</td>
-<td>2017-10-28</td>
 </tr>
 </tbody></table>
 
@@ -3506,22 +3531,6 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in a <code class="prettyprint">Cartid</code> as a string, a <code class="prettyprint">MerchantId</code> as a string, a CheckoutProduct object (representing the object you want to change), a second CheckoutProduct object (with the updated values), and a checkoutInterface (or callback).</p>
 
 <p>The method returns a <code class="prettyprint">CartDetails</code> object.</p>
-
-<h4 id="objectname-object">objectname object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
 
           <h2 id="module-favoritemanager">Module: FavoriteManager</h2>
 
@@ -3823,6 +3832,185 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Method signature: <code class="prettyprint">session.favouriteManager.getAll( [callback or interface] )</code></p>
 
 <p>The method returns an array of <code class="prettyprint">favourite</code> objects.</p>
+
+          <h2 id="module-phonebookmanager">Module: PhonebookManager</h2>
+
+<p>The PhonebookManager is an aggregate of Session.</p>
+
+<p>This module provides CRUD functions for consumer phone numbers. The consumer may add one or more phone numbers to their account.</p>
+
+<h3 id="method-phonebookmanager-create">Method: phonebookManager.create</h3>
+<pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">phoneBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PhonebookInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">PhonebookManager</span> <span class="n">myPhonebookManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPhonebookManager</span><span class="o">();</span>
+
+        <span class="n">Phone</span> <span class="n">phone</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Phone</span><span class="o">();</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Home phone"</span><span class="o">);</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setPhone</span><span class="o">(</span><span class="s">"555-555-1212"</span><span class="o">);</span>
+
+        <span class="n">myPhonebookManager</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">phone</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPhonebookCreateSuccess</span><span class="o">(</span><span class="n">Phone</span> <span class="n">phone</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">phoneId</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">phoneName</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">phoneNumber</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getPhone</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.phonebookManager.create( phone, [callback or interface] )</code></p>
+
+<p>You must pass in a valid <code class="prettyprint">phone</code> object with the <code class="prettyprint">id</code> field blank.</p>
+
+<p>The method returns the created <code class="prettyprint">phone</code> object with <code class="prettyprint">id</code> upon success.</p>
+
+<h4 id="phone-object">phone Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>phoneId</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
+<tr>
+<td>phoneName</td>
+<td>string</td>
+<td>Home phone</td>
+</tr>
+<tr>
+<td>phonePhone</td>
+<td>string</td>
+<td>+1(555)555-1212</td>
+</tr>
+</tbody></table>
+
+<h3 id="method-phonebookmanager-update">Method: phonebookManager.update</h3>
+<pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">phoneBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PhonebookInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">PhonebookManager</span> <span class="n">myPhonebookManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPhonebookManager</span><span class="o">();</span>
+
+        <span class="n">String</span> <span class="n">newNumber</span> <span class="o">=</span> <span class="s">"555-555-1313"</span><span class="o">;</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="s">"123"</span><span class="o">);</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"HomePhone"</span><span class="o">);</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setPhone</span><span class="o">(</span><span class="n">newNumber</span><span class="o">);</span>
+        <span class="n">myPhonebookManager</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">phone</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPhonebookUpdateSuccess</span><span class="o">(</span><span class="n">Phone</span> <span class="n">phone</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">phoneId</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">phoneName</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">phoneNumber</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getPhone</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.phonebookManager.update( phone, [callback or interface] )</code></p>
+
+<p>You must pass in a valid <code class="prettyprint">phone</code> object with <code class="prettyprint">id</code> populated.</p>
+
+<p>The method returns the updated <code class="prettyprint">phone</code> object upon success.</p>
+
+<h3 id="method-phonebookmanager-delete">Method: phonebookManager.delete</h3>
+<pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">phoneBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PhonebookInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">PhonebookManager</span> <span class="n">myPhonebookManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPhonebookManager</span><span class="o">();</span>
+
+        <span class="n">Phone</span> <span class="n">phone</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Phone</span><span class="o">();</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Home phone"</span><span class="o">);</span>
+        <span class="n">phone</span><span class="o">.</span><span class="na">setPhone</span><span class="o">(</span><span class="s">"555-555-1212"</span><span class="o">);</span>
+
+        <span class="n">myPhonebookManager</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">phone</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPhonebookDeleteSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// display post-deletion confirmation</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.phonebookManager.delete( phone, [callback or interface] )</code></p>
+
+<p>You must pass in the <code class="prettyprint">phone</code> object to delete.</p>
+
+<h3 id="method-phonebookmanager-get">Method: phonebookManager.get</h3>
+<pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">phoneBook</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PhonebookInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+        <span class="n">PhonebookManager</span> <span class="n">myPhonebookManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">PRODUCTION</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPhonebookManager</span><span class="o">();</span>
+
+        <span class="n">myPhonebookManager</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onPhonebookGetSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Phone</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Phone</span> <span class="nl">phone:</span><span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">phoneId</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">phoneName</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">phoneNumber</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">getPhone</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+<p>Method signature: <code class="prettyprint">session.phonebookManager.get( [callback or interface] )</code></p>
+
+<p>The method take no parameters. </p>
+
+<p>The method returns an array of <code class="prettyprint">Phone</code> objects.</p>
 
           <h2 id="module-productmanager">Module: ProductManager</h2>
 
@@ -4403,7 +4591,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
         <span class="n">String</span> <span class="n">merchant_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getMerchantId</span><span class="o">();</span>
         <span class="kt">float</span> <span class="n">price</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
         <span class="n">List</span><span class="o">&lt;</span><span class="n">Option</span><span class="o">&gt;</span> <span class="n">options</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptions</span><span class="o">();</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">Variant</span><span class="o">&gt;</span> <span class="n">optionsAvail</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptionAvailable</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Variant</span><span class="o">&gt;</span> <span class="n">optionsAvail</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptionsAvailable</span><span class="o">();</span>
         <span class="n">List</span><span class="o">&lt;</span><span class="n">CustomOption</span><span class="o">&gt;</span> <span class="n">customOptions</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getCustomOptions</span><span class="o">();</span>
 
 
@@ -5285,32 +5473,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>These functions are NOT implemented server-side, and should not be used at this time.</p>
 
 <h3 id="method-getorders">Method: getOrders</h3>
-<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
-<span class="kd">import</span> <span class="kt">RezolveSDK</span>
-
-<span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
-
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
-
-        <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">SDK_ENV</span><span class="p">)</span>
-
-        <span class="k">let</span> <span class="nv">signUpRequest</span> <span class="o">=</span> <span class="nf">createSingUpRequest</span><span class="p">()</span>
-
-        <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
-
-            <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> <span class="nv">device</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
-
-                <span class="n">session</span><span class="o">.</span><span class="n">userActivityManager</span><span class="o">.</span><span class="nf">getOrders</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">orders</span> <span class="k">in</span>
-
-
-                <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="c1">// handle error</span>
-                <span class="p">})</span>
-            <span class="p">})</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get orders using UserActivityManager</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">userActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">UserActivityInterface</span> <span class="o">{</span>
 
@@ -5319,10 +5482,15 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">UserActivityManager</span> <span class="n">myActivityManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getUserActivityManager</span><span class="o">();</span>
+        <span class="n">UserActivityManager</span> <span class="n">myActivityManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Env</span><span class="o">.</span><span class="na">SANDBOX</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getUserActivityManager</span><span class="o">();</span>
+
+        <span class="c1">// these strings represent dates in yyyy-MM-dd format. Both are nullable.</span>
+        <span class="n">String</span> <span class="n">from</span> <span class="o">=</span> <span class="s">"2016-09-30"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">to</span> <span class="o">=</span> <span class="s">"2016-12-30"</span><span class="o">;</span>
 
         <span class="c1">// get transactions from User Activity Manager</span>
-        <span class="n">myActivityManager</span><span class="o">.</span><span class="na">getOrders</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">myActivityManager</span><span class="o">.</span><span class="na">getOrders</span><span class="o">(</span> <span class="k">this</span><span class="o">,</span> <span class="n">from</span><span class="o">,</span> <span class="n">to</span><span class="o">);</span>
 
         <span class="c1">// The following are reserved for future functionality:</span>
         <span class="c1">// myActivityManager.getActsHistory();</span>
@@ -5347,15 +5515,28 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
             <span class="n">String</span> <span class="n">orderPayWith</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getPayWith</span><span class="o">();</span>
             <span class="n">String</span> <span class="n">orderStatus</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getStatus</span><span class="o">();</span>
             <span class="n">String</span> <span class="n">orderTimestamp</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getTimestamp</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">orderType</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
-            <span class="n">Order</span> <span class="n">orderFinalPrice</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
             <span class="n">RezolveLocation</span> <span class="n">orderLocation</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getGeoloc</span><span class="o">();</span>
-            <span class="n">List</span><span class="o">&lt;</span><span class="n">HistoryItem</span><span class="o">&gt;</span> <span class="n">orderItems</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">OrderProduct</span><span class="o">&gt;</span> <span class="n">orderItems</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getItems</span><span class="o">();</span>
+
+            <span class="n">Order</span> <span class="n">price</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">partnerId</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getPartnerId</span><span class="o">();</span>
+            <span class="n">Address</span> <span class="n">billingAddress</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getBillingAddressDetails</span><span class="o">();</span>
+            <span class="n">Address</span> <span class="n">shippingAddress</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getShippingAddressDetails</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getEmail</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">firstName</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">lastName</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getLastName</span><span class="o">();</span>
+            <span class="n">Phone</span> <span class="n">phone</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getPhone</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">merchantEmail</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getMerchantEmail</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">merchantName</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getMerchantName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">merchantPhone</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getMerchantPhone</span><span class="o">();</span>
+
+
+
 
             <span class="c1">// get properties of finalPrice object</span>
-            <span class="n">String</span> <span class="n">orderFinalPriceOrderId</span> <span class="o">=</span> <span class="n">orderFinalPrice</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
-            <span class="kt">float</span> <span class="n">orderFinalPriceFinalPrice</span> <span class="o">=</span> <span class="n">orderFinalPrice</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
-            <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">orderFinalPriceBreakdowns</span> <span class="o">=</span> <span class="n">orderFinalPrice</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">orderFinalPriceOrderId</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+            <span class="kt">float</span> <span class="n">orderFinalPriceFinalPrice</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">orderFinalPriceBreakdowns</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
 
             <span class="c1">// get properties of PriceBreakdown array</span>
             <span class="k">for</span> <span class="o">(</span><span class="n">PriceBreakdown</span> <span class="n">priceBreakdown</span> <span class="o">:</span> <span class="n">orderFinalPriceBreakdowns</span><span class="o">)</span> <span class="o">{</span>
@@ -5364,89 +5545,19 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
             <span class="o">}</span>
 
             <span class="c1">// get properties of orderLocation  object</span>
-            <span class="n">String</span> <span class="n">orderLocationType</span> <span class="o">=</span> <span class="n">orderLocation</span><span class="o">.</span><span class="na">getLocationType</span><span class="o">();</span>
             <span class="kt">double</span> <span class="n">orderLatitude</span> <span class="o">=</span> <span class="n">orderLocation</span><span class="o">.</span><span class="na">getLatitude</span><span class="o">();</span>
             <span class="kt">double</span> <span class="n">orderLongitude</span> <span class="o">=</span> <span class="n">orderLocation</span><span class="o">.</span><span class="na">getLongitude</span><span class="o">();</span>
 
             <span class="c1">// get properties of orderItems array</span>
-            <span class="k">for</span> <span class="o">(</span><span class="n">HistoryItem</span> <span class="n">historyItem</span> <span class="o">:</span> <span class="n">orderItems</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">Address</span> <span class="n">historyItemAddressDetails</span> <span class="o">=</span> <span class="n">historyItem</span><span class="o">.</span><span class="na">getAddressDetails</span><span class="o">();</span>
-                <span class="n">CustomerDetails</span> <span class="n">historyItemCustomerDetails</span> <span class="o">=</span> <span class="n">historyItem</span><span class="o">.</span><span class="na">getCustomerDetails</span><span class="o">();</span>
-                <span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">historyItemProducts</span> <span class="o">=</span> <span class="n">historyItem</span><span class="o">.</span><span class="na">getProducts</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">OrderProduct</span> <span class="n">orderProduct</span> <span class="o">:</span> <span class="n">orderItems</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">ConfigurableOptionValue</span><span class="o">&gt;</span> <span class="n">configurableOptionValues</span> <span class="o">=</span> <span class="n">orderProduct</span><span class="o">.</span><span class="na">getConfigurableOptionValues</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">quantity</span> <span class="o">=</span> <span class="n">orderProduct</span><span class="o">.</span><span class="na">getQuantity</span><span class="o">();</span>
 
-                <span class="c1">// get properties of historyItemAddressDetails object</span>
-                <span class="n">String</span> <span class="n">historyAddressId</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressShortName</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getShortName</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressCity</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getCity</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressCountry</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getCountry</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressLine1</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getLine1</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressLine2</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getLine2</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressState</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getState</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyAddressZip</span> <span class="o">=</span> <span class="n">historyItemAddressDetails</span><span class="o">.</span><span class="na">getZip</span><span class="o">();</span>
-
-                <span class="c1">// get properties of historyItemCustomerDetails object</span>
-                <span class="n">String</span> <span class="n">historyCustomerId</span> <span class="o">=</span> <span class="n">historyItemCustomerDetails</span><span class="o">.</span><span class="na">getCustomerId</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyCustomerEmail</span> <span class="o">=</span> <span class="n">historyItemCustomerDetails</span><span class="o">.</span><span class="na">getEmail</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyCustomerFirstName</span> <span class="o">=</span> <span class="n">historyItemCustomerDetails</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyCustomerLastName</span> <span class="o">=</span> <span class="n">historyItemCustomerDetails</span><span class="o">.</span><span class="na">getLastName</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">historyCustomerLoyaltyCardNo</span> <span class="o">=</span> <span class="n">historyItemCustomerDetails</span><span class="o">.</span><span class="na">getLoyaltyCardNumber</span><span class="o">();</span>
-                <span class="n">Boolean</span> <span class="n">historyCustomerHasLoyalty</span> <span class="o">=</span> <span class="n">historyItemCustomerDetails</span><span class="o">.</span><span class="na">isHasLoyaltyCard</span><span class="o">();</span>
-
-                <span class="c1">// get properties of historyItemProducts array</span>
-                <span class="k">for</span> <span class="o">(</span><span class="n">Product</span> <span class="n">product</span> <span class="o">:</span> <span class="n">historyItemProducts</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">List</span><span class="o">&lt;</span><span class="n">CustomOption</span><span class="o">&gt;</span> <span class="n">productCustomOptions</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getCustomOptions</span><span class="o">();</span>
-                    <span class="n">String</span> <span class="n">productDescription</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getDescription</span><span class="o">();</span>
-                    <span class="n">String</span> <span class="n">productId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-                    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">productImages</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getImages</span><span class="o">();</span>
-                    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">[]&gt;</span> <span class="n">productThumbs</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getImageThumbs</span><span class="o">();</span>
-                    <span class="n">String</span> <span class="n">productMerchantId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getMerchantId</span><span class="o">();</span>
-                    <span class="n">List</span><span class="o">&lt;</span><span class="n">Variant</span><span class="o">&gt;</span> <span class="n">productOptionsAvailable</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptionsAvailable</span><span class="o">();</span>
-                    <span class="n">List</span><span class="o">&lt;</span><span class="n">Option</span><span class="o">&gt;</span> <span class="n">productOptions</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptions</span><span class="o">();</span>
-                    <span class="n">List</span><span class="o">&lt;</span><span class="n">Variant</span><span class="o">&gt;</span> <span class="n">productOptionAvailable</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getOptionAvailable</span><span class="o">();</span>
-                    <span class="kt">float</span> <span class="n">productPrice</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
-                    <span class="n">String</span> <span class="n">productSubtitle</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getSubtitle</span><span class="o">();</span>
-                    <span class="n">String</span> <span class="n">productTitle</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
-
-                    <span class="c1">// get properties of productCustomOptions array</span>
-                    <span class="k">for</span> <span class="o">(</span><span class="n">CustomOption</span> <span class="n">customOption</span> <span class="o">:</span> <span class="n">productCustomOptions</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="kt">int</span> <span class="n">customOptionId</span> <span class="o">=</span> <span class="n">customOption</span><span class="o">.</span><span class="na">getOptionId</span><span class="o">();</span>
-                        <span class="kt">int</span> <span class="n">customOptionsSortOrder</span> <span class="o">=</span> <span class="n">customOption</span><span class="o">.</span><span class="na">getSortOrder</span><span class="o">();</span>
-                        <span class="n">String</span> <span class="n">customOptionsTitle</span> <span class="o">=</span> <span class="n">customOption</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
-                        <span class="n">String</span> <span class="n">customOptionsType</span> <span class="o">=</span> <span class="n">customOption</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
-                        <span class="n">List</span><span class="o">&lt;</span><span class="n">CustomOptionValue</span><span class="o">&gt;</span> <span class="n">customOptionValues</span> <span class="o">=</span> <span class="n">customOption</span><span class="o">.</span><span class="na">getValues</span><span class="o">();</span>
-
-                        <span class="c1">// get properties of customOptionValues array</span>
-                        <span class="k">for</span> <span class="o">(</span><span class="n">CustomOptionValue</span> <span class="n">customOptionValue</span> <span class="o">:</span> <span class="n">customOptionValues</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="kt">int</span> <span class="n">customOptionValueSortOrder</span> <span class="o">=</span> <span class="n">customOptionValue</span><span class="o">.</span><span class="na">getSortOrder</span><span class="o">();</span>
-                            <span class="n">String</span> <span class="n">customOptionValueTitle</span> <span class="o">=</span> <span class="n">customOptionValue</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
-                            <span class="n">String</span> <span class="n">customOptionValueValueId</span> <span class="o">=</span> <span class="n">customOptionValue</span><span class="o">.</span><span class="na">getValueId</span><span class="o">();</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
-
-                    <span class="c1">// get properties of productOptionsAvailable array</span>
-                    <span class="k">for</span><span class="o">(</span><span class="n">Variant</span> <span class="n">variant</span> <span class="o">:</span> <span class="n">productOptionsAvailable</span><span class="o">){</span>
-                        <span class="n">List</span><span class="o">&lt;</span><span class="n">Combination</span><span class="o">&gt;</span> <span class="n">variantCombinations</span> <span class="o">=</span> <span class="n">variant</span><span class="o">.</span><span class="na">getCombinations</span><span class="o">();</span>
-
-                        <span class="c1">// get properties of variantCombinations array</span>
-                        <span class="k">for</span><span class="o">(</span><span class="n">Combination</span> <span class="n">combination</span> <span class="o">:</span> <span class="n">variantCombinations</span><span class="o">){</span>
-                            <span class="n">String</span> <span class="n">combinationCode</span> <span class="o">=</span> <span class="n">combination</span><span class="o">.</span><span class="na">getCode</span><span class="o">();</span>
-                            <span class="n">String</span> <span class="n">combinationValue</span> <span class="o">=</span> <span class="n">combination</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
-
-                    <span class="c1">// get properties of productOptions array</span>
-                    <span class="k">for</span><span class="o">(</span><span class="n">Option</span> <span class="n">option</span> <span class="o">:</span> <span class="n">productOptions</span><span class="o">){</span>
-                        <span class="n">String</span> <span class="n">optionCode</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="na">getCode</span><span class="o">();</span>
-                        <span class="n">String</span> <span class="n">optionLabel</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>
-                        <span class="n">List</span><span class="o">&lt;</span><span class="n">OptionValue</span><span class="o">&gt;</span> <span class="n">optionValues</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="na">getValues</span><span class="o">();</span>
-                        <span class="n">String</span> <span class="n">optionExtraInfo</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="na">getExtraInfo</span><span class="o">();</span>
-
-                        <span class="c1">// get properties of optionValues array</span>
-                        <span class="k">for</span><span class="o">(</span><span class="n">OptionValue</span> <span class="nl">optionValue:</span><span class="n">optionValues</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="n">String</span> <span class="n">optionValueLabel</span> <span class="o">=</span> <span class="n">optionValue</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>
-                            <span class="n">String</span> <span class="n">optionValueValue</span> <span class="o">=</span> <span class="n">optionValue</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
+                <span class="k">for</span> <span class="o">(</span><span class="n">ConfigurableOptionValue</span> <span class="n">configurableOptionValue</span> <span class="o">:</span> <span class="n">configurableOptionValues</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">String</span> <span class="n">configurableOptionValueCode</span> <span class="o">=</span> <span class="n">configurableOptionValue</span><span class="o">.</span><span class="na">getCode</span><span class="o">();</span>
+                    <span class="n">String</span> <span class="n">configurableOptionValueLabel</span> <span class="o">=</span> <span class="n">configurableOptionValue</span><span class="o">.</span><span class="na">getLabel</span><span class="o">();</span>
+                    <span class="n">String</span> <span class="n">configurableOptionValueValue</span> <span class="o">=</span> <span class="n">configurableOptionValue</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                    <span class="kt">int</span> <span class="n">configurableOptionValueValueId</span> <span class="o">=</span> <span class="n">configurableOptionValue</span><span class="o">.</span><span class="na">getValueId</span><span class="o">();</span>
                 <span class="o">}</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -5563,24 +5674,146 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <td>1493130773</td>
 </tr>
 <tr>
-<td>orderType</td>
-<td>string, must be &ldquo;order&rdquo;</td>
-<td>order</td>
-</tr>
-<tr>
-<td>orderFinalPrice</td>
-<td>Order object</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
 <td>orderLocation</td>
 <td>RezolveLocation object</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td>orderItems</td>
-<td>array of HistoryItem objects</td>
+<td>partnerId</td>
+<td>string</td>
+<td>123</td>
+</tr>
+<tr>
+<td>billingAddress</td>
+<td>Address object</td>
 <td>&nbsp;</td>
+</tr>
+<tr>
+<td>shippingAddress</td>
+<td>Address object</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>email</td>
+<td>string</td>
+<td>user@example.com</td>
+</tr>
+<tr>
+<td>firstName</td>
+<td>string</td>
+<td>John</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>string</td>
+<td>Everyman</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>Phone object</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>merchantEmail</td>
+<td>string</td>
+<td>merchant@email.com</td>
+</tr>
+<tr>
+<td>merchantName</td>
+<td>string</td>
+<td>Adam&rsquo;s Apples</td>
+</tr>
+<tr>
+<td>merchantPhone</td>
+<td>string</td>
+<td>555-555-1212</td>
+</tr>
+<tr>
+<td>price</td>
+<td>Order object</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>orderItems</td>
+<td>array of OrderProduct objects</td>
+<td>&nbsp;</td>
+</tr>
+</tbody></table>
+
+<h4 id="phone-object">Phone Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>phoneId</td>
+<td>string</td>
+<td>123abc</td>
+</tr>
+<tr>
+<td>phoneName</td>
+<td>string</td>
+<td>Home phone</td>
+</tr>
+<tr>
+<td>phoneNumber</td>
+<td>string</td>
+<td>555-555-1212</td>
+</tr>
+</tbody></table>
+
+<h4 id="address-object">Address Object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th>format</th>
+<th>example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>auto-assigned string</td>
+<td>123abc</td>
+</tr>
+<tr>
+<td>short_name</td>
+<td>string</td>
+<td>My house</td>
+</tr>
+<tr>
+<td>line1</td>
+<td>string</td>
+<td>Theodore Lowe</td>
+</tr>
+<tr>
+<td>line2</td>
+<td>string</td>
+<td>Ap #867-859 Sit Rd.</td>
+</tr>
+<tr>
+<td>city</td>
+<td>string</td>
+<td>New York</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>NY</td>
+</tr>
+<tr>
+<td>zip</td>
+<td>string</td>
+<td>39531</td>
+</tr>
+<tr>
+<td>country</td>
+<td>string</td>
+<td>USA</td>
 </tr>
 </tbody></table>
 
@@ -5641,11 +5874,6 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </tr>
 </thead><tbody>
 <tr>
-<td>orderLocationType</td>
-<td>string, must be &ldquo;point&rdquo;</td>
-<td>point</td>
-</tr>
-<tr>
 <td>orderLatitude</td>
 <td>double</td>
 <td>66.123</td>
@@ -5657,7 +5885,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </tr>
 </tbody></table>
 
-<h4 id="historyitem-object">historyItem object</h4>
+<h4 id="orderproduct-object">OrderProduct object</h4>
 
 <table><thead>
 <tr>
@@ -5667,23 +5895,18 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </tr>
 </thead><tbody>
 <tr>
-<td>historyItemAddressDetails</td>
-<td>Address object</td>
+<td>configurableOptionValues</td>
+<td>array of ConfigurableOptionValue objects</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td>historyItemCustomerDetails</td>
-<td>CustomerDetails object</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>historyItemProducts</td>
-<td>array of Product objects</td>
-<td>&nbsp;</td>
+<td>quantity</td>
+<td>integer</td>
+<td>1</td>
 </tr>
 </tbody></table>
 
-<h4 id="address-object">address Object</h4>
+<h4 id="configurableoptionvalue-object">ConfigurableOptionValue object</h4>
 
 <table><thead>
 <tr>
@@ -5693,308 +5916,24 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </tr>
 </thead><tbody>
 <tr>
-<td>id</td>
-<td>auto-assigned string</td>
-<td>123abc</td>
-</tr>
-<tr>
-<td>short_name</td>
+<td>configurableOptionValueCode</td>
 <td>string</td>
-<td>My house</td>
+<td>pl123</td>
 </tr>
 <tr>
-<td>line1</td>
+<td>configurableOptionValueLabel</td>
 <td>string</td>
-<td>Theodore Lowe</td>
+<td>Pattern</td>
 </tr>
 <tr>
-<td>line2</td>
+<td>configurableOptionValueValue</td>
 <td>string</td>
-<td>Ap #867-859 Sit Rd.</td>
+<td>plaid</td>
 </tr>
 <tr>
-<td>city</td>
-<td>string</td>
-<td>New York</td>
-</tr>
-<tr>
-<td>state</td>
-<td>string</td>
-<td>NY</td>
-</tr>
-<tr>
-<td>zip</td>
-<td>string</td>
-<td>39531</td>
-</tr>
-<tr>
-<td>country</td>
-<td>string</td>
-<td>USA</td>
-</tr>
-</tbody></table>
-
-<h4 id="customerdetails-object">customerDetails Object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>transCustomerId</td>
-<td>string</td>
-<td>12345</td>
-</tr>
-<tr>
-<td>transCustomerEmail</td>
-<td>string</td>
-<td>example@email.com</td>
-</tr>
-<tr>
-<td>transCustomerFirstName</td>
-<td>string</td>
-<td>John</td>
-</tr>
-<tr>
-<td>transCustomerLastName</td>
-<td>string</td>
-<td>Doe</td>
-</tr>
-<tr>
-<td>transCustomerLoyaltyCardNo</td>
-<td>string</td>
-<td>ABC123DEF456</td>
-</tr>
-<tr>
-<td>transCustomerHasLoyalty</td>
-<td>boolean</td>
-<td>true</td>
-</tr>
-</tbody></table>
-
-<h4 id="product-object">product Object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>productCustomOptions</td>
-<td>array of customOption objects</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>description</td>
-<td>string</td>
-<td>Make every beat count with Fitbit Charge 2 - a heart rate and fitness wristband that tracks activity, exercise and sleep, includes advanced fitness features and displays real-time stats on a large display.</td>
-</tr>
-<tr>
-<td>productId</td>
-<td>auto-populated string</td>
+<td>configurableOptionValueValueId</td>
+<td>integer</td>
 <td>123</td>
-</tr>
-<tr>
-<td>productImages</td>
-<td>array of image urls</td>
-<td>http://domain.com/path/image.jpg</td>
-</tr>
-<tr>
-<td>productThumbs</td>
-<td>array of thumbnail image url arrays.</td>
-<td>[ http://domain.com/path/thumb400.jpg, http://domain.com/path/thumb800.jpg, http://domain.com/path/thumb1600.jpg ]</td>
-</tr>
-<tr>
-<td>productMerchantId</td>
-<td>string</td>
-<td>brookstone</td>
-</tr>
-<tr>
-<td>productOptionsAvailable</td>
-<td>array of Variant objects</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>productOptions</td>
-<td>array of Option objects</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>productPrice</td>
-<td>decimal</td>
-<td>129.00</td>
-</tr>
-<tr>
-<td>productSubtitle</td>
-<td>string</td>
-<td>Heart Rate and Fitness Wristband</td>
-</tr>
-<tr>
-<td>productTitle</td>
-<td>string</td>
-<td>Fitbit Charge 2</td>
-</tr>
-</tbody></table>
-
-<h4 id="customoption-object">customOption object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>customOptionId</td>
-<td>int</td>
-<td>123</td>
-</tr>
-<tr>
-<td>customOptionsSortOrder</td>
-<td>int</td>
-<td>123</td>
-</tr>
-<tr>
-<td>customOptionsTitle</td>
-<td>string</td>
-<td>Material</td>
-</tr>
-<tr>
-<td>customOptionsType</td>
-<td>string, must be one of <code class="prettyprint">full_name</code>, <code class="prettyprint">address</code>, <code class="prettyprint">email</code>, <code class="prettyprint">mobile</code>, <code class="prettyprint">location</code>, <code class="prettyprint">dob</code>, <code class="prettyprint">phone_unique_id</code>, <code class="prettyprint">gender</code>, <code class="prettyprint">national_id</code>, <code class="prettyprint">passport_number</code>, <code class="prettyprint">field</code>, <code class="prettyprint">area</code>, <code class="prettyprint">drop_down</code>, <code class="prettyprint">radio</code>, <code class="prettyprint">checkbox</code>, <code class="prettyprint">multiple</code>, <code class="prettyprint">date</code>, <code class="prettyprint">date_time</code>, or <code class="prettyprint">time</code></td>
-<td>field</td>
-</tr>
-<tr>
-<td>customOptionValues</td>
-<td>array of CustomOptionValue objects</td>
-<td>&nbsp;</td>
-</tr>
-</tbody></table>
-
-<h4 id="customoptionvalue-object">customOptionValue object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>customOptionValueSortOrder</td>
-<td>int</td>
-<td>123</td>
-</tr>
-<tr>
-<td>customOptionValueTitle</td>
-<td>string</td>
-<td>cotton</td>
-</tr>
-<tr>
-<td>customOptionValueValueId</td>
-<td>string</td>
-<td>100% Cotton</td>
-</tr>
-</tbody></table>
-
-<h4 id="variant-object">variant Object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>array of Combination objects</td>
-<td>array</td>
-<td>&nbsp;</td>
-</tr>
-</tbody></table>
-
-<h4 id="combination-object">combination Object</h4>
-
-<p>A combination object represents one unique combination of options for this product. For example, if a shirt has 4 sizes, and 3 colors, it should have 12 combination objects (assuming all combinations are available). The number of key/value pairs in a combination object will vary, and is dependent upon the number of options in the product. A product with size, color, and pattern, would have three key/value pairs in each combination.</p>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>code</td>
-<td>string</td>
-<td>color</td>
-</tr>
-<tr>
-<td>value</td>
-<td>string</td>
-<td>Red</td>
-</tr>
-</tbody></table>
-
-<h4 id="option-object">option Object</h4>
-
-<p>An option represents a choice. For example, Color or Size on a clothing item.</p>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>optionLabel</td>
-<td>string</td>
-<td>Color</td>
-</tr>
-<tr>
-<td>optionCode</td>
-<td>string</td>
-<td>color</td>
-</tr>
-<tr>
-<td>optionExtraInfo</td>
-<td>string displayed to the user, provides additional info about the option</td>
-<td>Color may differ from shown.</td>
-</tr>
-<tr>
-<td>optionValues</td>
-<td>array of optionValue objects</td>
-<td>&nbsp;</td>
-</tr>
-</tbody></table>
-
-<h4 id="optionvalue-object">optionValue Object</h4>
-
-<p>OptionValue objects are key/value pairs, each describing one choice within an option. For example, if the option is Color, you might have three optionValue objects, one for the red option, one for blue, and one for green.</p>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th>format</th>
-<th>example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>optionValueLabel</td>
-<td>string</td>
-<td>Red</td>
-</tr>
-<tr>
-<td>optionValueValue</td>
-<td>string</td>
-<td>5</td>
 </tr>
 </tbody></table>
 
