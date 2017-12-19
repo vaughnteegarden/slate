@@ -21,6 +21,7 @@ includes:
 - authenticationmanager
 - checkoutmanager
 - favoritemanager
+- phonebookmanager
 - productmanager
 - profilemanager
 - scanmanager

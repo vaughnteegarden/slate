@@ -225,7 +225,7 @@ public class addressBook extends AppCompatActivity implements AddressbookInterfa
 }
 ```
 
-Method signature: `session.addressbookManager.delete( id, [callback or interface] )`
+Method signature: `session.addressbookManager.delete( address, [callback or interface] )`
 
 You must pass in the `address` object to delete.
 
