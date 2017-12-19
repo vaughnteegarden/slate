@@ -28,6 +28,7 @@ includes:
 - useractivitymanager
 - walletmanager
 - apicheck
+- changelog
 
 search: true
 ---

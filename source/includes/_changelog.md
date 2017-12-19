@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this log.
 
-## December 13, 2017 
+## Android v1.5.37, IOS v1.5.40 - Dec 19 2017
 
 ### Added
 
-- none
+- PhonebookManager Class
 
 ### Changed
 - Product Scan, Cart Flow example - updated code samples to reflect chnges in CheckoutManager, rezolveLocation object
