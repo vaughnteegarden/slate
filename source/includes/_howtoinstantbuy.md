@@ -4,7 +4,7 @@
 
 
 
-<img src="images/ShoppableAdFlowInstantBuy.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdFlowInstantBuy.png">View full size</a> ]
+<img src="images/ShoppableAdFlowInstantBuy.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdFlowInstantBuy.png" target="_blank">View full size</a> ]
 
 
 
