@@ -110,11 +110,11 @@ You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please vis
 
 The SDK for **IOS** can be downloaded here:
 
-* <a href="https://www.rezolve.com/sdk-releases/rezolve-ios-sdk-.1.5.0.zip">rezolve-ios-sdk-.1.5.0.zip</a> - contains libraries for both ARM and x86. 
+* <a href="http://rezolve.com/sdk-releases/rezolve-ios-sdk-1.5.40-release.zip">rezolve-ios-sdk-1.5.40-release.zip</a> - contains libraries for both ARM and x86. 
 
 The SDK for **Android** can be downloaded here: 
 
-* <a href="https://www.rezolve.com/sdk-releases/rezolve-android-sdk-1.5.20-release.aar">rezolve-android-sdk-1.5.20-release.aar</a> - for all platforms
+* <a href="http://rezolve.com/sdk-releases/rezolve-android-sdk-1.5.37-release.aar">rezolve-android-sdk-1.5.37-release.aar</a> - for all platforms
 
 ## Set up the SDK - IOS
 
