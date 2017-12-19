@@ -6329,6 +6329,67 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
 <p>Reserved for future functionality.</p>
 
+          <h1 id="changelog">Changelog</h1>
+
+<p>All notable changes to this project will be documented in this log.</p>
+
+<h2 id="android-v1-5-37-ios-v1-5-40-dec-19-2017">Android v1.5.37, IOS v1.5.40 - Dec 19 2017</h2>
+
+<h3 id="added">Added</h3>
+
+<ul>
+<li>PhonebookManager Class</li>
+</ul>
+
+<h3 id="changed">Changed</h3>
+
+<ul>
+<li>Product Scan, Cart Flow example - updated code samples to reflect chnges in CheckoutManager, rezolveLocation object</li>
+<li>Product Scan, Cart Flow example - updated sequence diagram and narrative to better describe role of signOrderUpdates call.</li>
+<li>Product Scan, Instant Buy flow example - updated code samples to reflect chnges in CheckoutManager, rezolveLocation object</li>
+<li>Product Scan, Instant Buy flow example - updated sequence diagram and narrative to better describe role of signOrderUpdates call.</li>
+<li>CheckoutManager.buyCart - added phonebookId to method parameters. Removed &ldquo;Type&rdquo; from RezolveLocation object.</li>
+<li>CheckoutManager.buyProduct - added phonebookId to method parameters. Removed &ldquo;Type&rdquo; from RezolveLocation object.</li>
+<li>CheckoutManager.signOrderUpdates - remove from response:
+
+<ul>
+<li>Transaction.transactionAmount (Order object)</li>
+<li>Transaction.transactionItems list</li>
+<li>remove Transaction.Timestamp from response</li>
+</ul></li>
+<li>CheckoutManager.signOrderUpdates - clarified narrative describing socket listener behavior.</li>
+<li>ProductManager.getProduct - change method name from product.getOptionAvailable() product.getOptionsAvailable()  (plural)</li>
+<li>UserActivityManager.getOrders request - add &ldquo;from&rdquo; and &ldquo;to&rdquo; date parameters to request parameters</li>
+<li>UserActivityManager.getOrders response - orderDetails.getItems() now returns a list of OrderProduct objects, instead of HistoryItem objects</li>
+<li>UserActivityManager.getOrders response - remove from the OrderDetails object: 
+
+<ul>
+<li>Type</li>
+<li>RezolveLocation.Type</li>
+</ul></li>
+<li>UserActivityManager.getOrders response - rename object FinalPrice to Price</li>
+<li>UserActivityManager.getOrders response - add to the OrderDetails object:
+
+<ul>
+<li>Partner Id</li>
+<li>Billing Address</li>
+<li>Shipping Address</li>
+<li>Email</li>
+<li>First Name</li>
+<li>Last Name</li>
+<li>Phone</li>
+<li>Merchant Email</li>
+<li>Merchant Name</li>
+<li>Merchant Phone</li>
+</ul></li>
+</ul>
+
+<h3 id="deleted">Deleted</h3>
+
+<ul>
+<li>none</li>
+</ul>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
