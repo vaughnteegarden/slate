@@ -4,7 +4,7 @@
 ```java
 //
 // contents of scan_activity.xml
-// 
+//
 
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
@@ -88,9 +88,10 @@ extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate
 }
 ```
 ```java
-public class ScanActivity extends AppCompatActivity implements ScanManagerInterface {
+public class ScanActivity extends AppCompatActivity implements ScanManagerInterface, View.OnClickListener {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     private final static String TAG = ScanActivity.class.getSimpleName();
     private ScanManager scanManager;
@@ -105,8 +106,8 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
         // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
-                .getRezolveSession().getScanManager(this, true);
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
+			.getRezolveSession().getScanManager(this, true);
 
         // use startVideo to begin watching for scannable media
         scanManager.startVideoScan(this, rezolveScanView);

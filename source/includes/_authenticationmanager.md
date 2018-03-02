@@ -46,7 +46,7 @@ SignUpRequest signUpRequest = new SignUpRequest.Builder()
     .device(deviceProfile)
     .build();
 
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).registerUser(
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).registerUser(
 signUpRequest, new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
@@ -122,7 +122,7 @@ sdk.createSession(
 
 ```
 ```java
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).createSession(entityId, 
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession(entityId, 
 partnerId, deviceProfile, new RezolveInterface() {
     @Override
     public void onInitializationSuccess(RezolveSession rezolveSession, String s, 

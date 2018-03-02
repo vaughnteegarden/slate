@@ -44,17 +44,34 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get merchants
-        // in the call below, "this" represents a productInterface, but could also be a callback
-        myProductManager.getMerchants(this);
+        // get merchants
+        myProductManager.getMerchants(this, new ProductCallback() {
+            @Override
+            public void onGetMerchantsSuccess(List<Merchant> list) {
+                for(Merchant merchant : list) {
+                    String merchant_id = merchant.getId();
+                    String name = merchant.getName();
+                    String tagline = merchant.getTagline();
+                    String banner = merchant.getBanner();
+                    List<String> bannerThumb = merchant.getBannerThumbs();
+                    List<String> logoThumbs = merchant.getLogoThumbs();
+                }
+            }
+            @Override
+            public void onFailure(HttpResponse httpResponse) {
+                //handle error
+            }
+        });
     }
 
 
@@ -78,7 +95,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-First, initialize `productManager`, and call `GetMerchants`. This will return an array of Merchant objects. Parse each merchant object to get the `id`, `name`, `tagline`, `banner`, `bannerThumbs`, and `logoThumbs`.
+First, initialize `productManager`, and call `GetMerchants`, providing an implementation of ProductCallback as a parameter. This will return an array of Merchant objects. Parse each merchant object to get the `id`, `name`, `tagline`, `banner`, `bannerThumbs`, and `logoThumbs`.
 
 
 
@@ -119,6 +136,7 @@ class ViewController: UIViewController {
 }
 ```
 ```java
+TODO
 
 ```
 
@@ -140,16 +158,17 @@ func onCategoryResult(category: RezolveCategory) -> Void {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get products
-        myProductManager.getProducts(merchantId3, categoryId, count, page, 
+        myProductManager.getProducts(this, merchantId3, categoryId, count, page, 
         sort_by_field, sort_direction, this);
     }
 

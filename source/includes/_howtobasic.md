@@ -19,7 +19,8 @@ class RezolveSDK1ViewController: ViewController {
         // initialize SDK
         // possible values for RezolveEnv enum are .Sandbox, .Production
         let API_KEY: String  = "1234567890"
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: RezolveEnv.Sandbox)
+        let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: ENVIRONMENT)
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,10 +53,11 @@ import com.rezolve.sdk.model.shop.Merchant;
 
 
 // initialize SDK
-// possible values for RezolveSDK.Env enum are .SANDBOX, .PRODUCTION
 
-String API_KEY = "1234567890";
-RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX);
+private final static String API_KEY = "your_api_key";
+private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, ENVIRONMENT);
 
 
 
@@ -99,7 +101,7 @@ public class MyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
  		...
-        RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
+        RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
         .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
 
             @Override
@@ -132,7 +134,7 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 	...
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession()
+		RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession()
         .getWalletManager().getAll(this);
 	}
 
@@ -244,7 +246,7 @@ SignUpRequest signUpRequest = new SignUpRequest.Builder()
     .device(deviceProfile)
     .build();
 
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).registerUser(signUpRequest, 
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).registerUser(signUpRequest, 
 new RezolveInterface() {
 
     @Override
@@ -303,7 +305,7 @@ sdk.createSession(
 ```
 
 ```java
-RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).createSession(entityId, 
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession(entityId, 
 partnerId, deviceProfile, new RezolveInterface() {
 
     @Override
@@ -322,7 +324,7 @@ partnerId, deviceProfile, new RezolveInterface() {
 
 // Note: You don't need to create a new session if user navigates to another activity. 
 // After the session is created, you can access it by calling:
-RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
+RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
 .getRezolveSession();
 
 ```

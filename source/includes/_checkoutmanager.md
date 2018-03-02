@@ -55,6 +55,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String merchantId;
     RezolveLocation rezolveLocation;
     CheckoutInterface checkoutInterface;
@@ -64,11 +66,11 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
 
         // add product to cart
-        myCheckoutManager.addProductToCart(checkoutProduct, merchantId, checkoutInterface);
+        myCheckoutManager.addProductToCart(this, checkoutProduct, merchantId, checkoutInterface);
     }
 
 
@@ -105,7 +107,9 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 AddProductToCart adds a product to the cart for a particular merchant.
 
-Method signature: `session.CheckoutManager.addProductToCart( CheckoutProduct, String TOTO, [callback or interface] )`
+IOS Method signature: `session.CheckoutManager.addProductToCart( CheckoutProduct, String TODO, [callback or interface] )`
+
+Android Method signature: `session.CheckoutManager.addProductToCart( Context, CheckoutProduct, String TODO, [callback or interface] )`
 
 You must pass in a `CheckoutProduct` object, the merchantId as a string, and a `CheckoutInterface` object (or callback).
 
@@ -200,6 +204,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String cartId;
     String merchantId;
@@ -212,7 +218,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
 
         // buy cart; returns an order id
@@ -320,6 +326,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String merchantId;
     RezolveLocation rezolveLocation;
@@ -331,11 +339,11 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // buy product directly, bypassing cart; returns an order id
-        myCheckoutManager.buyProduct(merchantId, checkoutProduct, addressId, phonebookId,
+        myCheckoutManager.buyProduct(this, merchantId, checkoutProduct, addressId, phonebookId,
         rezolveLocation, paymentRequest, checkoutInterface);
     }
 
@@ -356,7 +364,10 @@ BuyProduct purchases a product directly, bypassing the cart.
 
 If this method returns successfully, it will automatically call `signOrderUpdate` and start listening on a socket for the server to return an order status.
 
-Method signature: `session.buyProduct( MerchantId, CheckoutProduct, AddressId, 
+IOS Method signature: `session.buyProduct( MerchantId, CheckoutProduct, AddressId, 
+        RezolveLocation, PaymentRequest, [callback or interface] )`
+
+Android Method signature: `session.buyProduct( Context, MerchantId, CheckoutProduct, AddressId, 
         RezolveLocation, PaymentRequest, [callback or interface] )`
 
 You must pass in MerchantId and AddressId as strings, a CheckoutProduct Object, a RezolveLocation object, a PaymentRequest object, and a CheckoutInterface (or callback). 
@@ -427,6 +438,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String cartId;
     String merchantId;
@@ -437,7 +450,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // checkout cart: returns an Order object with price breakdown
         myCheckoutManager.checkoutCart(cartId,merchantId, addressId, checkoutInterface);
@@ -548,6 +561,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String merchantId;
     CheckoutProduct checkoutProduct;
@@ -556,10 +571,10 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // checkout product; returns an Order object with price breakdown
-        myCheckoutManager.checkoutProduct(merchantId, checkoutProduct, 
+        myCheckoutManager.checkoutProduct(this, merchantId, checkoutProduct, 
         addressId, checkoutInterface);
     }
 
@@ -586,7 +601,9 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 CheckoutProduct requests pricing, including shipping and tax, for a single product.
 
-Method signature: `session.CheckoutManager.checkoutProduct( MerchantId, CheckoutProduct, AddressId,  [callback or interface] )`
+IOS Method signature: `session.CheckoutManager.checkoutProduct( MerchantId, CheckoutProduct, AddressId,  [callback or interface] )`
+
+Android Method signature: `session.CheckoutManager.checkoutProduct( Context, MerchantId, CheckoutProduct, AddressId,  [callback or interface] )`
 
 You must pass in a MerchantId string, a CheckoutProduct object, an AddressId string, and a CheckoutInterface (or callback).
 
@@ -641,6 +658,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String cartId;
     String cvv;
@@ -656,7 +675,8 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // create a payment request prior to buying product or cart
         myCheckoutManager.createPaymentRequest(paymentCard, cvv);
@@ -712,6 +732,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String cartId;
     String merchantId;
     CheckoutInterface checkoutInterface;
@@ -719,7 +741,8 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // get cart by id: returns a CartDetails object
         myCheckoutManager.getCartById(cartId, merchantId, checkoutInterface);
@@ -804,12 +827,15 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     CheckoutInterface checkoutInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // gets carts for the current session: returns an array of CartDetail objects
         myCheckoutManager.getCarts(checkoutInterface);
@@ -917,6 +943,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String cartId;
     String merchantId;
@@ -927,10 +955,10 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // removes a product from cart: returns a CartDetails object
-        myCheckoutManager.removeProductFromCart(cartId, merchantId,
+        myCheckoutManager.removeProductFromCart(this, cartId, merchantId,
         checkoutProduct, checkoutInterface);
     }
 
@@ -967,7 +995,9 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 RemoveProductFromCart removes a previously added product from the specified cart.
 
-Method signature: `session.CheckoutManager.removeProductFromCart( CartId, MerchantId, CheckoutProduct, [callback or interface] )`
+IOS Method signature: `session.CheckoutManager.removeProductFromCart( CartId, MerchantId, CheckoutProduct, [callback or interface] )`
+
+Android Method signature: `session.CheckoutManager.removeProductFromCart( Context, CartId, MerchantId, CheckoutProduct, [callback or interface] )`
 
 You must pass in CartId as a string, MerchantId as a string, the CheckoutProduct to remove, and a CheckoutInterface (or callback).
 
@@ -1048,6 +1078,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String merchantId;
     String orderId;
     CheckoutInterface checkoutInterface;
@@ -1055,7 +1087,8 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // sign order updates
         myCheckoutManager.signOrderUpdates(orderId, merchantId, checkoutInterface);
@@ -1178,6 +1211,8 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
     String addressId;
     String cartId;
     String cvv;
@@ -1194,10 +1229,10 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getCheckoutManager();
+        ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
         // update product(s) in cart: returns a CartDetails object
-        myCheckoutManager.updateProductInCart(cartId, merchantId, 
+        myCheckoutManager.updateProductInCart(this, cartId, merchantId, 
         checkoutProduct, checkoutProduct2, checkoutInterface);
     }
 
@@ -1234,7 +1269,9 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 UpdateProductInCart modifies a CheckoutProduct object that is already in the cart.
 
-Method signature: `session.CheckoutManager.updateProductInCart( CartId, MerchantId, CheckoutProduct, CheckoutProduct2, [callback or interface] )`
+IOS Method signature: `session.CheckoutManager.updateProductInCart( CartId, MerchantId, CheckoutProduct, CheckoutProduct2, [callback or interface] )`
+
+Android Method signature: `session.CheckoutManager.updateProductInCart( Context, CartId, MerchantId, CheckoutProduct, CheckoutProduct2, [callback or interface] )`
 
 You must pass in a `Cartid` as a string, a `MerchantId` as a string, a CheckoutProduct object (representing the object you want to change), a second CheckoutProduct object (with the updated values), and a checkoutInterface (or callback).
 

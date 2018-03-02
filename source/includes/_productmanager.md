@@ -12,9 +12,10 @@ import RezolveSDK
 
 class ProductViewController: UIViewController {
 
-  let API_KEY: String = "your_api_key"
+    let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
-  var mySession: RezolveSession?
+  	var mySession: RezolveSession?
 
   override func viewDidLoad() {
       super.viewDidLoad()
@@ -38,35 +39,43 @@ class ProductViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProductInterface productInterface;
 
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get merchants
-        myProductManager.getMerchants(this);
-    }
-
-
-    @Override
-    public void onGetMerchantsSuccess(List<Merchant> list) {
-        // list merchants
-        for(Merchant merchant : list) {
-            String merchant_id = merchant.getId();
-            String name = merchant.getName();
-            String tagline = merchant.getTagline();
-            String banner = merchant.getBanner();
-            List<String> bannerThumb = merchant.getBannerThumbs();
-            List<String> logoThumbs = merchant.getLogoThumbs();
-        }
+        myProductManager.getMerchants(this, new ProductCallback() {
+            @Override
+            public void onGetMerchantsSuccess(List<Merchant> list) {
+                for(Merchant merchant : list) {
+                    String merchant_id = merchant.getId();
+                    String name = merchant.getName();
+                    String tagline = merchant.getTagline();
+                    String banner = merchant.getBanner();
+                    List<String> bannerThumb = merchant.getBannerThumbs();
+                    List<String> logoThumbs = merchant.getLogoThumbs();
+                }
+            }
+            @Override
+            public void onFailure(HttpResponse httpResponse) {
+                //handle error
+            }
+        });
     }
 }
-```
 
-Method signature: `session.getMerchants( [callback or interface] )`
+```
+When calling getMerchants(), you must provide an implementation of ProductCallback as a parameter.
+
+IOS Method signature: `session.getMerchants( [ProductCallback] )`
+
+Android Method signature: `session.getMerchants( Context, [ProductCallback] )`
 
 The method returns an array of `merchant` objects.
 
@@ -124,17 +133,18 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
 		// get categories
         String merchantId = "123";
-        myProductManager.getCategories(merchantId,this);
+        myProductManager.getCategories(merchantId, this);  // "this" is productInterface
     }
 
     @Override
@@ -221,18 +231,19 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get single category
         String categoryId = "123";
         String merchantId = "123";
-        myProductManager.getCategory(merchantId, categoryId, this);
+        myProductManager.getCategory(this, merchantId, categoryId, this); //first this is context, second this is productInterface
     }
 
     @Override
@@ -250,7 +261,9 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-Method signature: `session.getCategory( merchant_id, category_id, [callback or interface] )`
+IOS Method signature: `session.getCategory( merchant_id, category_id, [callback or interface] )`
+
+Android Method signature: `session.getCategory( context, merchant_id, category_id, [callback or interface] )`
 
 The method returns a `category` object.
 
@@ -300,13 +313,14 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get products
         Integer count = 16;
@@ -315,7 +329,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         String sort_direction = "ASC";
         String merchantId3 = "123";
         String categoryId = "123";
-        myProductManager.getProducts(merchantId3, categoryId, count, page, 
+        myProductManager.getProducts(this, merchantId3, categoryId, count, page, 
         sort_by_field, sort_direction, this);
     }
 
@@ -345,7 +359,9 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-Method signature: `session.getProducts( merchant_id, category_id, pageNavigation, [callback or interface] )`
+IOS Method signature: `session.getProducts( merchant_id, category_id, pageNavigation, [callback or interface] )`
+
+Android Method signature: `session.getProducts( context, merchant_id, category_id, pageNavigation, [callback or interface] )`
 
 You must pass a `merchant_id`, `category_id`, and a `pageNavivation` object.
 
@@ -430,20 +446,21 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get single product
         Product product = new Product();
         String productId = "123abc";
         String merchantId = "123";
         String categoryId = "123";
-        myProductManager.getProduct(merchantId, categoryId3, productId, this);
+        myProductManager.getProduct(this, merchantId, categoryId3, productId, this);
     }
 
     @Override
@@ -505,7 +522,9 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-Method signature: `session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )`
+IOS Method signature: `session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )`
+
+Android Method signature: `session.getProduct( context, merchant_id, catalog_id, product_id, [callback or interface] )`
 
 You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
 

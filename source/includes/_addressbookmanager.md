@@ -4,6 +4,14 @@ The AddressbookManager is an aggregate of Session.
 
 This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.
 
+While none of the address fields are REQUIRED by the SDK, because the requirements vary from customer to customer, the Rezolve Commerce Engine by default expects: 
+
+- Address 1
+- City
+- State
+- Zip
+- Country
+
 ### Method: addressbookManager.create
 
 ```swift
@@ -13,6 +21,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -50,13 +59,14 @@ class AddressBookViewController: UIViewController {
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
+        AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getAddressbookManager();
 
         // create a new address
         Address address = new Address();
@@ -106,6 +116,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -132,13 +143,14 @@ class AddressBookViewController: UIViewController {
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
+        ENVIRONMENT).getRezolveSession().getAddressbookManager();
 
         // update an address
         Address address = new Address();
@@ -174,6 +186,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -198,13 +211,14 @@ class AddressBookViewController: UIViewController {
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
+        ENVIRONMENT).getRezolveSession().getAddressbookManager();
 
         // delete an address
         Address address = new Address();
@@ -237,7 +251,8 @@ import RezolveSDK
 
 class AddressBookViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -258,13 +273,14 @@ class AddressBookViewController: UIViewController {
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
+        ENVIRONMENT).getRezolveSession().getAddressbookManager();
 
         // get a single address
         String address_id = "123";
@@ -300,7 +316,8 @@ import RezolveSDK
 
 class AddressBookViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -321,13 +338,14 @@ class AddressBookViewController: UIViewController {
 public class addressBook extends AppCompatActivity implements AddressbookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AddressbookManager myAddressManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getAddressbookManager();
+        ENVIRONMENT).getRezolveSession().getAddressbookManager();
 
         // list all addresses
         myAddressManager.getAll(this);

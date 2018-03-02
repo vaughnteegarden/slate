@@ -85,7 +85,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
           .getRezolveSession().getScanManager(this, true);
 
           //start video scan to acquire image
@@ -165,7 +165,7 @@ class ViewController: UIViewController {
 ```
 ```java
 // add product to cart
-checkout.addProductToCart(checkoutProduct, merchantId, new CheckoutCallback() {
+checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallback() {
     @Override
     public void onAddProductsToCartSuccess(CartDetails cartDetails) {
         super.onAddProductsToCartSuccess(cartDetails);
@@ -260,7 +260,7 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 Pass the `merchantId`, `phonebookId` and `addressId` strings, the `checkoutProduct` object, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
-When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback. 
+When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback.
 
 
 

@@ -8,7 +8,8 @@ This module provides CRUD functions for payment cards.  The consumer may add one
 ```swift
 class WalletViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -40,13 +41,14 @@ class WalletViewController: UIViewController {
 public class Wallet extends AppCompatActivity implements WalletInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
+        ENVIRONMENT).getRezolveSession().getWalletManager();
 
         // create a new payment card
         PaymentCard myCard = new PaymentCard();
@@ -97,7 +99,8 @@ The method returns the created `paymentCard` object with `id` upon success.
 ```swift
 class WalletViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -125,13 +128,14 @@ class WalletViewController: UIViewController {
 public class Wallet extends AppCompatActivity implements WalletInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
+        ENVIRONMENT).getRezolveSession().getWalletManager();
 
         // update a payment card
         PaymentCard myCard2 = new PaymentCard();
@@ -164,7 +168,8 @@ The method returns the updated `paymentCard` object upon success.
 ```swift
 class WalletViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -188,13 +193,14 @@ class WalletViewController: UIViewController {
 public class Wallet extends AppCompatActivity implements WalletInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
+        ENVIRONMENT).getRezolveSession().getWalletManager();
 
         // delete a payment card
         PaymentCard myCard3 = new PaymentCard();
@@ -225,7 +231,8 @@ You must pass in the `paymentCard` object to delete.
 ```swift
 class WalletViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -246,13 +253,14 @@ class WalletViewController: UIViewController {
 public class Wallet extends AppCompatActivity implements WalletInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
+        ENVIRONMENT).getRezolveSession().getWalletManager();
 
         // list a single payment card
         String card_id = "123";
@@ -287,7 +295,8 @@ The method returns a `paymentCard` object.
 ```swift
 class WalletViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -309,13 +318,14 @@ class WalletViewController: UIViewController {
 public class Wallet extends AppCompatActivity implements WalletInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         WalletManager myWalletManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getWalletManager();
+         ENVIRONMENT).getRezolveSession().getWalletManager();
 
         // list all payment cards
         myWalletManager.getAll(this);

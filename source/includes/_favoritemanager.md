@@ -9,7 +9,8 @@ This module provides CRUD functions for Favorites. The term "Favorite" refers to
 ```swift
 class FavouriteViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -37,13 +38,14 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
+        ENVIRONMENT).getRezolveSession().getFavouriteManager();
 
         // create a favourite
         Favourite favourite = new Favourite();
@@ -80,7 +82,8 @@ The method returns the created `favourite` object with `id` upon success.
 ```swift
 class FavouriteViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -107,13 +110,14 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
+        ENVIRONMENT).getRezolveSession().getFavouriteManager();
 
         // update a favourite
         Favourite favourite = new Favourite();
@@ -141,7 +145,8 @@ The method returns the updated `favourite` object upon success.
 ```swift
 class FavouriteViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -165,13 +170,14 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
+        ENVIRONMENT).getRezolveSession().getFavouriteManager();
 
         // delete a favourite
         Favourite favourite = new Favourite();
@@ -197,7 +203,8 @@ You must pass in the `favourite` object to delete.
 ```swift
 class FavouriteViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -218,13 +225,14 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
+        ENVIRONMENT).getRezolveSession().getFavouriteManager();
 
         // get a single favourite
         String favourite_id = "123";
@@ -253,7 +261,8 @@ The method returns an `favourite` object.
 ```swift
 class FavouriteViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -273,13 +282,14 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FavouriteManager myFavouriteManager = RezolveSDK.getInstance(API_KEY, 
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getFavouriteManager();
+        ENVIRONMENT).getRezolveSession().getFavouriteManager();
 
         // list all favourites
         myFavouriteManager.getAll(this);

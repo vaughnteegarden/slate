@@ -13,12 +13,14 @@ TODO
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getPhonebookManager();
+        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, 
+        ENVIRONMENT).getRezolveSession().getPhonebookManager();
 
         Phone phone = new Phone();
         phone.setName("Home phone");
@@ -63,12 +65,14 @@ TODO
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getPhonebookManager();
+        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY,
+        ENVIRONMENT).getRezolveSession().getPhonebookManager();
 
         String newNumber = "555-555-1313";
         phone.setId("123");
@@ -107,12 +111,14 @@ TODO
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getPhonebookManager();
+        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, 
+        ENVIRONMENT).getRezolveSession().getPhonebookManager();
 
         Phone phone = new Phone();
         phone.setName("Home phone");
@@ -149,12 +155,14 @@ TODO
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getPhonebookManager();
+        PhonebookManager myPhonebookManager = RezolveSDK.getInstance(API_KEY, 
+        ENVIRONMENT).getRezolveSession().getPhonebookManager();
 
         myPhonebookManager.get(this);
     }
@@ -177,7 +185,7 @@ public class phoneBook extends AppCompatActivity implements PhonebookInterface {
 
 Method signature: `session.phonebookManager.get( [callback or interface] )`
 
-The method take no parameters. 
+The method takes no parameters.
 
 The method returns an array of `Phone` objects.
 

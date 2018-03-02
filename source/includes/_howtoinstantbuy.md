@@ -7,7 +7,6 @@
 <img src="images/ShoppableAdFlowInstantBuy.png" style="margin:6px 0;"><br/>[ <a href="images/ShoppableAdFlowInstantBuy.png" target="_blank">View full size</a> ]
 
 
-
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
 In the Instant Buy flow, we purchase the product immediately, without first adding it to the cart.
@@ -87,7 +86,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
           .getRezolveSession().getScanManager(this, true);
 
           //start video scan to acquire image
@@ -155,12 +154,12 @@ public void onProductResult(Product product) {
     checkoutProduct.setQty(1);
 
     // call the CheckoutProduct method to get and order object and totals
-    CheckoutManager checkout = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.PRODUCTION).getRezolveSession().getCheckoutManager();
+    CheckoutManager checkout = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
     String merchantId = "123"; // use real merchant id
     String addressId = "123"; // use real consumer address id
 
-    checkout.checkoutProduct(merchantId, checkoutProduct, addressId, new CheckoutCallback() {
+    checkout.checkoutProduct(this, merchantId, checkoutProduct, addressId, new CheckoutCallback() {
         @Override
         public void onCheckoutProductSuccess(Order order) {
             super.onCheckoutProductSuccess(order);
@@ -242,7 +241,7 @@ RezolveLocation rezolveLocation = new RezolveLocation();
 rezolveLocation.setLatitude(48.8736645);
 rezolveLocation.setLongitude(2.2910793);
 
-checkout.buyProduct(merchantId, checkoutProduct, addressId, phonebookId, rezolveLocation, paymentRequest, new CheckoutCallback() {
+checkout.buyProduct(this, merchantId, checkoutProduct, addressId, phonebookId, rezolveLocation, paymentRequest, new CheckoutCallback() {
     @Override
     public void onProductOrderPlaced(String s) {
         super.onProductOrderPlaced(s);

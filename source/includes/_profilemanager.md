@@ -12,7 +12,8 @@ This module handles maintaining the consumer's contact information and device in
 
   class CustomerProfilerViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -47,13 +48,14 @@ This module handles maintaining the consumer's contact information and device in
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getCustomerProfileManager();
+        ENVIRONMENT).getRezolveSession().getCustomerProfileManager();
 
 		List<DeviceProfile> devices = new ArrayList<DeviceProfile>();
 
@@ -127,7 +129,8 @@ import RezolveSDK
 
 class CustomerProfilerViewController: UIViewController {
 
-    let API_KEY: String = "your_api_key"
+	let API_KEY: String = "your_api_key"
+    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -162,13 +165,14 @@ class CustomerProfilerViewController: UIViewController {
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         CustomerProfileManager myProfileManager = RezolveSDK.getInstance(API_KEY, 
-         RezolveSDK.Env.SANDBOX).getRezolveSession().getCustomerProfileManager();
+         ENVIRONMENT).getRezolveSession().getCustomerProfileManager();
 
 
         //update customer profile

@@ -80,7 +80,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
           .getRezolveSession().getScanManager(this, true);
 
           //start video scan to acquire image
@@ -126,13 +126,14 @@ func onCategoryResult(category: RezolveCategory) -> Void {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
 
         myProductManager.getCategories(merchantId,this);
@@ -178,16 +179,17 @@ func onCategoryResult(category: RezolveCategory) -> Void {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.PRODUCTION).getRezolveSession().getProductManager();
+        ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get products
-        myProductManager.getProducts(merchantId3, categoryId, count, page, 
+        myProductManager.getProducts(this, merchantId3, categoryId, count, page, 
         sort_by_field, sort_direction, this);
     }
 

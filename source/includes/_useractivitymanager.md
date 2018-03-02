@@ -23,12 +23,13 @@ TODO
 public class userActivity extends AppCompatActivity implements UserActivityInterface {
 
     private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UserActivityManager myActivityManager = RezolveSDK.getInstance(API_KEY,
-        RezolveSDK.Env.SANDBOX).getRezolveSession().getUserActivityManager();
+        ENVIRONMENT).getRezolveSession().getUserActivityManager();
 
         // these strings represent dates in yyyy-MM-dd format. Both are nullable.
         String from = "2016-09-30";
