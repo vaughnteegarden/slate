@@ -1,23 +1,24 @@
 # Changelog
 
-All notable changes to this project will be documented in this log.
+All notable changes to the project will be documented in this log.
 
-## Android v1.6.0, IOS v1.6.0 - February 28 2018
+## Android v1.6.0, IOS v1.6.0 - March 5, 2018
 
 ### Added
+- New section on JWT Authentication
 
 ### Changed
-- Prodct Scan, Instant Buy Flow - updated code samples for CheckoutManager changes
-- Prodct Scan, Cart Flow - updated code samples for CheckoutManager changes
-- Mall flow - update getMerchants method, and add context to getProducts params
+- Product Scan, Instant Buy Flow - updated code samples for `CheckoutManager` changes
+- Product Scan, Cart Flow - updated code samples for `CheckoutManager` changes
+- Mall flow - updated `getMerchants` method, and add `context` to `getProducts` params
 - Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.
-- AuthenticationManager.register and .logout methods have been deprecated.
-- Android CheckoutManager - the methods .addProductToCart, .buyProduct, .checkoutProduct, .removeProductFromCart, and .updateProductInCart now require Android context as their first parameter.
-- ProductManager - change format of getMerchants to require an implementation of ProductCallback as a parameter. Add "this" context as first parameter to .getCategory, .getProducts, and .getProduct.
+- `AuthenticationManager.register` and `.logout` methods have been deprecated.
+- Android `CheckoutManager` - the methods `.addProductToCart`, ``.buyProduct`, `.checkoutProduct`, `.removeProductFromCart`, and `.updateProductInCart` now require Android `context` as their first parameter.
+- `ProductManager` - change format of `getMerchants` to require an implementation of `ProductCallback` as a parameter. Add `this` context as first parameter to `.getCategory`, `.getProducts`, and `.getProduct`.
 
 
 ### Deleted
-- The enum to represent the target Rezolve environment RezolveSDK.Env.EvironmentName is removed
+- The enum to represent the target Rezolve environment `RezolveSDK.Env.EvironmentName` is removed
 
 ## Android v1.5.37, IOS v1.5.40 - Dec 19 2017
 

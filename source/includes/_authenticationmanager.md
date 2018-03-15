@@ -3,7 +3,11 @@ Authentication services are an aggregate of SDK.
 
 This module handles consumer user creation and authentication.
 
-### Method: Register
+<aside class="warning">
+Note that several methods in this class are now deprecated.
+</aside>
+
+### Method: Register (deprecated)
 
 ```swift
   let deviceProfile: DeviceProfile = DeviceProfile(
@@ -65,6 +69,8 @@ signUpRequest, new RezolveInterface() {
 });
 
 ```
+
+
 
 Method signature: `sdk.register( SignUpRequest, [callback or interface] )`
 
@@ -156,7 +162,7 @@ The method returns a `rezolveSession` object.
 |entity_id|string|9310c880695c|
 |deviceProfile|object| |
 
-### Method: Logout
+### Method: Logout (deprecated)
 
 ```swift
 // When session ends you should inform the sdk by calling
