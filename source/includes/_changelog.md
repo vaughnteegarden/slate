@@ -5,26 +5,31 @@ All notable changes to the project will be documented in this log.
 ## Android v1.6.0, IOS v1.6.0 - March 5, 2018
 
 ### Added
-- New section on JWT Authentication
+- New section on Generic JWT Authentication, with sequence diagram.
+- AuthenticationManager.createSession, v2, added.
 
 ### Changed
+- Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.  
+- Updated all sequence diagrams for v2 authentication, using JWT.
 - Product Scan, Instant Buy Flow - updated code samples for `CheckoutManager` changes
 - Product Scan, Cart Flow - updated code samples for `CheckoutManager` changes
-- Mall flow - updated `getMerchants` method, and add `context` to `getProducts` params
-- Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.
-- `AuthenticationManager.register` and `.logout` methods have been deprecated.
+- Mall flow - updated `getMerchants` method, and add `context` to `getProducts` params. 
+- `AuthenticationManager.register`, v1 `.createSession` and `.logout` methods have been deprecated.  V2 `.createSession` has been added, using JWT accessToken, and removing deviceProfile. CreateSession change made to all sequence diagrams.
 - Android `CheckoutManager` - the methods `.addProductToCart`, ``.buyProduct`, `.checkoutProduct`, `.removeProductFromCart`, and `.updateProductInCart` now require Android `context` as their first parameter.
 - `ProductManager` - change format of `getMerchants` to require an implementation of `ProductCallback` as a parameter. Add `this` context as first parameter to `.getCategory`, `.getProducts`, and `.getProduct`.
 
 
 ### Deleted
-- The enum to represent the target Rezolve environment `RezolveSDK.Env.EvironmentName` is removed
+- The enum to represent the target Rezolve environment `RezolveSDK.Env.EvironmentName` is removed.
+- DeviceProfile object removed from createSession. 
 
 ## Android v1.5.37, IOS v1.5.40 - Dec 19 2017
 
 ### Added
 
 - PhonebookManager Class
+
+
 
 ### Changed
 - Product Scan, Cart Flow example - updated code samples to reflect changes in CheckoutManager, rezolveLocation object

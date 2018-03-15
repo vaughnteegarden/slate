@@ -3,7 +3,7 @@
 ## Mall flow
 
 
-<img src="images/MallFlow.png" style="margin:6px 0;"><br/>[ <a href="images/MallFlow.png" target="_blank">View full size</a> ]
+<img src="images/JWT-mall-flow.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-mall-flow.png" target="_blank">View full size</a> ]
 
 Mall is the only method for finding products that does not require an ad scan. A consumer enters the mall by clicking on a "Mall" navigation option within the mobile app. The Mall showcases active merchants in an attractive layout that is condusive to casual browsing and subsequent purchasing. 
 

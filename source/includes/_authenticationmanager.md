@@ -7,6 +7,10 @@ This module handles consumer user creation and authentication.
 Note that several methods in this class are now deprecated.
 </aside>
 
+
+
+
+
 ### Method: Register (deprecated)
 
 ```swift
@@ -108,7 +112,81 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 |partner_id|string|rezolve|
 |entity_id|string|9310c880695c|
 
-### Method: Create Session
+
+
+
+
+
+
+
+### Method: Create Session (v2, with JWT)
+
+```swift
+import UIKit
+import RezolveSDK
+
+
+class SandboxViewController: UIViewController {
+
+    private var API_KEY: String = "your_api_key"
+    private var API_ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    private var accessToken: String = "abc123.abc123.abc123"
+    private var entityId: String = "123"
+    private var partnerId: String = "123"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        var sdk = RezolveSDK(
+            apiKey: API_KEY,
+            env: API_ENVIRONMENT
+        )
+        
+        sdk.createSession(accessToken: accessToken, entityId: entityId, partnerId: partnerId) { session
+            
+            // your rezolve SDK logic here
+        }
+    }
+}
+```
+```java
+String API_KEY = "your_api_key";
+String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+String accessToken = "abc123.abc123.abc123";  // JWT token from auth server
+String entityId = "123";	// from auth server
+String partnerId = "123";   // from auth server
+
+// NEW session requires Login JWT  from auth server (customer auth or RUA)
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession( accessToken, entityId, partnerId, new RezolveInterface() {
+
+	@Override
+	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
+		// use created session to access managers.  Example...
+		rezolveSession.getCustomerProfileManager().get();
+	}
+
+	@Override
+	public void onInitializationFailure() {
+		// handle error
+	}
+});
+```
+
+Method signature: `sdk.createSession( accessToken, entityId, partnerId, [callback or interface] )`
+
+`accessToken` is a Jason Web Token as a string, returned from the auth server (customer auth server, or RUA)
+
+`entityId` is a string, returned from the auth server (customer auth server, or RUA)
+
+`partnerId` is a string, returned from the auth server (customer auth server, or RUA)
+
+The method returns a `rezolveSession` object.  A valid `rezolveSession` gives you access to the rest of the SDK methods;  .getAddressbookManager(), .getAuthenticationManager(), .getCheckoutManager(), etc. 
+
+
+
+
+
+### Method: Create Session (v1, deprecated)
 
 ```swift
 let deviceProfile: DeviceProfile = DeviceProfile(
@@ -162,7 +240,17 @@ The method returns a `rezolveSession` object.
 |entity_id|string|9310c880695c|
 |deviceProfile|object| |
 
+
+
+
+
+
+
 ### Method: Logout (deprecated)
+
+This method is no longer needed. 
+
+With v2 auth (JWT-based), when your consumer logs out, you expire the JWT at the auth server, and this prevents the SDK from talking to the Rezolve servers.
 
 ```swift
 // When session ends you should inform the sdk by calling

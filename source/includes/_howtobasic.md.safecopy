@@ -17,7 +17,6 @@ class RezolveSDK1ViewController: ViewController {
         super.viewDidLoad()
 
         // initialize SDK
-        // possible values for RezolveEnv enum are .Sandbox, .Production
         let API_KEY: String  = "1234567890"
         let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: ENVIRONMENT)
@@ -102,7 +101,7 @@ public class MyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
  		...
         RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-        .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
+        .createSession(accessToken, entityId, partnerId, new RezolveInterface() {
 
             @Override
             public void onInitializationSuccess(RezolveSession rezolveSession, String 
@@ -188,45 +187,195 @@ When large images are uploaded to the merchant portal, the portal automatically 
 Each uploaded image will have a corresponding array of thumbnails. If an object can have an array of images, it will have an array of thumbnail arrays.
 
 
-##  User Management Introduction
+##  User Management, Session Management
 
-For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumers to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
+For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumes to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
 
-The Rezolve SDK has no built-in authentication mechansim, but that is not to say there is no security. Instead, Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with Jason Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
+This section will describe how to:
 
-Exactly how you implement authentication in your app will depend on what authorization system you use. You may either:
+1. Register a Rezolve user via the SDK
+2. Create a Session for that user
+3. When the user is done, log them out
 
-- Utilize an existing authentication server, and adapt it to serve the JWT required by Rezolve. This makes most sense if you already have a community of users with logins.
+<img src="images/loginsequencediagram.png" style="margin:6px 0;"><br/>[ <a href="images/loginsequencediagram.png">View full size</a> ]
 
-- Utilize Rezolve User Authentication (RUA), our implementation of a JWT-aware auth system. If you do not have an existing auth system, adopting RUA may save development time, as opposed to implementing a new system from the ground up.
 
-The primary task in implementing user management is to create the JWT that will allow you to bind a Partner user to a Rezolve profile. Through a server-to-server transaction, you can create a new Rezolve User Profile, and get back an identifying `entityId` that you should persist in your authentication database, as an addition to your user record. This `entityId` will then be used by the Rezolve SDK to identify the user to the Rezolve Server. 
 
-## Session Management Introduction
+### Register User
 
-Once a Rezolve Profile has been established, and an `entityId` secured, there is no Login per-se in the Rezolve system. Whether or not the SDK can talk to Rezolve Services depends on supplying a valid JWT to the SDK from your auth system. If the user-specific JWT you supply is valid, you are able to create a session, and access the SDK capabilities. 
+```swift
+  let deviceProfile: DeviceProfile = DeviceProfile(
+      deviceId: "123",
+      make: "Apple",
+      osType: "iOS",
+      osVersion: "10",
+      locale: "Europe/London"
+  )
 
-Expiring a session is as simple as expiring the JWT token. So it is up to the partner's auth server to either renew the JWT when it expires, or to set an expiration when the partner consumer logs out. 
+  let signUpRequest: SignUpRequest = SignUpRequest(
+      email: "johndoe@domain.com",
+      firstName: "John",
+      lastName: "Doe",
+      name: "John Doe",
+      device: deviceProfile
+  )
 
-More on User Management and Session Management can be sound in the sections on JWT Authorization and RUA.  Look at whichever section is relevant to your situation.
 
+  sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+      self.entityId = entityId;
+      self.partnerId = partnerId
+
+      sdk.createSession(
+          entityId: self.entityId!,
+          partnerId: self.partnerId!,
+          device: deviceProfile) { (session: RezolveSession) in
+
+              self.mySession = session
+      }
+  }
+```
+```java
+DeviceProfile deviceProfile = new DeviceProfile(deviceId, deviceManufacturer, locale);
+
+SignUpRequest signUpRequest = new SignUpRequest.Builder()
+    .email("john.doe@domain.com")
+    .firstName("John")
+    .lastName("Doe")
+    .name("JDoe")
+    .device(deviceProfile)
+    .build();
+
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).registerUser(signUpRequest, 
+new RezolveInterface() {
+
+    @Override
+    public void onInitializationSuccess(RezolveSession rezolveSession, String partnerId, 
+    String entityId) {
+
+    	// persist the entity_id and partner_id values here
+        ...
+
+        // set session for convenience
+        mySession = rezolveSession;
+    }
+
+    @Override
+    public void onInitializationFailure() {
+    	// handle failure here
+    }
+});
+
+```
+
+To register a user, call the sdk `registerUser` method, passing in an `SignUpRequest object`. The SignUpRequest object is defined as shown to the right. It is composed of a deviceProfile object, and four user data fields. All fields are strings.
+
+The `registerUser` method is used as shown to the right. Upon successful registration, the response contains a `partner_id` and an `entity_id`. **Persist both these values for the life of the app.**
+
+<aside class="notice">
+You will know if you need to call `registerUser` instead of `createSession` if either `partner_id` or `entity_id` are null or blank.
+</aside>
+
+<aside class="warning">
+It is recommended that <code>entity_id</code> and <code>partner_id</code> be persisted to the partner server. If these values are stored server side, a consumer who uninstalls the app and reinstalls will be able to retain their history and settings. Without this info, their account cannot be reassociated after install.
+</aside>
+
+
+
+
+
+### Create Session
+
+```swift
+let deviceProfile: DeviceProfile = DeviceProfile(
+  deviceId: "123",
+  make: "Apple",
+  osType: "iOS",
+  osVersion: "10",
+  locale: "Europe/London"
+)
+
+sdk.createSession(
+  entityId: self.entityId!,
+  partnerId: self.partnerId!,
+  device: deviceProfile) { (session: RezolveSession) in
+      self.mySession = session
+}
+
+```
+
+```java
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession(entityId, 
+partnerId, deviceProfile, new RezolveInterface() {
+
+    @Override
+    public void onInitializationSuccess(RezolveSession rezolveSession, String s, 
+    String s1) {
+        mySession = rezolveSession;
+        // use created session to access managers
+    }
+
+    @Override
+    public void onInitializationFailure() {
+        // handle failed initialization
+    }
+});
+
+
+// Note: You don't need to create a new session if user navigates to another activity. 
+// After the session is created, you can access it by calling:
+RezolveSession rezolveSession = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
+.getRezolveSession();
+
+```
+
+
+
+To log in and interact with Rezolve services, you must establish a session. A session combines several functions, and abstracts them from the developer:
+
+* Verifies the validity of the mobile app, through the API key
+* Identifies the consumer and pairs them with a session token
+* Verifies each request from the mobile app by passing API Key and session token
+* Establishes a public key for the session, for encrypting transmitted credit card info
+
+Once the user is authenticated on the partner side, make a call to `createSession{}`, passing in the `entity_id` and a `deviceProfile` object. The server response contains a session authentication token, and a session public key; the SDK takes care of managing these for the session. The auth token is used to authenticate each request from the client, while the public key is used for encrypting the transmission of payment card information for this session.
+
+
+
+Once the session is established, you can access services, for example:
+`session.CustomerProfileManager.get`
+
+
+
+
+
+### Logout Session
+
+```swift
+// When session ends you should inform the sdk by calling
+session.authenticationManager.logout();
+```
+```java
+// When session ends you should inform the sdk by calling
+rezolveSession.getAuthenticationManager().logout(entityId);
+```
+
+When a session is over, you should notify the SDK by passing the `entity_id` to the logout method.
 
 
 
 ## Consumer Profile Management
 
 
-Once you have established a session, you have access to the consumer's records. These include:
+Once logged in, you have access to the consumer's records. These include:
 
 * Consumer Profile - Via the `ConsumerProfileManager`. Name, email, and device profile (phone info) for the consumer
-* Address Book - Via the `AddressbookManager`. A collection of postal addresses, to be used for ship-to and bill-to purposes.
-* Phone Book - Via the `PhonebookManager`. A collection of phone numbers associated with the profile. 
-* Favorites - Via the `FavouriteManager`. Reserved for future functionality, "Favorites" are collections of unique devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
+* Address Book - Via the `AddressbookManager`. A collection of postal addresses, to be used for ship-to and bill-to purposes
+* Favorites - Via the `FavouriteManager`. A collection of devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
 * Wallet - Via the `WalletManager`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
 
 There are no specific flows to consider when managing the customer profile and associated records.
 
-AddressbookManager, FavouriteManager, PhonebookManager and WalletManager support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
+AddressbookManager, FavouriteManager, and WalletManager support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
 
 ProfileManager supports only `update` and `get`.
 

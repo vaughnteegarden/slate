@@ -13,9 +13,15 @@ When the Partner creates a new user on their auth server, or wishes to associate
 When a user logs in to your auth system, generate a new Login JWT and supply to CreateSession in the SDK. As long as the JWT is valid, the SDK can talk to Rezolve. A method is suggested below for smoothly handling JWT timeouts without interrupting the SDK session. 
 
 
+
+
+
 ### JWT Flow
 
 <img src="images/GenericSWT.png" style="margin:6px 0;"><br/>[ <a href="images/GenericSWT.png" target="_blank">View full size</a> ]
+
+
+
 
 
 ### Create the Registration JWT
@@ -59,6 +65,7 @@ For the `partner_entity_id`, set it to the unique identifier for your user recor
 For `exp`, set the expiration value to a small number, now() + 30 minutes or less. Expiration should be expressed as a unix timestamp integer. 
 
 
+
 #### Signature
 
 ```JSON
@@ -77,6 +84,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 ```
 
 The resulting JWT will look something like this (except without linebreaks); the first third is the header, the second third the payload, and the last third the signature: 
+
 
 
 
@@ -104,6 +112,8 @@ Example, using Sandbox endpoint:
 }
 ```
 The endpoint will reply with an entity id and the partner id. You should save the Rezolve Entity Id to your authentication database and associate it with the user's record.
+
+
 
 
 ### Logging in a User
@@ -149,6 +159,38 @@ HMACSHA512(
 ```
 Sign the header and payload with the `partner_auth_key`.
 
+#### Create the Session
+
+```swift
+TODO
+
+```
+```java
+String API_KEY = "your_api_key";
+String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+String accessToken = "abc123.abc123.abc123";  // JWT token from auth server
+String entityId = "123";	// from auth server
+String partnerId = "123";   // from auth server
+
+// NEW session requires Login JWT  from auth server (customer auth or RUA)
+RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession( accessToken, entityId, partnerId, new RezolveInterface() {
+
+	@Override
+	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
+		// use created session to access managers.  Example...
+		rezolveSession.getCustomerProfileManager().get();
+	}
+
+	@Override
+	public void onInitializationFailure() {
+		// handle error
+	}
+});
+```
+
+
+
+
 ### Handling JWT Expiration & Session Preservation
 
 ```swift
@@ -178,6 +220,9 @@ The Login JWT you generate is included in the headers of every SDK transmission.
 However, this also means you are required to handle JWT token expiration/renewal. To do this smoothly without interrupting the user session, Rezolve recommends creating a wrapper around any call that contacts the server. If the server returns an authorization error, you can call your token renewal endpoint and issue a new JWT. 
 
 Here is an example, using the getAddressBook method of the AddressBookManager class. Note the use of a boolean to only retry once; this is to prevent continual retries in the event of a purposeful logout.  
+
+
+
 
 ### HTTP Error Responses 
 
