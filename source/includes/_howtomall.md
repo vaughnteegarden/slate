@@ -136,7 +136,39 @@ class ViewController: UIViewController {
 }
 ```
 ```java
-TODO
+private final static String API_KEY = "your_api_key";
+private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	ProductInterface productInterface;
+
+	ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
+
+	// get categories
+	String merchantId = "123";
+	myProductManager.getCategories(merchantId,this);
+}
+
+@Override
+public void onGetCategoriesSuccess(Category category) {
+	// parse Category object 
+	String category_id = category.getId();
+	String parentId = category.getParentId();
+	String name = category.getName();
+	Boolean hasCategories = category.hasCategories();
+	Boolean hasProduct = category.hasProducts();
+	String image = category.getImage();
+	List<String> imageThumbs = category.getImageThumbs();
+	String catparentId = category.getParentId();
+	List<Category> children = category.getCategories();
+
+	for (Category subcategory : children){
+		subcategory.getId();
+		// ... etc
+	}
+}
 
 ```
 

@@ -107,9 +107,9 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
 AddProductToCart adds a product to the cart for a particular merchant.
 
-IOS Method signature: `session.CheckoutManager.addProductToCart( CheckoutProduct, String TODO, [callback or interface] )`
+IOS Method signature: `session.CheckoutManager.addProductToCart( CheckoutProduct, String merchantId, [callback or interface] )`
 
-Android Method signature: `session.CheckoutManager.addProductToCart( Context, CheckoutProduct, String TODO, [callback or interface] )`
+Android Method signature: `session.CheckoutManager.addProductToCart( Context, CheckoutProduct, String merchantId, [callback or interface] )`
 
 You must pass in a `CheckoutProduct` object, the merchantId as a string, and a `CheckoutInterface` object (or callback).
 

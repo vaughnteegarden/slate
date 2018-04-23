@@ -162,7 +162,32 @@ Sign the header and payload with the `partner_auth_key`.
 #### Create the Session
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+
+class SandboxViewController: UIViewController {
+
+    private var API_KEY: String = "your_api_key"
+    private var API_ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    private var accessToken: String = "abc123.abc123.abc123"
+    private var entityId: String = "123"
+    private var partnerId: String = "123"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        var sdk = RezolveSDK(
+            apiKey: API_KEY,
+            env: API_ENVIRONMENT
+        )
+        
+        sdk.createSession(accessToken: accessToken, entityId: entityId, partnerId: partnerId) { session
+            
+            // your rezolve SDK logic here
+        }
+    }
+}
 
 ```
 ```java

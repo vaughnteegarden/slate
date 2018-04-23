@@ -53,7 +53,7 @@ To learn more about what the Rezolve Inside<sup>TM</sup> SDK can offer your app,
 
 A Rezolve demo app is available, and is a great way to experience Rezolve's offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.
 
-If you would like access to the demo app, email Stephen Meli (stephenmeli@rezolve.com) the following information:
+If you would like access to the demo app, email Stephen Meli (stephen@rezolve.com) the following information:
 
 1. Your full name
 2. Your company
@@ -116,6 +116,17 @@ You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please vis
 |IOS|IOS 10 and up|
 |Android|4.2.2 and up|
 
+
+## Implement a Crash Reporting Sytem
+
+To provide quality support, we require quality information. 
+
+Rezolve advises using *<a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a>* to capture app problems on both IOS and Android.
+
+We will not provide development support if you have not integrated Crashlytics or a similar tool.
+
+
+
 ## Download the Rezolve Inside<sup>TM</sup> SDK
 
 The SDK for **IOS** can be downloaded here:
@@ -125,6 +136,9 @@ The SDK for **IOS** can be downloaded here:
 The SDK for **Android** can be downloaded here: 
 
 * <a href="http://rezolve.com/sdk-releases/rezolve-android-sdk-1.6.0-release.aar">rezolve-android-sdk-1.6.0-release.aar</a> - for all platforms
+
+
+<iframe src="https://google.com" style="height:400px;width:100%;border:none;"></iframe>
 
 ## Set up the SDK - IOS
 

@@ -77,8 +77,6 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
             String merchantPhone = orderDetails.getMerchantPhone();
 
 
-
-
             // get properties of finalPrice object
             String orderFinalPriceOrderId = price.getOrderId();
             float orderFinalPriceFinalPrice = price.getFinalPrice();

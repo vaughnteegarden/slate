@@ -7,6 +7,7 @@ The Shop module offers methods specific to e-commerce; getting catalogs, product
 ### Method: getMerchants
 
 ```swift
+
 import UIKit
 import RezolveSDK
 
