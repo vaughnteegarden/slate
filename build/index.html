@@ -239,7 +239,7 @@ You can switch between IOS and Android by clicking the tabs above.
 <h2 id='demo-app'>Demo App</h2>
 <p>A Rezolve demo app is available, and is a great way to experience Rezolve&#39;s offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.</p>
 
-<p>If you would like access to the demo app, email Stephen Meli (stephenmeli@rezolve.com) the following information:</p>
+<p>If you would like access to the demo app, email Stephen Meli (stephen@rezolve.com) the following information:</p>
 
 <ol>
 <li>Your full name</li>
@@ -315,6 +315,12 @@ You can switch between IOS and Android by clicking the tabs above.
 <td>4.2.2 and up</td>
 </tr>
 </tbody></table>
+<h2 id='implement-a-crash-reporting-sytem'>Implement a Crash Reporting Sytem</h2>
+<p>To provide quality support, we require quality information. </p>
+
+<p>Rezolve advises using <em><a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a></em> to capture app problems on both IOS and Android.</p>
+
+<p>We will not provide development support if you have not integrated Crashlytics or a similar tool.</p>
 <h2 id='download-the-rezolve-insidetm-sdk'>Download the Rezolve Inside<sup>TM</sup> SDK</h2>
 <p>The SDK for <strong>IOS</strong> can be downloaded here:</p>
 
@@ -327,6 +333,8 @@ You can switch between IOS and Android by clicking the tabs above.
 <ul>
 <li><a href="http://rezolve.com/sdk-releases/rezolve-android-sdk-1.6.0-release.aar">rezolve-android-sdk-1.6.0-release.aar</a> - for all platforms</li>
 </ul>
+
+<iframe src="https://google.com" style="height:400px;width:100%;border:none;"></iframe>
 <h2 id='set-up-the-sdk-ios'>Set up the SDK - IOS</h2>
 <p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
@@ -671,7 +679,32 @@ email: user@example.com
 )
 </code></pre>
 <p>Sign the header and payload with the <code>partner_auth_key</code>.</p>
-<h4 id='create-the-session'>Create the Session</h4><pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
+<h4 id='create-the-session'>Create the Session</h4><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">RezolveSDK</span>
+
+
+<span class="kd">class</span> <span class="kt">SandboxViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">API_ENVIRONMENT</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">accessToken</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"abc123.abc123.abc123"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"123"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"123"</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+        <span class="k">var</span> <span class="nv">sdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
+            <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span>
+            <span class="nv">env</span><span class="p">:</span> <span class="kt">API_ENVIRONMENT</span>
+        <span class="p">)</span>
+
+        <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">accessToken</span><span class="p">:</span> <span class="n">accessToken</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">)</span> <span class="p">{</span> <span class="n">session</span>
+
+            <span class="c1">// your rezolve SDK logic here</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
 </code></pre><pre class="highlight java tab-java"><code><span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
@@ -1519,7 +1552,39 @@ email: user@example.com
         <span class="p">})</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="n">TODO</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
+
+<span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="n">ProductInterface</span> <span class="n">productInterface</span><span class="o">;</span>
+
+    <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+
+    <span class="c1">// get categories</span>
+    <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+    <span class="n">myProductManager</span><span class="o">.</span><span class="na">getCategories</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetCategoriesSuccess</span><span class="o">(</span><span class="n">Category</span> <span class="n">category</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// parse Category object </span>
+    <span class="n">String</span> <span class="n">category_id</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">parentId</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getParentId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+    <span class="n">Boolean</span> <span class="n">hasCategories</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">hasCategories</span><span class="o">();</span>
+    <span class="n">Boolean</span> <span class="n">hasProduct</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">hasProducts</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">image</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getImage</span><span class="o">();</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">imageThumbs</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getImageThumbs</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">catparentId</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getParentId</span><span class="o">();</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Category</span><span class="o">&gt;</span> <span class="n">children</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getCategories</span><span class="o">();</span>
+
+    <span class="k">for</span> <span class="o">(</span><span class="n">Category</span> <span class="n">subcategory</span> <span class="o">:</span> <span class="n">children</span><span class="o">){</span>
+        <span class="n">subcategory</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="c1">// ... etc</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code></pre>
 <p>By looking at the Boolean <code>hasCategories</code>, we can tell if the category contains any subcategories. If so, we can use <code>ProductManager.getCategories</code> to fetch them.</p>
@@ -2404,9 +2469,9 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </code></pre>
 <p>AddProductToCart adds a product to the cart for a particular merchant.</p>
 
-<p>IOS Method signature: <code>session.CheckoutManager.addProductToCart( CheckoutProduct, String TODO, [callback or interface] )</code></p>
+<p>IOS Method signature: <code>session.CheckoutManager.addProductToCart( CheckoutProduct, String merchantId, [callback or interface] )</code></p>
 
-<p>Android Method signature: <code>session.CheckoutManager.addProductToCart( Context, CheckoutProduct, String TODO, [callback or interface] )</code></p>
+<p>Android Method signature: <code>session.CheckoutManager.addProductToCart( Context, CheckoutProduct, String merchantId, [callback or interface] )</code></p>
 
 <p>You must pass in a <code>CheckoutProduct</code> object, the merchantId as a string, and a <code>CheckoutInterface</code> object (or callback).</p>
 
@@ -4083,7 +4148,8 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>Shop is an aggregate of Session.</p>
 
 <p>The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.</p>
-<h3 id='method-getmerchants'>Method: getMerchants</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-getmerchants'>Method: getMerchants</h3><pre class="highlight swift tab-swift"><code>
+<span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">ProductViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -5568,8 +5634,6 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
             <span class="n">String</span> <span class="n">merchantEmail</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getMerchantEmail</span><span class="o">();</span>
             <span class="n">String</span> <span class="n">merchantName</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getMerchantName</span><span class="o">();</span>
             <span class="n">String</span> <span class="n">merchantPhone</span> <span class="o">=</span> <span class="n">orderDetails</span><span class="o">.</span><span class="na">getMerchantPhone</span><span class="o">();</span>
-
-
 
 
             <span class="c1">// get properties of finalPrice object</span>
