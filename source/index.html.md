@@ -118,7 +118,7 @@ For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve
 
 To provide quality support, we require quality information. 
 
-Rezolve advises using *<a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a>* to capture app problems on both IOS and Android.
+Rezolve advises using **<a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a>** to capture app problems on both IOS and Android.
 
 We will not provide development support if you have not integrated Crashlytics or a similar tool.
 
@@ -138,7 +138,7 @@ If this is your first time downloading the SDK, you will be provided with an API
 
 ## Set up the SDK - IOS
 
-** NOTE: the IOS SDK is currently based upon Swift 3.2, and thus is not compatible with the latest version of XCode. Rezolve will update to the latest version of Swift in the near future. Until the upgrade is complete, please downgrade your XCode to version 9.2. **
+**NOTE: the IOS SDK is currently based upon Swift 3.2, and thus is not compatible with the latest version of XCode. Rezolve will update to the latest version of Swift in the near future. Until the upgrade is complete, please downgrade your XCode to version 9.2.**
 
 The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
