@@ -2,7 +2,7 @@
 
 As of release 1.6.0, the Rezolve SDK no longer includes an authentication system. Resultingly, the `AuthenticationManager.register` and `AuthenticationManager.logout`  methods have been deprecated.
 
-Instead, Rezolve is utilizing a server-to-server JWT authentication system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with Jason Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
+Instead, Rezolve is utilizing a server-to-server JWT authentication system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
 
 Rezolve expects the primary authentication of users will happen outside the SDK. Thus, exactly how you implement authentication in your app will depend on your existing auth system. In the server-to-server realm, however, there is only one instance in which your authentication server must interact with the Rezolve server. 
 
@@ -203,7 +203,7 @@ RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession( accessToken, entityI
 	@Override
 	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
 		// use created session to access managers.  Example...
-		rezolveSession.getCustomerProfileManager().get();
+		rezolveSession.getAddressbookManager().get(...);
 	}
 
 	@Override
@@ -222,30 +222,172 @@ RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession( accessToken, entityI
 TODO
 ```
 ```java
-// handle JWT expiration without ending session
-private void attemptToGetAddressBook(final RezolveSession session, final boolean retryOnFail) {
-	session.getAddressbookManager().getAll(new AddressbookCallback() {
-		@Override
-		public void onAddressbookGetAllSuccess(List<Address> addresses) {
-			setAddresses(addresses);
-		}
-		@Override
-		public void onFailure(HttpResponse httpResponse) {
-			// TODO - create generic example
-			// Show getting a new JWT
-			// Show setting new JWT in Session Header. 
-			// Anything else?
-		}
-	});
+// Example Authentication Interface
+{
+	package com.partner.app.auth;
+
+	import com.rezolve.sdk.model.network.HttpResponse;
+	import okhttp3.Response;
+
+	//AuthInterface defines how callbacks for several auth operations will work
+	public interface AuthInterface {
+		void onUserRegisterSuccess(UserResponse userResponse, Response responseWithHeaders);
+		void onUserRegiserFailure(HttpResponse httpResponse);
+		void onUserLoginSuccess(UserResponse userResponse, Response responseWithHeaders);
+		void onUserLoginFailure(HttpResponse httpResponse);
+		void onUserDetailsUpdateSuccess(UserResponse userResponse);
+		void onUserDetailsUpdateFailure(HttpResponse httpResponse);
+
+		void onForgotPasswordSuccess(HttpResponse response, Response responseWithHeaders);
+		void onForgotPasswordFailure(HttpResponse errorResponse);
+
+		void onChangePasswordSuccess(HttpResponse response, Response responseWithHeaders);
+		void onChangePasswordFailure(HttpResponse errorResponse);
+
+		void onTokenRenewSuccess(HttpResponse response, Response responseWithHeaders);
+		void onTokenRenewFailure(HttpResponse errorResponse);
+
+		void onLogoutSuccess();
+		void onLogoutFailure(HttpResponse errorResponse);
+
+		void onVerificationCodeSuccess();
+		void onVerificationCodeFailure(HttpResponse errorResponse);
+	}
+}
+
+// Example Authentication Callback
+{
+package com.partner.app.auth;
+
+import com.rezolve.sdk.model.network.HttpResponse;
+import okhttp3.Response;
+
+	//AuthCallback creates a concrete implementation of AuthInterface that the app may rely on
+	public abstract class AuthCallback implements AuthInterface {
+		public void onUserRegisterSuccess(UserResponse userResponse, Response responseWithHeaders) { }
+		public void onUserRegiserFailure(HttpResponse httpResponse) { }
+		public void onUserLoginSuccess(UserResponse userResponse, Response responseWithHeaders) { }
+		public void onUserLoginFailure(HttpResponse httpResponse) { }
+		public void onUserDetailsUpdateSuccess(UserResponse userResponse) { }
+		public void onUserDetailsUpdateFailure(HttpResponse httpResponse) { }
+
+		public void onForgotPasswordSuccess(HttpResponse response, Response responseWithHeaders) { }
+		public void onForgotPasswordFailure(HttpResponse errorResponse) { }
+
+		public void onChangePasswordSuccess(HttpResponse response, Response responseWithHeaders) { }
+		public void onChangePasswordFailure(HttpResponse errorResponse) { }
+
+		public void onTokenRenewSuccess(HttpResponse response, Response responseWithHeaders) { }
+		public void onTokenREnewFailure(HttpResponse errorResponse) { }
+
+		public void onLogoutSuccess() { }
+		public void onLogoutFailure(HttpResponse errorResponse) { }
+
+		public void onVerificationCodeSuccess() { }
+		public void onVerificationCodeFailure(HttpResponse errorResponse) { }
+	}
+}
+
+// Example Authentication Manager
+{
+	//AuthenticationManager implements several methods to create sessions, update passwords, etc
+	//This method is called to renew the authorization token
+	public void renewJwtToken(final AuthInterface authInterface) {
+
+		okHttpClient.httpGet(CREDENTIALS+"ping", new LoginResponseHandler() {
+			@Override
+			public void onSuccess(HttpResponse response, Response responseWithHeaders) {
+
+				String authHeader = response.getResponseJson().optString("accessToken");
+				HashMap<String, String> headers = new HashMap<>();
+				headers.put("Authorization", authHeader);
+				okHttpClient.setHeaders(headers);
+				RezolveSDK.getInstance(Constants.API_KEY, Constants.ENV).setAuthToken(authHeader);
+
+				if(authInterface != null) {
+					authInterface.onTokenRenewSuccess(response, responseWithHeaders);
+				}
+			}
+
+			@Override
+			public void onFailure(HttpResponse errorResponse) {
+				if(authInterface != null) {
+					authInterface.onTokenRenewFailure(errorResponse);
+				}
+			}
+		});
+	}
+}
+
+// Example of Authentication Manager Use With Rezolve AddressbookManager.getAll
+{
+	//RezolveApp is an entity that implements all Rezolve SDK managers and provides infrastrucuture to access Rezolve API services
+	//
+	// On this example the app already stablished a Rezolve Session and is trying to get the user addresses from the Rezolve SDK AddressbookManager
+
+	//This is the method called to get the AddressBook from the Rezolve API
+	private void attemptToGetAddressBook(final RezolveSession session, final boolean retryOnFail) {
+		//We don't check session for nullity here because this was done by the caller
+		session.getAddressbookManager().getAll(new AddressbookCallback() {
+			@Override
+			public void onAddressbookGetAllSuccess(List<Address> addresses) {
+				setAddresses(addresses);
+			}
+			@Override
+			public void onFailure(HttpResponse httpResponse) {
+				//In case of failure we check if we must try again and if the fail was due to an 
+				//expired session token. If it is, the server returns a code 401
+				if(retryOnFail && httpResponse != null && httpResponse.getStatusCode() == 401) {
+					//We get a new instance of our AuthenticationManager and request a new JWT token
+					AuthenticationManager.getInstance().renewJwtToken(new AuthCallback() {
+						@Override
+						public void onTokenRenewSuccess(HttpResponse response, Response responseWithHeaders) {
+							//If we get a new token, we recursivelly try to get address book again
+							attemptToGetAddressBook(session, false);
+						}
+
+						@Override
+						public void onTokenRenewFailure(HttpResponse errorResponse) {
+							//If the token renewal is failed we log the error. We could ask user to login again.
+							Log.e(TAG, errorResponse);
+						}
+					});
+				} else {
+					//If the first request failed by any reason other than 401 we log the error
+					Log.e(TAG, httpResponse);
+				}
+			}
+		});
+	}
 }
 ```
 
 The Login JWT you generate is included in the headers of every SDK transmission. Thus, when your consumer logs out, you can expire the JWT, and the app will cease communication with the Rezolve server. To do this, create a new JWT with an expiration stamp in the past, and supply it to the SDK.
 
-However, this also means you are required to handle JWT token expiration/renewal. To do this smoothly without interrupting the user session, Rezolve recommends creating a wrapper around any call that contacts the server. If the server returns an authorization error, you can call your token renewal endpoint and issue a new JWT. 
+This also means you are required to handle JWT token expiration/renewal if you want a session to continue. To do this smoothly without interrupting the user session, Rezolve recommends creating a wrapper around any call that contacts the server. If the server returns an authorization error, you can call your token renewal endpoint and issue a new JWT. 
 
-Here is an example, using the getAddressBook method of the AddressBookManager class. Note the use of a boolean to only retry once; this is to prevent continual retries in the event of a purposeful logout.  
+Examples are provided to the right. These are NOT an example of implementing SDK code, but rather an example of implementing session rewnewal with your own authentication server. 
 
+#### IOS
+
+TODO
+
+#### Android
+
+The first three samples show an example of how you might implement an Authentication Manager.  
+
+The Authentication Manager may, for example, process username/passwords for login, handle registering your users, and handle password resets.  It should also handle the JSON Web Tokens to register, create session, and maintain session with Rezolve. 
+
+The Authentication Interface and Authentication Callbacks provide the Authentication Manager features to your developer in a standard and convenient way. 
+
+The final sample, "Example of Authentication Manager Use With Rezolve AddressbookManager.getAll", gives an example of wrapping the AddressbookManager.getAll method. 
+1. Pass in the `session`, and a `retryOnFail` boolean
+2. Call the `getAddressbookManager().getAll` method
+3. If the call succeeds, proceed as normal.
+4. If the call results in an error, check if the error is a 401
+5. If the error is a 401, and the `retryOnFail` is true, request a new JWT, calling the `renewJwtToken` method. Then retry the request.
+6. If the error is 401, and `retryOnFail` is false, we know that we requested a new token and the token provided was expired (indicating end of login session at auth server). Do not retry.
+7. If a different error occurs, log and handle the error. 
 
 
 

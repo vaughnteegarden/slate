@@ -1,6 +1,6 @@
-## Module: ProfileManager
+## Module: CustomerProfileManager
 
-The ProfileManager is an aggregate of Session.
+The CustomerProfileManager is an aggregate of Session.
 
 This module handles maintaining the consumer's contact information and device info.
 

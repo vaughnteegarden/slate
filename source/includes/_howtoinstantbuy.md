@@ -3,14 +3,12 @@
 ## Product Scan, Instant Buy flow
 
 
-
 <img src="images/JWT-shoppable-ad-flow-single-buy.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-single-buy.png" target="_blank">View full size</a> ]
 
 
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
 In the Instant Buy flow, we purchase the product immediately, without first adding it to the cart.
-
 
 
 #### 1. Capture image and get product
@@ -109,7 +107,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
 
 ```
 
-First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts `merchantId`, `catalogId`, and `productId` from the image, automatically calling `getProduct`. The scanManager returns a `product` object.
+First, initialize `scanManager`, and enable the scan screen using `session.startVideoScan()`, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts `merchantId`, `catalogId`, and `productId` from the image, automatically calling `getProduct`. The scanManager returns a `product` object.
 
 
 
@@ -117,63 +115,51 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 
 #### 2. Create an order and get an order total
 
-
-
 ```swift
-func onProductResult(product: Product) -> Void {
-
-    session.addressbookManager.get(id: "1") { (remoteAddress: Address) in
-
-      let checkoutProduct = createCheckoutProductWithVariant(product: product)
-
-      session.checkoutManager.checkoutProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, callback: { (order: CheckoutOrder) in
-
-
-      }, errorCallback: { print($0) })
-    }
-}
-
+TODO
 ```
-
 ```java
-
 @Override
 public void onProductResult(Product product) {
-    // get product info
-    String product_id = product.getId();
-    String title = product.getTitle();
-    String subtitle = product.getSubtitle();
-    // ... etc
+	// get product info
+	String product_id = product.getId();
+	String title = product.getTitle();
+	String subtitle = product.getSubtitle();
+	// ... etc
 
 
-    // instant buy example
+	// create a CheckoutProduct object with the product id , and set the quantity
+	CheckoutProduct checkoutProduct = new CheckoutProduct();
+	checkoutProduct.setId(Integer.parseInt(product_id));
+	checkoutProduct.setQty(1);
 
-    // create a CheckoutProduct object with the product id , and set the quantity
-    CheckoutProduct checkoutProduct = new CheckoutProduct();
-    checkoutProduct.setId(Integer.parseInt(product_id));
-    checkoutProduct.setQty(1);
 
-    // call the CheckoutProduct method to get and order object and totals
-    CheckoutManager checkout = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
+	// get a CheckoutManager
+	final CheckoutManager checkout = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-    String merchantId = "123"; // use real merchant id
-    String addressId = "123"; // use real consumer address id
+	// create a product checkout bundle for standard home delivery
+	String merchantId = "123"; // use real merchant id
+	String addressId = "123"; // use real consumer address id
+	String phonebookId = "123"; // use real consumer phonebook id
+	CheckoutBundle checkoutBundle = CheckoutBundle.createProductCheckoutBundle(merchantId, addressId, checkoutProduct);
 
-    checkout.checkoutProduct(this, merchantId, checkoutProduct, addressId, new CheckoutCallback() {
-        @Override
-        public void onCheckoutProductSuccess(Order order) {
-            super.onCheckoutProductSuccess(order);
+	// call CheckoutCart to get an Order object with totals
+	checkout.checkoutProduct(checkoutBundle, new CheckoutCallback() {
+		public void onCheckoutProductSuccess(Order order) {
+			// extract order details
+			List<PriceBreakdown> breakdowns = order.getBreakdowns();
+			float finalPrice = order.getFinalPrice();
+			String orderId = order.getOrderId();
 
-            String orderId = order.getOrderId();
-            List<PriceBreakdown> orderBreakdown = order.getBreakdowns();
-            float orderTotal = order.getFinalPrice();
-        }
-    });
+			// extract price breakdowns
+			for (PriceBreakdown priceBreakdown : breakdowns ) {
+				float amount = priceBreakdown.getAmount();
+				String type = priceBreakdown.getType();
+			}
+		}
+	});
 }
-
 ```
-
-
 
 Once you have product information, create a CheckoutProduct object. Then call the SDK `CheckoutManager.checkoutProduct` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
 
@@ -215,21 +201,11 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 
 #### 4. Submit payment for order
 
-
-
 ```swift
-let PARIS_LOCATION = RezolveLocation(longitude: 2.2910793, latitude: 48.8736645)
-
-let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
-session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, phone: phone, callback: { (order: CheckoutOrder) in
-
-
-}, errorCallback: { print($0) })
+TODO
 ```
-
 ```java
-// create a paymentRequest object, and then use this with the checkoutProduct object and rezolveLocation object to purchase the item.
+// create a paymentRequest object, and then use this with the checkoutBundle object and rezolveLocation object to purchase the item.
 
 // create paymentRequest object
 PaymentCard paymentCard = new PaymentCard(); // use consumer's chosen payment card from step 3
@@ -241,11 +217,11 @@ RezolveLocation rezolveLocation = new RezolveLocation();
 rezolveLocation.setLatitude(48.8736645);
 rezolveLocation.setLongitude(2.2910793);
 
-checkout.buyProduct(this, merchantId, checkoutProduct, addressId, phonebookId, rezolveLocation, paymentRequest, new CheckoutCallback() {
-    @Override
-    public void onProductOrderPlaced(String s) {
-        super.onProductOrderPlaced(s);
-    }
+// buy a single product
+checkout.buyProduct(checkoutBundle, phonebookId, rezolveLocation, paymentRequest, new CheckoutCallback() {
+	public void onProductOrderPlaced(String merchantId, String orderId) {
+		// show order confirmation
+	}
 });
 ```
 
@@ -253,7 +229,7 @@ checkout.buyProduct(this, merchantId, checkoutProduct, addressId, phonebookId, r
 
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass the `merchantId`, `phonebookId` and `addressId` strings, the `checkoutProduct` object, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyProduct` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
+Pass a `checkoutBundle` object, `phonebookId` string, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyProduct` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
 When the method returns successfully, it will automatically initiate the signOrderUpdate method.
 

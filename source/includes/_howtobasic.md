@@ -59,8 +59,6 @@ private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
 RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, ENVIRONMENT);
 
-
-
 ```
 
 ```java
@@ -82,7 +80,7 @@ The SDK must be initialized before use. When initializing the SDK, you must spec
 
 Your `API Key` is supplied to you when you set up a developer account with Rezolve.
 
-Your `server environment` is an enum. See values, right.
+Your `server environment` is a string, and is provided at the same time as your API key.
 
 
 
@@ -102,7 +100,7 @@ public class MyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
  		...
         RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-        .createSession(entityId, partnerId, deviceProfile, new RezolveInterface() {
+        .createSession(accessToken, entityId, partnerId, deviceProfile, new RezolveInterface() {
 
             @Override
             public void onInitializationSuccess(RezolveSession rezolveSession, String 
@@ -125,7 +123,6 @@ public class MyActivity extends AppCompatActivity {
     }
 }
 
-
 //
 // Using INTERFACE, you can save some development time
 //
@@ -134,6 +131,7 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 	...
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// .getRezolveSession gets an already created session
 		RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession()
         .getWalletManager().getAll(this);
 	}
@@ -192,7 +190,7 @@ Each uploaded image will have a corresponding array of thumbnails. If an object 
 
 For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumers to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
 
-The Rezolve SDK has no built-in authentication mechansim, but that is not to say there is no security. Instead, Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with Jason Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
+The Rezolve SDK has no built-in authentication mechansim, but that is not to say there is no security. Instead, Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
 
 Exactly how you implement authentication in your app will depend on what authorization system you use. You may either:
 

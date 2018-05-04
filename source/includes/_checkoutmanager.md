@@ -4,6 +4,219 @@ Checkout is an aggregate of Session.
 
 The checkout module handles the shopping cart, and creates, modifies, and completes orders with payment.
 
+This section also covers the use of CheckoutBundle class, to create the CheckoutBundles used by CheckoutManager. The method used to create the checkout bundle  determines the order flow for checkout and purchase. For example, if you create a checkout bundle using `.CreateCartCheckoutBundle`, the consumer is prompted to for the cart, and choose a shipping address. If you instead use `.CreateCartInStorePickupCheckoutBundle`, the consumer will need to choose their in-store-pickup options. 
+
+
+
+### Method: CheckoutBundle.CreateCartCheckoutBundle
+
+```swift
+TODO
+```
+```java
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
+
+        String merchantId = "123";
+        String cartId = "123";
+        String addressId = "123";
+
+        // create a cart checkout bundle
+        CheckoutBundle checkoutBundle = CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId );
+    }
+}
+```
+
+CreateCartCheckoutBundle creates a cart checkout bundle for standard home delivery.
+
+Method signature: `session.CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId )`
+
+You must pass in the `cartId`, the `merchantId`, and `addressId`, all as strings.
+
+The method returns an `CheckoutBundle` object.
+
+
+### Method: CheckoutBundle.CreateCartInStorePickupCheckoutBundle
+
+```swift
+TODO
+```
+```java
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
+
+        String cartId = "123";
+        String merchantId = "123";
+        ShippingMethod shippingMethod = new ShippingMethod();
+        StoreAddress storeAddress = new StoreAddress();
+
+        // create a pick up in store checkout bundle
+        CheckoutBundle.createCartInStorePickupCheckoutBundle( cartId, merchantId, shippingMethod, storeAddress);
+    }
+}
+```
+
+CreateCartInStorePickupCheckoutBundle creates a cart checkout bundle for in store pickup. 
+
+Method signature: `session.CheckoutBundle.createCartInStorePickupCheckoutBundle( cartId, merchantId, shippingMethod, storeAddress);`
+
+You must pass in the `cartId` and `merchantId` as strings, a `ShippingMethod` object, and a `StoreAddress` object.
+
+The method returns an `CheckoutBundle` object.
+
+
+
+
+### Method: CheckoutBundle.CreateProductCheckoutBundle
+
+```swift
+TODO
+```
+```java
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        String cartId = "123";
+        String merchantId = "123";
+
+		// create a product checkout bundle for standard home delivery
+        CheckoutBundle.createProductCheckoutBundle( merchantId, addressId, checkoutProduct );
+    }
+}
+```
+
+CreateProductCheckoutBundle creates a product checkout bundle for standard home delivery.
+
+Method signature: `session.CheckoutBundle.createProductCheckoutBundle( merchantId, addressId, checkoutProduct )`
+
+You must pass in the `merchantId` and `addressId` as strings, and a  `CheckoutProduct` object.
+
+The method returns an `CheckoutBundle` object.
+
+
+
+
+### Method: CheckoutBundle.CreateProductInStorePickupCheckoutBundle
+
+```swift
+TODO
+```
+```java
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        String cartId = "123";
+        ShippingMethod shippingMethod = new ShippingMethod();
+        StoreAddress storeAddress = new StoreAddress();
+
+        // create a product checkout bundle for pick up in store
+        CheckoutBundle.createProductInStorePickupCheckoutBundle( merchantId, shippingMethod, storeAddress, checkoutProduct );
+    }
+}
+```
+
+CreateProductInStorePickupCheckoutBundle creates a product checkout bundle for in store pickup.
+
+Method signature: `session.CheckoutBundle.createProductInStorePickupCheckoutBundle( merchantId, shippingMethod, storeAddress, checkoutProduct )`
+
+You must pass in the `merchantId` as a string, a `ShippingMethod` object, a `StoreAddress` object, and a `CheckoutProduct` object.
+
+The method returns an `CheckoutBundle` object.
+
+
+
+### Method: createPaymentRequest
+
+```swift
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
+
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        let signUpRequest = createSingUpRequest()
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) i
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+              let address: Address = createAddress()
+              session.addressbookManager.create(address: address) { (remoteAddress: Address) in
+                  let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
+                  session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
+                      let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
+                      let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
+                  }, validationErrorCallback: { print($0) })
+              }
+            }, errorCallback: { print($0) })
+        })
+    }
+}
+```
+```java
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
+
+        PaymentCard paymentCard = new PaymentCard();
+        String cvv = "123";
+
+        // create a payment request
+        PaymentRequest paymentRequest = checkoutManager.createPaymentRequest( paymentCard, cvv);
+
+    }
+}
+```
+
+CreatePaymentRequest is a utility method that creates a PaymentRequest object.
+
+Method signature: `session.CheckoutManager.createPaymentRequest( PaymentCard, CVV, [callback or interface] )`
+
+You must pass in a `PaymentCard` object, and a `CVV` as a string. Use WalletManager to get a PaymentCard object.
+
+The method returns an `PaymentRequest` object.
+
+
+
+
 ### Method: addProductToCart
 
 ```swift
@@ -52,203 +265,141 @@ class ViewController: UIViewController {
 }
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String merchantId;
-    RezolveLocation rezolveLocation;
-    CheckoutInterface checkoutInterface;
-    CheckoutProduct checkoutProduct;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        String merchantId = "123";
 
-        // add product to cart
-        myCheckoutManager.addProductToCart(this, checkoutProduct, merchantId, checkoutInterface);
+        // add a product to the cart
+        checkoutManager.addProductToCart(checkoutProduct, merchantId, this);
     }
-
 
     @Override
     public void onAddProductsToCartSuccess(CartDetails cartDetails) {
-        // get properties of cartDetails object
-        String cartDateCreated = cartDetails.getDateCreated();
-        String cartDateUpdated = cartDetails.getDateUpdated();
-        String cartId = cartDetails.getId();
-        String cartMerchantId = cartDetails.getMerchantId();
-        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+        String dateCreated = cartDetails.getDateCreated();
+        String dateUpdated = cartDetails.getDateUpdated();
+        String merchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> products = cartDetails.getProducts();
 
-        // get properties of cartProducts array
-        for(CheckoutProduct checkoutProduct:cartProducts){
-            int checkoutProductId = checkoutProduct.getId();
+        // extract product info from array of CheckoutProduct objects
+        for (CheckoutProduct checkoutProduct : products ) {
             List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
-            float checkoutProductQty = checkoutProduct.getQty();
+            int id = checkoutProduct.getId();
+            Placement productPlacement = checkoutProduct.getProductPlacement();
+            float qty = checkoutProduct.getQty();
 
-            // get properties of configurableOptions array
-            for(ConfigurableOption configurableOption:configurableOptions){
-                String configurableOptionCode = configurableOption.getCode();
-                int configurableOptionValue = configurableOption.getValue();
+            // extract configurable options
+            for (ConfigurableOption configurableOption : configurableOptions) {
+                String code = configurableOption.getCode();
+                int value = configurableOption.getValue();
             }
+
+            // extract product placement
+            String adId = productPlacement.getAdId();
+            String placementId = productPlacement.getPlacementId();
         }
-    }
-
-
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
     }
 }
 ```
 
-AddProductToCart adds a product to the cart for a particular merchant.
+Adds a product to a cart.
 
-IOS Method signature: `session.CheckoutManager.addProductToCart( CheckoutProduct, String merchantId, [callback or interface] )`
+Method signature: `session.CheckoutManager.addProductToCart(checkoutProduct, merchantId, [callback or interface] )`
 
-Android Method signature: `session.CheckoutManager.addProductToCart( Context, CheckoutProduct, String merchantId, [callback or interface] )`
-
-You must pass in a `CheckoutProduct` object, the merchantId as a string, and a `CheckoutInterface` object (or callback).
+You must pass in a `CheckoutProduct` object, the merchantId as a string, and an interface or callback.
 
 The method returns an `CartDetails` object.
+
+
+#### CartDetails object
+
+|field|format|example|
+|---|---|---|
+|dateCreated|ISO8601 date string|2017-09-05T07:45:56.692Z|
+|dateUpdated|ISO8601 date string|2017-09-05T07:45:56.692Z|
+|merchantId|string|123|
+|products|array of CheckoutProduct objects|&nbsp;|
 
 #### CheckoutProduct object
 
 |field|format|example|
 |---|---|---|
-|checkoutProductId|int|123|
-|checkoutProductQty|float|1|
-|configurableOptions|array of configurableOption objects|@nbsp;|
+|configurableOptions|array of ConfigurableOption objects|&nbsp;|
+|id|integer|123|
+|productPlacement|ProductPlacement object|&nbsp;|
+|qty|float|123|
 
 #### ConfigurableOption object
 
 |field|format|example|
 |---|---|---|
-|configurableOptionCode|string|Logo|
-|configurableOptionValue|int|123|
+|code|string|abc123|
+|value|int|123|
 
-#### CartDetails object
+#### ProductPlacement object
+
 |field|format|example|
 |---|---|---|
-|cartDateCreated|date string in format YYYY-MM-DD|2017-12-25|
-|cartDateUpdated|date string in format YYYY-MM-DD|2017-12-25|
-|cartId|string|abc123|
-|cartMerchantId|string|abc123|
-|cartProducts|array of CheckoutProduct objects|&nbsp;|
-
-
-
+|adId|string|abc123|
+|placementId|string|abc123|
 
 
 ### Method: buyCart
 
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "..."
-let CATEGORY_ID = Int32(100)
-let PRODUCT_ID = "..."
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-              let address: Address = createAddress()
-
-              session.addressbookManager.create(address: address) { (remoteAddress: Address) in
-
-                  let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
-
-                  session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
-
-                      let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
-                      let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
-                      session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
-
-                          session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
-
-
-                          }, errorCallback: { print($0) })
-
-                      }, errorCallback: { print($0) })
-                  })
-              }
-
-            }, errorCallback: { print($0) })
-        })
-    }
-
-    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
-        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
-        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
-    }
-}
+TODO
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String cartId;
-    String merchantId;
-    RezolveLocation rezolveLocation;
-    PaymentRequest paymentRequest;
-    CheckoutInterface checkoutInterface;
-    String phonebookId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
+        String cartId = "123";
+        String merchantId = "123";
+        String addressId = "123";
+        String phonebookId = "123";
+        RezolveLocation rezolveLocation = new RezolveLocation();
+        PaymentCard paymentCard = new PaymentCard();
+        String cvv = "123";
 
-        // buy cart; returns an order id
-        myCheckoutManager.buyCart(merchantId, cartId, addressId, phonebookId,
-        rezolveLocation, paymentRequest, checkoutInterface);
+        // create a payment request
+        PaymentRequest paymentRequest = checkoutManager.createPaymentRequest( paymentCard, cvv);
+		
+        // create a cart checkout bundle for standard home delivery
+        CheckoutBundle checkoutBundle = CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId );
 
+        // buy the contents of a cart
+        checkoutManager.buyCart(checkoutBundle, phonebookId, rezolveLocation, paymentRequest, this );
     }
 
     @Override
-    public void onCartOrderPlaced(String s) {
-        String orderId = s;
-    }
-
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
+    public void onCartOrderPlaced(String merchantId, String orderId) {
+        // show order confirmation
     }
 }
 ```
 
-BuyCart sends payment information to the backend to purchase the contents of a cart. 
+BuyCart sends payment information to purchase the contents of a cart.
 
-If this method returns successfully, it will automatically call `signOrderUpdate` and start listening on a socket for the server to return an order status. 
+Method signature: `session.CheckoutManager.buyCart(checkoutBundle, phonebookId, rezolveLocation, paymentRequest, [callback or interface] )`
 
-Method signature: `session.CheckoutManager.buyCart( MerchantId, CartId, AddressId, 
-        RezolveLocation, PaymentRequest, [callback or interface] )`
+You must pass in a `CheckoutBundle` object, the `phonebookId` as a string, a `RezolveLocation` object, a `PaymentRequest` object, and an interface or callback.
 
-You must pass in strings MerchantId, CartId, AddressId, a RezolveLocation object, a PaymentRequest object, and a CheckoutInterface (or callback).
-
-The method returns an `OrderId` string.
+The method returns a `merchantId` and an `orderId`. 
 
 #### RezolveLocation object
 
@@ -268,238 +419,126 @@ The method returns an `OrderId` string.
 
 
 
+
 ### Method: buyProduct
 
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "..."
-let CATEGORY_ID = Int32(100)
-let PRODUCT_ID = "..."
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                let address: Address = createAddress()
-
-                session.addressbookManager.create(address: address) { (remoteAddress: Address) in
-
-                    let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
-
-                    session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
-
-                        let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
-                        let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
-                        session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
-
-
-
-                        }, errorCallback: { print($0) })
-                    })
-                }
-
-            }, errorCallback: { print($0) })
-        })
-    }
-
-    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
-        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
-        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
-    }
-}
+TODO
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String merchantId;
-    RezolveLocation rezolveLocation;
-    PaymentRequest paymentRequest;
-    CheckoutInterface checkoutInterface;
-    CheckoutProduct checkoutProduct;
-    String phonebookId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-        // buy product directly, bypassing cart; returns an order id
-        myCheckoutManager.buyProduct(this, merchantId, checkoutProduct, addressId, phonebookId,
-        rezolveLocation, paymentRequest, checkoutInterface);
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        RezolveLocation rezolveLocation = new RezolveLocation();
+        PaymentCard paymentCard = new PaymentCard();
+        String cvv = "123";
+
+        // create a product checkout bundle for standard home delivery
+        CheckoutBundle.createProductCheckoutBundle(cartId, merchantId, checkoutProduct);
+
+        // create a payment request
+        PaymentRequest paymentRequest = checkoutManager.createPaymentRequest( paymentCard, cvv);
+
+        // buy a single product (identical to buy cart?)
+        checkoutManager.buyProduct(checkoutBundle, phonebookId, rezolveLocation, paymentRequest, this);
+
     }
 
     @Override
-    public void onProductOrderPlaced(String s) {
-        String orderId = s;
-    }
-
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
+    public void onProductOrderPlaced(String merchantId, String orderId) {
+        // show order confirmation
     }
 }
-
 ```
 
-BuyProduct purchases a product directly, bypassing the cart.
+BuyProduct sends payment information to purchase a single product.
 
-If this method returns successfully, it will automatically call `signOrderUpdate` and start listening on a socket for the server to return an order status.
+Method signature: `session.CheckoutManager.buyProduct(checkoutBundle, phonebookId, rezolveLocation, paymentRequest, [callback or interface] )`
 
-IOS Method signature: `session.buyProduct( MerchantId, CheckoutProduct, AddressId, 
-        RezolveLocation, PaymentRequest, [callback or interface] )`
+You must pass in a `CheckoutBundle` object, the `phonebookId` as a string, a `RezolveLocation` object, a `PaymentRequest` object, and an interface or callback.
 
-Android Method signature: `session.buyProduct( Context, MerchantId, CheckoutProduct, AddressId, 
-        RezolveLocation, PaymentRequest, [callback or interface] )`
-
-You must pass in MerchantId and AddressId as strings, a CheckoutProduct Object, a RezolveLocation object, a PaymentRequest object, and a CheckoutInterface (or callback). 
-
-The method returns an `OrderId` string.
-
+The method returns a `merchantId` and an `orderId`. 
 
 
 
 ### Method: checkoutCart
 
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "..."
-let CATEGORY_ID = Int32(100)
-let PRODUCT_ID = "..."
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                let address: Address = createAddress()
-
-                session.addressbookManager.create(address: address) { (remoteAddress: Address) in
-
-                    let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
-
-                    session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
-
-                        let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
-
-                        session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
-
-                            session.checkoutManager.checkoutCart(cart: cartDetails, address: remoteAddress, callback: { order in
-
-
-                            }, errorCallback: { print($0) })
-
-                        }, errorCallback: { print($0) })
-
-                    }, validationErrorCallback: { print($0) })
-                }
-
-            }, errorCallback: { print($0) })
-        })
-    }
-
-    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
-        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
-        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
-    }
-}
+TODO
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String cartId;
-    String merchantId;
-    CheckoutInterface checkoutInterface;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-        // checkout cart: returns an Order object with price breakdown
-        myCheckoutManager.checkoutCart(cartId,merchantId, addressId, checkoutInterface);
+        String cartId = "123";
+        String merchantId = "123";
+        String addressId = "123";
+
+        // create a cart checkout bundle for standard home delivery
+        CheckoutBundle checkoutBundle = CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId );
+
+        //  get order id and totals for a cart
+        checkoutManager.checkoutCart( checkoutBundle, this );
     }
 
     @Override
     public void onCheckoutCartSuccess(Order order) {
-        // get properties of order array
+        // extract order details
         List<PriceBreakdown> breakdowns = order.getBreakdowns();
         float finalPrice = order.getFinalPrice();
         String orderId = order.getOrderId();
 
-        // get properties of PriceBreakdown array
-        for (PriceBreakdown priceBreakdown : breakdowns) {
-            float breakdownAmount = priceBreakdown.getAmount();
-            String breakdownType = priceBreakdown.getType();
+        // extract price breakdowns
+        for (PriceBreakdown priceBreakdown : breakdowns ) {
+            float amount = priceBreakdown.getAmount();
+            String type = priceBreakdown.getType();
         }
     }
-
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
-    }
 }
-
 ```
 
-CheckoutCart requests updated pricing, including shipping and tax, based on the contents of the cart.
+CheckoutCart generates order totals, including shipping and tax, based on the contents of the cart. 
 
-Method signature: `session.CheckoutManager.checkoutCart( CartId, MerchantId, AddressId, [callback or interface] )`
+Method signature: `session.CheckoutManager.checkoutCart( checkoutBundle, [callback or interface] )`
 
-You must pass in CartId, MerchantId, and AddressId as strings, and a CheckoutInterface (or callback).
+You must pass in a `CheckoutBundle` object, and an interface or callback.
 
-The method returns an `Order` object with PriceBreakdown information.
+The method returns an `Order` object that includes final price and order id.
 
 #### Order object
 
 |field|format|example|
 |---|---|---|
 |breakdowns|array of PriceBreakdown objects|&nbsp;|
-|finalPrice|float|19.95|
-|orderId|string|abc123|
+|finalPrice|float|499.95|
+|orderId|string|abcd1234|
 
 #### PriceBreakdown object
 
 |field|format|example|
 |---|---|---|
-|breakdownAmount|float|14.95|
-|breakdownType|string enum, one of (MAIN, UNIT, SHIPPING, OPTION_VARIANT, TAX, or DISCOUNT)|TAX|
+|amount|float|49.01|
+|type|string|tax|
+
 
 
 
@@ -507,112 +546,57 @@ The method returns an `Order` object with PriceBreakdown information.
 ### Method: checkoutProduct
 
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "..."
-let CATEGORY_ID = Int32(100)
-let PRODUCT_ID = "..."
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                let address: Address = createAddress()
-
-                session.addressbookManager.create(address: address) { (remoteAddress: Address) in
-
-                    let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
-
-                    session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
-
-                        let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
-
-                        session.checkoutManager.checkoutProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, callback: { (order: CheckoutOrder) in
-
-
-                        }, errorCallback: { print($0) })
-
-                    }, validationErrorCallback: { print($0) })
-                }
-
-            }, errorCallback: { print($0) })
-        })
-    }
-
-    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
-        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
-        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
-    }
-}
+TODO
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String merchantId;
-    CheckoutProduct checkoutProduct;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-        // checkout product; returns an Order object with price breakdown
-        myCheckoutManager.checkoutProduct(this, merchantId, checkoutProduct, 
-        addressId, checkoutInterface);
+        String cartId = "123";
+        String merchantId = "123";
+        String addressId = "123";
+
+        // create a cart checkout bundle for standard home delivery
+        CheckoutBundle checkoutBundle = CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId );
+
+        //  get order id and totals for a single product
+        checkoutManager.checkoutProduct(checkoutBundle,this);
     }
 
     @Override
     public void onCheckoutProductSuccess(Order order) {
-        // get properties of order array
+        // extract order details
         List<PriceBreakdown> breakdowns = order.getBreakdowns();
         float finalPrice = order.getFinalPrice();
         String orderId = order.getOrderId();
 
-        // get properties of PriceBreakdown array
-        for (PriceBreakdown priceBreakdown : breakdowns) {
-            float breakdownAmount = priceBreakdown.getAmount();
-            String breakdownType = priceBreakdown.getType();
+        // extract price breakdowns
+        for (PriceBreakdown priceBreakdown : breakdowns ) {
+            float amount = priceBreakdown.getAmount();
+            String type = priceBreakdown.getType();
         }
-    }
-
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
     }
 }
 ```
 
-CheckoutProduct requests pricing, including shipping and tax, for a single product.
+CheckoutProduct generates order totals, including shipping and tax, for a single product. 
 
-IOS Method signature: `session.CheckoutManager.checkoutProduct( MerchantId, CheckoutProduct, AddressId,  [callback or interface] )`
+Method signature: `session.CheckoutManager.checkoutProduct( checkoutBundle, [callback or interface] )`
 
-Android Method signature: `session.CheckoutManager.checkoutProduct( Context, MerchantId, CheckoutProduct, AddressId,  [callback or interface] )`
+You must pass in a `CheckoutBundle` object, and an interface or callback.
 
-You must pass in a MerchantId string, a CheckoutProduct object, an AddressId string, and a CheckoutInterface (or callback).
-
-The method returns an `Order` object with PriceBreakdown information.
+The method returns an `Order` object that includes final price and order id.
 
 
 
-
-### Method: createPaymentRequest
+### Method: getCarts
 
 ```swift
 import UIKit
@@ -623,32 +607,15 @@ let CATEGORY_ID = Int32(100)
 let PRODUCT_ID = "..."
 
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
         let signUpRequest = createSingUpRequest()
-
         sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+                session.cartManager.getCarts(callback: { carts in
 
-              let address: Address = createAddress()
-
-              session.addressbookManager.create(address: address) { (remoteAddress: Address) in
-
-                  let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
-
-                  session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
-
-                      let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
-                      let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
-                  }, validationErrorCallback: { print($0) })
-              }
-
+                }, errorCallback: { print($0) })
             }, errorCallback: { print($0) })
         })
     }
@@ -660,17 +627,7 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String cartId;
-    String cvv;
-    String merchantId;
-    String orderId;
-    RezolveLocation rezolveLocation;
-    PaymentRequest paymentRequest;
     CheckoutInterface checkoutInterface;
-    CheckoutProduct checkoutProduct;
-    CheckoutProduct checkoutProduct2;
-    PaymentCard paymentCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -678,20 +635,49 @@ public class Checkout extends AppCompatActivity implements CheckoutInterface {
         CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
         ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-        // create a payment request prior to buying product or cart
-        myCheckoutManager.createPaymentRequest(paymentCard, cvv);
+        // gets carts for the current session: returns an array of CartDetail objects
+        myCheckoutManager.getCarts(checkoutInterface);
+    }
+
+    @Override
+    public void onGetCartsSuccess(List<CartDetails> successCartDetails) {
+        // get properties of successCartDetails array
+        for(CartDetails cartDetails: successCartDetails){
+            String cartDateCreated = cartDetails.getDateCreated();
+            String cartDateUpdated = cartDetails.getDateUpdated();
+            String cartId = cartDetails.getId();
+            String cartMerchantId = cartDetails.getMerchantId();
+            List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+
+            // get properties of cartProducts array
+            for(CheckoutProduct checkoutProduct:cartProducts){
+                int checkoutProductId = checkoutProduct.getId();
+                List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+                float checkoutProductQty = checkoutProduct.getQty();
+
+                // get properties of configurableOptions array
+                for(ConfigurableOption configurableOption:configurableOptions){
+                    String configurableOptionCode = configurableOption.getCode();
+                    int configurableOptionValue = configurableOption.getValue();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(HttpResponse httpResponse) {
+        // handle error
     }
 }
 ```
 
-CreatePaymentRequest is a utility method that creates a PaymentRequest object.
+GetCarts gets a list of carts associated with the user.
 
-Method signature: `session.CheckoutManager.createPaymentRequest( PaymentCard, CVV, [callback or interface] )`
+Method signature: `session.CheckoutManager.getCarts( [callback or interface] )`
 
-You must pass in a `PaymentCard` object, and a `CVV` as a string.
+You must pass in a `CheckoutInterface` or callback.
 
-The method returns an `PaymentRequest` object.
-
+The method returns an array of `CartDetail` objects.
 
 
 
@@ -706,23 +692,15 @@ let CATEGORY_ID = Int32(100)
 let PRODUCT_ID = "..."
 
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
         let signUpRequest = createSingUpRequest()
-
         sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
               session.cartManager.getCart(merchantId: MERCHANT_ID, id: cartDetails.id, callback: { remoteCart in
 
-
               }, errorCallback: { print($0) })
-
             }, errorCallback: { print($0) })
         })
     }
@@ -783,104 +761,9 @@ GetCardById returns the contents of a cart, as specified by cartId.
 
 Method signature: `session.CheckoutManager.getCartById( CartId, MerchantId, [callback or interface] )`
 
-You must pass in a `Cartid` string, a `MerchantId` string, and a CheckoutInterface (or callback).
+You must pass in a `Cartid` string, a `MerchantId` string, and a `CheckoutInterface` or callback.
 
 The method returns an `CartDetails` object.
-
-
-
-
-### Method: getCarts
-
-```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "..."
-let CATEGORY_ID = Int32(100)
-let PRODUCT_ID = "..."
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                session.cartManager.getCarts(callback: { carts in
-
-
-                }, errorCallback: { print($0) })
-
-            }, errorCallback: { print($0) })
-        })
-    }
-}
-```
-```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
-
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
-    CheckoutInterface checkoutInterface;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
-
-        // gets carts for the current session: returns an array of CartDetail objects
-        myCheckoutManager.getCarts(checkoutInterface);
-    }
-
-    @Override
-    public void onGetCartsSuccess(List<CartDetails> successCartDetails) {
-        // get properties of successCartDetails array
-        for(CartDetails cartDetails: successCartDetails){
-            String cartDateCreated = cartDetails.getDateCreated();
-            String cartDateUpdated = cartDetails.getDateUpdated();
-            String cartId = cartDetails.getId();
-            String cartMerchantId = cartDetails.getMerchantId();
-            List<CheckoutProduct> cartProducts = cartDetails.getProducts();
-
-            // get properties of cartProducts array
-            for(CheckoutProduct checkoutProduct:cartProducts){
-                int checkoutProductId = checkoutProduct.getId();
-                List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
-                float checkoutProductQty = checkoutProduct.getQty();
-
-                // get properties of configurableOptions array
-                for(ConfigurableOption configurableOption:configurableOptions){
-                    String configurableOptionCode = configurableOption.getCode();
-                    int configurableOptionValue = configurableOption.getValue();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
-    }
-}
-```
-
-GetCarts gets a list of carts associated with the user.
-
-Method signature: `session.CheckoutManager.getCarts( [callback or interface] )`
-
-You must pass in a `CheckoutInterface` (or callout).
-
-The method returns an array of `CartDetail` objects.
-
 
 
 
@@ -899,29 +782,17 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
         let signUpRequest = createSingUpRequest()
-
         sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
               session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, productId: PRODUCT_ID, callback: { (remoteProduct: Product) in
                 session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_2, productId: PRODUCT_2, callback: { (remoteProduct2: Product) in
-
                   let checkoutProduct1 = createCheckoutProductWithVariant(product: remoteProduct)
                   let checkoutProduct2 = createCheckoutProductWithVariant(product: remoteProduct2)
-
                   session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct1, callback: { cartDetails1 in
-
                     session.cartManager.addCartProduct(merchantId: MERCHANT_ID, cart: cartDetails1, product: checkoutProduct2, callback: { cartDetails2 in
-
                       session.cartManager.removeCartProduct(merchantId: MERCHANT_ID, cart: cartDetails2, product: checkoutProduct1, callback: { remoteCart in
-
-
-
                       }, errorCallback: { print($0) })
                     }, errorCallback: { print($0) })
                   }, errorCallback: { print($0) })
@@ -932,78 +803,65 @@ class ViewController: UIViewController {
     }
 
     func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
         let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
         return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
     }
 }
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String cartId;
-    String merchantId;
-    CheckoutInterface checkoutInterface;
-    CheckoutProduct checkoutProduct;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-        // removes a product from cart: returns a CartDetails object
-        myCheckoutManager.removeProductFromCart(this, cartId, merchantId,
-        checkoutProduct, checkoutInterface);
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        String cartId = "123";
+        String merchantId = "123";
+
+        // remove a product from a cart
+        checkoutManager.removeProductFromCart(cartId, merchantId, checkoutProduct, this);
     }
-
 
     @Override
     public void onRemoveProductFromCartSuccess(CartDetails cartDetails) {
-        // get properties of cartDetails array
-        String cartDateCreated = cartDetails.getDateCreated();
-        String cartDateUpdated = cartDetails.getDateUpdated();
-        String cartId = cartDetails.getId();
-        String cartMerchantId = cartDetails.getMerchantId();
-        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+        String dateCreated = cartDetails.getDateCreated();
+        String dateUpdated = cartDetails.getDateUpdated();
+        String merchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> products = cartDetails.getProducts();
 
-        // get properties of cartProducts array
-        for(CheckoutProduct checkoutProduct:cartProducts){
-            int checkoutProductId = checkoutProduct.getId();
+        // extract product info from array of CheckoutProduct objects
+        for (CheckoutProduct checkoutProduct : products ) {
             List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
-            float checkoutProductQty = checkoutProduct.getQty();
+            int id = checkoutProduct.getId();
+            Placement productPlacement = checkoutProduct.getProductPlacement();
+            float qty = checkoutProduct.getQty();
 
-            // get properties of configurableOptions array
-            for(ConfigurableOption configurableOption:configurableOptions){
-                String configurableOptionCode = configurableOption.getCode();
-                int configurableOptionValue = configurableOption.getValue();
+            // extract configurable options
+            for (ConfigurableOption configurableOption : configurableOptions) {
+                String code = configurableOption.getCode();
+                int value = configurableOption.getValue();
             }
-        }
-    }
 
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
+            // extract product placement
+            String adId = productPlacement.getAdId();
+            String placementId = productPlacement.getPlacementId();
+        }
     }
 }
 ```
 
 RemoveProductFromCart removes a previously added product from the specified cart.
 
-IOS Method signature: `session.CheckoutManager.removeProductFromCart( CartId, MerchantId, CheckoutProduct, [callback or interface] )`
+Method signature: `session.CheckoutManager.removeProductFromCart( CartId, MerchantId, CheckoutProduct, [callback or interface] )`
 
-Android Method signature: `session.CheckoutManager.removeProductFromCart( Context, CartId, MerchantId, CheckoutProduct, [callback or interface] )`
-
-You must pass in CartId as a string, MerchantId as a string, the CheckoutProduct to remove, and a CheckoutInterface (or callback).
+You must pass in `CartId` as a string, `MerchantId` as a string, the `CheckoutProduct` to remove, and a `CheckoutInterface` or callback.
 
 The method returns a `CartDetails` object.
-
-
 
 
 
@@ -1022,54 +880,33 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
         let signUpRequest = createSingUpRequest()
-
         sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
                 let address: Address = createAddress()
-
                 session.addressbookManager.create(address: address) { (remoteAddress: Address) in
-
                     let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
-
                     session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
-
                         let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
                         let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
                         session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
-
                             session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, callback: { (order: CheckoutOrder) in
-
                                 session.checkoutManager.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
-
                                     print(status)
-
                                     if status == .completed {
-
-
                                     }
                                 })
-
                             }, errorCallback: { print($0) })
-
                         }, errorCallback: { print($0) })
                     })
                 }
-
             }, errorCallback: { print($0) })
         })
     }
 
     func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
         let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
         return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
     }
 }
@@ -1125,7 +962,7 @@ If the orders status is "completed" or "canceled", the listener will close. If t
 
 Method signature: `session.CheckoutManager.signOrderUpdates( OrderId, MerchantId, [callback or interface] )`
 
-You must pass in an OrderId as a string, a MerchantId as string, and a CheckoutInterface (or callback).
+You must pass in an `OrderId` as a string, a `MerchantId` as string, and a `CheckoutInterface` or callback.
 
 The method returns a `Transaction` object, and a `Transaction.Status` object.
 
@@ -1148,7 +985,6 @@ The method returns a `Transaction` object, and a `Transaction.Status` object.
 
 
 
-
 ### Method: updateProductInCart
 
 ```swift
@@ -1160,35 +996,23 @@ let CATEGORY_ID = Int32(100)
 let PRODUCT_ID = "..."
 
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
         let signUpRequest = createSingUpRequest()
-
         sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
               session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, productId: PRODUCT_ID, callback: { (remoteProduct: Product) in
                 session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_2, productId: PRODUCT_2, callback: { (remoteProduct2: Product) in
-
                   let checkoutProduct1 = createCheckoutProduct(product: remoteProduct)
                   let checkoutProduct2 = createCheckoutProduct(product: remoteProduct2)
-
                   session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct1, callback: { cartDetails1 in
-
                     session.cartManager.addCartProduct(merchantId: MERCHANT_ID, cart: cartDetails1, product: checkoutProduct2, callback: { cartDetails2 in
-
                       let newC = cartDetails2.products[0]
                       newC.qty = 20
                       let newC2 = cartDetails2.products[1]
                       newC2.qty = 40
-
                       session.cartManager.updateProductInCart(merchantId: MERCHANT_ID, cart: cartDetails2, oldProduct: checkoutProduct1, newProduct: newC, callback: { remoteCart in
-
 
                       }, errorCallback: { print($0) })
                     }, errorCallback: { print($0) })
@@ -1200,84 +1024,64 @@ class ViewController: UIViewController {
     }
 
     func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
         let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
         return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
     }
 }
 ```
 ```java
-public class Checkout extends AppCompatActivity implements CheckoutInterface {
+public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-    String addressId;
-    String cartId;
-    String cvv;
-    String merchantId;
-    String orderId;
-    RezolveLocation rezolveLocation;
-    PaymentRequest paymentRequest;
-    CheckoutInterface checkoutInterface;
-    CheckoutProduct checkoutProduct;
-    CheckoutProduct checkoutProduct2;
-    PaymentCard paymentCard;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CheckoutManager myCheckoutManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getCheckoutManager();
+        CheckoutManager checkoutManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
 
-        // update product(s) in cart: returns a CartDetails object
-        myCheckoutManager.updateProductInCart(this, cartId, merchantId, 
-        checkoutProduct, checkoutProduct2, checkoutInterface);
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        CheckoutProduct checkoutProduct2 = new CheckoutProduct();
+        String cartId = "123";
+        String merchantId = "123";
+
+        // update a product in a cart
+        // first checkoutProduct is the one to update, second checkoutProduct is what to update it to
+        checkoutManager.updateProductInCart(cartId, merchantId, checkoutProduct, checkoutProduct2, this);
     }
-
 
     @Override
     public void onUpdateProductInCartSuccess(CartDetails cartDetails) {
-        // get properties of cartDetails array
-        String cartDateCreated = cartDetails.getDateCreated();
-        String cartDateUpdated = cartDetails.getDateUpdated();
-        String cartId = cartDetails.getId();
-        String cartMerchantId = cartDetails.getMerchantId();
-        List<CheckoutProduct> cartProducts = cartDetails.getProducts();
+        String dateCreated = cartDetails.getDateCreated();
+        String dateUpdated = cartDetails.getDateUpdated();
+        String merchantId = cartDetails.getMerchantId();
+        List<CheckoutProduct> products = cartDetails.getProducts();
 
-        // get properties of cartProducts array
-        for(CheckoutProduct checkoutProduct:cartProducts){
-            int checkoutProductId = checkoutProduct.getId();
+        // extract product info from array of CheckoutProduct objects
+        for (CheckoutProduct checkoutProduct : products ) {
             List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
-            float checkoutProductQty = checkoutProduct.getQty();
+            int id = checkoutProduct.getId();
+            Placement productPlacement = checkoutProduct.getProductPlacement();
+            float qty = checkoutProduct.getQty();
 
-            // get properties of configurableOptions array
-            for(ConfigurableOption configurableOption:configurableOptions){
-                String configurableOptionCode = configurableOption.getCode();
-                int configurableOptionValue = configurableOption.getValue();
+            // extract configurable options
+            for (ConfigurableOption configurableOption : configurableOptions) {
+                String code = configurableOption.getCode();
+                int value = configurableOption.getValue();
             }
-        }
-    }
 
-    @Override
-    public void onFailure(HttpResponse httpResponse) {
-        // handle error
+            // extract product placement
+            String adId = productPlacement.getAdId();
+            String placementId = productPlacement.getPlacementId();
+        }
     }
 }
 ```
 
 UpdateProductInCart modifies a CheckoutProduct object that is already in the cart.
 
-IOS Method signature: `session.CheckoutManager.updateProductInCart( CartId, MerchantId, CheckoutProduct, CheckoutProduct2, [callback or interface] )`
+Method signature: `session.CheckoutManager.updateProductInCart( CartId, MerchantId, CheckoutProduct, CheckoutProduct2, [callback or interface] )`
 
-Android Method signature: `session.CheckoutManager.updateProductInCart( Context, CartId, MerchantId, CheckoutProduct, CheckoutProduct2, [callback or interface] )`
-
-You must pass in a `Cartid` as a string, a `MerchantId` as a string, a CheckoutProduct object (representing the object you want to change), a second CheckoutProduct object (with the updated values), and a checkoutInterface (or callback).
+You must pass in a `Cartid` as a string, a `MerchantId` as a string, a `CheckoutProduct` object (the product you want to change), a second `CheckoutProduct` object (with the updated values), and a `CheckoutInterface` or callback.
 
 The method returns a `CartDetails` object.
-
-
-
-
-

@@ -2,11 +2,12 @@
 
 All notable changes to the project will be documented in this log.
 
-## Android v1.6.0, IOS v1.6.0 - March 5, 2018
+## Android v1.7.5, IOS v1.7.5 - April 25, 2018
 
 ### Added
 - New section on Generic JWT Authentication, with sequence diagram.
 - AuthenticationManager.createSession, v2, added.
+- MerchantManager class added
 
 ### Changed
 - Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.  
@@ -14,20 +15,34 @@ All notable changes to the project will be documented in this log.
 - Product Scan, Instant Buy Flow - updated code samples for `CheckoutManager` changes
 - Product Scan, Cart Flow - updated code samples for `CheckoutManager` changes
 - Mall flow - updated `getMerchants` method, and add `context` to `getProducts` params. 
-- `AuthenticationManager.register`, v1 `.createSession` and `.logout` methods have been deprecated.  V2 `.createSession` has been added, using JWT accessToken, and removing deviceProfile. CreateSession change made to all sequence diagrams.
-- Android `CheckoutManager` - the methods `.addProductToCart`, ``.buyProduct`, `.checkoutProduct`, `.removeProductFromCart`, and `.updateProductInCart` now require Android `context` as their first parameter.
-- `ProductManager` - change format of `getMerchants` to require an implementation of `ProductCallback` as a parameter. Add `this` context as first parameter to `.getCategory`, `.getProducts`, and `.getProduct`.
+- `AuthenticationManager` class
+	- `.register` deprecated
+	- v1 `.createSession` deprecated
+	- v1 `.logout` deprecated  
+	- V2 `.createSession` has been added, using JWT accessToken, and removing deviceProfile. CreateSession change made to all sequence diagrams.
+- `CheckoutManager` class
+	- the methods `addProductToCart`, `buyProduct`, `checkoutProduct`, `removeProductFromCart`, and `updateProductInCart` now require Android `context` as their first parameter.
+- `ProductManager` class  
+	- `getCategory` now takes category object as a parameter, instead of category id. 
+	- `getProduct` now takes a product object as a parameter, instead of a product id.
+	- `onGetProductsSuccess` now uses `getItems` instead of `getProducts` to extract DisplayProducts. 
+
 
 
 ### Deleted
 - The enum to represent the target Rezolve environment `RezolveSDK.Env.EvironmentName` is removed.
 - DeviceProfile object removed from createSession. 
+- Removed Merchant handling from ProductManager
 
 ## Android v1.5.37, IOS v1.5.40 - Dec 19 2017
 
 ### Added
 
 - PhonebookManager Class
+- MerchantManager Class
+- ProductManager.getCartProduct 
+- ProductManager.getParentCategory
+- ProductManager.getProductsAndCategories
 
 
 

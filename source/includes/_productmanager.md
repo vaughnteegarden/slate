@@ -1,96 +1,14 @@
 ## Module: ProductManager
 
-Shop is an aggregate of Session.
+ProductManager is an aggregate of Session.
 
-The Shop module offers methods specific to e-commerce; getting catalogs, products, and creating orders.
+The ProductManager module offers methods specific to the merchant product catalog; getting catalogs and products.
 
-### Method: getMerchants
-
-```swift
-
-import UIKit
-import RezolveSDK
-
-class ProductViewController: UIViewController {
-
-    let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
-
-  	var mySession: RezolveSession?
-
-  override func viewDidLoad() {
-      super.viewDidLoad()
-
-      self.mySession = ... // initialize session
-
-      self.mySession?.productManager.getMerchants() { (listOfMerchant: Array<Merchant>) in
-
-          listOfMerchant.forEach() { (merchant: Merchant) in
-
-              let merchantId: String = merchant.id
-              let title: String = merchant.title
-          }
-      }
-  }
-}
-
-```
-```java
-// get merchants using ProductInterface
-public class Products extends AppCompatActivity implements ProductInterface {
-
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ProductInterface productInterface;
-
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getProductManager();
-
-        // get merchants
-        myProductManager.getMerchants(this, new ProductCallback() {
-            @Override
-            public void onGetMerchantsSuccess(List<Merchant> list) {
-                for(Merchant merchant : list) {
-                    String merchant_id = merchant.getId();
-                    String name = merchant.getName();
-                    String tagline = merchant.getTagline();
-                    String banner = merchant.getBanner();
-                    List<String> bannerThumb = merchant.getBannerThumbs();
-                    List<String> logoThumbs = merchant.getLogoThumbs();
-                }
-            }
-            @Override
-            public void onFailure(HttpResponse httpResponse) {
-                //handle error
-            }
-        });
-    }
-}
-
-```
-When calling getMerchants(), you must provide an implementation of ProductCallback as a parameter.
-
-IOS Method signature: `session.getMerchants( [ProductCallback] )`
-
-Android Method signature: `session.getMerchants( Context, [ProductCallback] )`
-
-The method returns an array of `merchant` objects.
-
-#### merchant Object
-
-|field|format|example|
-|---|---|---|
-|id|string|brookstone|
-|title|string|Brookstone|
-|logo_url|string|http://domain.com/path/logo.jpg|
-|image_url|string|http://domain.com/path/image.jpg|
-
-How to use the returned images: the `image_url` is typically used as a header background, and the image represented by `logo_url` is overlaid on top.
-
+Scenarios:
+* `getCategories` is used the first time you request categories from a merchant, for mall browsing.
+* `getCategory` is used to pull information and products about a subcategory when mall browsing, or when browsing as the result of a category scan.
+* `getProducts` is no longer needed because categories now automatically return product info, but is retained for backwards compatibility with older code bases.
+* `getProduct`  is typically used to get more information about a product returned from a category query, when displaying a product detail page.
 
 
 ### Method: getCatgories
@@ -159,6 +77,39 @@ public class Products extends AppCompatActivity implements ProductInterface {
         List<String> imageThumbs = category.getImageThumbs();
         String catparentId = category.getParentId();
         List<Category> children = category.getCategories();
+		
+		// get category placement
+        Placement.CategoryPlacement categoryPlacement = category.getCategoryPlacement();
+        String categoryAdId = categoryPlacement.getAdId();
+        String categoryPlacementId = categoryPlacement.getPlacementId();
+
+        // optional:  get paginated subcategory results
+        PageResult<Category> categoryPageResult = category.getCategoryPageResult();
+        
+        // optional: get paginated product results
+		PageResult<DisplayProduct> pageResult = category.getProductPageResult();
+        
+        // get products from pageResult...
+        Integer count = pageResult.getCount();
+        Integer total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
+
+        for (Link link: links){
+            Integer linkcount = link.getCount();
+            Integer page = link.getPage();
+            String sort = link.getSort();
+            String sortBy = link.getSortBy();
+        }
+
+        for (DisplayProduct displayProduct : displayProducts){
+            String DPid = displayProduct.getId();
+            List<String> DPimageThumbs = displayProduct.getImageThumbs();
+            String DPimage = displayProduct.getImage();
+            float DPprice = displayProduct.getPrice();
+            String DPname = displayProduct.getName();
+            String DPcategoryId = displayProduct.getCategoryId();
+        }
     }
 }
 ```
@@ -184,6 +135,9 @@ This method returns the *root category* and *first level of child categories*.
 |imageThumbs|array of url strings|&nbsp;|
 |categoryParentId|string|123|
 |categories|array of category objects|&nbsp;|
+|categoryPlacement|Object containing information on the Engagement placement, if any|&nbsp;|
+|categoryPageResult|object of paginated category results|&nbsp;|
+|pageResult|array of paginated DisplayProduct results|&nbsp;|
 
 Notes:
 
@@ -191,41 +145,12 @@ If `has_categories` is `false`, the `categories` array should be empty.
 
 If `has_products` is `true`, call `getProducts` with the category `id` to get a product list.
 
-This method takes a category id, and returns *that category*, and *all its child categories*.
+
 
 ### Method: getCategory
 
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "12"
-let CATEGORY_ID = Int32(70)
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, callback: { category in
-
-
-                }, errorCallback: {
-
-                    print($0) // handle error
-                })
-            })
-        }
-    }
-}
+TODO
 ```
 ```java
 // get a single category using ProductInterface
@@ -242,9 +167,10 @@ public class Products extends AppCompatActivity implements ProductInterface {
         ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get single category
-        String categoryId = "123";
+		// note: in practice you would pass in category object returned by getCategories method
+        Category category = new Category();  
         String merchantId = "123";
-        myProductManager.getCategory(this, merchantId, categoryId, this); //first this is context, second this is productInterface
+        myProductManager.getCategory(merchantId, category, this); // "this" is productInterface
     }
 
     @Override
@@ -258,19 +184,130 @@ public class Products extends AppCompatActivity implements ProductInterface {
         List<String> imageThumbs = category.getImageThumbs();
         String catParentId = category.getParentId();
         List<Category> children = category.getCategories();
+		
+		// get category placement
+        Placement.CategoryPlacement categoryPlacement = category.getCategoryPlacement();
+        String categoryAdId = categoryPlacement.getAdId();
+        String categoryPlacementId = categoryPlacement.getPlacementId();
+
+        // optional:  get paginated subcategory results
+        PageResult<Category> categoryPageResult = category.getCategoryPageResult();
+        
+        // optional: get paginated product results
+		PageResult<DisplayProduct> pageResult = category.getProductPageResult();
+        
+        // get products from pageResult...
+        Integer count = pageResult.getCount();
+        Integer total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
+
+        for (Link link: links){
+            Integer linkcount = link.getCount();
+            Integer page = link.getPage();
+            String sort = link.getSort();
+            String sortBy = link.getSortBy();
+        }
+
+        for (DisplayProduct displayProduct : displayProducts){
+            String DPid = displayProduct.getId();
+            List<String> DPimageThumbs = displayProduct.getImageThumbs();
+            String DPimage = displayProduct.getImage();
+            float DPprice = displayProduct.getPrice();
+            String DPname = displayProduct.getName();
+            String DPcategoryId = displayProduct.getCategoryId();
+        }
     }
 }
 ```
 
-IOS Method signature: `session.getCategory( merchant_id, category_id, [callback or interface] )`
-
-Android Method signature: `session.getCategory( context, merchant_id, category_id, [callback or interface] )`
+Method signature: `session.getCategory( merchant_id, category, [callback or interface] )`
 
 The method returns a `category` object.
 
 <aside class="notice">
 Note: IOS uses the `getCatalogs` method to fetch both singular and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
+
+
+
+### Method: getParentCategory
+
+```swift
+TODO
+```
+```java
+public class Products extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ProductInterface productInterface;
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
+
+        // get the parent category of a category
+		String merchantId = "123";
+		Category category = new Category();
+        myProductManager.getParentCategory( merchantId, category, this);
+    }
+
+    @Override
+    public void onGetCategorySuccess(Category category) {
+        String category_id = category.getId();
+        String parentId = category.getParentId();
+        String name = category.getName();
+        Boolean hasCategories = category.hasCategories();
+        Boolean hasProduct = category.hasProducts();
+        String image = category.getImage();
+        List<String> imageThumbs = category.getImageThumbs();
+        String catParentId = category.getParentId();
+        List<Category> children = category.getCategories();
+		
+		// get category placement
+        Placement.CategoryPlacement categoryPlacement = category.getCategoryPlacement();
+        String categoryAdId = categoryPlacement.getAdId();
+        String categoryPlacementId = categoryPlacement.getPlacementId();
+
+        // optional:  get paginated subcategory results
+        PageResult<Category> categoryPageResult = category.getCategoryPageResult();
+        
+        // optional: get paginated product results
+        PageResult<DisplayProduct> pageResult = category.getProductPageResult();
+
+        // get products from pageResult...
+        Integer count = pageResult.getCount();
+        Integer total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
+
+        for (Link link: links){
+            Integer linkcount = link.getCount();
+            Integer page = link.getPage();
+            String sort = link.getSort();
+            String sortBy = link.getSortBy();
+        }
+
+        for (DisplayProduct displayProduct : displayProducts){
+            String DPid = displayProduct.getId();
+            List<String> DPimageThumbs = displayProduct.getImageThumbs();
+            String DPimage = displayProduct.getImage();
+            float DPprice = displayProduct.getPrice();
+            String DPname = displayProduct.getName();
+            String DPcategoryId = displayProduct.getCategoryId();
+        }
+    }
+}
+```
+
+Method signature: `session.getCategory( merchant_id, category, [callback or interface] )`
+
+The method returns a `category` object.
+
+
 
 ### Method: getProducts
 
@@ -324,14 +361,17 @@ public class Products extends AppCompatActivity implements ProductInterface {
         ENVIRONMENT).getRezolveSession().getProductManager();
 
         // get products
-        Integer count = 16;
-        Integer page = 1;
-        String sort_by_field = "title";
-        String sort_direction = "ASC";
-        String merchantId3 = "123";
-        String categoryId = "123";
-        myProductManager.getProducts(this, merchantId3, categoryId, count, page, 
-        sort_by_field, sort_direction, this);
+        String merchantId = "123";
+        Category category = new Category();
+
+        PageNavigationFilter pageNavigationFilter = new PageNavigationFilter();
+        pageNavigationFilter.setItemsPerPage(10);
+        pageNavigationFilter.setPageNumber(1);
+        pageNavigationFilter.setSortBy("name");   // values: name, price
+        pageNavigationFilter.setSortDirection("asc");  // values: asc, desc
+
+        // updated
+        myProductManager.getProducts( merchantId, category, pageNavigationFilter, this);
     }
 
     @Override
@@ -339,7 +379,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
         Integer count = pageResult.getCount();
         Integer total = pageResult.getTotal();
         Link[] links = pageResult.getLinks();
-        List<DisplayProduct> products = pageResult.getProducts();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
 
         for (Link link: links){
             Integer linkcount = link.getCount();
@@ -348,7 +388,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
             String sortBy = link.getSortBy();
         }
 
-        for (DisplayProduct displayProduct : products){
+        for (DisplayProduct displayProduct : displayProducts){
             String id = displayProduct.getId();
             List<String> imageThumbs = displayProduct.getImageThumbs();
             String image = displayProduct.getImage();
@@ -360,13 +400,11 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-IOS Method signature: `session.getProducts( merchant_id, category_id, pageNavigation, [callback or interface] )`
+Method signature: `session.getProducts( merchantId, category, pageNavigationFilter, [callback or interface] )`
 
-Android Method signature: `session.getProducts( context, merchant_id, category_id, pageNavigation, [callback or interface] )`
+You must pass a `merchantId`, `category` object, and a `pageNavivationFilter` object.
 
-You must pass a `merchant_id`, `category_id`, and a `pageNavivation` object.
-
-The method returns a `pageResult` object.
+The method returns a `pageResult` object, containing an array of `DisplayProduct` objects.
 
 
 #### pageResult Object
@@ -389,7 +427,7 @@ The links object controls pagignation and sorting of paginated results.
 |count|integer|10|number of items per page|
 |page|integer|1|what page of results you are requesting|
 |sortBy|string|productName|must be a field of the pageResult > SDKEntity object array (see below)|
-|sort|enum|one of: ASC, DESC|
+|sort|enum|one of: asc, desc|
 
 
 #### displayProduct Object
@@ -406,41 +444,12 @@ The displayProduct object is used when rending a series of products. It contains
 |image|main product image url (as a string)|http://domain.com/path/image.jpg|
 
 
+
+
 ### Method: getProduct
 
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "12"
-let CATEGORY_ID = Int32(102)
-let PRODUCT_ID = "6"
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, productId: PRODUCT_ID, callback:  { (product: Product) in
-
-
-
-                }, errorCallback: {
-
-                    print($0) // handle error
-                })
-            })
-        }
-    }
-}
+TODO
 ```
 ```java
 // get a single product using ProductInterface
@@ -455,13 +464,13 @@ public class Products extends AppCompatActivity implements ProductInterface {
 
         ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
         ENVIRONMENT).getRezolveSession().getProductManager();
-
+		
         // get single product
         Product product = new Product();
-        String productId = "123abc";
+		Category category = new Category();
         String merchantId = "123";
-        String categoryId = "123";
-        myProductManager.getProduct(this, merchantId, categoryId3, productId, this);
+		
+        myProductManager.getProduct(merchantId, category, product, this);
     }
 
     @Override
@@ -523,9 +532,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-IOS Method signature: `session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )`
-
-Android Method signature: `session.getProduct( context, merchant_id, catalog_id, product_id, [callback or interface] )`
+Method signature: `session.getProduct( merchant_id, catalog_id, product_id, [callback or interface] )`
 
 You must pass a `merchant_id`, `catalog_id`, and a `product_id`.
 
@@ -648,7 +655,158 @@ A combination object represents one unique combination of options for this produ
 
 
 
+### Method: getCartProduct
+
+```swift
+TODO
+```
+```java
+public class Products2 extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ProductInterface productInterface;
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
+
+        // get the parent category of a category
+		Category category = new Category();
+        String merchantId = "123";
+        myProductManager.getParentCategory( merchantId, category, this);
+    }
+
+    @Override
+    public void onGetCategorySuccess(Category category) {
+        String category_id = category.getId();
+        String parentId = category.getParentId();
+        String name = category.getName();
+        Boolean hasCategories = category.hasCategories();
+        Boolean hasProduct = category.hasProducts();
+        String image = category.getImage();
+        List<String> imageThumbs = category.getImageThumbs();
+        String catParentId = category.getParentId();
+        List<Category> children = category.getCategories();
+        PageResult<DisplayProduct> pageResult = category.getProductPageResult();
+
+        // get products from pageResult...
+        Integer count = pageResult.getCount();
+        Integer total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
+
+        for (Link link: links){
+            Integer linkcount = link.getCount();
+            Integer page = link.getPage();
+            String sort = link.getSort();
+            String sortBy = link.getSortBy();
+        }
+
+        for (DisplayProduct displayProduct : displayProducts){
+            String DPid = displayProduct.getId();
+            List<String> DPimageThumbs = displayProduct.getImageThumbs();
+            String DPimage = displayProduct.getImage();
+            float DPprice = displayProduct.getPrice();
+            String DPname = displayProduct.getName();
+            String DPcategoryId = displayProduct.getCategoryId();
+        }
+    }
+}
+```
+
+Method signature: `session.getParentCategory( merchantId, category, [callback or interface] )`
+
+You must pass a `merchantId`, and a `category` object.
+
+The method returns a category object.
 
 
 
 
+
+### Method: getProductsAndCategories
+
+```swift
+TODO
+```
+```java
+public class Products2 extends AppCompatActivity implements ProductInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ProductInterface productInterface;
+
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
+
+		merchantId = "123";
+		Category category = new Category();
+														
+        // first pageNavigationFilter is for categories
+		PageNavigationFilter pageNavigationFilter = new PageNavigationFilter();
+        pageNavigationFilter.setItemsPerPage(10);
+        pageNavigationFilter.setPageNumber(1);
+        pageNavigationFilter.setSortBy("name");   // values: name, price
+        pageNavigationFilter.setSortDirection("asc");  // values: asc, desc
+		// second pageNavigationFilter is for products
+		PageNavigationFilter pageNavigationFilter2 = new PageNavigationFilter();
+        pageNavigationFilter2.setItemsPerPage(20);
+        pageNavigationFilter2.setPageNumber(1);
+        pageNavigationFilter2.setSortBy("price");   // values: name, price
+        pageNavigationFilter2.setSortDirection("asc");  // values: asc, desc
+        
+		// get products and categories in one call
+        myProductManager.getProductsAndCategories(merchantId, category, pageNavigationFilter, pageNavigationFilter2, this);
+    }
+
+    @Override
+    public void onGetProductsAndCategoriesSuccess(Category category) {
+        String category_id = category.getId();
+        String parentId = category.getParentId();
+        String name = category.getName();
+        Boolean hasCategories = category.hasCategories();
+        Boolean hasProduct = category.hasProducts();
+        String image = category.getImage();
+        List<String> imageThumbs = category.getImageThumbs();
+        String catParentId = category.getParentId();
+        List<Category> children = category.getCategories();
+        PageResult<DisplayProduct> pageResult = category.getProductPageResult();
+
+        // get products from pageResult...
+        Integer count = pageResult.getCount();
+        Integer total = pageResult.getTotal();
+        Link[] links = pageResult.getLinks();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
+
+        for (Link link: links){
+            Integer linkcount = link.getCount();
+            Integer page = link.getPage();
+            String sort = link.getSort();
+            String sortBy = link.getSortBy();
+        }
+
+        for (DisplayProduct displayProduct : displayProducts){
+            String DPid = displayProduct.getId();
+            List<String> DPimageThumbs = displayProduct.getImageThumbs();
+            String DPimage = displayProduct.getImage();
+            float DPprice = displayProduct.getPrice();
+            String DPname = displayProduct.getName();
+            String DPcategoryId = displayProduct.getCategoryId();
+        }
+    }
+}
+```
+
+Method signature: `session.getProductsAndCategories( merchantId, category, pageNavigationFilter, pageNavigationFilter2 [callback or interface] )`
+
+The first pageNavigationFilter applies to the categories, the second to the products.
+
+You must pass a `merchantId`, and a `category` object.
+
+The method returns a category object.

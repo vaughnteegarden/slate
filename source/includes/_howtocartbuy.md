@@ -3,9 +3,7 @@
 ## Product Scan, Cart flow
 
 
-
 <img src="images/JWT-shoppable-ad-flow-cart-buy.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-cart-buy.png" target="_blank">View full size</a> ]
-
 
 
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
@@ -116,52 +114,8 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 
 #### 2. Add the product to the cart, and create an order with an order total
 
-
-
 ```swift
-import UIKit
-import RezolveSDK
-
-let MERCHANT_ID = "..."
-let CATEGORY_ID = Int32(100)
-let PRODUCT_ID = "..."
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-              session.productManager.getProduct(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, productId: PRODUCT_ID, callback: { (remoteProduct: Product) in
-
-                   let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
-
-                   session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
-
-
-
-                   }, errorCallback: { print($0) })
-
-               }, errorCallback: { print($0) })
-
-            }, errorCallback: { print($0) })
-        })
-    }
-
-    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
-
-        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
-
-        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
-    }
-}
+TODO
 ```
 ```java
 // add product to cart
@@ -175,14 +129,20 @@ checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallbac
         String addressId = "123";  //use actual address id
 
         // immediately call CheckoutCart to get an Order with totals
-        checkout.checkoutCart(cartId, merchantId, addressId,  new CheckoutCallback() {
+        checkout.addProductToCart( checkoutProduct, merchantId, new CheckoutCallback() {
             @Override
-            public void onCheckoutProductSuccess(Order order) {
-                super.onCheckoutProductSuccess(order);
+            public void onAddProductsToCartSuccess(CartDetails cartDetails) {
+                super.onAddProductsToCartSuccess(cartDetails);
 
-                String orderId = order.getOrderId();
-                List<PriceBreakdown> orderBreakdown = order.getBreakdowns();
-                float orderTotal = order.getFinalPrice();
+                String cartId = cartDetails.getId();
+                String merchantId = "123"; //use actual merchant id
+                String addressId = "123";  //use actual address id
+
+                // create checkoutBundle
+                CheckoutBundle checkoutBundle = CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId );
+
+                //  get order id and totals for a cart
+                checkout.checkoutCart(checkoutBundle,this);
             }
         });
     }
@@ -190,8 +150,7 @@ checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallbac
 ```
 
 
-
-Once you have product information, add the product to the cart. Then call the SDK `CheckoutManager.checkoutCart` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
+Once you have product information, create a CheckoutProduct object.  Then call the SDK `CheckoutManager.checkoutCart` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
 
 
 
@@ -222,15 +181,7 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 #### 4. Submit payment for order
 
 ```swift
-let PARIS_LOCATION = RezolveLocation(longitude: 2.2910793, latitude: 48.8736645)
-
-
-let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
-session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, phone: phone, callback: { (order: CheckoutOrder) in
-
-
-}, errorCallback: { print($0) })
+TODO
 ```
 ```java
 // create a paymentRequest object, and then use this with the checkoutProduct object and rezolveLocation object to purchase the item.
@@ -246,11 +197,11 @@ rezolveLocation.setLongitude(2.2910793);
 
 // buy the cart
 String cartId = "123"; // either buy current cart, or use getCarts to choose a cart
-checkout.buyCart(merchantId, cartId, addressId, phonebookId, rezolveLocation, paymentRequest,  new CheckoutCallback() {
-    @Override
-    public void onCartOrderPlaced(String orderId) {
-        super.onCartOrderPlaced(orderId);
-    }
+
+checkout.buyCart( checkoutBundle, phonebookId, rezolveLocation, paymentRequest,  new CheckoutCallback() {
+	public void onCartOrderPlaced(String orderId) {
+		// display order confirmation
+	}
 });
 ```
 
@@ -258,7 +209,7 @@ checkout.buyCart(merchantId, cartId, addressId, phonebookId, rezolveLocation, pa
 
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass the `merchantId`, `phonebookId` and `addressId` strings, the `checkoutProduct` object, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
+Pass the `checkoutBundle` object, `phonebookId` string, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
 When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback.
 

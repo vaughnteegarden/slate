@@ -23,6 +23,7 @@ includes:
 - authenticationmanager
 - checkoutmanager
 - favoritemanager
+- merchantmanager
 - phonebookmanager
 - productmanager
 - profilemanager
@@ -100,7 +101,7 @@ This document is intended for experienced IOS and Android developer. It is expec
 
 ## For more information
 
-For more information on Rezolve, see http://rezolve.com.
+For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve.som</a>.
 
 
 # Getting Started
@@ -129,16 +130,13 @@ We will not provide development support if you have not integrated Crashlytics o
 
 ## Download the Rezolve Inside<sup>TM</sup> SDK
 
-The SDK for **IOS** can be downloaded here:
+Latest release versions:
+IOS: 1.6.4.0
+Android: 1.7.5
 
-* <a href="http://rezolve.com/sdk-releases/rezolve-ios-sdk-1.6.0.zip">rezolve-ios-sdk-1.6.0.zip</a> - contains libraries for both ARM and x86. 
-
-The SDK for **Android** can be downloaded here: 
-
-* <a href="http://rezolve.com/sdk-releases/rezolve-android-sdk-1.6.0-release.aar">rezolve-android-sdk-1.6.0-release.aar</a> - for all platforms
+To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.
 
 
-<iframe src="https://google.com" style="height:400px;width:100%;border:none;"></iframe>
 
 ## Set up the SDK - IOS
 

@@ -15,57 +15,7 @@ Once a product has been selected, purchasing follows one of the previous example
 #### 1. Scan a category shoppable ad,  get a getCatalog response
 
 ```swift
-class ViewController: UIViewController, ProductDelegate {
-
-    var session: RezolveSession?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                self.session = session
-                self.session?.getScanManager().productResultDelegate = self
-                self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
-
-            }, errorCallback: { print($0) })
-        }
-    }
-
-
-    func onError(error: String) -> Void {
-
-      // handle error
-    }
-
-    func onStartRecognizeImage() -> Void {
-
-      // suggestion: show a loading indicator
-    }
-
-    func onFinishRecognizeImage() -> Void {
-
-      // suggestion: alert user with some sound
-    }
-
-    func onProductResult(product: Product) -> Void {
-
-    }
-
-    func onCategoryResult(category: RezolveCategory) -> Void {
-
-    }
-
-    func onCategoryProductsResult(category: RezolveCategory, productsPage: PageResult<DisplayProduct>) -> Void {
-
-    }
-}
+TODO  (get from )
 ```
 
 ```java
@@ -89,116 +39,36 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
 
 
     // if scan media contains a category link, onCategoryResult fires and
-    // returns a Category object
+    // returns a Category object. Parse the category object to obtain 
+    // a list of products in that category, and a list of subcategories of that category
     @Override
     public void onCategoryResult(Category category, String s) {
-        String categoryId = category.getId();
-        String categoryParentId = category.getParentId();
-        String categoryName = category.getName();
-        List<String> categoryImageThumbs = category.getImageThumbs();
-        String categoryImage = category.getImage();
-        List<Category> categoryChildren = category.getCategories();
-        Boolean hasCategories = category.hasCategories();
-        Boolean hasProduct = category.hasProducts();
-    }
-}
-
-```
-
-First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager returns a `Category` object, which is then parsed to determine its contents.
-
-
-
-### 2. If boolean hasCategories is true, extract subcategories using getCategories
-``` swift
-func onCategoryResult(category: RezolveCategory) -> Void {
-
-  session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: category.id, callback: { category in
-
-
-  }, errorCallback: {
-
-      print($0) // handle error
-  })
-}
-```
-```java
-public class Products extends AppCompatActivity implements ProductInterface {
-
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getProductManager();
-
-
-        myProductManager.getCategories(merchantId,this);
-
-    }
-
-    @Override
-    public void onGetCategoriesSuccess(Category category) {
-        String category_id = category.getId();
+		String category_id = category.getId();
         String parentId = category.getParentId();
         String name = category.getName();
         Boolean hasCategories = category.hasCategories();
         Boolean hasProduct = category.hasProducts();
         String image = category.getImage();
         List<String> imageThumbs = category.getImageThumbs();
-        String catparentId = category.getParentId();
+        String catParentId = category.getParentId();
         List<Category> children = category.getCategories();
+		
+		// get category placement
+        Placement.CategoryPlacement categoryPlacement = category.getCategoryPlacement();
+        String categoryAdId = categoryPlacement.getAdId();
+        String categoryPlacementId = categoryPlacement.getPlacementId();
 
-        for (Category subcategory : children){
-            subcategory.getId();
-            // ... etc
-        }
-    }
+        // optional:  get paginated subcategory results
+        PageResult<Category> categoryPageResult = category.getCategoryPageResult();
+        
+        // optional: get paginated product results
+        PageResult<DisplayProduct> pageResult = category.getProductPageResult();
 
-}
-```
-
-By looking at the Boolean `hasCategories`, we can tell if the category contains any subcategories. If so, we can use `ProductManager.getCategories` to fetch them.
-
-
-### 3. If boolean hasProducts is true, get product info (onCategoryProductsResult)
-``` swift
-func onCategoryResult(category: RezolveCategory) -> Void {
-
-  let pageNavigation: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
-
-  session.productManager.getProducts(merchantId: MERCHANT_ID, categoryId: category.id, pageNavigation: pageNavigation, callback: { (pageResult: PageResult<DisplayProduct>) in
-
-  }, errorCallback: { print($0) })
-}}
-```
-```java
-public class Products extends AppCompatActivity implements ProductInterface {
-
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY,
-        ENVIRONMENT).getRezolveSession().getProductManager();
-
-        // get products
-        myProductManager.getProducts(this, merchantId3, categoryId, count, page, 
-        sort_by_field, sort_direction, this);
-    }
-
-    @Override
-    public void onGetProductsSuccess(PageResult<DisplayProduct> pageResult) {
+        // get products from pageResult...
         Integer count = pageResult.getCount();
         Integer total = pageResult.getTotal();
         Link[] links = pageResult.getLinks();
-        List<DisplayProduct> displayProducts = pageResult.getProducts();
+        List<DisplayProduct> displayProducts = pageResult.getItems();
 
         for (Link link: links){
             Integer linkcount = link.getCount();
@@ -208,19 +78,21 @@ public class Products extends AppCompatActivity implements ProductInterface {
         }
 
         for (DisplayProduct displayProduct : displayProducts){
-            String id = displayProduct.getId();
-            List<String> imageThumbs = displayProduct.getImageThumbs();
-            String image = displayProduct.getImage();
-            float price = displayProduct.getPrice();
-            String name = displayProduct.getName();
-            String categoryId = displayProduct.getCategoryId();
+            String DPid = displayProduct.getId();
+            List<String> DPimageThumbs = displayProduct.getImageThumbs();
+            String DPimage = displayProduct.getImage();
+            float DPprice = displayProduct.getPrice();
+            String DPname = displayProduct.getName();
+            String DPcategoryId = displayProduct.getCategoryId();
         }
     }
 }
+
 ```
 
-Similarly, we can check the Boolean "hasProducts" to determine if the category has products. If it does, we can fetch them using `ProductManager.getProducts`.
+First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager returns a `Category` object, which is then parsed to determine its contents.
 
-### 4. Repeat for navigation until ready to purchase
 
-Repeat steps 2 & 3 above as the consumer browses through categories. Once the consumer selects a product and is ready to purchase, the process is the same as in the Instant Buy or Cart Buy flows. 
+### 2. Repeat for navigation until ready to purchase
+
+Repeat step 1 above as the consumer browses through categories. Once the consumer selects a product and is ready to purchase, the process is the same as in the Instant Buy or Cart Buy flows. Note: a DisplayProduct does not contain full information on a product. You will need to call getProduct to display the detail view of the Product.
