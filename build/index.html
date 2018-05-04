@@ -297,9 +297,7 @@ You can switch between IOS and Android by clicking the tabs above.
 </tbody></table>
 <h2 id='for-more-information'>For more information</h2>
 <p>For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve.som</a>.</p>
-<h1 id='getting-started'>Getting Started</h1><h2 id='get-an-api-key'>Get an API key</h2>
-<p>You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please visit <a href="https://www.rezolve.com/#sectionForm">the contact page</a> and request an API key. We’ll establish some basic information to form a contract of use, and send for your approval. Upon signature, we will provide an API key for you to use.</p>
-<h2 id='supported-os-versions'>Supported OS Versions</h2>
+<h1 id='getting-started'>Getting Started</h1><h2 id='supported-os-versions'>Supported OS Versions</h2>
 <table><thead>
 <tr>
 <th>OS</th>
@@ -321,12 +319,14 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>Rezolve advises using <em><a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a></em> to capture app problems on both IOS and Android.</p>
 
 <p>We will not provide development support if you have not integrated Crashlytics or a similar tool.</p>
-<h2 id='download-the-rezolve-insidetm-sdk'>Download the Rezolve Inside<sup>TM</sup> SDK</h2>
+<h2 id='download-the-rezolve-insidetm-sdk-amp-get-an-api-key'>Download the Rezolve Inside<sup>TM</sup> SDK &amp; Get an API Key</h2>
 <p>Latest release versions:
-IOS: 1.6.4.0
+IOS: 1.6.5.0
 Android: 1.7.5</p>
 
 <p>To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.</p>
+
+<p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
 <h2 id='set-up-the-sdk-ios'>Set up the SDK - IOS</h2>
 <p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
@@ -6621,19 +6621,45 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='android-v1-7-5-ios-v1-7-5-april-25-2018'>Android v1.7.5, IOS v1.7.5 - April 25, 2018</h2><h3 id='added'>Added</h3>
+<h2 id='android-v1-7-5-ios-v1-6-5-may-5-2018'>Android v1.7.5, IOS v1.6.5 - May 5, 2018</h2><h3 id='added'>Added</h3>
 <ul>
 <li>New section on Generic JWT Authentication, with sequence diagram.</li>
 <li>AuthenticationManager.createSession, v2, added.</li>
 <li>MerchantManager class added</li>
+<li>CheckoutBundle class added (see CheckoutManager class for details)</li>
 </ul>
 <h3 id='changed'>Changed</h3>
 <ul>
 <li>Instancing the SDK via <code>RezolveSDK.getInstance</code> used to take an enum to specify environment. This is now takes a string.  <code>RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)</code>. For the Sandbox, ENVIRONMENT should equal <code>https://sandbox-api-tw.rzlvtest.co</code>. Changed in many code samples.<br></li>
 <li>Updated all sequence diagrams for v2 authentication, using JWT.</li>
-<li>Product Scan, Instant Buy Flow - updated code samples for <code>CheckoutManager</code> changes</li>
-<li>Product Scan, Cart Flow - updated code samples for <code>CheckoutManager</code> changes</li>
-<li>Mall flow - updated <code>getMerchants</code> method, and add <code>context</code> to <code>getProducts</code> params. </li>
+<li>Added new SDK download process.</li>
+<li>Product Scan, Instant Buy Flow - 
+
+<ul>
+<li>Updated code samples for <code>CheckoutManager</code> changes.<br></li>
+<li>Revised sequence diagram. </li>
+</ul></li>
+<li>Product Scan, Cart Flow
+
+<ul>
+<li>Updated code samples for <code>CheckoutManager</code> changes. </li>
+<li>Updated Category structure. </li>
+<li>Revised sequence diagram. </li>
+</ul></li>
+<li>Category Scan Flow
+
+<ul>
+<li>Simplified calls.</li>
+<li>Updated Category structure.</li>
+<li>Revised sequence diagram.</li>
+</ul></li>
+<li>Mall flow 
+
+<ul>
+<li>Updated <code>getMerchants</code> method</li>
+<li>Updated Category structure. Simplified subsequent calls</li>
+<li>Revised sequence diagram. </li>
+</ul></li>
 <li><code>AuthenticationManager</code> class
 
 <ul>
@@ -6645,7 +6671,8 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <li><code>CheckoutManager</code> class
 
 <ul>
-<li>the methods <code>addProductToCart</code>, <code>buyProduct</code>, <code>checkoutProduct</code>, <code>removeProductFromCart</code>, and <code>updateProductInCart</code> now require Android <code>context</code> as their first parameter.</li>
+<li>Added CheckoutBundle class documentation</li>
+<li>Revised checkout methods and purchase methods to use CheckoutBundles</li>
 </ul></li>
 <li><code>ProductManager</code> class<br>
 
@@ -6653,6 +6680,8 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <li><code>getCategory</code> now takes category object as a parameter, instead of category id. </li>
 <li><code>getProduct</code> now takes a product object as a parameter, instead of a product id.</li>
 <li><code>onGetProductsSuccess</code> now uses <code>getItems</code> instead of <code>getProducts</code> to extract DisplayProducts. </li>
+<li>Added <code>getParentCategory</code> method.</li>
+<li>Updated <code>Category</code> objects</li>
 </ul></li>
 </ul>
 <h3 id='deleted'>Deleted</h3>
