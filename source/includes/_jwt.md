@@ -368,11 +368,11 @@ This also means you are required to handle JWT token expiration/renewal if you w
 
 Examples are provided to the right. These are NOT an example of implementing SDK code, but rather an example of implementing session rewnewal with your own authentication server. 
 
-*IOS*
+**IOS**
 
 TODO
 
-*Android*
+**Android**
 
 The first three samples show an example of how you might implement an Authentication Manager.  
 
