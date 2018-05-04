@@ -320,9 +320,12 @@ You can switch between IOS and Android by clicking the tabs above.
 
 <p>We will not provide development support if you have not integrated Crashlytics or a similar tool.</p>
 <h2 id='download-the-rezolve-insidetm-sdk-amp-get-an-api-key'>Download the Rezolve Inside<sup>TM</sup> SDK &amp; Get an API Key</h2>
-<p>Latest release versions:
-IOS: 1.6.5.0
-Android: 1.7.5</p>
+<p>Latest release versions:</p>
+
+<ul>
+<li>IOS: 1.6.5.0</li>
+<li>Android: 1.7.5</li>
+</ul>
 
 <p>To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.</p>
 
@@ -861,23 +864,30 @@ email: user@example.com
 <p>This also means you are required to handle JWT token expiration/renewal if you want a session to continue. To do this smoothly without interrupting the user session, Rezolve recommends creating a wrapper around any call that contacts the server. If the server returns an authorization error, you can call your token renewal endpoint and issue a new JWT. </p>
 
 <p>Examples are provided to the right. These are NOT an example of implementing SDK code, but rather an example of implementing session rewnewal with your own authentication server. </p>
-<h4 id='ios'>IOS</h4>
+
+<p><em>IOS</em></p>
+
 <p>TODO</p>
-<h4 id='android'>Android</h4>
+
+<p><em>Android</em></p>
+
 <p>The first three samples show an example of how you might implement an Authentication Manager.  </p>
 
 <p>The Authentication Manager may, for example, process username/passwords for login, handle registering your users, and handle password resets.  It should also handle the JSON Web Tokens to register, create session, and maintain session with Rezolve. </p>
 
 <p>The Authentication Interface and Authentication Callbacks provide the Authentication Manager features to your developer in a standard and convenient way. </p>
 
-<p>The final sample, &quot;Example of Authentication Manager Use With Rezolve AddressbookManager.getAll&quot;, gives an example of wrapping the AddressbookManager.getAll method. 
-1. Pass in the <code>session</code>, and a <code>retryOnFail</code> boolean
-2. Call the <code>getAddressbookManager().getAll</code> method
-3. If the call succeeds, proceed as normal.
-4. If the call results in an error, check if the error is a 401
-5. If the error is a 401, and the <code>retryOnFail</code> is true, request a new JWT, calling the <code>renewJwtToken</code> method. Then retry the request.
-6. If the error is 401, and <code>retryOnFail</code> is false, we know that we requested a new token and the token provided was expired (indicating end of login session at auth server). Do not retry.
-7. If a different error occurs, log and handle the error. </p>
+<p>The final sample, &quot;Example of Authentication Manager Use With Rezolve AddressbookManager.getAll&quot;, gives an example of wrapping the AddressbookManager.getAll method. </p>
+
+<ol>
+<li>Pass in the <code>session</code>, and a <code>retryOnFail</code> boolean</li>
+<li>Call the <code>getAddressbookManager().getAll</code> method</li>
+<li>If the call succeeds, proceed as normal.</li>
+<li>If the call results in an error, check if the error is a 401</li>
+<li>If the error is a 401, and the <code>retryOnFail</code> is true, request a new JWT, calling the <code>renewJwtToken</code> method. Then retry the request.</li>
+<li>If the error is 401, and <code>retryOnFail</code> is false, we know that we requested a new token and the token provided was expired (indicating end of login session at auth server). Do not retry.</li>
+<li>If a different error occurs, log and handle the error. </li>
+</ol>
 <h3 id='http-error-responses'>HTTP Error Responses</h3><h4 id='403'>403</h4><pre class="highlight plaintext"><code>{
     "type": "Authentication"
     "code": "1"
