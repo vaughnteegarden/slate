@@ -2,30 +2,47 @@
 
 All notable changes to the project will be documented in this log.
 
-## Android v1.7.5, IOS v1.7.5 - April 25, 2018
+## Android v1.7.5, IOS v1.6.5 - May 5, 2018
 
 ### Added
 - New section on Generic JWT Authentication, with sequence diagram.
 - AuthenticationManager.createSession, v2, added.
 - MerchantManager class added
+- CheckoutBundle class added (see CheckoutManager class for details)
 
 ### Changed
 - Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.  
 - Updated all sequence diagrams for v2 authentication, using JWT.
-- Product Scan, Instant Buy Flow - updated code samples for `CheckoutManager` changes
-- Product Scan, Cart Flow - updated code samples for `CheckoutManager` changes
-- Mall flow - updated `getMerchants` method, and add `context` to `getProducts` params. 
+- Added new SDK download process.
+- Product Scan, Instant Buy Flow - 
+	- Updated code samples for `CheckoutManager` changes.  
+	- Revised sequence diagram. 
+- Product Scan, Cart Flow
+	- Updated code samples for `CheckoutManager` changes. 
+	- Updated Category structure. 
+	- Revised sequence diagram. 
+- Category Scan Flow
+	- Simplified calls.
+	- Updated Category structure.
+	- Revised sequence diagram.
+- Mall flow 
+	- Updated `getMerchants` method
+	- Updated Category structure. Simplified subsequent calls
+	- Revised sequence diagram. 
 - `AuthenticationManager` class
 	- `.register` deprecated
 	- v1 `.createSession` deprecated
 	- v1 `.logout` deprecated  
 	- V2 `.createSession` has been added, using JWT accessToken, and removing deviceProfile. CreateSession change made to all sequence diagrams.
 - `CheckoutManager` class
-	- the methods `addProductToCart`, `buyProduct`, `checkoutProduct`, `removeProductFromCart`, and `updateProductInCart` now require Android `context` as their first parameter.
+	- Added CheckoutBundle class documentation
+	- Revised checkout methods and purchase methods to use CheckoutBundles
 - `ProductManager` class  
 	- `getCategory` now takes category object as a parameter, instead of category id. 
 	- `getProduct` now takes a product object as a parameter, instead of a product id.
 	- `onGetProductsSuccess` now uses `getItems` instead of `getProducts` to extract DisplayProducts. 
+	- Added `getParentCategory` method.
+	- Updated `Category` objects
 
 
 

@@ -106,10 +106,6 @@ For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve
 
 # Getting Started
 
-## Get an API key
-
-You will need an API key to use the Rezolve Inside<sup>TM</sup> SDK.  Please visit <a href="https://www.rezolve.com/#sectionForm">the contact page</a> and request an API key. We’ll establish some basic information to form a contract of use, and send for your approval. Upon signature, we will provide an API key for you to use.
-
 ## Supported OS Versions
 
 |OS|Minimum Version|
@@ -128,14 +124,15 @@ We will not provide development support if you have not integrated Crashlytics o
 
 
 
-## Download the Rezolve Inside<sup>TM</sup> SDK
+## Download the Rezolve Inside<sup>TM</sup> SDK & Get an API Key
 
 Latest release versions:
-IOS: 1.6.4.0
+IOS: 1.6.5.0
 Android: 1.7.5
 
 To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.
 
+If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
 
 
 ## Set up the SDK - IOS
