@@ -127,8 +127,9 @@ We will not provide development support if you have not integrated Crashlytics o
 ## Download the Rezolve Inside<sup>TM</sup> SDK & Get an API Key
 
 Latest release versions:
-IOS: 1.6.5.0
-Android: 1.7.5
+
+- IOS: 1.6.5.0
+- Android: 1.7.5
 
 To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.
 

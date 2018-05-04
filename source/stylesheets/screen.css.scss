@@ -557,6 +557,10 @@ html, body {
   pre {
     @extend %code-font;
   }
+	
+	pre {
+		white-space: pre-wrap;
+	}
 
   blockquote {
     &>p {

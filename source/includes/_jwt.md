@@ -368,11 +368,11 @@ This also means you are required to handle JWT token expiration/renewal if you w
 
 Examples are provided to the right. These are NOT an example of implementing SDK code, but rather an example of implementing session rewnewal with your own authentication server. 
 
-#### IOS
+*IOS*
 
 TODO
 
-#### Android
+*Android*
 
 The first three samples show an example of how you might implement an Authentication Manager.  
 
@@ -381,6 +381,7 @@ The Authentication Manager may, for example, process username/passwords for logi
 The Authentication Interface and Authentication Callbacks provide the Authentication Manager features to your developer in a standard and convenient way. 
 
 The final sample, "Example of Authentication Manager Use With Rezolve AddressbookManager.getAll", gives an example of wrapping the AddressbookManager.getAll method. 
+
 1. Pass in the `session`, and a `retryOnFail` boolean
 2. Call the `getAddressbookManager().getAll` method
 3. If the call succeeds, proceed as normal.

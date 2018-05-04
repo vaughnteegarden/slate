@@ -5,12 +5,14 @@ All notable changes to the project will be documented in this log.
 ## Android v1.7.5, IOS v1.6.5 - May 5, 2018
 
 ### Added
+
 - New section on Generic JWT Authentication, with sequence diagram.
 - AuthenticationManager.createSession, v2, added.
 - MerchantManager class added
 - CheckoutBundle class added (see CheckoutManager class for details)
 
 ### Changed
+
 - Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.  
 - Updated all sequence diagrams for v2 authentication, using JWT.
 - Added new SDK download process.
@@ -47,6 +49,7 @@ All notable changes to the project will be documented in this log.
 
 
 ### Deleted
+
 - The enum to represent the target Rezolve environment `RezolveSDK.Env.EvironmentName` is removed.
 - DeviceProfile object removed from createSession. 
 - Removed Merchant handling from ProductManager
