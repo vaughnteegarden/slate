@@ -138,6 +138,8 @@ If this is your first time downloading the SDK, you will be provided with an API
 
 ## Set up the SDK - IOS
 
+** NOTE: the IOS SDK is currently based upon Swift 3.2, and thus is not compatible with the latest version of XCode. Rezolve will update to the latest version of Swift in the near future. Until the upgrade is complete, please downgrade your XCode to version 9.2. **
+
 The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
 The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
