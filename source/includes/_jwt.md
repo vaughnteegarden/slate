@@ -219,7 +219,116 @@ RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession( accessToken, entityI
 ### Handling JWT Expiration & Session Preservation
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal enum Result<T> {
+    case success(T)
+    case failure(HttpResponse)
+}
+
+internal protocol TokenRenewProtocol {
+    func renewToken(result: @escaping (Result<RezolveSession>) -> Void)
+}
+
+internal class AuthService: NSObject, TokenRenewProtocol {
+
+    func renewToken(result: @escaping (Result<RezolveSession, AuthenticationError>) -> Void) {
+
+        let urlString = ""
+        let endpoint = "/api/v1/authentication/register"
+        let data = ["username": "user@email.com", "password": "password"]
+
+        guard let url = URL(string: urlString).appendPathComponent(endpoint),
+              let request = URLRequest(url: url) else {
+            preconditionFailure("Url not created, verify check path and host")
+        }
+
+        let device: DeviceProfile  = ... // The device profile 
+        let entityId: String =  ... // Entity Id
+        let partnerId: String = ... // Partner Id
+
+        let dictionary: [String: String] = [
+            "device_id": device.deviceId,
+            "make": device.make,
+            "os_type": device.osType,
+            "os_version": device.osVersion,
+            "locale": device.locale
+            "entityId": entityId,
+            "partnerId": partnerId
+        ]
+
+        guard let body = try JSONSerialization.data(withJSONObject: dictionary, options: []) else {
+            preconditionFailure("Payload convertion to Data failed")
+        }
+
+        request.httpMethod = "POST"
+        request.httpBody = body
+
+
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: urlRequest) { data, response, error in
+                if let httpResponse = response as? HTTPURLResponse,
+                    httpResponse.statusCode == 200 {
+                    if let responseData = data,
+                       let jsonDictionary = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                        let accessToken = jsonDictionary["access_token"]
+                        let publicKey =   jsonDictionary["public_key"]
+                        // Securily store received keys
+                        // Create new session with received accessToken
+                        self.rezolveSdk?.createSession(
+                            accessToken: accessToken,
+                            entityId: entityId,
+                            partnerId: partnerId, 
+                            callback: { rezolveSession in
+                                // Store new token
+
+                                // Proccess callback
+                                callback(.success(rezolveSession))
+                        },  errorCallback: { error in
+                                // Error handling
+
+                                // Proccess callback
+                                callback(.failure(error))
+                        })
+                       }
+                    else {
+                        // Handle parsing error
+                    }
+                }
+                else {
+                    // Handle error
+                }
+        }
+    }
+}
+
+internal final class AddressBookViewController: UIViewController {
+
+    fileprivate(set) var authService: (NSObjectProtocol & TokenRenewProtocol)?
+
+    fileprivate func attemptToGetAddressBook(session: RezolveSession, retryOnFail: Bool) {
+        session.addressbookManager.getAll(callback: { addressList in
+            // Handle addressList
+
+            }, errorCallback: { httpResponse in
+                if retryOnFail && httpResponse.statusCode == 401 {
+                    self.authService?.renewToken { result in
+                        swith result {
+                            case let .success(newSession):
+                                // Retries to fetch data from AddressBookManager using the new RezolveSession
+                                self.attemptToGetAddressBook(session: newSession, retryOnFail: false)
+
+                            case let .failure(error):
+                                // Handle Token Renewal failure
+                                debugPrint(error)
+                        }
+                    }
+                }
+        })
+    }
+}
 ```
 ```java
 // Example Authentication Interface
@@ -370,7 +479,21 @@ Examples are provided to the right. These are NOT an example of implementing SDK
 
 **IOS**
 
-TODO
+The sample shows two classes, an `AuthService` class and an `AddressBookViewController` class. 
+
+The `AuthService` class may, for example, process username/passwords for login, handle registering your users, and handle password resets.  It should also handle the JSON Web Tokens to register, create session, and maintain session with Rezolve. The example method `renewJwtToken` is provided as an example of how to renew a token. 
+
+The `AddressBookViewController` is an example of how you would implement the `AddressbookManager.getAll` method so as to smoothly handle token expiration and renewal to provide continuity of session. 
+
+1. call the method `attemptToGetAddressBook` passing in a Rezolve session and the `retryOnFail` boolean
+2. the method calls the `addressbookManager.getAll` method
+3. if the call succeeds, proceed as normal, displaying the `addressList`
+4. if the call results in an error, check if the error is a 401.
+5. If the error is a 401, and the `retryOnFail` is true, request a new JWT, calling the `renewJwtToken` method. Then retry the request.
+6. If the error is 401, and `retryOnFail` is false, we know that we requested a new token and the token provided was expired (indicating end of login session at auth server). Do not retry.
+7. If a different error occurs, log and handle the error.
+
+
 
 **Android**
 
@@ -380,10 +503,10 @@ The Authentication Manager may, for example, process username/passwords for logi
 
 The Authentication Interface and Authentication Callbacks provide the Authentication Manager features to your developer in a standard and convenient way. 
 
-The final sample, "Example of Authentication Manager Use With Rezolve AddressbookManager.getAll", gives an example of wrapping the AddressbookManager.getAll method. 
+The final sample, "Example of Authentication Manager Use With Rezolve AddressbookManager.getAll", gives an example of wrapping the `AddressbookManager.getAll` method. 
 
 1. Pass in the `session`, and a `retryOnFail` boolean
-2. Call the `getAddressbookManager().getAll` method
+2. the method calls the `getAddressbookManager().getAll` method
 3. If the call succeeds, proceed as normal.
 4. If the call results in an error, check if the error is a 401
 5. If the error is a 401, and the `retryOnFail` is true, request a new JWT, calling the `renewJwtToken` method. Then retry the request.

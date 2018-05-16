@@ -15,7 +15,70 @@ Once a product has been selected, purchasing follows one of the previous example
 #### 1. Scan a category shoppable ad,  get a getCatalog response
 
 ```swift
-TODO  (get from )
+class ViewController: UIViewController, ProductDelegate {
+
+    var session: RezolveSession?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+                self.session = session
+                self.session?.getScanManager().productResultDelegate = self
+                self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
+
+            }, errorCallback: { print($0) })
+        }
+    }
+
+
+    func onError(error: String) -> Void {
+
+      // handle error
+    }
+
+    func onStartRecognizeImage() -> Void {
+
+      // suggestion: show a loading indicator
+    }
+
+    func onFinishRecognizeImage() -> Void {
+
+      // suggestion: alert user with some sound
+    }
+
+    func onProductResult(product: Product) -> Void {
+
+    }
+
+    func onCategoryResult(category: RezolveCategory) -> Void {
+	
+	// If category hasCategories, fetch children categories (onCategoryResult)
+		session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: category.id, callback: { category in
+
+		}, errorCallback: {
+
+		  print($0) // handle error
+		})
+    }
+
+    func onCategoryProductsResult(category: RezolveCategory, productsPage: PageResult<DisplayProduct>) -> Void {
+
+	// If category hasProducts, get product info (onCategoryProductsResult)
+		let pageNavigation: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
+
+		session.productManager.getProducts(merchantId: MERCHANT_ID, categoryId: category.id, pageNavigation: pageNavigation, callback: { (pageResult: PageResult<DisplayProduct>) in
+
+		}, errorCallback: { print($0) })
+    }
+}
 ```
 
 ```java

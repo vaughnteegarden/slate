@@ -8,7 +8,50 @@ This class provides the ability to retrieve merchants, and info about them.
 ### Method: getMerchants
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class ApiClient {
+
+    let rezolveSdk: RezolveSDK?
+
+    func getMerchants() {
+
+        self.rezolveSdk?.createSession(
+            accessToken: accessToken,
+            entityId: entityId,
+            partnerId: partnerId, 
+            callback: { rezolveSession in
+
+                rezolveSession.merchantManager.getMerchants(
+                    callback: { listOfMerchant in
+
+                        listOfMerchant.forEach {
+                            print($0.id)
+                            print($0.name)
+                            print($0.tagline)
+                            print($0.banner)
+
+                            $0.bannerThumbs.forEach { thumb in
+                                print(thumb)
+                            }
+
+                            print($0.logo)
+                            $0.logoThumbs.forEach { logo in
+                                print(logo)
+                            }
+
+                            print($0.termsAndConditions)
+                            print($0.contactInformation)
+                        }
+                    },
+                    errorCallback: { _ in 
+                        // Handle Errors
+                    }
+                )
+        })
+    }
+}
 ```
 ```java
 public class Merchants extends AppCompatActivity implements MerchantInterface {
@@ -67,7 +110,41 @@ How to use the returned images: the `banner` is typically used as a header backg
 Gets shipping methods for a specific merchant.
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class ApiClient {
+
+    let rezolveSdk: RezolveSDK?
+
+    func getShippingMethods() {
+
+        self.rezolveSdk?.createSession(
+            accessToken: accessToken,
+            entityId: entityId,
+            partnerId: partnerId, 
+            callback: { rezolveSession in
+
+                rezolveSession.merchantManager.getShippingMethods(
+                    merchantId: "MERCHANT_ID",
+                    callback: { shippingMethods: [ShippingMethod] in
+                        shippingMethods.forEach {
+                            print($0.carrierCode)
+                            print($0.methodCode)
+                            print($0.displayName)
+                            for (key, value) $0.extensionAttribute {
+                                print(key, value)
+                            }
+                            print($0.store)
+                        }
+                    },
+                    errorCallback: { _ in 
+                        // Handle Errors
+                    }
+                )
+        })
+    }
+}
 ```
 ```java
 public class Merchants extends AppCompatActivity implements MerchantInterface {

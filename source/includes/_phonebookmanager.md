@@ -7,7 +7,44 @@ This module provides CRUD functions for consumer phone numbers. The consumer may
 ### Method: phonebookManager.create
 
 ``` swift
-TODO
+import UIKit
+import RezolveSDK
+
+internal final class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+
+        let rezolveSDK = ... // Initialize RezolveSDK
+
+        let accessToken: String = ... // Access Token
+        let deviceProfile: DeviceProfile = DeviceService().getDeviceProfile()
+        let sdkData = SessionService().getSdkData()
+        guard let entityId = sdkData.entityId,
+              let partnerId = sdkData.partnerId else {
+                preconditionFailure("SDK Data is nil")
+        }
+
+
+        rezolveSdk?.createSession(
+            accessToken: "",
+            entityId: entityId,
+            partnerId: partnerId, callback: { (rezolveSession) in
+
+                // New RezolveSDK.Phone
+                let phone = Phone()
+                phone.name = "Home phone"
+                phone.number = "555-555-1212"
+
+                rezolveSession.phonebookManager.create(phone: phone, callback: { (aPhone) in
+                    print(aPhone.id)
+                    print(aPhone.name)
+                    print(aPhone.phone)
+                })
+        })
+    }
+}
 ```
 ``` java
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
@@ -59,7 +96,45 @@ The method returns the created `phone` object with `id` upon success.
 ### Method: phonebookManager.update
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+internal final class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+
+        let rezolveSDK = ... // Initialize RezolveSDK
+
+        let accessToken: String = ... // Access Token
+        let deviceProfile: DeviceProfile = DeviceService().getDeviceProfile()
+        let sdkData = SessionService().getSdkData()
+        guard let entityId = sdkData.entityId,
+              let partnerId = sdkData.partnerId else {
+                preconditionFailure("SDK Data is nil")
+        }
+
+
+        rezolveSdk?.createSession(
+            accessToken: accessToken,
+            entityId: entityId,
+            partnerId: partnerId, callback: { (rezolveSession) in
+
+                // Target RezolveSDK.Phone object
+                let phone = Phone()
+                phone.id = "111"
+                phone.name = "Home phone"
+                phone.number = "555-555-1212"
+
+                rezolveSession.phonebookManager.update(phone: phone, callback: { (aPhone) in
+                    print(aPhone.id)
+                    print(aPhone.name)
+                    print(aPhone.phone)
+                })
+        })
+    }
+}
 ```
 ```java
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
@@ -105,7 +180,43 @@ The method returns the updated `phone` object upon success.
 ### Method: phonebookManager.delete
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+internal final class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+
+        let rezolveSDK = ... // Initialize RezolveSDK
+
+        let accessToken: String = ... // Access Token
+        let deviceProfile: DeviceProfile = DeviceService().getDeviceProfile()
+        let sdkData = SessionService().getSdkData()
+        guard let entityId = sdkData.entityId,
+              let partnerId = sdkData.partnerId else {
+                preconditionFailure("SDK Data is nil")
+        }
+
+
+        rezolveSdk?.createSession(
+            accessToken: accessToken,
+            entityId: entityId,
+            partnerId: partnerId, callback: { (rezolveSession) in
+
+                // Target RezolveSDK.Phone object
+                let phone = Phone()
+                phone.id = "111"
+                phone.name = "Home phone"
+                phone.number = "555-555-1212"
+
+                rezolveSession.phonebookManager.delete(phone: phone, callback: {
+                    // Void closure
+                })
+        })
+    }
+}
 ```
 ```java
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
@@ -149,7 +260,38 @@ You must pass in the `phone` object to delete.
 ### Method: phonebookManager.get
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+internal final class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let rezolveSDK = ... // Initialize RezolveSDK
+
+        let accessToken: String = ... // Access Token
+        let deviceProfile: DeviceProfile = DeviceService().getDeviceProfile()
+        let sdkData = SessionService().getSdkData()
+        guard let entityId = sdkData.entityId,
+              let partnerId = sdkData.partnerId else {
+                preconditionFailure("SDK Data is nil")
+        }
+
+        rezolveSdk?.createSession(
+            accessToken: "",
+            entityId: entityId,
+            partnerId: partnerId, callback: { (session) in
+                session.phonebookManager.get(callback: { (phone) in
+                    if let aPhone = phone {
+                        print(aPhone.id)
+                        print(aPhone.name)
+                        print(aPhone.phone)
+                    }
+                })
+        })
+    }
+}
 ```
 ```java
 public class phoneBook extends AppCompatActivity implements PhonebookInterface {
@@ -187,5 +329,5 @@ Method signature: `session.phonebookManager.get( [callback or interface] )`
 
 The method takes no parameters.
 
-The method returns an array of `Phone` objects.
+The Android method returns an array of `Phone` objects. The IOS method returns only the first `Phone` object.
 

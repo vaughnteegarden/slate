@@ -115,7 +115,12 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 #### 2. Add the product to the cart, and create an order with an order total
 
 ```swift
-TODO
+let checkoutProduct = createCheckoutProductWithVariant(product: product)
+
+session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
+
+
+}, errorCallback: { print($0) })
 ```
 ```java
 // add product to cart
@@ -181,7 +186,14 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 #### 4. Submit payment for order
 
 ```swift
-TODO
+let PARIS_LOCATION = RezolveLocation(type: .point, coordinates: (latitude: 48.8736645, longitude: 2.2910793))
+
+let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
+
+session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, callback: { (order: CheckoutOrder) in
+
+
+}, errorCallback: { print($0) })
 ```
 ```java
 // create a paymentRequest object, and then use this with the checkoutProduct object and rezolveLocation object to purchase the item.

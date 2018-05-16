@@ -13,10 +13,61 @@ Note that this module contains some functions reserved for future functionality,
 
 These functions are NOT implemented server-side, and should not be used at this time.
 
-### Method: getOrders
+### Method: getOrders / getOrdersBy
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { partnerId, entityId in
+
+            sdk.createSession(
+                entityId: entityId, 
+                partnerId: partnerId, 
+                device: signUpRequest.device, 
+                callback: { (session: RezolveSession) in
+
+                session.userActivityManager.getOrdersBy(callback: { orders in
+
+                    orders.forEach { order
+                        print(order.customer)
+                        print(order.phone)
+                        print(order.merchant.id)
+                        print(order.merchant.name)
+                        print(order.merchant.email)
+                        print(order.merchant.phone)
+
+                        print(order.deliveryAddress)
+                        print(order.billingAddress)
+                        print(order.orderId)
+                        print(order.pan4)
+                        print(order.partnerId)
+                        print(order.payWith)
+                        print(order.status)
+                        print(order.timestamp)
+                        print(order.finalPrice)
+                        print(order.location)
+                        order.products.forEach { product in
+                            print(product)
+                        }
+                    }
+
+                }, errorCallback: {
+                    print($0) // handle error
+                })
+            })
+        }
+    }
+}
 ```
 ```java
 // get orders using UserActivityManager
@@ -144,7 +195,9 @@ public class userActivity extends AppCompatActivity implements UserActivityInter
 }
 ```
 
-Method signature: `session.getOrders( [callback or interface] )`
+Method signature Android: `session.getOrders( [callback or interface] )`
+
+Method signature IOS: `session.getOrdersBy( [callback or interface] )`
 
 The method returns a `orderHistory object`.
 

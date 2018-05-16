@@ -11,7 +11,38 @@ This section also covers the use of CheckoutBundle class, to create the Checkout
 ### Method: CheckoutBundle.CreateCartCheckoutBundle
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class Controller: NSObject { 
+
+	func createBundle() {
+
+		let address = Address()
+		// Set up address object
+		address.shortName = "..."
+		address.line1 = "..."
+		address.line2 = "..."
+		address.city = "..."
+		address.state = "..."
+		address.zip = "..."
+		address.country = "..."
+
+		let cartDetails = CartDetails(
+			id: "...", 
+			merchantId: "...", 
+			dateCreated: "...",
+			dateUpdated: "...", 
+			products: [...]
+		)
+
+		let checkoutBundle = createCartCheckoutBundle(
+			cartDetails: cartDetails,
+			merchantId: cartDetails.merchantId,
+			address: address
+		)
+	}
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -46,7 +77,46 @@ The method returns an `CheckoutBundle` object.
 ### Method: CheckoutBundle.CreateCartInStorePickupCheckoutBundle
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class Controller: NSObject { 
+
+	func createBundle() {
+
+		let address = StoreAddress(
+			street1 = "...",
+			street2 = "...",
+			region = "...",
+			postCode = "...",
+			country = "...",
+			city = "..."
+		)
+
+		let cartDetails = CartDetails(
+			id: "...", 
+			merchantId: "...", 
+			dateCreated: "...",
+			dateUpdated: "...", 
+			products: [...]
+		)
+
+		let shippingMethod = ShippingMethod(
+			carrierCode: "",
+			methodCode: "",
+			displayName: "",
+			extensionAttribute: [](),
+			store: nil
+		)
+
+		let checkoutBundle = createCartInStorePickupCheckoutBundle(
+			cartDetails: cartDetails,
+			merchantId: cartDetails.merchantId,
+			shippingMethod: shippingMethod,
+			storeAddress: address
+		)
+	}
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -84,7 +154,40 @@ The method returns an `CheckoutBundle` object.
 ### Method: CheckoutBundle.CreateProductCheckoutBundle
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class Controller: NSObject { 
+
+	func createBundle() {
+
+		let address = Address()
+		// Set up address object
+		address.shortName = "..."
+		address.line1 = "..."
+		address.line2 = "..."
+		address.city = "..."
+		address.state = "..."
+		address.zip = "..."
+		address.country = "..."
+
+		let merchantId = "..." // Merchant id
+
+		let checkoutProduct = CheckoutProduct(
+			id: 0, 
+			qty: 10, 
+			productPlacement: ProductPlacement(adID: "", placementID: ""), 
+			configurableOptions: []()], 
+			customOptions: []()
+		)
+
+		let checkoutBundle = createProductInStorePickupCheckoutBundle(
+			merchantId: merchantId,
+			address: shippingMethod,
+			checkoutProduct: address
+		)
+	}
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -121,7 +224,56 @@ The method returns an `CheckoutBundle` object.
 ### Method: CheckoutBundle.CreateProductInStorePickupCheckoutBundle
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class Controller: NSObject { 
+
+	func createBundle() {
+
+		let address = StoreAddress(
+			street1 = "...",
+			street2 = "...",
+			region = "...",
+			postCode = "...",
+			country = "...",
+			city = "..."
+		)
+
+		let cartDetails = CartDetails(
+			id: "...", 
+			merchantId: "...", 
+			dateCreated: "...",
+			dateUpdated: "...", 
+			products: [...]
+		)
+
+		let shippingMethod = ShippingMethod(
+			carrierCode: "",
+			methodCode: "",
+			displayName: "",
+			extensionAttribute: [](),
+			store: nil
+		)
+
+		let checkoutProduct = CheckoutProduct(
+			id: 0, 
+			qty: 10, 
+			productPlacement: ProductPlacement(adID: "", placementID: ""), 
+			configurableOptions: []()], 
+			customOptions: []()
+		)
+
+		let merchantId = "..." // Merchant id string
+
+		let checkoutBundle = createProductInStorePickupCheckoutBundle(
+				merchantId: merchantId,
+				shippingMethod: shippingMethod,
+				storeAddress: address,
+				checkoutProduct: checkoutProduct
+		)
+	}
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -355,7 +507,46 @@ The method returns an `CartDetails` object.
 ### Method: buyCart
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
+
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+		
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+              let address: Address = createAddress()
+
+              session.addressbookManager.create(address: address) { (remoteAddress: Address) in
+                  let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
+
+                  session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
+                      let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
+                      let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
+
+                      session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
+                          session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, callback: { (order: CheckoutOrder) in
+                          }, errorCallback: { print($0) })
+                      }, errorCallback: { print($0) })
+                  })
+              }
+            }, errorCallback: { print($0) })
+        })
+    }
+
+    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
+        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
+        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
+    }
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -423,7 +614,40 @@ The method returns a `merchantId` and an `orderId`.
 ### Method: buyProduct
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
+
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+                let address: Address = createAddress()
+                session.addressbookManager.create(address: address) { (remoteAddress: Address) in
+                    let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
+                    session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
+                        let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
+                        let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
+                        session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, callback: { (order: CheckoutOrder) in
+                        }, errorCallback: { print($0) })
+                    })
+                }
+            }, errorCallback: { print($0) })
+        })
+    }
+
+    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
+        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
+        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
+    }
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -476,7 +700,40 @@ The method returns a `merchantId` and an `orderId`.
 ### Method: checkoutCart
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "..."
+let CATEGORY_ID = Int32(100)
+let PRODUCT_ID = "..."
+
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        let signUpRequest = createSingUpRequest()
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+                let address: Address = createAddress()
+                session.addressbookManager.create(address: address) { (remoteAddress: Address) in
+                    let card: PaymentCard = createPaymentCard(addressId: remoteAddress.id)
+                    session.walletManager.create(paymentCard: card, callback: { (remoteCard: PaymentCard) in
+                        let checkoutProduct = createCheckoutProductWithVariant(product: remoteProduct)
+                        session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
+                            session.checkoutManager.checkoutCart(cart: cartDetails, address: remoteAddress, callback: { order in
+                            }, errorCallback: { print($0) })
+                        }, errorCallback: { print($0) })
+                    }, validationErrorCallback: { print($0) })
+                }
+            }, errorCallback: { print($0) })
+        })
+    }
+
+    func createCheckoutProductWithVariant(product: Product, qty: Decimal = 1.0 ) -> CheckoutProduct {
+        let configurableOptions = (product.optionAvailable.first?.combination.map { $0.configurableOption() })!
+        return CheckoutProduct(id: product.id, qty: qty, configurableOptions: configurableOptions, customOptions: [])
+    }
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
@@ -546,7 +803,35 @@ The method returns an `Order` object that includes final price and order id.
 ### Method: checkoutProduct
 
 ```swift
-TODO
+import RezolveSDK
+import Foundation
+
+internal final class ViewController: UIViewController {
+
+    let rezolveSdk: RezolveSDK?
+
+    func checkoutProduct() {
+
+        let checkoutBundle = createProductCheckoutBundle(...) // Create checkout bundle
+
+        self.rezolveSdk?.checkout(
+            bundle: checkoutBundle,
+            callback: { order: Order in 
+                print(order.finalPrice)
+                order.breakdown.forEach {
+                    print($0.type)
+                    print($0.amount)
+                }
+                guard let settings =  order.settings else { return }
+                print(settings.paymentMethod)
+                print(settings.shippingAddress)
+            },
+            errorCallback: { _ in 
+                // Handle error
+            }
+        )
+    }
+}
 ```
 ```java
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {

@@ -33,14 +33,30 @@ class ViewController: UIViewController {
 
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
-                session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: nil, callback:  { category in
+                session.productManager.getCategories(
+                    merchantId: MERCHANT_ID, 
+                    category: Category(id: CATEGORY_ID), 
+                    callback: { responseCategory in
 
+                        print(responseCategory.id)
+                        print(responseCategory.parentId)
+                        print(responseCategory.name)
+                        print(responseCategory.image)
+                        print(responseCategory.imageThumbs)
+                        print(responseCategory.hasProducts)
+                        print(responseCategory.hasCategories)
+                        if responseCategory.hasCategories {                     
+                            responseCategory.categories.forEach { subCategories in
+                                print(subCategories.id)
+                                print(subCategories.parentId)
+                                print(subCategories.name)
 
+                                // ...
+                            }   
+                        }
 
                 }, errorCallback: {
-
                     print($0) // handle error
-
                 })
             })
         }
@@ -114,13 +130,15 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-Method signature: `session.getCategories( merchant_id, [callback or interface] )`
+Android method signature: `session.getCategories( merchant_id, [callback or interface] )`
+
+IOS method signature: `session.getCategories( merchant_id, category_id (nullable), [callback or interface] )`
 
 You must pass in the `id` of the `merchant` to whose categories you wish to get.
 
-The method returns an array of `category` objects owned by a specific merchant.
+The method returns an array of `category` objects owned by a specific merchant.  Specifically, it returns the *root category* and *first level* of child categories*.
 
-This method returns the *root category* and *first level of child categories*.
+For IOS, if you supply the category_id, you will get results for a single category. Omit the category_id to get all categories.
 
 #### category Object
 
@@ -150,7 +168,7 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 ### Method: getCategory
 
 ```swift
-TODO
+// This method no longer exists on IOS. Use getCategories instead.
 ```
 ```java
 // get a single category using ProductInterface
@@ -220,6 +238,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
     }
 }
 ```
+This method is Android-only. IOS should use `getCategories` and supply an optional category_id, which performs the same function. 
 
 Method signature: `session.getCategory( merchant_id, category, [callback or interface] )`
 
@@ -333,13 +352,29 @@ class ViewController: UIViewController {
 
                 let pageNavigation: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
 
-                session.productManager.getProducts(merchantId: MERCHANT_ID, categoryId: CATEGORY_ID, pageNavigation: pageNavigation, callback: { (pageResult: PageResult<DisplayProduct>) in
+                session.productManager.getProducts(
+                    merchantId: MERCHANT_ID, 
+                    categoryId: CATEGORY_ID, 
+                    pageNavigation: pageNavigation,
+                    callback: { pageResult in
 
-                    print(pageResult.embedded.count)
+                    pageResult.embedded.forEach { displayProduct in
 
-                }, errorCallback: {
+                        // Iterate over embbeded RezolveSDK.DisplayProduct
 
-                    print($0) // handle error
+                        print(displayProduct.id)
+                        print(displayProduct.name)
+                        print(displayProduct.price)
+                        print(displayProduct.image)
+                        displayProduct.thumbs.forEach {
+                            // prints thumbs
+                            print($0)    
+                        }
+                    }
+
+                }, errorCallback: { httpResponse in
+                    // handle error
+                    print($0) 
                 })
             })
         }
@@ -449,7 +484,95 @@ The displayProduct object is used when rending a series of products. It contains
 ### Method: getProduct
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(102)
+let PRODUCT_ID = "6"
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(
+                entityId: entityId, 
+                partnerId: partnerId, 
+                device: signUpRequest.device, 
+                callback: { (session: RezolveSession) in
+
+                session.productManager.getProduct(
+                    merchantId: MERCHANT_ID, 
+                    categoryId: CATEGORY_ID, 
+                    productId: PRODUCT_ID, 
+                    callback:  { product in
+
+                        print(product.id)
+                        print(product.merchantId)
+                        print(product.title)
+                        print(product.subtitle)
+                        print(product.price)
+                        print(product.description)
+
+                        product.images.forEach {
+                            print($0)
+                        }
+
+                        product.options.forEach { option in
+                            print(option.label)
+                            print(option.code)
+                            print(option.extraInfo)
+                            option.values.forEach { optionValue in
+                                print(optionValue.value)
+                                print(optionValue.label)
+                            }
+                        }
+
+                        product.optionAvailable.forEach {
+                            $0.combination.forEach { variant in
+                                print(code)
+                                print(value)
+                                print(id)
+                            }
+                        } 
+
+                        product.customOptions.forEach {
+                            print($0.isRequire)
+                            print($0.optionId)
+                            print($0.sortOrder)
+                            print($0.title)
+                            print($0.optionType)
+
+                            $0.values.forEach { value in 
+                                print(value.sortOrder)
+                                print(value.title)
+                                print(valueId)
+                            }
+
+                            $0.valuesId.forEach { valueId in 
+                                print(valueId)
+                            }
+
+                            print($0.value)
+                        }
+
+                        print(product.productPlacement)
+
+                }, errorCallback: {
+
+                    print($0) // handle error
+                })
+            })
+        }
+    }
+}
 ```
 ```java
 // get a single product using ProductInterface

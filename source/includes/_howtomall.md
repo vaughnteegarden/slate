@@ -14,7 +14,50 @@ Once a merchant is selected, the consumer shifts into category/product browse mo
 #### 1. Get List of Merchants in the mall
 
 ```swift
-TODO  (get from MerchantManager.getMerchants call)
+import RezolveSDK
+import Foundation
+
+internal final class ApiClient {
+
+    let rezolveSdk: RezolveSDK?
+
+    func getMerchants() {
+
+        self.rezolveSdk?.createSession(
+            accessToken: accessToken,
+            entityId: entityId,
+            partnerId: partnerId, 
+            callback: { rezolveSession in
+
+                rezolveSession.merchantManager.getMerchants(
+                    callback: { listOfMerchant in
+
+                        listOfMerchant.forEach {
+                            print($0.id)
+                            print($0.name)
+                            print($0.tagline)
+                            print($0.banner)
+
+                            $0.bannerThumbs.forEach { thumb in
+                                print(thumb)
+                            }
+
+                            print($0.logo)
+                            $0.logoThumbs.forEach { logo in
+                                print(logo)
+                            }
+
+                            print($0.termsAndConditions)
+                            print($0.contactInformation)
+                        }
+                    },
+                    errorCallback: { _ in 
+                        // Handle Errors
+                    }
+                )
+        })
+    }
+}
 ```
 ```java
 public class Merchants extends AppCompatActivity implements MerchantInterface {
@@ -55,7 +98,54 @@ First, initialize `MerchantManager`, and call `GetMerchants`, providing an imple
 
 ### 2. Get list of first-level Categories for the selected Merchant
 ``` swift
-TODO (get from getCategories sample)
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(70)
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+                session.productManager.getCategories(
+                    merchantId: MERCHANT_ID, 
+                    category: Category(id: CATEGORY_ID), 
+                    callback: { responseCategory in
+
+                        print(responseCategory.id)
+                        print(responseCategory.parentId)
+                        print(responseCategory.name)
+                        print(responseCategory.image)
+                        print(responseCategory.imageThumbs)
+                        print(responseCategory.hasProducts)
+                        print(responseCategory.hasCategories)
+                        if responseCategory.hasCategories {                     
+                            responseCategory.categories.forEach { subCategories in
+                                print(subCategories.id)
+                                print(subCategories.parentId)
+                                print(subCategories.name)
+
+                                // ...
+                            }   
+                        }
+
+                }, errorCallback: {
+                    print($0) // handle error
+                })
+            })
+        }
+    }
+}
 ```
 ```java
 private final static String API_KEY = "your_api_key";
@@ -117,7 +207,55 @@ Display your subcategories and products as returned by the `getCategories` call.
 
 ### 3. If the consumer clicks a subcategory, call `getCategory`
 ``` swift
-TODO  (get from getCategory sample)
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(70)
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+				// IOS uses getCategories, and pass in the category id
+                session.productManager.getCategories(
+                    merchantId: MERCHANT_ID, 
+                    category: Category(id: CATEGORY_ID), 
+                    callback: { responseCategory in
+
+                        print(responseCategory.id)
+                        print(responseCategory.parentId)
+                        print(responseCategory.name)
+                        print(responseCategory.image)
+                        print(responseCategory.imageThumbs)
+                        print(responseCategory.hasProducts)
+                        print(responseCategory.hasCategories)
+                        if responseCategory.hasCategories {                     
+                            responseCategory.categories.forEach { subCategories in
+                                print(subCategories.id)
+                                print(subCategories.parentId)
+                                print(subCategories.name)
+
+                                // ...
+                            }   
+                        }
+
+                }, errorCallback: {
+                    print($0) // handle error
+                })
+            })
+        }
+    }
+}
 ```
 ```java
 public class Products extends AppCompatActivity implements ProductInterface {
@@ -188,12 +326,100 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-If the consumer clicks a subcategory, call `getCategory` to pull a new list of subcategories and products for that category.  Repeat this step to drill down in the category structure. 
+If the consumer clicks a subcategory, call `getCategory` (or `getCategories` with a category_id on IOS) to pull a new list of subcategories and products for that category.  Repeat this step to drill down in the category structure. 
 
 
 ### 4. If the consumer clicks a Product, call `getProduct` 
 ``` swift
-TODO  (get from getProduct sample)
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(102)
+let PRODUCT_ID = "6"
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(
+                entityId: entityId, 
+                partnerId: partnerId, 
+                device: signUpRequest.device, 
+                callback: { (session: RezolveSession) in
+
+                session.productManager.getProduct(
+                    merchantId: MERCHANT_ID, 
+                    categoryId: CATEGORY_ID, 
+                    productId: PRODUCT_ID, 
+                    callback:  { product in
+
+                        print(product.id)
+                        print(product.merchantId)
+                        print(product.title)
+                        print(product.subtitle)
+                        print(product.price)
+                        print(product.description)
+
+                        product.images.forEach {
+                            print($0)
+                        }
+
+                        product.options.forEach { option in
+                            print(option.label)
+                            print(option.code)
+                            print(option.extraInfo)
+                            option.values.forEach { optionValue in
+                                print(optionValue.value)
+                                print(optionValue.label)
+                            }
+                        }
+
+                        product.optionAvailable.forEach {
+                            $0.combination.forEach { variant in
+                                print(code)
+                                print(value)
+                                print(id)
+                            }
+                        } 
+
+                        product.customOptions.forEach {
+                            print($0.isRequire)
+                            print($0.optionId)
+                            print($0.sortOrder)
+                            print($0.title)
+                            print($0.optionType)
+
+                            $0.values.forEach { value in 
+                                print(value.sortOrder)
+                                print(value.title)
+                                print(valueId)
+                            }
+
+                            $0.valuesId.forEach { valueId in 
+                                print(valueId)
+                            }
+
+                            print($0.value)
+                        }
+
+                        print(product.productPlacement)
+
+                }, errorCallback: {
+
+                    print($0) // handle error
+                })
+            })
+        }
+    }
+}
 ```
 ```java
 // get a single product using ProductInterface
