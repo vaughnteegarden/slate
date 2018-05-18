@@ -252,9 +252,8 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
 ### Method: getParentCategory
 
-```swift
-TODO
-```
+This is an Android-only method that is a convenience proxy for the `getCateogry` method. IOS developers, use `getCategory`. 
+
 ```java
 public class Products extends AppCompatActivity implements ProductInterface {
 
@@ -780,9 +779,8 @@ A combination object represents one unique combination of options for this produ
 
 ### Method: getCartProduct
 
-```swift
-TODO
-```
+This is an Android-only method that is a convenience proxy for the `getProduct` method. IOS developers, use `getProduct`. 
+
 ```java
 public class Products2 extends AppCompatActivity implements ProductInterface {
 

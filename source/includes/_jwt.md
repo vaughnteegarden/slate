@@ -13,7 +13,15 @@ When the Partner creates a new user on their auth server, or wishes to associate
 When a user logs in to your auth system, generate a new Login JWT and supply to CreateSession in the SDK. As long as the JWT is valid, the SDK can talk to Rezolve. A method is suggested below for smoothly handling JWT timeouts without interrupting the SDK session. 
 
 
+### Terminology
 
+|Term|Definition|
+|---|---|
+|partner_id|A numerical id you are assigned by Rezolve. Usually a 2-4 digit integer.|
+|partner_api_key|The API key you are assigned by Rezolve. 36 characters including dashes.|
+|partner_auth_key|The Auth key you are assigned by Rezolve. This is typically a ~90 character hash|
+|JWT token|A JSON Web Token, consisting of a header, payload, and signature. The header and signature are signed with the parther_auth_key, above. It is used as a bearer token when communicating with the Rezolve server.|
+|accessToken|In the IOS and Android code samples, the accessToken is the JWT Token you generated.|
 
 
 ### JWT Flow
@@ -22,9 +30,15 @@ When a user logs in to your auth system, generate a new Login JWT and supply to 
 
 
 
-
-
 ### Create the Registration JWT
+
+<aside class="notice">
+**Note:**
+
+For testing via cURL or Postman without a server-side JWT library, you can use https://jwt.io/#debugger to generate valid JWT tokens. 
+
+Use https://www.epochconverter.com/ to generate the token expiration in Epoch time. 
+</aside>
 
 #### Requirements
 
@@ -96,7 +110,7 @@ POST: https://sandbox-api-tw.rzlvtest.co/api/v1/authentication/register
 -H x-rezolve-partner-apikey: your-api-key
 -H authorization: Bearer signed-jwt
 -d {
-email: user@example.com
+"email": "user@example.com"
 }
 ```
 
@@ -118,7 +132,9 @@ The endpoint will reply with an entity id and the partner id. You should save th
 
 ### Logging in a User
 
-Once a Rezolve User has been registered and an `entity_id` obtained, you can log in the user. Log them in via your normal method in your auth server. Then create a new Login JWT. Use this JWT when creating the Rezolve Session in the SDK.
+Once a Rezolve User has been registered and an `entity_id` obtained, you can log in the user. If you just registered the user, you can reuse the `Register JWT` as the `accessToken`.  
+
+For returning users, log them in via your normal method in your auth server. Then create a new `Login JWT`, and use it as the `accessToken` in the `createSession` method.
 
 #### JWT Header
 
@@ -160,6 +176,9 @@ HMACSHA512(
 Sign the header and payload with the `partner_auth_key`.
 
 #### Create the Session
+
+In the samples to the right, `accessToken` is one of the JWT tokens you created above. If you just registered the user, you can reuse the `register JWT` token here. Otherwise, use a `login JWT`.
+
 
 ```swift
 import UIKit
