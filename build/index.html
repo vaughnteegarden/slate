@@ -573,9 +573,45 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>When the Partner creates a new user on their auth server, or wishes to associate an existing user with Rezolve for the first time, the partner must generate the Registration JWT, and then POST it to the <code>/api/v1/authentication/register</code> endpoint. The Rezolve server will validate the JWT, create a new user, create the user&#39;s public/private key pair, and return to you the Rezolve EntityId. </p>
 
 <p>When a user logs in to your auth system, generate a new Login JWT and supply to CreateSession in the SDK. As long as the JWT is valid, the SDK can talk to Rezolve. A method is suggested below for smoothly handling JWT timeouts without interrupting the SDK session. </p>
+<h3 id='terminology'>Terminology</h3>
+<table><thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>partner_id</td>
+<td>A numerical id you are assigned by Rezolve. Usually a 2-4 digit integer.</td>
+</tr>
+<tr>
+<td>partner_api_key</td>
+<td>The API key you are assigned by Rezolve. 36 characters including dashes.</td>
+</tr>
+<tr>
+<td>partner_auth_key</td>
+<td>The Auth key you are assigned by Rezolve. This is typically a ~90 character hash</td>
+</tr>
+<tr>
+<td>JWT token</td>
+<td>A JSON Web Token, consisting of a header, payload, and signature. The header and signature are signed with the parther_auth_key, above. It is used as a bearer token when communicating with the Rezolve server.</td>
+</tr>
+<tr>
+<td>accessToken</td>
+<td>In the IOS and Android code samples, the accessToken is the JWT Token you generated.</td>
+</tr>
+</tbody></table>
 <h3 id='jwt-flow'>JWT Flow</h3>
 <p><img src="images/GenericSWT.png" style="margin:6px 0;"><br/>[ <a href="images/GenericSWT.png" target="_blank">View full size</a> ]</p>
-<h3 id='create-the-registration-jwt'>Create the Registration JWT</h3><h4 id='requirements'>Requirements</h4>
+<h3 id='create-the-registration-jwt'>Create the Registration JWT</h3>
+<aside class="notice">
+**Note:**
+
+For testing via cURL or Postman without a server-side JWT library, you can use https://jwt.io/#debugger to generate valid JWT tokens. 
+
+Use https://www.epochconverter.com/ to generate the token expiration in Epoch time. 
+</aside>
+<h4 id='requirements'>Requirements</h4>
 <p>You must possess:</p>
 
 <table><thead>
@@ -635,7 +671,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 -H x-rezolve-partner-apikey: your-api-key
 -H authorization: Bearer signed-jwt
 -d {
-email: user@example.com
+"email": "user@example.com"
 }
 </code></pre>
 <p>After the JWT is created, POST it to the Rezolve registration endpoint. This will create a Rezolve User, generate a public/private keypair for the user, and return to you the corresponding Entity Id. </p>
@@ -648,7 +684,9 @@ email: user@example.com
 </code></pre>
 <p>The endpoint will reply with an entity id and the partner id. You should save the Rezolve Entity Id to your authentication database and associate it with the user&#39;s record.</p>
 <h3 id='logging-in-a-user'>Logging in a User</h3>
-<p>Once a Rezolve User has been registered and an <code>entity_id</code> obtained, you can log in the user. Log them in via your normal method in your auth server. Then create a new Login JWT. Use this JWT when creating the Rezolve Session in the SDK.</p>
+<p>Once a Rezolve User has been registered and an <code>entity_id</code> obtained, you can log in the user. If you just registered the user, you can reuse the <code>Register JWT</code> as the <code>accessToken</code>.  </p>
+
+<p>For returning users, log them in via your normal method in your auth server. Then create a new <code>Login JWT</code>, and use it as the <code>accessToken</code> in the <code>createSession</code> method.</p>
 <h4 id='jwt-header-2'>JWT Header</h4>
 <p>Note the addition of the &quot;auth&quot; line.</p>
 <pre class="highlight plaintext"><code>{
@@ -674,7 +712,9 @@ email: user@example.com
 )
 </code></pre>
 <p>Sign the header and payload with the <code>partner_auth_key</code>.</p>
-<h4 id='create-the-session'>Create the Session</h4><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h4 id='create-the-session'>Create the Session</h4>
+<p>In the samples to the right, <code>accessToken</code> is one of the JWT tokens you created above. If you just registered the user, you can reuse the <code>register JWT</code> token here. Otherwise, use a <code>login JWT</code>.</p>
+<pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 
@@ -5472,8 +5512,9 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <aside class="notice">
 Note: IOS uses the `getCatalogs` method to fetch both singular and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
-<h3 id='method-getparentcategory'>Method: getParentCategory</h3><pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
+<h3 id='method-getparentcategory'>Method: getParentCategory</h3>
+<p>This is an Android-only method that is a convenience proxy for the <code>getCateogry</code> method. IOS developers, use <code>getCategory</code>. </p>
+<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
@@ -6186,8 +6227,9 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <td>Items will be sorted sequentially by this integer. Exaple: 1 would come first, 2 next, etc.</td>
 </tr>
 </tbody></table>
-<h3 id='method-getcartproduct'>Method: getCartProduct</h3><pre class="highlight swift tab-swift"><code><span class="kt">TODO</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
+<h3 id='method-getcartproduct'>Method: getCartProduct</h3>
+<p>This is an Android-only method that is a convenience proxy for the <code>getProduct</code> method. IOS developers, use <code>getProduct</code>. </p>
+<pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
