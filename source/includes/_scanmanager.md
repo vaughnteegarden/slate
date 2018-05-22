@@ -1,6 +1,7 @@
 ## Module: ScanManager
 
 
+
 ```java
 //
 // contents of scan_activity.xml
@@ -37,6 +38,13 @@
 </RelativeLayout>
 
 ```
+
+**Topics**
+
+* <a href="#methods-scanmanager-startvideoscan-scanmanager-stopvideoscan">ScanManager.startVideoScan, ScanManager.stopVideoScan</a>
+* <a href="#methods-scanmanager-startaudioscan-scanmanager-stopaudioscan">ScanManager.startAudioScan, ScanManager.stopAudioScan</a>
+* <a href="#methods-scanmanager-destroy">ScanManager.destroy</a>
+
 ScanManager is different than other Managers as it relies on a user interface component.
 
 ### Methods: ScanManager.startVideoScan, ScanManager.stopVideoScan

@@ -1,5 +1,10 @@
 ## Module: MerchantManager
 
+**Topics**
+
+* <a href="#method-merchantmanager-getmerchants">MerchantManager.getMerchants</a>
+* <a href="#method-merchantmanager-getshippingmethods">MerchantManager.getShippingMethods</a>
+
 MerchantManager is an aggregate of Session. 
 
 This class provides the ability to retrieve merchants, and info about them.

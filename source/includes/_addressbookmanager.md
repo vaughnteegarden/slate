@@ -1,5 +1,13 @@
 ## Module: AddressbookManager
 
+**Topics**
+
+* <a href="#method-addressbookmanager-create">AddressbookManager.create</a>
+* <a href="#method-addressbookmanager-update">AddressbookManager.update</a>
+* <a href="#method-addressbookmanager-delete">AddressbookManager.delete</a>
+* <a href="#method-addressbookmanager-get">AddressbookManager.get</a>
+* <a href="#method-addressbookmanager-getall">AddressbookManager.getAll</a>
+
 The AddressbookManager is an aggregate of Session.
 
 This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.
@@ -12,7 +20,7 @@ While none of the address fields are REQUIRED by the SDK, because the requiremen
 - Zip
 - Country
 
-### Method: addressbookManager.create
+### Method: AddressbookManager.create
 
 ```swift
 import UIKit
@@ -107,7 +115,7 @@ The method returns the created `address` object with `id` upon success.
 |zip|string|39531|
 |country|string|USA|
 
-### Method: addressbookManager.update
+### Method: AddressbookManager.update
 
 ```swift
 import UIKit
@@ -177,7 +185,7 @@ You must pass in a valid `address` object with `id` populated.
 
 The method returns the updated `address` object upon success.
 
-### Method: addressbookManager.delete
+### Method: AddressbookManager.delete
 
 ```swift
 import UIKit
@@ -243,7 +251,7 @@ Method signature: `session.addressbookManager.delete( address, [callback or inte
 
 You must pass in the `address` object to delete.
 
-### Method: addressbookManager.get
+### Method: AddressbookManager.get
 
 ```swift
 import UIKit
@@ -308,7 +316,7 @@ You must pass in the `id` of the `address` to get.
 
 The method returns an `address` object.
 
-### Method: addressbookManager.getAll
+### Method: AddressbookManager.getAll
 
 ```swift
 import UIKit

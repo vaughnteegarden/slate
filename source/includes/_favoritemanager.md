@@ -1,5 +1,13 @@
 ## Module: FavoriteManager
 
+**Topics**
+
+* <a href="#method-favouritemanager-create">favouriteManager.create</a>
+* <a href="#method-favouritemanager-update">favouriteManager.update</a>
+* <a href="#method-favouritemanager-delete">favouriteManager.delete</a>
+* <a href="#method-favouritemanager-get">favouriteManager.get</a>
+* <a href="#method-favouritemanager-getall">favouriteManager.getAll</a>
+
 The FavoriteManager is an aggregate of Session.
 
 This module provides CRUD functions for Favorites. The term "Favorite" refers to the target of a top up operation, in which money is added to a remote account associated with a device or service. The consumer may add one or more favorites to their account.

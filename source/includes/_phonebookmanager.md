@@ -1,5 +1,12 @@
 ## Module: PhonebookManager
 
+**Topics**
+
+* <a href="#method-phonebookmanager-create">phonebookManager.create</a>
+* <a href="#method-phonebookmanager-update">phonebookManager.update</a>
+* <a href="#method-phonebookmanager-delete">phonebookManager.delete</a>
+* <a href="#method-phonebookmanager-get">phonebookManager.get</a>
+
 The PhonebookManager is an aggregate of Session.
 
 This module provides CRUD functions for consumer phone numbers. The consumer may add one or more phone numbers to their account.

@@ -1,5 +1,23 @@
 ## Module: CheckoutManager
 
+**Topics**
+
+* <a href="#method-checkoutbundle-createcartcheckoutbundle">CheckoutBundle.CreateCartCheckoutBundle</a>
+* <a href="#method-checkoutbundle-createcartinstorepickupcheckoutbundle">CheckoutBundle.CreateCartInStorePickupCheckoutBundle</a>
+* <a href="#method-checkoutbundle-createproductcheckoutbundle">CheckoutBundle.CreateProductCheckoutBundle</a>
+* <a href="#method-checkoutbundle-createproductinstorepickupcheckoutbundle">CheckoutBundle.CreateProductInStorePickupCheckoutBundle</a>
+* <a href="#method-checkoutmanager-createpaymentrequest">CheckoutManager.createPaymentRequest</a>
+* <a href="#method-checkoutmanager-addproducttocart">CheckoutManager.addProductToCart</a>
+* <a href="#method-checkoutmanager-buycart">CheckoutManager.buyCart</a>
+* <a href="#method-checkoutmanager-buyproduct">CheckoutManager.buyProduct</a>
+* <a href="#method-checkoutmanager-checkoutcart">CheckoutManager.checkoutCart</a>
+* <a href="#method-checkoutmanager-checkoutproduct">CheckoutManager.checkoutProduct</a>
+* <a href="#method-checkoutmanager-getcarts">CheckoutManager.getCarts</a>
+* <a href="#method-checkoutmanager-getcartbyid">CheckoutManager.getCartById</a>
+* <a href="#method-checkoutmanager-removeproductfromcart">CheckoutManager.removeProductFromCart</a>
+* <a href="#method-checkoutmanager-signorderupdates">CheckoutManager.signOrderUpdates</a>
+* <a href="#method-checkoutmanager-updateproductincart">CheckoutManager.updateProductInCart</a>
+
 Checkout is an aggregate of Session.
 
 The checkout module handles the shopping cart, and creates, modifies, and completes orders with payment.
@@ -307,7 +325,7 @@ The method returns an `CheckoutBundle` object.
 
 
 
-### Method: createPaymentRequest
+### Method: CheckoutManager.createPaymentRequest
 
 ```swift
 import UIKit
@@ -369,7 +387,7 @@ The method returns an `PaymentRequest` object.
 
 
 
-### Method: addProductToCart
+### Method: CheckoutManager.addProductToCart
 
 ```swift
 import UIKit
@@ -504,7 +522,7 @@ The method returns an `CartDetails` object.
 |placementId|string|abc123|
 
 
-### Method: buyCart
+### Method: CheckoutManager.buyCart
 
 ```swift
 import UIKit
@@ -611,7 +629,7 @@ The method returns a `merchantId` and an `orderId`.
 
 
 
-### Method: buyProduct
+### Method: CheckoutManager.buyProduct
 
 ```swift
 import UIKit
@@ -697,7 +715,7 @@ The method returns a `merchantId` and an `orderId`.
 
 
 
-### Method: checkoutCart
+### Method: CheckoutManager.checkoutCart
 
 ```swift
 import UIKit
@@ -800,7 +818,7 @@ The method returns an `Order` object that includes final price and order id.
 
 
 
-### Method: checkoutProduct
+### Method: CheckoutManager.checkoutProduct
 
 ```swift
 import RezolveSDK
@@ -881,7 +899,7 @@ The method returns an `Order` object that includes final price and order id.
 
 
 
-### Method: getCarts
+### Method: CheckoutManager.getCarts
 
 ```swift
 import UIKit
@@ -966,7 +984,7 @@ The method returns an array of `CartDetail` objects.
 
 
 
-### Method: getCartById
+### Method: CheckoutManager.getCartById
 
 ```swift
 import UIKit
@@ -1053,7 +1071,7 @@ The method returns an `CartDetails` object.
 
 
 
-### Method: removeProductFromCart
+### Method: CheckoutManager.removeProductFromCart
 
 ```swift
 import UIKit
@@ -1151,7 +1169,7 @@ The method returns a `CartDetails` object.
 
 
 
-### Method: signOrderUpdates
+### Method: CheckoutManager.signOrderUpdates
 
 ```swift
 import UIKit
@@ -1270,7 +1288,7 @@ The method returns a `Transaction` object, and a `Transaction.Status` object.
 
 
 
-### Method: updateProductInCart
+### Method: CheckoutManager.updateProductInCart
 
 ```swift
 import UIKit

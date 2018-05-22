@@ -1,4 +1,12 @@
 ## Module: AuthenticationManager
+
+**Topics**
+
+* <a href="#method-register-deprecated">Register (deprecated)</a>
+* <a href="#method-create-session-v2-with-jwt">Create Session (v2, with JWT)</a>
+* <a href="#method-create-session-v1-deprecated">Create Session (v1, deprecated)</a>
+* <a href="#method-logout-deprecated">Logout (deprecated)</a>
+
 Authentication services are an aggregate of SDK.
 
 This module handles consumer user creation and authentication.

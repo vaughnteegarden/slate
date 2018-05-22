@@ -1,4 +1,13 @@
 ## Module: WalletManager
+
+**Topics**
+
+* <a href="#method-walletmanager-create">walletManager.create</a>
+* <a href="#method-walletmanager-update">walletManager.update</a>
+* <a href="#method-walletmanager-delete">walletManager.delete</a>
+* <a href="#method-walletmanager-get">walletManager.get</a>
+* <a href="#method-walletmanager-getall">walletManager.getAll</a>
+
 The WalletManager is an aggregate of Session.
 
 This module provides CRUD functions for payment cards.  The consumer may add one or more payment cards to their account.

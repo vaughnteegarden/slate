@@ -1,5 +1,16 @@
 ## Module: ProductManager
 
+**Topics**
+
+* <a href="#usage-scenarios">Usage Scenarios</a>
+* <a href="#method-productmanager-getcatgories">ProductManager.getCatgories</a>
+* <a href="#method-productmanager-getcategory">ProductManager.getCategory</a>
+* <a href="#method-productmanager-getparentcategory">ProductManager.getParentCategory</a>
+* <a href="#method-productmanager-getproducts">ProductManager.getProducts</a>
+* <a href="#method-productmanager-getproduct">ProductManager.getProduct</a>
+* <a href="#method-productmanager-getcartproduct">ProductManager.getCartProduct</a>
+* <a href="#method-productmanager-getproductsandcategories">ProductManager.getProductsAndCategories</a>
+
 ProductManager is an aggregate of Session.
 
 The ProductManager module offers methods specific to the merchant product catalog; getting catalogs and products.

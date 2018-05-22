@@ -1,5 +1,9 @@
 ## Module: UserActivityManager
 
+**Topics**
+
+* <a href="#method-useractivitymanager-getorders-useractivitymanager-getordersby">UserActivityManager.getOrders / UserActivityManager.getOrdersBy</a>
+
 Activity is an aggregate of Session.
 
 The user activity module handles order history and other historical data.
