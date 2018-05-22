@@ -8,7 +8,7 @@
 * <a href="#register-a-new-rezolve-user">Register a new Rezolve User</a>
 * <a href="#logging-in-a-user">Logging in a User</a>
 * <a href="#handling-jwt-expiration-amp-session-preservation">Handling JWT Expiration & Session Preservation</a>
-* <a href="http-error-responses">HTTP Error Responses</a>
+* <a href="#http-error-responses">HTTP Error Responses</a>
 
 As of release 1.6.0, the Rezolve SDK no longer includes an authentication system. Resultingly, the `AuthenticationManager.register` and `AuthenticationManager.logout`  methods have been deprecated.
 
