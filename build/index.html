@@ -562,6 +562,18 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>ProfileManager supports only <code>update</code> and <code>get</code>.</p>
 
           <h2 id='implementing-jwt-authentication-on-your-authentication-server'>Implementing JWT Authentication on Your Authentication Server</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#terminology">Terminology</a></li>
+<li><a href="#jwt-flow">JWT Flow</a></li>
+<li><a href="#create-the-registration-jwt">Create the Registration JWT</a></li>
+<li><a href="#register-a-new-rezolve-user">Register a new Rezolve User</a></li>
+<li><a href="#logging-in-a-user">Logging in a User</a></li>
+<li><a href="#handling-jwt-expiration-amp-session-preservation">Handling JWT Expiration &amp; Session Preservation</a></li>
+<li><a href="http-error-responses">HTTP Error Responses</a></li>
+</ul>
+
 <p>As of release 1.6.0, the Rezolve SDK no longer includes an authentication system. Resultingly, the <code>AuthenticationManager.register</code> and <code>AuthenticationManager.logout</code>  methods have been deprecated.</p>
 
 <p>Instead, Rezolve is utilizing a server-to-server JWT authentication system, conformant with the <strong>https://tools.ietf.org/html/rfc7519</strong> standard. If you are not familar with JSON Web Tokens, the site <strong>https://jwt.io/</strong> provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.</p>
@@ -642,18 +654,53 @@ Use https://www.epochconverter.com/ to generate the token expiration in Epoch ti
     "typ": "JWT"
 }
 </code></pre>
-<p>Set type as JWT, and algorithm as HMAC using SHA-512.</p>
+<table><thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>alg</td>
+<td>HS512</td>
+<td>algorithm, HMAC SHA-512</td>
+</tr>
+<tr>
+<td>typ</td>
+<td>JWT</td>
+<td>type</td>
+</tr>
+</tbody></table>
 <h4 id='jwt-payload'>JWT Payload</h4><pre class="highlight plaintext"><code>{
     "rezolve_entity_id": ":NONE:",
     "partner_entity_id": "partner_entity_id",
     "exp": 1520869470
 }
 </code></pre>
-<p>For the <code>rezolve_entity_id</code>, use the value <code>:NONE:</code>.</p>
-
-<p>For the <code>partner_entity_id</code>, set it to the unique identifier for your user record. This may be a numerical id, or an identifying string such as email address.</p>
-
-<p>For <code>exp</code>, set the expiration value to a small number, now() + 30 minutes or less. Expiration should be expressed as a unix timestamp integer. </p>
+<table><thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>rezolve_entity_id</td>
+<td>:NONE:</td>
+<td>use :NONE: when registering</td>
+</tr>
+<tr>
+<td>partner_entity_id</td>
+<td>your_user_id</td>
+<td>The unique identifier for your user record. This may be a numerical id, or an identifying string such as email address.</td>
+</tr>
+<tr>
+<td>exp</td>
+<td>1520869470</td>
+<td>Expiration, as a unix timestamp integer. Set the expiration value to a small number, now() + 30 minutes or less.</td>
+</tr>
+</tbody></table>
 <h4 id='signature'>Signature</h4><pre class="highlight plaintext"><code>HMACSHA512(
     base64UrlEncode(header) + "." +
     base64UrlEncode(payload),
@@ -694,17 +741,59 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     "alg": "HS512",
     "typ": "JWT"
 }
-</code></pre><h4 id='jwt-payload-2'>JWT Payload</h4><pre class="highlight plaintext"><code>{
+</code></pre>
+<table><thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth</td>
+<td>v2</td>
+<td>auth version to use, login uses v2</td>
+</tr>
+<tr>
+<td>alg</td>
+<td>HS512</td>
+<td>algorithm, HMAC SHA-512</td>
+</tr>
+<tr>
+<td>typ</td>
+<td>JWT</td>
+<td>type</td>
+</tr>
+</tbody></table>
+<h4 id='jwt-payload-2'>JWT Payload</h4><pre class="highlight plaintext"><code>{
     "rezolve_entity_id": "entity123",
     "partner_entity_id": "partner_entity_id",
     "exp": 1520869470
 }
 </code></pre>
-<p>For the <code>rezolve_entity_id</code>, use the entity_id you obtained during registration.</p>
-
-<p>For the <code>partner_entity_id</code>, set it to the unique identifier for your user record. </p>
-
-<p>For <code>exp</code>, set the expiration value to a small number, now() + 30 minutes or less. Expiration should be expressed as a unix timestamp integer. </p>
+<table><thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>rezolve_entity_id</td>
+<td>your_rezolve_entity_id</td>
+<td>use the entity_id you obtained during registration</td>
+</tr>
+<tr>
+<td>partner_entity_id</td>
+<td>your_partner_entity_id</td>
+<td>set it to the unique identifier for your user record</td>
+</tr>
+<tr>
+<td>exp</td>
+<td>1520869470</td>
+<td>Expiration, as a unix timestamp integer. Set the expiration value to a small number, now() + 30 minutes or less.</td>
+</tr>
+</tbody></table>
 <h4 id='signature-2'>Signature</h4><pre class="highlight plaintext"><code>HMACSHA512(
     base64UrlEncode(header) + "." +
     base64UrlEncode(payload),
@@ -1059,13 +1148,16 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     "message": "Access is denied."
 }
 </code></pre>
-<p>For security reasons, Rezolve masks certain potential issues behind a generic 403 response:
-- invalid partner api key
-- partner doesn&#39;t have an auth key
-- token not found
-- invalid token signature
-- token is missing required fields
-- token belongs to another user</p>
+<p>For security reasons, Rezolve masks certain potential issues behind a generic 403 response:</p>
+
+<ul>
+<li>invalid partner api key</li>
+<li>partner doesn&#39;t have an auth key</li>
+<li>token not found</li>
+<li>invalid token signature</li>
+<li>token is missing required fields</li>
+<li>token belongs to another user</li>
+</ul>
 <h4 id='401'>401</h4><pre class="highlight plaintext"><code>{
     "type": "Expired Token"
     "code": "8"
@@ -4615,7 +4707,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>MerchantManager is an aggregate of Session. </p>
 
 <p>This class provides the ability to retrieve merchants, and info about them.</p>
-<h3 id='method-getmerchants'>Method: getMerchants</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">RezolveSDK</span>
+<h3 id='method-merchantmanager-getmerchants'>Method: MerchantManager.getMerchants</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">RezolveSDK</span>
 <span class="kd">import</span> <span class="kt">Foundation</span>
 
 <span class="kd">internal</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ApiClient</span> <span class="p">{</span>
@@ -4734,7 +4826,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
 <p>How to use the returned images: the <code>banner</code> is typically used as a header background, and the image represented by <code>logo</code> is overlaid on top. The banner and logo come in a variety of thumbnailed sizes, depending on the original image side.</p>
-<h3 id='method-getshippingmethods'>Method: getShippingMethods</h3>
+<h3 id='method-merchantmanager-getshippingmethods'>Method: MerchantManager.getShippingMethods</h3>
 <p>Gets shipping methods for a specific merchant.</p>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">RezolveSDK</span>
 <span class="kd">import</span> <span class="kt">Foundation</span>
@@ -5338,7 +5430,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <li><code>getParentCategory</code> is a convenience method in the Android Rezolve SDK only, to get the parent category when navigating back up the category tree. IOS Developers should use <code>Category.parentId</code> to call <code>getCategories</code>, and use the returned object to call <code>getProductsAndCategories</code>.</li>
 <li><code>getCartProduct</code> is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use <code>getProduct</code>.</li>
 </ul>
-<h3 id='method-getcatgories'>Method: getCatgories</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-productmanager-getcatgories'>Method: ProductManager.getCatgories</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"12"</span>
@@ -5535,7 +5627,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>If <code>has_categories</code> is <code>false</code>, the <code>categories</code> array should be empty.</p>
 
 <p>If <code>has_products</code> is <code>true</code>, call <code>getProducts</code> with the category <code>id</code> to get a product list.</p>
-<h3 id='method-getcategory'>Method: getCategory</h3><pre class="highlight swift tab-swift"><code><span class="c1">// This method no longer exists on IOS. Use getCategories instead.</span>
+<h3 id='method-productmanager-getcategory'>Method: ProductManager.getCategory</h3><pre class="highlight swift tab-swift"><code><span class="c1">// This method no longer exists on IOS. Use getCategories instead.</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single category using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -5612,7 +5704,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <aside class="notice">
 Note: IOS uses the `getCatalogs` method to fetch both singular and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
-<h3 id='method-getparentcategory'>Method: getParentCategory</h3>
+<h3 id='method-productmanager-getparentcategory'>Method: ProductManager.getParentCategory</h3>
 <p>This is an Android-only method that is a convenience proxy for the <code>getCateogry</code> method, used to get the parent category when navigating back up the category tree. IOS developers, use <code>getCategory</code>. </p>
 <pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -5682,7 +5774,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>Method signature: <code>session.getCategory( merchant_id, category, [callback or interface] )</code></p>
 
 <p>The method returns a <code>category</code> object.</p>
-<h3 id='method-getproducts'>Method: getProducts</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-productmanager-getproducts'>Method: ProductManager.getProducts</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"12"</span>
@@ -5901,7 +5993,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <td>http://domain.com/path/image.jpg</td>
 </tr>
 </tbody></table>
-<h3 id='method-getproduct'>Method: getProduct</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-productmanager-getproduct'>Method: ProductManager.getProduct</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"12"</span>
@@ -6327,7 +6419,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <td>Items will be sorted sequentially by this integer. Exaple: 1 would come first, 2 next, etc.</td>
 </tr>
 </tbody></table>
-<h3 id='method-getcartproduct'>Method: getCartProduct</h3>
+<h3 id='method-productmanager-getcartproduct'>Method: ProductManager.getCartProduct</h3>
 <p>This is an Android-only method that is a convenience proxy for the <code>getProduct</code> method. IOS developers, use <code>getProduct</code>. </p>
 <pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
@@ -6389,7 +6481,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>You must pass a <code>merchantId</code>, and a <code>category</code> object.</p>
 
 <p>The method returns a category object.</p>
-<h3 id='method-getproductsandcategories'>Method: getProductsAndCategories</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-productmanager-getproductsandcategories'>Method: ProductManager.getProductsAndCategories</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"12"</span>
@@ -6596,7 +6688,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>The CustomerProfileManager is an aggregate of Session.</p>
 
 <p>This module handles maintaining the consumer&#39;s contact information and device info.</p>
-<h3 id='method-customerprofilemanager-get'>Method: customerProfileManager.get</h3><pre class="highlight swift tab-swift"><code>  <span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-customerprofilemanager-customerprofilemanager-get'>Method: CustomerProfileManager.customerProfileManager.get</h3><pre class="highlight swift tab-swift"><code>  <span class="kd">import</span> <span class="kt">UIKit</span>
   <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
   <span class="kd">class</span> <span class="kt">CustomerProfilerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -6778,7 +6870,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <td>en_GB</td>
 </tr>
 </tbody></table>
-<h3 id='method-customerprofilemanager-update'>Method: customerProfileManager.update</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-customerprofilemanager-customerprofilemanager-update'>Method: CustomerProfileManager.customerProfileManager.update</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">CustomerProfilerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -6902,7 +6994,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
 </code></pre>
 <p>ScanManager is different than other Managers as it relies on a user interface component.</p>
-<h3 id='methods-startvideoscan-stopvideoscan'>Methods: startVideoScan, stopVideoScan</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='methods-scanmanager-startvideoscan-scanmanager-stopvideoscan'>Methods: ScanManager.startVideoScan, ScanManager.stopVideoScan</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -7044,7 +7136,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>Method signature: <code>session.scanManager.startVideoScan()</code></p>
 
 <p>Method signature: <code>session.scanManager.stopVideoScan()</code></p>
-<h3 id='methods-startaudioscan-stopaudioscan'>Methods: startAudioScan, stopAudioScan</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='methods-scanmanager-startaudioscan-scanmanager-stopaudioscan'>Methods: ScanManager.startAudioScan, ScanManager.stopAudioScan</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -7091,7 +7183,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>Method signature: <code>session.scanManager.startAudioScan()</code></p>
 
 <p>Method signature: <code>session.scanManager.stopAudioScan()</code></p>
-<h3 id='method-destroy'>Method: destroy</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-scanmanager-destroy'>Method: ScanManager.destroy</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">ScanManagerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -7141,7 +7233,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </ul>
 
 <p>These functions are NOT implemented server-side, and should not be used at this time.</p>
-<h3 id='method-getorders-getordersby'>Method: getOrders / getOrdersBy</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-useractivitymanager-getorders-useractivitymanager-getordersby'>Method: UserActivityManager.getOrders / UserActivityManager.getOrdersBy</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
