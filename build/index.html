@@ -1760,6 +1760,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
             <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> <span class="nv">device</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
 
+                <span class="c1">// CATEGORY_ID should be null</span>
                 <span class="n">session</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getCategories</span><span class="p">(</span>
                     <span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> 
                     <span class="nv">category</span><span class="p">:</span> <span class="kt">Category</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">CATEGORY_ID</span><span class="p">),</span> 
@@ -1843,7 +1844,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 </code></pre>
 <p>Display your subcategories and products as returned by the <code>getCategories</code> call. </p>
-<h3 id='3-if-the-consumer-clicks-a-subcategory-call-getcategory'>3. If the consumer clicks a subcategory, call <code>getCategory</code></h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+
+<p>For subsequent navigation in categories, use <code>getProductsAndCategories</code>.</p>
+<h3 id='3-if-the-consumer-clicks-a-subcategory-call-getproductsandcategories'>3. If the consumer clicks a subcategory, call <code>getProductsAndCategories</code>.</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"12"</span>
@@ -1862,10 +1865,15 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
             <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> <span class="nv">device</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
 
-                <span class="c1">// IOS uses getCategories, and pass in the category id</span>
-                <span class="n">session</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getCategories</span><span class="p">(</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getProductsAndCatgories</span><span class="p">(</span>
                     <span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> 
                     <span class="nv">category</span><span class="p">:</span> <span class="kt">Category</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">CATEGORY_ID</span><span class="p">),</span> 
+                    <span class="nv">pageNavigationFilter</span><span class="p">:</span> <span class="kt">PageNavigationFilter</span><span class="p">(</span>
+                        <span class="nv">count</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> 
+                        <span class="nv">pageIndex</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+                        <span class="nv">sortBy</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> 
+                        <span class="nv">sort</span><span class="p">:</span> <span class="kt">PageNavigationSort</span><span class="o">.</span><span class="kt">DESC</span>
+                    <span class="p">),</span>
                     <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">responseCategory</span> <span class="k">in</span>
 
                         <span class="nf">print</span><span class="p">(</span><span class="n">responseCategory</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1885,6 +1893,78 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
                             <span class="p">}</span>   
                         <span class="p">}</span>
 
+
+                        <span class="k">if</span> <span class="k">let</span> <span class="nv">resultOfCategory</span> <span class="o">=</span> <span class="n">pageResultOfCategory</span> <span class="p">{</span>
+
+                            <span class="n">resultOfCategory</span><span class="o">.</span><span class="n">embedded</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">embeddedCategory</span> <span class="k">in</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedCategory</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedCategory</span><span class="o">.</span><span class="n">parentId</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedCategory</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedCategory</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedCategory</span><span class="o">.</span><span class="n">imageThumbs</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedCategory</span><span class="o">.</span><span class="n">hasProducts</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="n">embeddedCategory</span><span class="o">.</span><span class="n">hasCategories</span> <span class="p">{</span>
+                                    <span class="c1">// ..</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+
+                        <span class="k">if</span> <span class="k">let</span> <span class="nv">resultOfProduct</span> <span class="o">=</span> <span class="n">pageResultOfProduct</span> <span class="p">{</span>
+                            <span class="n">resultOfProduct</span><span class="o">.</span><span class="n">embedded</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">embeddedProduct</span> <span class="k">in</span>
+
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">merchantId</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">subtitle</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+
+                                <span class="n">embeddedProduct</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+                                <span class="p">}</span>
+
+                                <span class="n">embeddedProduct</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">option</span> <span class="k">in</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">extraInfo</span><span class="p">)</span>
+                                    <span class="n">option</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">optionValue</span> <span class="k">in</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">optionValue</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">optionValue</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+                                    <span class="p">}</span>
+                                <span class="p">}</span>
+
+                                <span class="n">embeddedProduct</span><span class="o">.</span><span class="n">optionAvailable</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
+                                    <span class="nv">$0</span><span class="o">.</span><span class="n">combination</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">variant</span> <span class="k">in</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+                                    <span class="p">}</span>
+                                <span class="p">}</span> 
+
+                                <span class="n">embeddedProduct</span><span class="o">.</span><span class="n">customOptions</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">isRequire</span><span class="p">)</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">optionId</span><span class="p">)</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">sortOrder</span><span class="p">)</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">optionType</span><span class="p">)</span>
+
+                                    <span class="nv">$0</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span> 
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">sortOrder</span><span class="p">)</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">valueId</span><span class="p">)</span>
+                                    <span class="p">}</span>
+
+                                    <span class="nv">$0</span><span class="o">.</span><span class="n">valuesId</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">valueId</span> <span class="k">in</span> 
+                                        <span class="nf">print</span><span class="p">(</span><span class="n">valueId</span><span class="p">)</span>
+                                    <span class="p">}</span>
+
+                                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                                <span class="p">}</span>
+
+                                <span class="nf">print</span><span class="p">(</span><span class="n">embeddedProduct</span><span class="o">.</span><span class="n">productPlacement</span><span class="p">)</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+
                 <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span>
                     <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="c1">// handle error</span>
                 <span class="p">})</span>
@@ -1892,7 +1972,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
@@ -1900,20 +1980,32 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">ProductInterface</span> <span class="n">productInterface</span><span class="o">;</span>
 
-        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
-        <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
 
-        <span class="c1">// get single category</span>
-        <span class="c1">// note: in practice you would pass in category object returned by a getCategories or getCategory method</span>
-        <span class="n">Category</span> <span class="n">category</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Category</span><span class="o">();</span>  
-        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
-        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getCategory</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">category</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span> <span class="c1">// "this" is productInterface</span>
+        <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+        <span class="n">Category</span> <span class="n">category</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Category</span><span class="o">();</span>
+
+        <span class="c1">// first pageNavigationFilter is for categories</span>
+        <span class="n">PageNavigationFilter</span> <span class="n">pageNavigationFilter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PageNavigationFilter</span><span class="o">();</span>
+        <span class="n">pageNavigationFilter</span><span class="o">.</span><span class="na">setItemsPerPage</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">pageNavigationFilter</span><span class="o">.</span><span class="na">setPageNumber</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+        <span class="n">pageNavigationFilter</span><span class="o">.</span><span class="na">setSortBy</span><span class="o">(</span><span class="s">"name"</span><span class="o">);</span>   <span class="c1">// values: name, price</span>
+        <span class="n">pageNavigationFilter</span><span class="o">.</span><span class="na">setSortDirection</span><span class="o">(</span><span class="s">"asc"</span><span class="o">);</span>  <span class="c1">// values: asc, desc</span>
+        <span class="c1">// second pageNavigationFilter is for products</span>
+        <span class="n">PageNavigationFilter</span> <span class="n">pageNavigationFilter2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PageNavigationFilter</span><span class="o">();</span>
+        <span class="n">pageNavigationFilter2</span><span class="o">.</span><span class="na">setItemsPerPage</span><span class="o">(</span><span class="mi">20</span><span class="o">);</span>
+        <span class="n">pageNavigationFilter2</span><span class="o">.</span><span class="na">setPageNumber</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+        <span class="n">pageNavigationFilter2</span><span class="o">.</span><span class="na">setSortBy</span><span class="o">(</span><span class="s">"price"</span><span class="o">);</span>   <span class="c1">// values: name, price</span>
+        <span class="n">pageNavigationFilter2</span><span class="o">.</span><span class="na">setSortDirection</span><span class="o">(</span><span class="s">"asc"</span><span class="o">);</span>  <span class="c1">// values: asc, desc</span>
+
+        <span class="c1">// get products and categories in one call</span>
+        <span class="n">myProductManager</span><span class="o">.</span><span class="na">getProductsAndCategories</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">category</span><span class="o">,</span> <span class="n">pageNavigationFilter</span><span class="o">,</span> <span class="n">pageNavigationFilter2</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetCategorySuccess</span><span class="o">(</span><span class="n">Category</span> <span class="n">category</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// parse the category contents to get subcategories and products</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onGetProductsAndCategoriesSuccess</span><span class="o">(</span><span class="n">Category</span> <span class="n">category</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">category_id</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">parentId</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getParentId</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
@@ -1923,16 +2015,6 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">imageThumbs</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getImageThumbs</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">catParentId</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getParentId</span><span class="o">();</span>
         <span class="n">List</span><span class="o">&lt;</span><span class="n">Category</span><span class="o">&gt;</span> <span class="n">children</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getCategories</span><span class="o">();</span>
-
-        <span class="c1">// get category placement</span>
-        <span class="n">Placement</span><span class="o">.</span><span class="na">CategoryPlacement</span> <span class="n">categoryPlacement</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getCategoryPlacement</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">categoryAdId</span> <span class="o">=</span> <span class="n">categoryPlacement</span><span class="o">.</span><span class="na">getAdId</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">categoryPlacementId</span> <span class="o">=</span> <span class="n">categoryPlacement</span><span class="o">.</span><span class="na">getPlacementId</span><span class="o">();</span>
-
-        <span class="c1">// optional:  get paginated subcategory results</span>
-        <span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Category</span><span class="o">&gt;</span> <span class="n">categoryPageResult</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getCategoryPageResult</span><span class="o">();</span>
-
-        <span class="c1">// optional: get paginated product results</span>
         <span class="n">PageResult</span><span class="o">&lt;</span><span class="n">DisplayProduct</span><span class="o">&gt;</span> <span class="n">pageResult</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="na">getProductPageResult</span><span class="o">();</span>
 
         <span class="c1">// get products from pageResult...</span>
@@ -1959,7 +2041,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>If the consumer clicks a subcategory, call <code>getCategory</code> (or <code>getCategories</code> with a category_id on IOS) to pull a new list of subcategories and products for that category.  Repeat this step to drill down in the category structure. </p>
+<p>As the consumer navigates the category tree, call <code>getProductsAndCategories</code> to pull a paginated lists of subcategories and products for that category.</p>
 <h3 id='4-if-the-consumer-clicks-a-product-call-getproduct'>4. If the consumer clicks a Product, call <code>getProduct</code></h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
@@ -5232,12 +5314,21 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>ProductManager is an aggregate of Session.</p>
 
 <p>The ProductManager module offers methods specific to the merchant product catalog; getting catalogs and products.</p>
+<h3 id='usage-scenarios'>Usage Scenarios</h3>
+<p><strong>For Mall Browse</strong>
+* <code>getCategories</code> is used the first time you request categories from a merchant. It returns the merchant catalog starting at the catalog root. 
+* Note that the Android version of <code>getCategories</code> returns both category and product info, while IOS returns only category info. IOS will need to follow with a <code>getProuducts</code> call if <code>hasProducts</code> is true. 
+* <code>getProductsAndCategories</code> is then used by both Android and IOS to request subsequent paginated category and product lists as the consumer navigates</p>
 
-<p>Scenarios:
-* <code>getCategories</code> is used the first time you request categories from a merchant, for mall browsing.
-* <code>getCategory</code> is used to pull information and products about a subcategory when mall browsing, or when browsing as the result of a category scan.
-* <code>getProducts</code> is no longer needed because categories now automatically return product info, but is retained for backwards compatibility with older code bases.
-* <code>getProduct</code>  is typically used to get more information about a product returned from a category query, when displaying a product detail page.</p>
+<p><strong>For Scanning a Category Engagement</strong>
+* <code>getCategory</code> is used to initially fetch the desired category, (IOS use <code>getCategories</code> with an optional category id)
+* IOS will need to follow with a <code>getProuducts</code> call if <code>hasProducts</code> is true. 
+* <code>getProductsAndCategories</code> is used to request subsequent paginated category and product lists as the consumer navigates</p>
+
+<p><strong>In Both Above Scenarios</strong>
+* <code>getProduct</code>  is used to get more information about a product, when displaying a product detail page.
+* <code>getParentCategory</code> is a convenience method in the Android Rezolve SDK only, to get the parent category when navigating back up the category tree. IOS Developers should use <code>Category.parentId</code> to call <code>getCategories</code>, and use the returned object to call <code>getProductsAndCategories</code>.
+* <code>getCartProduct</code> is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use <code>getProduct</code>.</p>
 <h3 id='method-getcatgories'>Method: getCatgories</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
@@ -5359,7 +5450,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>The method returns an array of <code>category</code> objects owned by a specific merchant.  Specifically, it returns the <em>root category</em> and <em>first level</em> of child categories*.</p>
 
-<p>For IOS, if you supply the category_id, you will get results for a single category. Omit the category_id to get all categories.</p>
+<p>For IOS, if you supply the category_id, you will get results for a specific category, instead of the root category. Send category_id as NULL to get the root category.</p>
 <h4 id='category-object'>category Object</h4>
 <table><thead>
 <tr>
@@ -5513,7 +5604,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 Note: IOS uses the `getCatalogs` method to fetch both singular and multiple catalogs. To get all catalogs, simply set the `catalogId` to `nil`. To get a singular catalog, specify a `catalogId`.
 </aside>
 <h3 id='method-getparentcategory'>Method: getParentCategory</h3>
-<p>This is an Android-only method that is a convenience proxy for the <code>getCateogry</code> method. IOS developers, use <code>getCategory</code>. </p>
+<p>This is an Android-only method that is a convenience proxy for the <code>getCateogry</code> method, used to get the parent category when navigating back up the category tree. IOS developers, use <code>getCategory</code>. </p>
 <pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
