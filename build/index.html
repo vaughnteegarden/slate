@@ -2362,6 +2362,16 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='module-reference-docs'>Module Reference Docs</h1>
           <h2 id='module-addressbookmanager'>Module: AddressbookManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-addressbookmanager-create">AddressbookManager.create</a></li>
+<li><a href="#method-addressbookmanager-update">AddressbookManager.update</a></li>
+<li><a href="#method-addressbookmanager-delete">AddressbookManager.delete</a></li>
+<li><a href="#method-addressbookmanager-get">AddressbookManager.get</a></li>
+<li><a href="#method-addressbookmanager-getall">AddressbookManager.getAll</a></li>
+</ul>
+
 <p>The AddressbookManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for consumer addresses. The consumer may add one or more addresses to their account.</p>
@@ -2375,7 +2385,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Zip</li>
 <li>Country</li>
 </ul>
-<h3 id='method-addressbookmanager-create'>Method: addressbookManager.create</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-addressbookmanager-create'>Method: AddressbookManager.create</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">AddressBookViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -2499,7 +2509,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <td>USA</td>
 </tr>
 </tbody></table>
-<h3 id='method-addressbookmanager-update'>Method: addressbookManager.update</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-addressbookmanager-update'>Method: AddressbookManager.update</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">AddressBookViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -2562,7 +2572,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>You must pass in a valid <code>address</code> object with <code>id</code> populated.</p>
 
 <p>The method returns the updated <code>address</code> object upon success.</p>
-<h3 id='method-addressbookmanager-delete'>Method: addressbookManager.delete</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-addressbookmanager-delete'>Method: AddressbookManager.delete</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">AddressBookViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -2621,7 +2631,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>Method signature: <code>session.addressbookManager.delete( address, [callback or interface] )</code></p>
 
 <p>You must pass in the <code>address</code> object to delete.</p>
-<h3 id='method-addressbookmanager-get'>Method: addressbookManager.get</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-addressbookmanager-get'>Method: AddressbookManager.get</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">AddressBookViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -2679,7 +2689,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>You must pass in the <code>id</code> of the <code>address</code> to get.</p>
 
 <p>The method returns an <code>address</code> object.</p>
-<h3 id='method-addressbookmanager-getall'>Method: addressbookManager.getAll</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-addressbookmanager-getall'>Method: AddressbookManager.getAll</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">AddressBookViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -2738,6 +2748,15 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>The method returns an array of <code>address</code> objects.</p>
 
           <h2 id='module-authenticationmanager'>Module: AuthenticationManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-register-deprecated">Register (deprecated)</a></li>
+<li><a href="#method-create-session-v2-with-jwt">Create Session (v2, with JWT)</a></li>
+<li><a href="#method-create-session-v1-deprecated">Create Session (v1, deprecated)</a></li>
+<li><a href="#method-logout-deprecated">Logout (deprecated)</a></li>
+</ul>
+
 <p>Authentication services are an aggregate of SDK.</p>
 
 <p>This module handles consumer user creation and authentication.</p>
@@ -3031,6 +3050,26 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p><code>entity_id</code> is a string, returned from <code>sdk.register</code>.</p>
 
           <h2 id='module-checkoutmanager'>Module: CheckoutManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-checkoutbundle-createcartcheckoutbundle">CheckoutBundle.CreateCartCheckoutBundle</a></li>
+<li><a href="#method-checkoutbundle-createcartinstorepickupcheckoutbundle">CheckoutBundle.CreateCartInStorePickupCheckoutBundle</a></li>
+<li><a href="#method-checkoutbundle-createproductcheckoutbundle">CheckoutBundle.CreateProductCheckoutBundle</a></li>
+<li><a href="#method-checkoutbundle-createproductinstorepickupcheckoutbundle">CheckoutBundle.CreateProductInStorePickupCheckoutBundle</a></li>
+<li><a href="#method-checkoutmanager-createpaymentrequest">CheckoutManager.createPaymentRequest</a></li>
+<li><a href="#method-checkoutmanager-addproducttocart">CheckoutManager.addProductToCart</a></li>
+<li><a href="#method-checkoutmanager-buycart">CheckoutManager.buyCart</a></li>
+<li><a href="#method-checkoutmanager-buyproduct">CheckoutManager.buyProduct</a></li>
+<li><a href="#method-checkoutmanager-checkoutcart">CheckoutManager.checkoutCart</a></li>
+<li><a href="#method-checkoutmanager-checkoutproduct">CheckoutManager.checkoutProduct</a></li>
+<li><a href="#method-checkoutmanager-getcarts">CheckoutManager.getCarts</a></li>
+<li><a href="#method-checkoutmanager-getcartbyid">CheckoutManager.getCartById</a></li>
+<li><a href="#method-checkoutmanager-removeproductfromcart">CheckoutManager.removeProductFromCart</a></li>
+<li><a href="#method-checkoutmanager-signorderupdates">CheckoutManager.signOrderUpdates</a></li>
+<li><a href="#method-checkoutmanager-updateproductincart">CheckoutManager.updateProductInCart</a></li>
+</ul>
+
 <p>Checkout is an aggregate of Session.</p>
 
 <p>The checkout module handles the shopping cart, and creates, modifies, and completes orders with payment.</p>
@@ -3298,7 +3337,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in the <code>merchantId</code> as a string, a <code>ShippingMethod</code> object, a <code>StoreAddress</code> object, and a <code>CheckoutProduct</code> object.</p>
 
 <p>The method returns an <code>CheckoutBundle</code> object.</p>
-<h3 id='method-createpaymentrequest'>Method: createPaymentRequest</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-createpaymentrequest'>Method: CheckoutManager.createPaymentRequest</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -3350,7 +3389,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in a <code>PaymentCard</code> object, and a <code>CVV</code> as a string. Use WalletManager to get a PaymentCard object.</p>
 
 <p>The method returns an <code>PaymentRequest</code> object.</p>
-<h3 id='method-addproducttocart'>Method: addProductToCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-addproducttocart'>Method: CheckoutManager.addProductToCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -3540,7 +3579,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <td>abc123</td>
 </tr>
 </tbody></table>
-<h3 id='method-buycart'>Method: buyCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-buycart'>Method: CheckoutManager.buyCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -3659,7 +3698,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <td>345</td>
 </tr>
 </tbody></table>
-<h3 id='method-buyproduct'>Method: buyProduct</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-buyproduct'>Method: CheckoutManager.buyProduct</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -3736,7 +3775,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in a <code>CheckoutBundle</code> object, the <code>phonebookId</code> as a string, a <code>RezolveLocation</code> object, a <code>PaymentRequest</code> object, and an interface or callback.</p>
 
 <p>The method returns a <code>merchantId</code> and an <code>orderId</code>. </p>
-<h3 id='method-checkoutcart'>Method: checkoutCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-checkoutcart'>Method: CheckoutManager.checkoutCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -3856,7 +3895,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <td>tax</td>
 </tr>
 </tbody></table>
-<h3 id='method-checkoutproduct'>Method: checkoutProduct</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">RezolveSDK</span>
+<h3 id='method-checkoutmanager-checkoutproduct'>Method: CheckoutManager.checkoutProduct</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">RezolveSDK</span>
 <span class="kd">import</span> <span class="kt">Foundation</span>
 
 <span class="kd">internal</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -3928,7 +3967,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in a <code>CheckoutBundle</code> object, and an interface or callback.</p>
 
 <p>The method returns an <code>Order</code> object that includes final price and order id.</p>
-<h3 id='method-getcarts'>Method: getCarts</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-getcarts'>Method: CheckoutManager.getCarts</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -4004,7 +4043,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in a <code>CheckoutInterface</code> or callback.</p>
 
 <p>The method returns an array of <code>CartDetail</code> objects.</p>
-<h3 id='method-getcartbyid'>Method: getCartById</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-getcartbyid'>Method: CheckoutManager.getCartById</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -4081,7 +4120,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in a <code>Cartid</code> string, a <code>MerchantId</code> string, and a <code>CheckoutInterface</code> or callback.</p>
 
 <p>The method returns an <code>CartDetails</code> object.</p>
-<h3 id='method-removeproductfromcart'>Method: removeProductFromCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-removeproductfromcart'>Method: CheckoutManager.removeProductFromCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -4169,7 +4208,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>You must pass in <code>CartId</code> as a string, <code>MerchantId</code> as a string, the <code>CheckoutProduct</code> to remove, and a <code>CheckoutInterface</code> or callback.</p>
 
 <p>The method returns a <code>CartDetails</code> object.</p>
-<h3 id='method-signorderupdates'>Method: signOrderUpdates</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-signorderupdates'>Method: CheckoutManager.signOrderUpdates</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -4310,7 +4349,7 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <td>&nbsp;</td>
 </tr>
 </tbody></table>
-<h3 id='method-updateproductincart'>Method: updateProductInCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-checkoutmanager-updateproductincart'>Method: CheckoutManager.updateProductInCart</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="k">let</span> <span class="nv">MERCHANT_ID</span> <span class="o">=</span> <span class="s">"..."</span>
@@ -4406,6 +4445,16 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns a <code>CartDetails</code> object.</p>
 
           <h2 id='module-favoritemanager'>Module: FavoriteManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-favouritemanager-create">favouriteManager.create</a></li>
+<li><a href="#method-favouritemanager-update">favouriteManager.update</a></li>
+<li><a href="#method-favouritemanager-delete">favouriteManager.delete</a></li>
+<li><a href="#method-favouritemanager-get">favouriteManager.get</a></li>
+<li><a href="#method-favouritemanager-getall">favouriteManager.getAll</a></li>
+</ul>
+
 <p>The FavoriteManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for Favorites. The term &quot;Favorite&quot; refers to the target of a top up operation, in which money is added to a remote account associated with a device or service. The consumer may add one or more favorites to their account.</p>
@@ -4704,6 +4753,13 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The method returns an array of <code>favourite</code> objects.</p>
 
           <h2 id='module-merchantmanager'>Module: MerchantManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-merchantmanager-getmerchants">MerchantManager.getMerchants</a></li>
+<li><a href="#method-merchantmanager-getshippingmethods">MerchantManager.getShippingMethods</a></li>
+</ul>
+
 <p>MerchantManager is an aggregate of Session. </p>
 
 <p>This class provides the ability to retrieve merchants, and info about them.</p>
@@ -5085,6 +5141,15 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 </tbody></table>
 
           <h2 id='module-phonebookmanager'>Module: PhonebookManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-phonebookmanager-create">phonebookManager.create</a></li>
+<li><a href="#method-phonebookmanager-update">phonebookManager.update</a></li>
+<li><a href="#method-phonebookmanager-delete">phonebookManager.delete</a></li>
+<li><a href="#method-phonebookmanager-get">phonebookManager.get</a></li>
+</ul>
+
 <p>The PhonebookManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for consumer phone numbers. The consumer may add one or more phone numbers to their account.</p>
@@ -5403,6 +5468,19 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 <p>The Android method returns an array of <code>Phone</code> objects. The IOS method returns only the first <code>Phone</code> object.</p>
 
           <h2 id='module-productmanager'>Module: ProductManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#usage-scenarios">Usage Scenarios</a></li>
+<li><a href="#method-productmanager-getcatgories">ProductManager.getCatgories</a></li>
+<li><a href="#method-productmanager-getcategory">ProductManager.getCategory</a></li>
+<li><a href="#method-productmanager-getparentcategory">ProductManager.getParentCategory</a></li>
+<li><a href="#method-productmanager-getproducts">ProductManager.getProducts</a></li>
+<li><a href="#method-productmanager-getproduct">ProductManager.getProduct</a></li>
+<li><a href="#method-productmanager-getcartproduct">ProductManager.getCartProduct</a></li>
+<li><a href="#method-productmanager-getproductsandcategories">ProductManager.getProductsAndCategories</a></li>
+</ul>
+
 <p>ProductManager is an aggregate of Session.</p>
 
 <p>The ProductManager module offers methods specific to the merchant product catalog; getting catalogs and products.</p>
@@ -6685,10 +6763,17 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>The method returns a category object.</p>
 
           <h2 id='module-customerprofilemanager'>Module: CustomerProfileManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-customerprofilemanager-get">CustomerProfileManager.get</a></li>
+<li><a href="#method-customerprofilemanager-update">CustomerProfileManager.update</a></li>
+</ul>
+
 <p>The CustomerProfileManager is an aggregate of Session.</p>
 
 <p>This module handles maintaining the consumer&#39;s contact information and device info.</p>
-<h3 id='method-customerprofilemanager-customerprofilemanager-get'>Method: CustomerProfileManager.customerProfileManager.get</h3><pre class="highlight swift tab-swift"><code>  <span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-customerprofilemanager-get'>Method: CustomerProfileManager.get</h3><pre class="highlight swift tab-swift"><code>  <span class="kd">import</span> <span class="kt">UIKit</span>
   <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
   <span class="kd">class</span> <span class="kt">CustomerProfilerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -6870,7 +6955,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <td>en_GB</td>
 </tr>
 </tbody></table>
-<h3 id='method-customerprofilemanager-customerprofilemanager-update'>Method: CustomerProfileManager.customerProfileManager.update</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<h3 id='method-customerprofilemanager-update'>Method: CustomerProfileManager.update</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
 <span class="kd">class</span> <span class="kt">CustomerProfilerViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
@@ -6993,6 +7078,14 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <span class="o">&lt;/</span><span class="n">RelativeLayout</span><span class="o">&gt;</span>
 
 </code></pre>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#methods-scanmanager-startvideoscan-scanmanager-stopvideoscan">ScanManager.startVideoScan, ScanManager.stopVideoScan</a></li>
+<li><a href="#methods-scanmanager-startaudioscan-scanmanager-stopaudioscan">ScanManager.startAudioScan, ScanManager.stopAudioScan</a></li>
+<li><a href="#methods-scanmanager-destroy">ScanManager.destroy</a></li>
+</ul>
+
 <p>ScanManager is different than other Managers as it relies on a user interface component.</p>
 <h3 id='methods-scanmanager-startvideoscan-scanmanager-stopvideoscan'>Methods: ScanManager.startVideoScan, ScanManager.stopVideoScan</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
@@ -7219,6 +7312,12 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <p>Method signature: <code>session.scanManager.destroy()</code></p>
 
           <h2 id='module-useractivitymanager'>Module: UserActivityManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-useractivitymanager-getorders-useractivitymanager-getordersby">UserActivityManager.getOrders / UserActivityManager.getOrdersBy</a></li>
+</ul>
+
 <p>Activity is an aggregate of Session.</p>
 
 <p>The user activity module handles order history and other historical data.</p>
@@ -7732,6 +7831,16 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 </tbody></table>
 
           <h2 id='module-walletmanager'>Module: WalletManager</h2>
+<p><strong>Topics</strong></p>
+
+<ul>
+<li><a href="#method-walletmanager-create">walletManager.create</a></li>
+<li><a href="#method-walletmanager-update">walletManager.update</a></li>
+<li><a href="#method-walletmanager-delete">walletManager.delete</a></li>
+<li><a href="#method-walletmanager-get">walletManager.get</a></li>
+<li><a href="#method-walletmanager-getall">walletManager.getAll</a></li>
+</ul>
+
 <p>The WalletManager is an aggregate of Session.</p>
 
 <p>This module provides CRUD functions for payment cards.  The consumer may add one or more payment cards to their account.</p>
