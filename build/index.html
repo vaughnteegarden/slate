@@ -5315,20 +5315,29 @@ Note, the values in the SignUpResponse should be persisted at least for the life
 
 <p>The ProductManager module offers methods specific to the merchant product catalog; getting catalogs and products.</p>
 <h3 id='usage-scenarios'>Usage Scenarios</h3>
-<p><strong>For Mall Browse</strong>
-* <code>getCategories</code> is used the first time you request categories from a merchant. It returns the merchant catalog starting at the catalog root. 
-* Note that the Android version of <code>getCategories</code> returns both category and product info, while IOS returns only category info. IOS will need to follow with a <code>getProuducts</code> call if <code>hasProducts</code> is true. 
-* <code>getProductsAndCategories</code> is then used by both Android and IOS to request subsequent paginated category and product lists as the consumer navigates</p>
+<p><strong>For Mall Browse</strong></p>
 
-<p><strong>For Scanning a Category Engagement</strong>
-* <code>getCategory</code> is used to initially fetch the desired category, (IOS use <code>getCategories</code> with an optional category id)
-* IOS will need to follow with a <code>getProuducts</code> call if <code>hasProducts</code> is true. 
-* <code>getProductsAndCategories</code> is used to request subsequent paginated category and product lists as the consumer navigates</p>
+<ul>
+<li><code>getCategories</code> is used the first time you request categories from a merchant. It returns the merchant catalog starting at the catalog root. </li>
+<li>Note that the Android version of <code>getCategories</code> returns both category and product info, while IOS returns only category info. IOS will need to follow with a <code>getProuducts</code> call if <code>hasProducts</code> is true. </li>
+<li><code>getProductsAndCategories</code> is then used by both Android and IOS to request subsequent paginated category and product lists as the consumer navigates</li>
+</ul>
 
-<p><strong>In Both Above Scenarios</strong>
-* <code>getProduct</code>  is used to get more information about a product, when displaying a product detail page.
-* <code>getParentCategory</code> is a convenience method in the Android Rezolve SDK only, to get the parent category when navigating back up the category tree. IOS Developers should use <code>Category.parentId</code> to call <code>getCategories</code>, and use the returned object to call <code>getProductsAndCategories</code>.
-* <code>getCartProduct</code> is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use <code>getProduct</code>.</p>
+<p><strong>For Scanning a Category Engagement</strong></p>
+
+<ul>
+<li><code>getCategory</code> is used to initially fetch the desired category, (IOS use <code>getCategories</code> with an optional category id)</li>
+<li>IOS will need to follow with a <code>getProuducts</code> call if <code>hasProducts</code> is true. </li>
+<li><code>getProductsAndCategories</code> is used to request subsequent paginated category and product lists as the consumer navigates</li>
+</ul>
+
+<p><strong>In Both Above Scenarios</strong></p>
+
+<ul>
+<li><code>getProduct</code>  is used to get more information about a product, when displaying a product detail page.</li>
+<li><code>getParentCategory</code> is a convenience method in the Android Rezolve SDK only, to get the parent category when navigating back up the category tree. IOS Developers should use <code>Category.parentId</code> to call <code>getCategories</code>, and use the returned object to call <code>getProductsAndCategories</code>.</li>
+<li><code>getCartProduct</code> is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use <code>getProduct</code>.</li>
+</ul>
 <h3 id='method-getcatgories'>Method: getCatgories</h3><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
