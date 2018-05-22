@@ -211,7 +211,7 @@ class SandboxViewController: UIViewController {
 ```
 ```java
 String API_KEY = "your_api_key";
-String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 String accessToken = "abc123.abc123.abc123";  // JWT token from auth server
 String entityId = "123";	// from auth server
 String partnerId = "123";   // from auth server

@@ -91,7 +91,7 @@ extension ScanManagerViewController : ProductDelegate, RezolveScanResultDelegate
 public class ScanActivity extends AppCompatActivity implements ScanManagerInterface, View.OnClickListener {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     private final static String TAG = ScanActivity.class.getSimpleName();
     private ScanManager scanManager;

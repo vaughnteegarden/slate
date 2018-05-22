@@ -8,12 +8,15 @@ All notable changes to the project will be documented in this log.
 
 - New section on Generic JWT Authentication, with sequence diagram.
 - AuthenticationManager.createSession, v2, added.
-- MerchantManager class added
-- CheckoutBundle class added (see CheckoutManager class for details)
+- `MerchantManager` class added
+- `CheckoutBundle` class added (see CheckoutManager class for details)
+- `ProductManager.getgetProductsAndCategories` method added
+- `ProductManager.getParentCategory` method added (Android Only)
+- `ProductManager.getCartProduct` method added (Android Only)
 
 ### Changed
 
-- Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co`. Changed in many code samples.  
+- Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co` in IOS, and `https://sandbox-api-tw.rzlvtest.co/api` in Android. Changed in many code samples.  
 - Updated all sequence diagrams for v2 authentication, using JWT.
 - Added new SDK download process.
 - Product Scan, Instant Buy Flow - 
@@ -43,7 +46,6 @@ All notable changes to the project will be documented in this log.
 	- `getCategory` now takes category object as a parameter, instead of category id. 
 	- `getProduct` now takes a product object as a parameter, instead of a product id.
 	- `onGetProductsSuccess` now uses `getItems` instead of `getProducts` to extract DisplayProducts. 
-	- Added `getParentCategory` method.
 	- Updated `Category` objects
 
 

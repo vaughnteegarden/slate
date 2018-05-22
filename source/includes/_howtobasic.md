@@ -55,7 +55,7 @@ import com.rezolve.sdk.model.shop.Merchant;
 // initialize SDK
 
 private final static String API_KEY = "your_api_key";
-private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
 RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, ENVIRONMENT);
 

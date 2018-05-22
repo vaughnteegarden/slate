@@ -38,7 +38,7 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,7 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +170,7 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,7 +225,7 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,7 +282,7 @@ class FavouriteViewController: UIViewController {
 public class Favorites extends AppCompatActivity implements FavouriteInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

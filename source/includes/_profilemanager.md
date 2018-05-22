@@ -48,7 +48,7 @@ This module handles maintaining the consumer's contact information and device in
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +165,7 @@ class CustomerProfilerViewController: UIViewController {
 public class Profile extends AppCompatActivity implements CustomerProfileInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

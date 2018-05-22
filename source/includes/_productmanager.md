@@ -68,7 +68,7 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +175,7 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,7 +258,7 @@ This is an Android-only method that is a convenience proxy for the `getCateogry`
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -385,7 +385,7 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -578,7 +578,7 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -785,7 +785,7 @@ This is an Android-only method that is a convenience proxy for the `getProduct` 
 public class Products2 extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -851,13 +851,138 @@ The method returns a category object.
 ### Method: getProductsAndCategories
 
 ```swift
-TODO
+import UIKit
+import RezolveSDK
+
+let MERCHANT_ID = "12"
+let CATEGORY_ID = Int32(70)
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+
+        let signUpRequest = createSingUpRequest()
+
+        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+
+            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+
+                session.productManager.getProductsAndCatgories(
+                    merchantId: MERCHANT_ID, 
+                    category: Category(id: CATEGORY_ID), 
+                    pageNavigationFilter: PageNavigationFilter(
+                        count: 10, 
+                        pageIndex: 0, 
+                        sortBy: nil, 
+                        sort: PageNavigationSort.DESC
+                    ),
+                    callback: { responseCategory in
+
+                        print(responseCategory.id)
+                        print(responseCategory.parentId)
+                        print(responseCategory.name)
+                        print(responseCategory.image)
+                        print(responseCategory.imageThumbs)
+                        print(responseCategory.hasProducts)
+                        print(responseCategory.hasCategories)
+                        if responseCategory.hasCategories {                     
+                            responseCategory.categories.forEach { subCategories in
+                                print(subCategories.id)
+                                print(subCategories.parentId)
+                                print(subCategories.name)
+
+                                // ...
+                            }   
+                        }
+
+
+                        if let resultOfCategory = pageResultOfCategory {
+
+                            resultOfCategory.embedded.forEach { embeddedCategory in
+                                print(embeddedCategory.id)
+                                print(embeddedCategory.parentId)
+                                print(embeddedCategory.name)
+                                print(embeddedCategory.image)
+                                print(embeddedCategory.imageThumbs)
+                                print(embeddedCategory.hasProducts)
+                                if embeddedCategory.hasCategories {
+                                    // ..
+                                }
+                            }
+                        }
+
+                        if let resultOfProduct = pageResultOfProduct {
+                            resultOfProduct.embedded.forEach { embeddedProduct in
+
+                                print(embeddedProduct.id)
+                                print(embeddedProduct.merchantId)
+                                print(embeddedProduct.title)
+                                print(embeddedProduct.subtitle)
+                                print(embeddedProduct.price)
+                                print(embeddedProduct.description)
+
+                                embeddedProduct.images.forEach {
+                                    print($0)
+                                }
+
+                                embeddedProduct.options.forEach { option in
+                                    print(option.label)
+                                    print(option.code)
+                                    print(option.extraInfo)
+                                    option.values.forEach { optionValue in
+                                        print(optionValue.value)
+                                        print(optionValue.label)
+                                    }
+                                }
+
+                                embeddedProduct.optionAvailable.forEach {
+                                    $0.combination.forEach { variant in
+                                        print(code)
+                                        print(value)
+                                        print(id)
+                                    }
+                                } 
+
+                                embeddedProduct.customOptions.forEach {
+                                    print($0.isRequire)
+                                    print($0.optionId)
+                                    print($0.sortOrder)
+                                    print($0.title)
+                                    print($0.optionType)
+
+                                    $0.values.forEach { value in 
+                                        print(value.sortOrder)
+                                        print(value.title)
+                                        print(valueId)
+                                    }
+
+                                    $0.valuesId.forEach { valueId in 
+                                        print(valueId)
+                                    }
+
+                                    print($0.value)
+                                }
+
+                                print(embeddedProduct.productPlacement)
+                            }
+                        }
+
+                }, errorCallback: {
+                    print($0) // handle error
+                })
+            })
+        }
+    }
+}
 ```
 ```java
 public class Products2 extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

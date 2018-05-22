@@ -63,7 +63,7 @@ internal final class ApiClient {
 public class Merchants extends AppCompatActivity implements MerchantInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +149,7 @@ class ViewController: UIViewController {
 ```
 ```java
 private final static String API_KEY = "your_api_key";
-private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -261,7 +261,7 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -426,7 +426,7 @@ class ViewController: UIViewController {
 public class Products extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

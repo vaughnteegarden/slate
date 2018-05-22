@@ -48,7 +48,7 @@ internal final class Controller: NSObject {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +122,7 @@ internal final class Controller: NSObject {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +193,7 @@ internal final class Controller: NSObject {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,7 +279,7 @@ internal final class Controller: NSObject {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,7 +341,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -420,7 +420,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -552,7 +552,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -653,7 +653,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -739,7 +739,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -837,7 +837,7 @@ internal final class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -910,7 +910,7 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     CheckoutInterface checkoutInterface;
 
@@ -995,7 +995,7 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     String cartId;
     String merchantId;
@@ -1097,7 +1097,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1200,7 +1200,7 @@ class ViewController: UIViewController {
 public class Checkout extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     String merchantId;
     String orderId;
@@ -1318,7 +1318,7 @@ class ViewController: UIViewController {
 public class Checkout3 extends AppCompatActivity implements CheckoutInterface {
 
     private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
