@@ -4,11 +4,25 @@ ProductManager is an aggregate of Session.
 
 The ProductManager module offers methods specific to the merchant product catalog; getting catalogs and products.
 
-Scenarios:
-* `getCategories` is used the first time you request categories from a merchant, for mall browsing.
-* `getCategory` is used to pull information and products about a subcategory when mall browsing, or when browsing as the result of a category scan.
-* `getProducts` is no longer needed because categories now automatically return product info, but is retained for backwards compatibility with older code bases.
-* `getProduct`  is typically used to get more information about a product returned from a category query, when displaying a product detail page.
+### Usage Scenarios
+
+
+**For Mall Browse**
+* `getCategories` is used the first time you request categories from a merchant. It returns the merchant catalog starting at the catalog root. 
+* Note that the Android version of `getCategories` returns both category and product info, while IOS returns only category info. IOS will need to follow with a `getProuducts` call if `hasProducts` is true. 
+* `getProductsAndCategories` is then used by both Android and IOS to request subsequent paginated category and product lists as the consumer navigates
+
+
+**For Scanning a Category Engagement**
+* `getCategory` is used to initially fetch the desired category, (IOS use `getCategories` with an optional category id)
+* IOS will need to follow with a `getProuducts` call if `hasProducts` is true. 
+* `getProductsAndCategories` is used to request subsequent paginated category and product lists as the consumer navigates
+
+
+**In Both Above Scenarios**
+* `getProduct`  is used to get more information about a product, when displaying a product detail page.
+* `getParentCategory` is a convenience method in the Android Rezolve SDK only, to get the parent category when navigating back up the category tree. IOS Developers should use `Category.parentId` to call `getCategories`, and use the returned object to call `getProductsAndCategories`.
+* `getCartProduct` is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use `getProduct`.
 
 
 ### Method: getCatgories
@@ -138,7 +152,8 @@ You must pass in the `id` of the `merchant` to whose categories you wish to get.
 
 The method returns an array of `category` objects owned by a specific merchant.  Specifically, it returns the *root category* and *first level* of child categories*.
 
-For IOS, if you supply the category_id, you will get results for a single category. Omit the category_id to get all categories.
+For IOS, if you supply the category_id, you will get results for a specific category, instead of the root category. Send category_id as NULL to get the root category.
+
 
 #### category Object
 
@@ -252,7 +267,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
 ### Method: getParentCategory
 
-This is an Android-only method that is a convenience proxy for the `getCateogry` method. IOS developers, use `getCategory`. 
+This is an Android-only method that is a convenience proxy for the `getCateogry` method, used to get the parent category when navigating back up the category tree. IOS developers, use `getCategory`. 
 
 ```java
 public class Products extends AppCompatActivity implements ProductInterface {

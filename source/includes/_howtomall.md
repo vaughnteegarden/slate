@@ -117,6 +117,7 @@ class ViewController: UIViewController {
 
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
+				// CATEGORY_ID should be null
                 session.productManager.getCategories(
                     merchantId: MERCHANT_ID, 
                     category: Category(id: CATEGORY_ID), 
@@ -204,8 +205,10 @@ public void onGetCategoriesSuccess(Category category) {
 
 Display your subcategories and products as returned by the `getCategories` call. 
 
+For subsequent navigation in categories, use `getProductsAndCategories`.
 
-### 3. If the consumer clicks a subcategory, call `getCategory`
+
+### 3. If the consumer clicks a subcategory, call `getProductsAndCategories`. 
 ``` swift
 import UIKit
 import RezolveSDK
@@ -226,10 +229,15 @@ class ViewController: UIViewController {
 
             sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
 
-				// IOS uses getCategories, and pass in the category id
-                session.productManager.getCategories(
+                session.productManager.getProductsAndCatgories(
                     merchantId: MERCHANT_ID, 
                     category: Category(id: CATEGORY_ID), 
+                    pageNavigationFilter: PageNavigationFilter(
+                        count: 10, 
+                        pageIndex: 0, 
+                        sortBy: nil, 
+                        sort: PageNavigationSort.DESC
+                    ),
                     callback: { responseCategory in
 
                         print(responseCategory.id)
@@ -249,6 +257,78 @@ class ViewController: UIViewController {
                             }   
                         }
 
+
+                        if let resultOfCategory = pageResultOfCategory {
+
+                            resultOfCategory.embedded.forEach { embeddedCategory in
+                                print(embeddedCategory.id)
+                                print(embeddedCategory.parentId)
+                                print(embeddedCategory.name)
+                                print(embeddedCategory.image)
+                                print(embeddedCategory.imageThumbs)
+                                print(embeddedCategory.hasProducts)
+                                if embeddedCategory.hasCategories {
+                                    // ..
+                                }
+                            }
+                        }
+
+                        if let resultOfProduct = pageResultOfProduct {
+                            resultOfProduct.embedded.forEach { embeddedProduct in
+
+                                print(embeddedProduct.id)
+                                print(embeddedProduct.merchantId)
+                                print(embeddedProduct.title)
+                                print(embeddedProduct.subtitle)
+                                print(embeddedProduct.price)
+                                print(embeddedProduct.description)
+
+                                embeddedProduct.images.forEach {
+                                    print($0)
+                                }
+
+                                embeddedProduct.options.forEach { option in
+                                    print(option.label)
+                                    print(option.code)
+                                    print(option.extraInfo)
+                                    option.values.forEach { optionValue in
+                                        print(optionValue.value)
+                                        print(optionValue.label)
+                                    }
+                                }
+
+                                embeddedProduct.optionAvailable.forEach {
+                                    $0.combination.forEach { variant in
+                                        print(code)
+                                        print(value)
+                                        print(id)
+                                    }
+                                } 
+
+                                embeddedProduct.customOptions.forEach {
+                                    print($0.isRequire)
+                                    print($0.optionId)
+                                    print($0.sortOrder)
+                                    print($0.title)
+                                    print($0.optionType)
+
+                                    $0.values.forEach { value in 
+                                        print(value.sortOrder)
+                                        print(value.title)
+                                        print(valueId)
+                                    }
+
+                                    $0.valuesId.forEach { valueId in 
+                                        print(valueId)
+                                    }
+
+                                    print($0.value)
+                                }
+
+                                print(embeddedProduct.productPlacement)
+                            }
+                        }
+
                 }, errorCallback: {
                     print($0) // handle error
                 })
@@ -258,7 +338,7 @@ class ViewController: UIViewController {
 }
 ```
 ```java
-public class Products extends AppCompatActivity implements ProductInterface {
+public class Products2 extends AppCompatActivity implements ProductInterface {
 
     private final static String API_KEY = "your_api_key";
     private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
@@ -266,20 +346,32 @@ public class Products extends AppCompatActivity implements ProductInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProductInterface productInterface;
 
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        ENVIRONMENT).getRezolveSession().getProductManager();
+        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
 
-        // get single category
-		// note: in practice you would pass in category object returned by a getCategories or getCategory method
-        Category category = new Category();  
-        String merchantId = "123";
-        myProductManager.getCategory(merchantId, category, this); // "this" is productInterface
+		merchantId = "123";
+		Category category = new Category();
+														
+        // first pageNavigationFilter is for categories
+		PageNavigationFilter pageNavigationFilter = new PageNavigationFilter();
+        pageNavigationFilter.setItemsPerPage(10);
+        pageNavigationFilter.setPageNumber(1);
+        pageNavigationFilter.setSortBy("name");   // values: name, price
+        pageNavigationFilter.setSortDirection("asc");  // values: asc, desc
+		// second pageNavigationFilter is for products
+		PageNavigationFilter pageNavigationFilter2 = new PageNavigationFilter();
+        pageNavigationFilter2.setItemsPerPage(20);
+        pageNavigationFilter2.setPageNumber(1);
+        pageNavigationFilter2.setSortBy("price");   // values: name, price
+        pageNavigationFilter2.setSortDirection("asc");  // values: asc, desc
+        
+		// get products and categories in one call
+        myProductManager.getProductsAndCategories(merchantId, category, pageNavigationFilter, pageNavigationFilter2, this);
     }
 
     @Override
-    public void onGetCategorySuccess(Category category) {
-		// parse the category contents to get subcategories and products
+    public void onGetProductsAndCategoriesSuccess(Category category) {
         String category_id = category.getId();
         String parentId = category.getParentId();
         String name = category.getName();
@@ -289,18 +381,8 @@ public class Products extends AppCompatActivity implements ProductInterface {
         List<String> imageThumbs = category.getImageThumbs();
         String catParentId = category.getParentId();
         List<Category> children = category.getCategories();
-		
-		// get category placement
-        Placement.CategoryPlacement categoryPlacement = category.getCategoryPlacement();
-        String categoryAdId = categoryPlacement.getAdId();
-        String categoryPlacementId = categoryPlacement.getPlacementId();
+        PageResult<DisplayProduct> pageResult = category.getProductPageResult();
 
-        // optional:  get paginated subcategory results
-        PageResult<Category> categoryPageResult = category.getCategoryPageResult();
-        
-        // optional: get paginated product results
-		PageResult<DisplayProduct> pageResult = category.getProductPageResult();
-        
         // get products from pageResult...
         Integer count = pageResult.getCount();
         Integer total = pageResult.getTotal();
@@ -326,7 +408,7 @@ public class Products extends AppCompatActivity implements ProductInterface {
 }
 ```
 
-If the consumer clicks a subcategory, call `getCategory` (or `getCategories` with a category_id on IOS) to pull a new list of subcategories and products for that category.  Repeat this step to drill down in the category structure. 
+As the consumer navigates the category tree, call `getProductsAndCategories` to pull a paginated lists of subcategories and products for that category.
 
 
 ### 4. If the consumer clicks a Product, call `getProduct` 
