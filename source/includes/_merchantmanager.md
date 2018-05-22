@@ -5,7 +5,7 @@ MerchantManager is an aggregate of Session.
 This class provides the ability to retrieve merchants, and info about them.
 
 
-### Method: getMerchants
+### Method: MerchantManager.getMerchants
 
 ```swift
 import RezolveSDK
@@ -105,7 +105,7 @@ How to use the returned images: the `banner` is typically used as a header backg
 
 
 
-### Method: getShippingMethods
+### Method: MerchantManager.getShippingMethods
 
 Gets shipping methods for a specific merchant.
 

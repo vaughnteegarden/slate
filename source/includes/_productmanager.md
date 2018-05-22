@@ -28,7 +28,7 @@ The ProductManager module offers methods specific to the merchant product catalo
 * `getCartProduct` is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use `getProduct`.
 
 
-### Method: getCatgories
+### Method: ProductManager.getCatgories
 
 ```swift
 import UIKit
@@ -183,7 +183,7 @@ If `has_products` is `true`, call `getProducts` with the category `id` to get a 
 
 
 
-### Method: getCategory
+### Method: ProductManager.getCategory
 
 ```swift
 // This method no longer exists on IOS. Use getCategories instead.
@@ -268,7 +268,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
 
 
-### Method: getParentCategory
+### Method: ProductManager.getParentCategory
 
 This is an Android-only method that is a convenience proxy for the `getCateogry` method, used to get the parent category when navigating back up the category tree. IOS developers, use `getCategory`. 
 
@@ -345,7 +345,7 @@ The method returns a `category` object.
 
 
 
-### Method: getProducts
+### Method: ProductManager.getProducts
 
 ```swift
 import UIKit
@@ -498,7 +498,7 @@ The displayProduct object is used when rending a series of products. It contains
 
 
 
-### Method: getProduct
+### Method: ProductManager.getProduct
 
 ```swift
 import UIKit
@@ -795,7 +795,7 @@ A combination object represents one unique combination of options for this produ
 
 
 
-### Method: getCartProduct
+### Method: ProductManager.getCartProduct
 
 This is an Android-only method that is a convenience proxy for the `getProduct` method. IOS developers, use `getProduct`. 
 
@@ -866,7 +866,7 @@ The method returns a category object.
 
 
 
-### Method: getProductsAndCategories
+### Method: ProductManager.getProductsAndCategories
 
 ```swift
 import UIKit

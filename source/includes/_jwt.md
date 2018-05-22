@@ -1,5 +1,15 @@
 ## Implementing JWT Authentication on Your Authentication Server
 
+**Topics**
+
+* <a href="#terminology">Terminology</a>
+* <a href="#jwt-flow">JWT Flow</a>
+* <a href="#create-the-registration-jwt">Create the Registration JWT</a>
+* <a href="#register-a-new-rezolve-user">Register a new Rezolve User</a>
+* <a href="#logging-in-a-user">Logging in a User</a>
+* <a href="#handling-jwt-expiration-amp-session-preservation">Handling JWT Expiration & Session Preservation</a>
+* <a href="http-error-responses">HTTP Error Responses</a>
+
 As of release 1.6.0, the Rezolve SDK no longer includes an authentication system. Resultingly, the `AuthenticationManager.register` and `AuthenticationManager.logout`  methods have been deprecated.
 
 Instead, Rezolve is utilizing a server-to-server JWT authentication system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
@@ -59,7 +69,10 @@ You must possess:
 }
 ```
 
-Set type as JWT, and algorithm as HMAC using SHA-512.
+|key|value|notes|
+|---|---|---|
+|alg|HS512|algorithm, HMAC SHA-512|
+|typ|JWT|type|
 
 
 #### JWT Payload
@@ -72,11 +85,12 @@ Set type as JWT, and algorithm as HMAC using SHA-512.
 }
 ```
 
-For the `rezolve_entity_id`, use the value `:NONE:`.
+|key|value|notes|
+|---|---|---|
+|rezolve_entity_id|:NONE:|use :NONE: when registering|
+|partner_entity_id|your_user_id|The unique identifier for your user record. This may be a numerical id, or an identifying string such as email address.|
+|exp|1520869470|Expiration, as a unix timestamp integer. Set the expiration value to a small number, now() + 30 minutes or less.|
 
-For the `partner_entity_id`, set it to the unique identifier for your user record. This may be a numerical id, or an identifying string such as email address.
-
-For `exp`, set the expiration value to a small number, now() + 30 minutes or less. Expiration should be expressed as a unix timestamp integer. 
 
 
 
@@ -148,6 +162,12 @@ Note the addition of the "auth" line.
 }
 ```
 
+|key|value|notes|
+|---|---|---|
+|auth|v2|auth version to use, login uses v2|
+|alg|HS512|algorithm, HMAC SHA-512|
+|typ|JWT|type|
+
 #### JWT Payload
 
 ```JSON
@@ -157,11 +177,13 @@ Note the addition of the "auth" line.
 	"exp": 1520869470
 }
 ```
-For the `rezolve_entity_id`, use the entity_id you obtained during registration.
 
-For the `partner_entity_id`, set it to the unique identifier for your user record. 
+|key|value|notes|
+|---|---|---|
+|rezolve_entity_id|your_rezolve_entity_id|use the entity_id you obtained during registration|
+|partner_entity_id|your_partner_entity_id|set it to the unique identifier for your user record|
+|exp|1520869470|Expiration, as a unix timestamp integer. Set the expiration value to a small number, now() + 30 minutes or less.|
 
-For `exp`, set the expiration value to a small number, now() + 30 minutes or less. Expiration should be expressed as a unix timestamp integer. 
 
 
 #### Signature
@@ -546,6 +568,7 @@ The final sample, "Example of Authentication Manager Use With Rezolve Addressboo
 }
 ```
 For security reasons, Rezolve masks certain potential issues behind a generic 403 response:
+
 - invalid partner api key
 - partner doesn't have an auth key
 - token not found

@@ -13,7 +13,7 @@ Note that this module contains some functions reserved for future functionality,
 
 These functions are NOT implemented server-side, and should not be used at this time.
 
-### Method: getOrders / getOrdersBy
+### Method: UserActivityManager.getOrders / UserActivityManager.getOrdersBy
 
 ```swift
 import UIKit

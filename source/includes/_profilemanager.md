@@ -4,7 +4,7 @@ The CustomerProfileManager is an aggregate of Session.
 
 This module handles maintaining the consumer's contact information and device info.
 
-### Method: customerProfileManager.get
+### Method: CustomerProfileManager.customerProfileManager.get
 
 ```swift
   import UIKit
@@ -121,7 +121,7 @@ The method returns a `customerProfile` object.
 |os_version|int|10.3|
 |locale|locale as a combination of ISO 639-1 language code and ISO 3166-1 country code|en_GB|
 
-### Method: customerProfileManager.update
+### Method: CustomerProfileManager.customerProfileManager.update
 
 ```swift
 import UIKit

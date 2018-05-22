@@ -39,7 +39,7 @@
 ```
 ScanManager is different than other Managers as it relies on a user interface component.
 
-### Methods: startVideoScan, stopVideoScan
+### Methods: ScanManager.startVideoScan, ScanManager.stopVideoScan
 
 ```swift
 import UIKit
@@ -188,7 +188,7 @@ Method signature: `session.scanManager.startVideoScan()`
 
 Method signature: `session.scanManager.stopVideoScan()`
 
-### Methods: startAudioScan, stopAudioScan
+### Methods: ScanManager.startAudioScan, ScanManager.stopAudioScan
 
 ```swift
 import UIKit
@@ -242,7 +242,7 @@ Method signature: `session.scanManager.startAudioScan()`
 
 Method signature: `session.scanManager.stopAudioScan()`
 
-### Method: destroy
+### Method: ScanManager.destroy
 
 ```swift
 import UIKit
