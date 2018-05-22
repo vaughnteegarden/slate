@@ -8,18 +8,21 @@ The ProductManager module offers methods specific to the merchant product catalo
 
 
 **For Mall Browse**
+
 * `getCategories` is used the first time you request categories from a merchant. It returns the merchant catalog starting at the catalog root. 
 * Note that the Android version of `getCategories` returns both category and product info, while IOS returns only category info. IOS will need to follow with a `getProuducts` call if `hasProducts` is true. 
 * `getProductsAndCategories` is then used by both Android and IOS to request subsequent paginated category and product lists as the consumer navigates
 
 
 **For Scanning a Category Engagement**
+
 * `getCategory` is used to initially fetch the desired category, (IOS use `getCategories` with an optional category id)
 * IOS will need to follow with a `getProuducts` call if `hasProducts` is true. 
 * `getProductsAndCategories` is used to request subsequent paginated category and product lists as the consumer navigates
 
 
 **In Both Above Scenarios**
+
 * `getProduct`  is used to get more information about a product, when displaying a product detail page.
 * `getParentCategory` is a convenience method in the Android Rezolve SDK only, to get the parent category when navigating back up the category tree. IOS Developers should use `Category.parentId` to call `getCategories`, and use the returned object to call `getProductsAndCategories`.
 * `getCartProduct` is a convenience method in the Android Rezolve SDK only, to get information about a product in the cart. IOS developers should use `getProduct`.
