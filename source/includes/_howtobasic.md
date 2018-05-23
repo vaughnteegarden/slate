@@ -19,7 +19,7 @@ class RezolveSDK1ViewController: ViewController {
         // initialize SDK
         // possible values for RezolveEnv enum are .Sandbox, .Production
         let API_KEY: String  = "1234567890"
-        let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+        let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
         let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: ENVIRONMENT)
     }
 

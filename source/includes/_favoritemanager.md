@@ -18,7 +18,7 @@ This module provides CRUD functions for Favorites. The term "Favorite" refers to
 class FavouriteViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -91,7 +91,7 @@ The method returns the created `favourite` object with `id` upon success.
 class FavouriteViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -154,7 +154,7 @@ The method returns the updated `favourite` object upon success.
 class FavouriteViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -212,7 +212,7 @@ You must pass in the `favourite` object to delete.
 class FavouriteViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -270,7 +270,7 @@ The method returns an `favourite` object.
 class FavouriteViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 

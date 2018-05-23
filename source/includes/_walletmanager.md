@@ -18,7 +18,7 @@ This module provides CRUD functions for payment cards.  The consumer may add one
 class WalletViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -109,7 +109,7 @@ The method returns the created `paymentCard` object with `id` upon success.
 class WalletViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -178,7 +178,7 @@ The method returns the updated `paymentCard` object upon success.
 class WalletViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -241,7 +241,7 @@ You must pass in the `paymentCard` object to delete.
 class WalletViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -305,7 +305,7 @@ The method returns a `paymentCard` object.
 class WalletViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 

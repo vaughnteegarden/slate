@@ -29,7 +29,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -124,7 +124,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -194,7 +194,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
     let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -260,7 +260,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
@@ -325,7 +325,7 @@ import RezolveSDK
 class AddressBookViewController: UIViewController {
 
 	let API_KEY: String = "your_api_key"
-    let ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
 
     var mySession: RezolveSession?
 
