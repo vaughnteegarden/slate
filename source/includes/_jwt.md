@@ -210,7 +210,7 @@ import RezolveSDK
 class SandboxViewController: UIViewController {
 
     private var API_KEY: String = "your_api_key"
-    private var API_ENVIRONMENT: String = "https://sandbox-api-tw.rzlvtest.co"
+    private var API_ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
     private var accessToken: String = "abc123.abc123.abc123"
     private var entityId: String = "123"
     private var partnerId: String = "123"

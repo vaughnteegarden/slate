@@ -16,7 +16,7 @@ All notable changes to the project will be documented in this log.
 
 ### Changed
 
-- Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `https://sandbox-api-tw.rzlvtest.co` in IOS, and `https://sandbox-api-tw.rzlvtest.co/api` in Android. Changed in many code samples.  
+- Instancing the SDK via `RezolveSDK.getInstance` used to take an enum to specify environment. This is now takes a string.  `RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)`. For the Sandbox, ENVIRONMENT should equal `sandbox-api-tw.rzlvtest.co` in IOS, and `https://sandbox-api-tw.rzlvtest.co/api` in Android. Changed in many code samples.  
 - Updated all sequence diagrams for v2 authentication, using JWT.
 - Added new SDK download process.
 - Product Scan, Instant Buy Flow - 
