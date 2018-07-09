@@ -2,6 +2,15 @@
 
 All notable changes to the project will be documented in this log.
 
+## Android v1.7.5, IOS 1.7.6.1 - July 9, 2018
+
+Note: This update only changes the IOS version. 
+
+### Changed
+
+- Updated IOS version to be compatible with IOS version 9 and onward, instead of 10 and onward
+- Updated IOS to be compatible with latest releases of SWIFT (4.x) and XCode (9.x)
+
 ## Android v1.7.5, IOS v1.6.5 - May 5, 2018
 
 ### Added

@@ -29,7 +29,7 @@ When a user logs in to your auth system, generate a new Login JWT and supply to 
 |---|---|
 |partner_id|A numerical id you are assigned by Rezolve. Usually a 2-4 digit integer.|
 |partner_api_key|The API key you are assigned by Rezolve. 36 characters including dashes.|
-|partner_auth_key|The Auth key you are assigned by Rezolve. This is typically a ~90 character hash|
+|partner_auth_key|The Auth key you are assigned by Rezolve. This plays the role of the JWT Secret. The partner_auth_key is typically a ~90 character hash.|
 |JWT token|A JSON Web Token, consisting of a header, payload, and signature. The header and signature are signed with the parther_auth_key, above. It is used as a bearer token when communicating with the Rezolve server.|
 |accessToken|In the IOS and Android code samples, the accessToken is the JWT Token you generated.|
 
@@ -103,7 +103,7 @@ HMACSHA512(
 	${$partner_auth_key}
 )
 ```
-Sign the header and payload with the `partner_auth_key`.
+Sign the header and payload with the `partner_auth_key`.  It is not necessary to decode the key before using it. Pass the whole value as a string to your library's `getBytes` method.  If you need to supply the charset, use UTF8. Example: `var key = new SecretKey(Encoding.UTF8.GetBytes(key));`
 
 ```
 eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.

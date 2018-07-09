@@ -101,7 +101,7 @@ This document is intended for experienced IOS and Android developer. It is expec
 
 ## For more information
 
-For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve.som</a>.
+For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve.com</a>.
 
 
 # Getting Started
@@ -110,7 +110,7 @@ For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve
 
 |OS|Minimum Version|
 |---|---|---|
-|IOS|IOS 10 and up|
+|IOS|IOS 9 and up<br>SWIFT 4 (recommended) or 3|
 |Android|4.2.2 and up|
 
 
@@ -129,7 +129,7 @@ We will not provide development support if you have not integrated Crashlytics o
 Latest release versions:
 
 - IOS: 1.6.5.0
-- Android: 1.7.5
+- Android: 1.7.5 (this version is the same as the previous release, Android users do not need to update)
 
 To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.
 
@@ -137,8 +137,6 @@ If this is your first time downloading the SDK, you will be provided with an API
 
 
 ## Set up the SDK - IOS
-
-**NOTE: the IOS SDK is currently based upon Swift 3.2, and thus is not compatible with the latest version of XCode. Rezolve will update to the latest version of Swift in the near future. Until the upgrade is complete, please downgrade your XCode to version 9.2.**
 
 The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
