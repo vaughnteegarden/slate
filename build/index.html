@@ -296,7 +296,7 @@ You can switch between IOS and Android by clicking the tabs above.
 </tr>
 </tbody></table>
 <h2 id='for-more-information'>For more information</h2>
-<p>For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve.som</a>.</p>
+<p>For more information on Rezolve, see <a href="http://rezolve.com">http://rezolve.com</a>.</p>
 <h1 id='getting-started'>Getting Started</h1><h2 id='supported-os-versions'>Supported OS Versions</h2>
 <table><thead>
 <tr>
@@ -306,7 +306,7 @@ You can switch between IOS and Android by clicking the tabs above.
 </thead><tbody>
 <tr>
 <td>IOS</td>
-<td>IOS 10 and up</td>
+<td>IOS 9 and up<br>SWIFT 4 (recommended) or 3</td>
 </tr>
 <tr>
 <td>Android</td>
@@ -323,16 +323,14 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>Latest release versions:</p>
 
 <ul>
-<li>IOS: 1.6.5.0</li>
-<li>Android: 1.7.5</li>
+<li>IOS: 1.7.6.1</li>
+<li>Android: 1.7.5 </li>
 </ul>
 
 <p>To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.</p>
 
 <p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
 <h2 id='set-up-the-sdk-ios'>Set up the SDK - IOS</h2>
-<p><strong>NOTE: the IOS SDK is currently based upon Swift 3.2, and thus is not compatible with the latest version of XCode. Rezolve will update to the latest version of Swift in the near future. Until the upgrade is complete, please downgrade your XCode to version 9.2.</strong></p>
-
 <p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
 <p>The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
@@ -602,7 +600,7 @@ You can switch between IOS and Android by clicking the tabs above.
 </tr>
 <tr>
 <td>partner_auth_key</td>
-<td>The Auth key you are assigned by Rezolve. This is typically a ~90 character hash</td>
+<td>The Auth key you are assigned by Rezolve. This plays the role of the JWT Secret. The partner_auth_key is typically a ~90 character hash.</td>
 </tr>
 <tr>
 <td>JWT token</td>
@@ -707,7 +705,7 @@ Use https://www.epochconverter.com/ to generate the token expiration in Epoch ti
     ${$partner_auth_key}
 )
 </code></pre>
-<p>Sign the header and payload with the <code>partner_auth_key</code>.</p>
+<p>Sign the header and payload with the <code>partner_auth_key</code>.  It is not necessary to decode the key before using it. Pass the whole value as a string to your library&#39;s <code>getBytes</code> method.  If you need to supply the charset, use UTF8. Example: <code>var key = new SecretKey(Encoding.UTF8.GetBytes(key));</code></p>
 <pre class="highlight plaintext"><code>eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.
 eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhwIjoxNTIwODY5NDcwfQ.
 5y2e6QpUKcqTNLTv75nO6a6iFPVxrF8YeAH5NTg2ZO9dkub31GEs0N46Hu2IJf1bQ_vC2IOO9Z2N7drmvA_AKg
@@ -8224,6 +8222,13 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
+<h2 id='android-v1-7-5-ios-1-7-6-1-july-9-2018'>Android v1.7.5, IOS 1.7.6.1 - July 9, 2018</h2>
+<p>Note: This update only changes the IOS version. </p>
+<h3 id='changed'>Changed</h3>
+<ul>
+<li>Updated IOS version to be compatible with IOS version 9 and onward, instead of 10 and onward</li>
+<li>Updated IOS to be compatible with latest releases of SWIFT (4.x) and XCode (9.x)</li>
+</ul>
 <h2 id='android-v1-7-5-ios-v1-6-5-may-5-2018'>Android v1.7.5, IOS v1.6.5 - May 5, 2018</h2><h3 id='added'>Added</h3>
 <ul>
 <li>New section on Generic JWT Authentication, with sequence diagram.</li>
@@ -8234,7 +8239,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <li><code>ProductManager.getParentCategory</code> method added (Android Only)</li>
 <li><code>ProductManager.getCartProduct</code> method added (Android Only)</li>
 </ul>
-<h3 id='changed'>Changed</h3>
+<h3 id='changed-2'>Changed</h3>
 <ul>
 <li>Instancing the SDK via <code>RezolveSDK.getInstance</code> used to take an enum to specify environment. This is now takes a string.  <code>RezolveSDK.getInstance(String API_KEY, String ENVIRONMENT)</code>. For the Sandbox, ENVIRONMENT should equal <code>sandbox-api-tw.rzlvtest.co</code> in IOS, and <code>https://sandbox-api-tw.rzlvtest.co/api</code> in Android. Changed in many code samples.<br></li>
 <li>Updated all sequence diagrams for v2 authentication, using JWT.</li>
@@ -8303,7 +8308,7 @@ Note: IOS uses the `getCatalogs` method to fetch both singular and multiple cata
 <li>ProductManager.getParentCategory</li>
 <li>ProductManager.getProductsAndCategories</li>
 </ul>
-<h3 id='changed-2'>Changed</h3>
+<h3 id='changed-3'>Changed</h3>
 <ul>
 <li>Product Scan, Cart Flow example - updated code samples to reflect changes in CheckoutManager, rezolveLocation object</li>
 <li>Product Scan, Cart Flow example - updated sequence diagram and narrative to better describe role of signOrderUpdates call.</li>
