@@ -128,8 +128,8 @@ We will not provide development support if you have not integrated Crashlytics o
 
 Latest release versions:
 
-- IOS: 1.6.5.0
-- Android: 1.7.5 (this version is the same as the previous release, Android users do not need to update)
+- IOS: 1.7.6.1
+- Android: 1.7.5 
 
 To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.
 
