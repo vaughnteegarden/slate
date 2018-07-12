@@ -28,6 +28,7 @@ includes:
 - productmanager
 - profilemanager
 - scanmanager
+- triggermanager
 - useractivitymanager
 - walletmanager
 - apicheck
