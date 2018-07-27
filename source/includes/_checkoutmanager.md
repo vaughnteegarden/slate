@@ -1,22 +1,26 @@
 ## Module: CheckoutManager
 
+<aside class="warning">
+The entire CheckoutManager Class is now deprecated. See CheckoutManagerV2.
+</aside>
+
 **Topics**
 
-* <a href="#method-checkoutbundle-createcartcheckoutbundle">CheckoutBundle.CreateCartCheckoutBundle</a>
-* <a href="#method-checkoutbundle-createcartinstorepickupcheckoutbundle">CheckoutBundle.CreateCartInStorePickupCheckoutBundle</a>
-* <a href="#method-checkoutbundle-createproductcheckoutbundle">CheckoutBundle.CreateProductCheckoutBundle</a>
-* <a href="#method-checkoutbundle-createproductinstorepickupcheckoutbundle">CheckoutBundle.CreateProductInStorePickupCheckoutBundle</a>
-* <a href="#method-checkoutmanager-createpaymentrequest">CheckoutManager.createPaymentRequest</a>
-* <a href="#method-checkoutmanager-addproducttocart">CheckoutManager.addProductToCart</a>
-* <a href="#method-checkoutmanager-buycart">CheckoutManager.buyCart</a>
-* <a href="#method-checkoutmanager-buyproduct">CheckoutManager.buyProduct</a>
-* <a href="#method-checkoutmanager-checkoutcart">CheckoutManager.checkoutCart</a>
-* <a href="#method-checkoutmanager-checkoutproduct">CheckoutManager.checkoutProduct</a>
-* <a href="#method-checkoutmanager-getcarts">CheckoutManager.getCarts</a>
-* <a href="#method-checkoutmanager-getcartbyid">CheckoutManager.getCartById</a>
-* <a href="#method-checkoutmanager-removeproductfromcart">CheckoutManager.removeProductFromCart</a>
-* <a href="#method-checkoutmanager-signorderupdates">CheckoutManager.signOrderUpdates</a>
-* <a href="#method-checkoutmanager-updateproductincart">CheckoutManager.updateProductInCart</a>
+* <a href="#method-checkoutbundle-createcartcheckoutbundle-deprecated">CheckoutBundle.CreateCartCheckoutBundle</a>
+* <a href="#method-checkoutbundle-createcartinstorepickupcheckoutbundle-deprecated">CheckoutBundle.CreateCartInStorePickupCheckoutBundle</a>
+* <a href="#method-checkoutbundle-createproductcheckoutbundle-deprecated">CheckoutBundle.CreateProductCheckoutBundle</a>
+* <a href="#method-checkoutbundle-createproductinstorepickupcheckoutbundle-deprecated">CheckoutBundle.CreateProductInStorePickupCheckoutBundle</a>
+* <a href="#method-checkoutmanager-createpaymentrequest-deprecated">CheckoutManager.createPaymentRequest</a>
+* <a href="#method-checkoutmanager-addproducttocart-deprecated">CheckoutManager.addProductToCart</a>
+* <a href="#method-checkoutmanager-buycart-deprecated">CheckoutManager.buyCart</a>
+* <a href="#method-checkoutmanager-buyproduct-deprecated">CheckoutManager.buyProduct</a>
+* <a href="#method-checkoutmanager-checkoutcart-deprecated">CheckoutManager.checkoutCart</a>
+* <a href="#method-checkoutmanager-checkoutproduct-deprecated">CheckoutManager.checkoutProduct</a>
+* <a href="#method-checkoutmanager-getcarts-deprecated">CheckoutManager.getCarts</a>
+* <a href="#method-checkoutmanager-getcartbyid-deprecated">CheckoutManager.getCartById</a>
+* <a href="#method-checkoutmanager-removeproductfromcart-deprecated">CheckoutManager.removeProductFromCart</a>
+* <a href="#method-checkoutmanager-signorderupdates-deprecated">CheckoutManager.signOrderUpdates</a>
+* <a href="#method-checkoutmanager-updateproductincart-deprecated">CheckoutManager.updateProductInCart</a>
 
 Checkout is an aggregate of Session.
 
@@ -26,7 +30,7 @@ This section also covers the use of CheckoutBundle class, to create the Checkout
 
 
 
-### Method: CheckoutBundle.CreateCartCheckoutBundle
+### Method: CheckoutBundle.CreateCartCheckoutBundle (deprecated)
 
 ```swift
 import RezolveSDK
@@ -92,7 +96,7 @@ You must pass in the `cartId`, the `merchantId`, and `addressId`, all as strings
 The method returns an `CheckoutBundle` object.
 
 
-### Method: CheckoutBundle.CreateCartInStorePickupCheckoutBundle
+### Method: CheckoutBundle.CreateCartInStorePickupCheckoutBundle (deprecated)
 
 ```swift
 import RezolveSDK
@@ -169,7 +173,7 @@ The method returns an `CheckoutBundle` object.
 
 
 
-### Method: CheckoutBundle.CreateProductCheckoutBundle
+### Method: CheckoutBundle.CreateProductCheckoutBundle (deprecated)
 
 ```swift
 import RezolveSDK
@@ -239,7 +243,7 @@ The method returns an `CheckoutBundle` object.
 
 
 
-### Method: CheckoutBundle.CreateProductInStorePickupCheckoutBundle
+### Method: CheckoutBundle.CreateProductInStorePickupCheckoutBundle (deprecated)
 
 ```swift
 import RezolveSDK
@@ -325,7 +329,7 @@ The method returns an `CheckoutBundle` object.
 
 
 
-### Method: CheckoutManager.createPaymentRequest
+### Method: CheckoutManager.createPaymentRequest (deprecated)
 
 ```swift
 import UIKit
@@ -387,7 +391,7 @@ The method returns an `PaymentRequest` object.
 
 
 
-### Method: CheckoutManager.addProductToCart
+### Method: CheckoutManager.addProductToCart (deprecated)
 
 ```swift
 import UIKit
@@ -629,7 +633,7 @@ The method returns a `merchantId` and an `orderId`.
 
 
 
-### Method: CheckoutManager.buyProduct
+### Method: CheckoutManager.buyProduct (deprecated)
 
 ```swift
 import UIKit
@@ -715,7 +719,7 @@ The method returns a `merchantId` and an `orderId`.
 
 
 
-### Method: CheckoutManager.checkoutCart
+### Method: CheckoutManager.checkoutCart (deprecated)
 
 ```swift
 import UIKit
@@ -818,7 +822,7 @@ The method returns an `Order` object that includes final price and order id.
 
 
 
-### Method: CheckoutManager.checkoutProduct
+### Method: CheckoutManager.checkoutProduct (deprecated)
 
 ```swift
 import RezolveSDK
@@ -899,7 +903,7 @@ The method returns an `Order` object that includes final price and order id.
 
 
 
-### Method: CheckoutManager.getCarts
+### Method: CheckoutManager.getCarts (deprecated)
 
 ```swift
 import UIKit
@@ -984,7 +988,7 @@ The method returns an array of `CartDetail` objects.
 
 
 
-### Method: CheckoutManager.getCartById
+### Method: CheckoutManager.getCartById (deprecated)
 
 ```swift
 import UIKit
@@ -1071,7 +1075,7 @@ The method returns an `CartDetails` object.
 
 
 
-### Method: CheckoutManager.removeProductFromCart
+### Method: CheckoutManager.removeProductFromCart (deprecated)
 
 ```swift
 import UIKit
@@ -1169,7 +1173,7 @@ The method returns a `CartDetails` object.
 
 
 
-### Method: CheckoutManager.signOrderUpdates
+### Method: CheckoutManager.signOrderUpdates (deprecated)
 
 ```swift
 import UIKit
@@ -1288,7 +1292,7 @@ The method returns a `Transaction` object, and a `Transaction.Status` object.
 
 
 
-### Method: CheckoutManager.updateProductInCart
+### Method: CheckoutManager.updateProductInCart (deprecated)
 
 ```swift
 import UIKit

@@ -12,7 +12,7 @@ Authentication services are an aggregate of SDK.
 This module handles consumer user creation and authentication.
 
 <aside class="warning">
-Note that several methods in this class are now deprecated.
+Note that several methods in this class are now deprecated. Authentication is switching to JWT. See "Implementing JWT Authentication on Your Authentication Server".
 </aside>
 
 
