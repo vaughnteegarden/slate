@@ -1,5 +1,9 @@
 ## Module: AuthenticationManager
 
+<aside class="warning">
+Note that several methods in this class are now deprecated. Authentication is switching to JWT. See "Implementing JWT Authentication on Your Authentication Server".
+</aside>
+
 **Topics**
 
 * <a href="#method-register-deprecated">Register (deprecated)</a>
@@ -10,14 +14,6 @@
 Authentication services are an aggregate of SDK.
 
 This module handles consumer user creation and authentication.
-
-<aside class="warning">
-Note that several methods in this class are now deprecated. Authentication is switching to JWT. See "Implementing JWT Authentication on Your Authentication Server".
-</aside>
-
-
-
-
 
 ### Method: Register (deprecated)
 

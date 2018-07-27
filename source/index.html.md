@@ -21,6 +21,7 @@ includes:
 - moduleref
 - addressbookmanager
 - authenticationmanager
+- checkoutmanagerv2
 - checkoutmanager
 - favoritemanager
 - merchantmanager
