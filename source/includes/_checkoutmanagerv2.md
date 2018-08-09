@@ -2,7 +2,13 @@
 
 **Topics**
 
-* <a href="#method-checkoutbundle-createcartcheckoutbundle">CheckoutBundle.CreateCartCheckoutBundle</a>
+* <a href="#method-checkoutbundlev2-createcartcheckoutbundlev2">CheckoutBundleV2.CreateCartCheckoutBundleV2</a>
+* <a href="#method-checkoutbundlev2-createproductcheckoutbundlev2">CheckoutBundleV2.CreateProductCheckoutBundleV2</a>
+* <a href="#method-checkoutmanagerv2-createpaymentrequest">CheckoutManagerV2.CreatePaymentRequest</a>
+* <a href="#method-checkoutmanagerv2-checkoutcartoption">CheckoutManagerV2.CheckoutCartOption</a>
+* <a href="#method-checkoutmanagerv2-checkoutproductoption">CheckoutManagerV2.CheckoutProductOption</a>
+* <a href="#method-checkoutmanagerv2-buycart">CheckoutManagerV2.BuyCart</a>
+* <a href="#method-checkoutmanagerv2-buyproduct">CheckoutManagerV2.BuyProduct</a>
 
 
 CheckoutManagerV2 is an aggregate of Session.
@@ -19,7 +25,32 @@ This section also covers the use of CheckoutBundleV2 class, to create the Checko
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        String optionId = "123";
+        String orderId="123"; // get this from  order.getOrderId()
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); // get this from PaymentOptionsManager
+        DeliveryMethod deliveryMethod = new DeliveryMethod();  // get this from PaymentOptionsManager
+
+
+        // create a cart checkout bundle
+        CheckoutBundleV2 cartCheckoutBundle = CheckoutBundleV2.createCartCheckoutBundleV2 ( merchantId, optionId, cartId, phonebookId, supportedPaymentMethod, deliveryMethod  );
+    }
+}
 ```
 
 CreateCartCheckoutBundleV2 creates a cart checkout bundle.
@@ -43,7 +74,31 @@ The method returns a `CartCheckoutBundle` object.
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        String optionId = "123";
+        String orderId="123"; // get this from  order.getOrderId()
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); // get this from PaymentOptionsManager
+        DeliveryMethod deliveryMethod = new DeliveryMethod();  // get this from PaymentOptionsManager
+
+        // create a product checkout bundle
+        CheckoutBundleV2 productCheckoutBundle = CheckoutBundleV2.createProductCheckoutBundleV2(merchantId, optionId, checkoutProduct, phonebookId, supportedPaymentMethod, deliveryMethod);
+    }
+}
 ```
 
 CreateCartCheckoutBundleV2 creates a product checkout bundle.
@@ -60,13 +115,30 @@ The method returns a `ProductCheckoutBundle` object.
 
 
 
-### Method: CheckoutBundleV2.CreatePaymentRequest
+### Method: CheckoutManagerV2.CreatePaymentRequest
 
 ```swift
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        PaymentCard paymentCard = new PaymentCard();  // get this from WalletManager
+        String cvv = "123";
+
+        // create a payment request
+        PaymentRequest paymentRequest = checkoutManagerV2.createPaymentRequest( paymentCard, cvv);
+    }
+}
 ```
 
 CreatePaymentRequest creates a payment request, tying together a payment card and CVV that will be used for current transaction.
@@ -86,7 +158,56 @@ The method returns a `PaymentRequest` object.
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        String optionId = "123";
+        String orderId="123"; // get this from  order.getOrderId()
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); // get this from PaymentOptionsManager
+        DeliveryMethod deliveryMethod = new DeliveryMethod();  // get this from PaymentOptionsManager
+
+
+        // create a cart checkout bundle
+        CheckoutBundleV2 cartCheckoutBundle = CheckoutBundleV2.createCartCheckoutBundleV2 ( merchantId, optionId, cartId, phonebookId, supportedPaymentMethod, deliveryMethod  );
+
+        // checkout Cart
+        checkoutManagerV2.checkoutCartOption(cartCheckoutBundle,this);
+
+        // checkout Product
+        checkoutManagerV2.checkoutProductOption(productCheckoutBundle,this);
+
+        // buy the contents of a cart
+        checkoutManagerV2.buyCart(paymentRequest, cartCheckoutBundle, orderId, this );
+
+        // buy a single product
+        checkoutManagerV2.buyProduct(paymentRequest, productCheckoutBundle, orderId, this);
+    }
+
+    @Override
+    public void onCartOptionCheckoutSuccess(Order order) {
+        String orderId = order.getOrderId();
+        float finalPrice = order.getFinalPrice();
+        List<PriceBreakdown> breakdowns = order.getBreakdowns();
+
+        for (PriceBreakdown priceBreakdown:breakdowns){
+            String type = priceBreakdown.getType();
+            float amount = priceBreakdown.getAmount();
+        }
+    }
+}
 ```
 
 CheckoutCartOption queries the server to obtain an order id, total, and price breakdown for a particular Cart.
@@ -106,7 +227,49 @@ The method returns an `Order` object.
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        String optionId = "123";
+        String orderId="123"; // get this from  order.getOrderId()
+        PaymentCard paymentCard = new PaymentCard();  // get this from WalletManager
+        String cvv = "123";
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); // get this from PaymentOptionsManager
+        DeliveryMethod deliveryMethod = new DeliveryMethod();  // get this from PaymentOptionsManager
+
+        // create a product checkout bundle
+        CheckoutBundleV2 productCheckoutBundle = CheckoutBundleV2.createProductCheckoutBundleV2(merchantId, optionId, checkoutProduct, phonebookId, supportedPaymentMethod, deliveryMethod);
+
+        // checkout Product
+        checkoutManagerV2.checkoutProductOption(productCheckoutBundle,this);
+    }
+
+
+    @Override
+    public void onProductOptionCheckoutSuccess(Order order) {
+        String orderId = order.getOrderId();
+        float finalPrice = order.getFinalPrice();
+        List<PriceBreakdown> breakdowns = order.getBreakdowns();
+
+        for (PriceBreakdown priceBreakdown:breakdowns){
+            String type = priceBreakdown.getType();
+            float amount = priceBreakdown.getAmount();
+        }
+    }
+}
 ```
 
 CheckoutProductOption queries the server to obtain an order id, total, and price breakdown for a particular Product.
@@ -125,7 +288,50 @@ The method returns an `Order` object.
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        String optionId = "123";
+        String orderId="123"; // get this from  order.getOrderId()
+        PaymentCard paymentCard = new PaymentCard();  // get this from WalletManager
+        String cvv = "123";
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); // get this from PaymentOptionsManager
+        DeliveryMethod deliveryMethod = new DeliveryMethod();  // get this from PaymentOptionsManager
+
+
+        // create a cart checkout bundle
+        CheckoutBundleV2 cartCheckoutBundle = CheckoutBundleV2.createCartCheckoutBundleV2 ( merchantId, optionId, cartId, phonebookId, supportedPaymentMethod, deliveryMethod  );
+
+        // create a payment request
+        PaymentRequest paymentRequest = checkoutManagerV2.createPaymentRequest( paymentCard, cvv);
+
+        // buy the contents of a cart
+        checkoutManagerV2.buyCart(paymentRequest, cartCheckoutBundle, orderId, this );
+    }
+
+    @Override
+    public void onCartOptionBuySuccess(OrderSummary orderSummary) {
+        // skip this call, ContactInformation entity is not public
+        // Merchant.ContactInformation contactInformation = orderSummary.getContactInformation();
+        JSONObject orderData = orderSummary.getData();
+        String orderId = orderSummary.getOrderId();
+        String partnerId = orderSummary.getPartnerId();
+        String partnerName = orderSummary.getPartnerName();
+    }
+}
 ```
 
 BuyCart takes the prepared CheckoutBundle, Order Id, and Payment information, and submits it to make a purchase. 
@@ -146,7 +352,49 @@ The method returns an `OrderSummary` object.
 
 ```
 ```java
+public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        CheckoutManagerV2 checkoutManagerV2 = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManagerV2();
+
+        String cartId = "123";
+        String merchantId = "123";
+        String phonebookId = "123";
+        String optionId = "123";
+        String orderId="123"; // get this from  order.getOrderId()
+        PaymentCard paymentCard = new PaymentCard();  // get this from WalletManager
+        String cvv = "123";
+
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+        SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); // get this from PaymentOptionsManager
+        DeliveryMethod deliveryMethod = new DeliveryMethod();  // get this from PaymentOptionsManager
+
+        // create a product checkout bundle
+        CheckoutBundleV2 productCheckoutBundle = CheckoutBundleV2.createProductCheckoutBundleV2(merchantId, optionId, checkoutProduct, phonebookId, supportedPaymentMethod, deliveryMethod);
+
+        // create a payment request
+        PaymentRequest paymentRequest = checkoutManagerV2.createPaymentRequest( paymentCard, cvv);
+
+        // buy a single product
+        checkoutManagerV2.buyProduct(paymentRequest, productCheckoutBundle, orderId, this);
+    }
+
+    @Override
+    public void onProductOptionBuySuccess(OrderSummary orderSummary) {
+        // skip this call, ContactInformation entity is not public
+        // Merchant.ContactInformation contactInformation = orderSummary.getContactInformation();
+        JSONObject orderData = orderSummary.getData();
+        String orderId = orderSummary.getOrderId();
+        String partnerId = orderSummary.getPartnerId();
+        String partnerName = orderSummary.getPartnerName();
+    }
+}
 ```
 
 BuyCart takes the prepared CheckoutBundle, Order Id, and Payment information, and submits it to make a purchase. 

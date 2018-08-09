@@ -1,158 +1,150 @@
-## Module: CheckoutManagerV2
+## Module: PaymentOptionsManager
 
 **Topics**
 
 * <a href="#method-checkoutbundle-createcartcheckoutbundle">CheckoutBundle.CreateCartCheckoutBundle</a>
 
 
-CheckoutManagerV2 is an aggregate of Session.
+PaymentOptionsManager is an aggregate of Session.
 
-CheckoutManagerV2 is a complete refactor of CheckoutManager, designed to simplify usage and reduce the number of methods require to accomplish checkout. It also lays the groundwork for Alternate Checkout, the ability to use non-credit-card checkout methods. The checkout module handles the shopping cart, and creates, modifies, and completes orders with payment.
-
-This section also covers the use of CheckoutBundleV2 class, to create the CheckoutBundles used by CheckoutManagerV2. There are separate methods for single product "instant buy" purchase, and cart purchase.
+PaymentOptionsManager retrieves payment options and shipping options, for either a single product or a cart . 
 
 
 
-### Method: CheckoutBundleV2.CreateCartCheckoutBundleV2
+### Method: PaymentOptionsManager.GetCartOptions
 
 ```swift
 
 ```
 ```java
+public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PaymentOptionManager pom = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getPaymentOptionManager();
+
+        String merchantId = "12345";
+        String cartId = "12345";
+
+        // get PaymentOptions for cart
+        pom.getCartOptions( merchantId, cartId, this);
+    }
+
+    @Override
+    public void onCartOptionsSuccess(List<PaymentOption> list) {
+        for (PaymentOption paymentOption : list ){
+            String type = paymentOption.getType();
+            List<SupportedPaymentMethod> supportedPaymentMethods = paymentOption.getSupportedPaymentMethods();
+            List<Shipping> supportedDeliveryMethods = paymentOption.getSupportedDeliveryMethods();
+            JSONObject options = paymentOption.getOptions();
+            String id = paymentOption.getId();
+            List<CheckoutProduct> checkoutProducts = paymentOption.getCheckoutProducts();
+
+            for (SupportedPaymentMethod supportedPaymentMethod : supportedPaymentMethods ) {
+                PaymentMethodData paymentMethodData = supportedPaymentMethod.getPaymentMethodData();
+                String spmType = supportedPaymentMethod.getType();
+                JSONObject originalDataJson = supportedPaymentMethod.getOriginalDataJson();
+
+                JSONObject requirements = paymentMethodData.getRequirements();
+                List<String> supportedDelivery = paymentMethodData.getSupportedDelivery();
+                List<String> supportedNetworks = paymentMethodData.getSupportedNetworks();
+                List<String> supportedTypes = paymentMethodData.getSupportedTypes();
+            }
+
+            for (Shipping shipping : supportedDeliveryMethods) {
+                ShippingDetails shippingDetails = shipping.getShippingDetails();
+                ShippingMethod shippingMethod = shipping.getShippingMethod();
+            }
+
+            for (CheckoutProduct checkoutProduct : checkoutProducts) {
+                // breakdown checkoutProduct object
+                float qty = checkoutProduct.getQty();
+                Placement productPlacement = checkoutProduct.getProductPlacement();
+                int cpId  = checkoutProduct.getId();
+                List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+
+                String placementId = productPlacement.getPlacementId();
+                String adId = productPlacement.getAdId();
+
+                for (ConfigurableOption configurableOption : configurableOptions) {
+                    int value = configurableOption.getValue();
+                    String code = configurableOption.getCode();
+                }
+            }
+        }
+    }
+}
 ```
 
-CreateCartCheckoutBundleV2 creates a cart checkout bundle.
+GetCartOptions gets payment options and shipping options for a cart. 
 
-Method signature: `session.CheckoutBundleV2.createCartCheckoutBundleV2 ( merchantId,  optionId, cartId, phonebookId, addressId, supportedPaymentMethod, deliveryMethod )`
+Method signature: `session.PaymentOptionsManager.getCartOptions( merchantId, cartId, [interface or callback])`
 
-You must pass in the `merchantId`, `optionId`, `cartId`, and `phonebookId` all as strings, a SupportedPaymentMethod object, and a DeliveryMethod object.
+You must pass in the `merchantId` and `cartId` as strings, and supply an interface or callback.
 
-Get SupportedPaymentMethod and DeliveryMethod using PaymentOptionsManager.
-
-The method returns a `CartCheckoutBundle` object.
+The method returns an array of `PaymentOption` objects.
 
 
-
-
-
-
-### Method: CheckoutBundleV2.CreateProductCheckoutBundleV2
+### Method: PaymentOptionsManager.GetProductOptions
 
 ```swift
 
 ```
 ```java
+public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
 
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PaymentOptionManager pom = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getPaymentOptionManager();
+
+        String merchantId = "12345";
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+
+        // get PaymentOptions for a product
+        pom.getProductOptions(checkoutProduct, merchantId, this);
+    }
+
+
+    @Override
+    public void onProductOptionsSuccess(PaymentOption paymentOption) {
+        String id = paymentOption.getId();
+        List<CheckoutProduct> checkoutProducts = paymentOption.getCheckoutProducts();
+        JSONObject paymentOptionOptions = paymentOption.getOptions();
+        List<Shipping> supportedDeliveryMethods =  paymentOption.getSupportedDeliveryMethods();
+        List<SupportedPaymentMethod> supportedPaymentMethods = paymentOption.getSupportedPaymentMethods();
+        String type = paymentOption.getType();
+
+        for (CheckoutProduct checkoutProduct : checkoutProducts) {
+            // breakdown checkoutProduct object
+            float qty = checkoutProduct.getQty();
+            Placement productPlacement = checkoutProduct.getProductPlacement();
+            int cpId  = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+
+            String placementId = productPlacement.getPlacementId();
+            String adId = productPlacement.getAdId();
+
+            for (ConfigurableOption configurableOption : configurableOptions) {
+                int value = configurableOption.getValue();
+                String code = configurableOption.getCode();
+            }
+        }
+    }
+}
 ```
 
-CreateCartCheckoutBundleV2 creates a product checkout bundle.
+GetProductOptions gets payment options and shipping options for a single product. 
 
-Method signature: `session.CheckoutBundleV2.createProductCheckoutBundleV2 ( merchantId,  optionId, checkoutProduct, phonebookId, addressId, supportedPaymentMethod, deliveryMethod )`
+Method signature: `session.PaymentOptionsManager.getProductOptions( checkoutProduct, merchantId, [interface or callback])`
 
-You must pass in the `merchantId`, `optionId`, and `phonebookId` all as strings, a SupportedPaymentMethod object, and a DeliveryMethod object.
+You must pass in a `checkoutProduct` object, the `merchantId` as a string, and supply an interface or callback.
 
-Get SupportedPaymentMethod and DeliveryMethod using PaymentOptionsManager.
-
-The method returns a `ProductCheckoutBundle` object.
-
-
-
-
-
-### Method: CheckoutBundleV2.CreatePaymentRequest
-
-```swift
-
-```
-```java
-
-```
-
-CreatePaymentRequest creates a payment request, tying together a payment card and CVV that will be used for current transaction.
-
-Method signature: `session.CheckoutManagerV2.createPaymentRequest ( paymentCard, cvv )`
-
-You must pass in a payment card object, and the `cvv` as a string.
-
-The method returns a `PaymentRequest` object.
-
-
-
-
-### Method: CheckoutManagerV2.CheckoutCartOption
-
-```swift
-
-```
-```java
-
-```
-
-CheckoutCartOption queries the server to obtain an order id, total, and price breakdown for a particular Cart.
-
-Method signature: `session.CheckoutManagerV2.checkoutCartOption ( cartCheckoutBundle, [callback or interface] )`
-
-You must pass in a CartCheckoutBundle, and a callback or interface.
-
-The method returns an `Order` object.
-
-
-
-
-### Method: CheckoutManagerV2.CheckoutProductOption
-
-```swift
-
-```
-```java
-
-```
-
-CheckoutProductOption queries the server to obtain an order id, total, and price breakdown for a particular Product.
-
-Method signature: `session.CheckoutManagerV2.checkoutProductOption ( productCheckoutBundle, [callback or interface] )`
-
-You must pass in a ProductCheckoutBundle, and a callback or interface.
-
-The method returns an `Order` object.
-
-
-
-### Method: CheckoutManagerV2.BuyCart
-
-```swift
-
-```
-```java
-
-```
-
-BuyCart takes the prepared CheckoutBundle, Order Id, and Payment information, and submits it to make a purchase. 
-
-Method signature: `session.CheckoutManagerV2.buyCart ( paymentRequest, cartCheckoutBundle, orderId, [callback or interface] )`
-
-You must pass in a PaymentRequest object, a CartCheckoutBundle object, an order id, and a callback or interface.
-
-The method returns an `OrderSummary` object.
-
-
-
-
-
-### Method: CheckoutManagerV2.BuyProduct
-
-```swift
-
-```
-```java
-
-```
-
-BuyCart takes the prepared CheckoutBundle, Order Id, and Payment information, and submits it to make a purchase. 
-
-Method signature: `session.CheckoutManagerV2.buyProduct ( paymentRequest, productCheckoutBundle, orderId, [callback or interface] )`
-
-You must pass in a PaymentRequest object, a ProductCheckoutBundle object, an order id, and a callback or interface.
-
-The method returns an `OrderSummary` object.
+The method returns a `PaymentOption` object.
