@@ -22,7 +22,15 @@ This section also covers the use of CheckoutBundleV2 class, to create the Checko
 ### Method: CheckoutBundleV2.CreateCartCheckoutBundleV2
 
 ```swift
-
+/// Creates cart checkoutBundle
+let cartCheckoutBundleV2 = createCartCheckoutBundleV2(
+	cartId: cartId,
+	deliveryMethod: deliveryMethod,
+	merchantId: merchantId,
+	optionId: optionId,
+	paymentMethod: paymentMethod,
+	phoneId: phoneId
+)
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -71,7 +79,15 @@ The method returns a `CartCheckoutBundle` object.
 ### Method: CheckoutBundleV2.CreateProductCheckoutBundleV2
 
 ```swift
-
+/// Creates product checkoutBundle
+let productBundleV2 = createProductCheckoutBundleV2(
+	checkoutProduct: checkoutProduct,
+	deliveryMethod: deliveryMethod,
+	merchantId: merchantId,
+	optionId: optionId,
+	paymentMethod: paymentMethod,
+	phoneId: phoneId
+)
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -88,7 +104,7 @@ public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interf
         String cartId = "123";
         String merchantId = "123";
         String phonebookId = "123";
-        String optionId = "123";
+        String optionId = "123"; // get this from TODO
         String orderId="123"; // get this from  order.getOrderId()
 
         CheckoutProduct checkoutProduct = new CheckoutProduct();
@@ -118,7 +134,13 @@ The method returns a `ProductCheckoutBundle` object.
 ### Method: CheckoutManagerV2.CreatePaymentRequest
 
 ```swift
+let paymentCard = // RezolveSDK.PaymentCard
+let cardCVV = "000" // Card CVV
 
+let paymentRequest = PaymentRequest(
+    paymentCard: paymentCard, 
+    cvv: cardCVV
+)
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -155,7 +177,14 @@ The method returns a `PaymentRequest` object.
 ### Method: CheckoutManagerV2.CheckoutCartOption
 
 ```swift
-
+    rezolveSession.checkoutManagerV2.checkout(
+        bundle: cartBundleV2, 
+        callback: { order in 
+            // Order handling
+        },
+        errorCallback: { _ in 
+            // Error handling
+    })
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -218,13 +247,20 @@ You must pass in a CartCheckoutBundle, and a callback or interface.
 
 The method returns an `Order` object.
 
-
+Note: IOS uses the same method, `CheckoutManagerV2.Checkout`, for both product and cart checkout. Pass in a `productBundleV2` for the former, and a `cartBundleV2` for the latter. 
 
 
 ### Method: CheckoutManagerV2.CheckoutProductOption
 
 ```swift
-
+    rezolveSession.checkoutManagerV2.checkout(
+        bundle: productBundleV2, 
+        callback: { order in 
+            // Order handling
+        },
+        errorCallback: { _ in 
+            // Error handling
+    })
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -280,12 +316,22 @@ You must pass in a ProductCheckoutBundle, and a callback or interface.
 
 The method returns an `Order` object.
 
+Note: IOS uses the same method, `CheckoutManagerV2.Checkout`, for both product and cart checkout. Pass in a `productBundleV2` for the former, and a `cartBundleV2` for the latter. 
 
 
 ### Method: CheckoutManagerV2.BuyCart
 
 ```swift
-
+rezolveSession.checkoutManagerV2.buy(
+	bundle: cartCheckoutBundleV2,
+	paymentRequest: paymentRequest,
+	checkoutId: checkoutId,
+	callback: { checkoutOrder in
+		// Handle checkoutOrder
+	},
+	errorCallback: { error in 
+		// Handle error
+})
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -342,14 +388,23 @@ You must pass in a PaymentRequest object, a CartCheckoutBundle object, an order 
 
 The method returns an `OrderSummary` object.
 
-
+Note: IOS uses the same method, `CheckoutManagerV2.Buy`, for both product and cart checkout. Pass in a `productBundleV2` for the former, and a `cartBundleV2` for the latter. 
 
 
 
 ### Method: CheckoutManagerV2.BuyProduct
 
 ```swift
-
+rezolveSession.checkoutManagerV2.buy(
+	bundle: productCheckoutBundleV2,
+	paymentRequest: paymentRequest,
+	checkoutId: checkoutId,
+	callback: { checkoutOrder in
+		// Handle checkoutOrder
+	},
+	errorCallback: { error in 
+		// Handle error
+})
 ```
 ```java
 public class CheckoutMgrV2 extends AppCompatActivity implements CheckoutV2Interface {
@@ -404,3 +459,5 @@ Method signature: `session.CheckoutManagerV2.buyProduct ( paymentRequest, produc
 You must pass in a PaymentRequest object, a ProductCheckoutBundle object, an order id, and a callback or interface.
 
 The method returns an `OrderSummary` object.
+
+Note: IOS uses the same method, `CheckoutManagerV2.Buy`, for both product and cart checkout. Pass in a `productBundleV2` for the former, and a `cartBundleV2` for the latter. 

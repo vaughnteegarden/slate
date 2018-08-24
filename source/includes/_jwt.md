@@ -103,7 +103,11 @@ HMACSHA512(
 	${$partner_auth_key}
 )
 ```
-Sign the header and payload with the `partner_auth_key`.  It is not necessary to decode the key before using it. Pass the whole value as a string to your library's `getBytes` method.  If you need to supply the charset, use UTF8. Example: `var key = new SecretKey(Encoding.UTF8.GetBytes(key));`
+Sign the header and payload with the `partner_auth_key`.  It is not necessary to decode the key before using it. Pass the whole value as a string to your library's `getBytes` method.  
+
+You may need to specify the charset as UTF8. 
+Example 1, Microsoft: `SecretKey(Encoding.UTF8.GetBytes(key));`  
+Example 2, Java:  `Secret.getBytes("UTF-8");`
 
 ```
 eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.

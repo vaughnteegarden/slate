@@ -3,7 +3,7 @@
 ## Product Scan, Instant Buy flow
 
 
-<img src="images/JWT-shoppable-ad-flow-single-buy.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-single-buy.png" target="_blank">View full size</a> ]
+<img src="images/wsd-jwt-product-buy-flow.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-single-buy.png" target="_blank">View full size</a> ]
 
 
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
@@ -84,11 +84,12 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-          .getRezolveSession().getScanManager(this, true);
+        boolean barcodeenabled = true;
+        boolean videoenabled = true;
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getScanManager(this, barcodeenabled, videoenabled );                                     
 
-          //start video scan to acquire image
-          scanManager.startVideoScan(this, rezolveScanView);
+        //start video scan to acquire image
+        scanManager.startVideoScan(this, rezolveScanView);
     }
 
 
@@ -122,8 +123,46 @@ func onProductResult(product: Product) -> Void {
 
       let checkoutProduct = createCheckoutProductWithVariant(product: product)
 
-      session.checkoutManager.checkoutProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, callback: { (order: CheckoutOrder) in
+      // Fetches PaymentOptions for Product
+        rezolveSession.paymentOptionManager.getProductOptions(
+            checkoutProduct: checkoutProduct,
+            merchantId: merchantId,
+            callback: { (paymentOption: PaymentOption) ->
 
+            let paymentMethods = paymentOption.supportedPaymentMethods
+            let shippings = paymentOption.supportedDeliveryMethods
+
+        }, errorCallback: { httpResponse in
+            // Error handling
+        })
+        
+        /// Creates product checkoutBundle
+        let productBundleV2 = createProductCheckoutBundleV2(
+            checkoutProduct: checkoutProduct,
+            deliveryMethod: deliveryMethod,
+            merchantId: merchantId,
+            optionId: optionId,
+            paymentMethod: paymentMethod,
+            phoneId: phoneId
+        )
+        
+        /// Create a payment request
+        let paymentCard = // RezolveSDK.PaymentCard
+        let cardCVV = "000" // Card CVV
+        let paymentRequest = PaymentRequest(
+            paymentCard: paymentCard, 
+            cvv: cardCVV
+        )
+        
+        /// Call Checkout method to get an Order
+        rezolveSession.checkoutManagerV2.checkout(
+            bundle: productBundleV2, 
+            callback: { order in 
+                // Order handling
+            },
+            errorCallback: { _ in 
+                // Error handling
+        })
 
       }, errorCallback: { print($0) })
     }

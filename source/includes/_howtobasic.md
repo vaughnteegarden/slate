@@ -190,13 +190,13 @@ Each uploaded image will have a corresponding array of thumbnails. If an object 
 
 For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumers to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
 
-The Rezolve SDK has no built-in authentication mechansim, but that is not to say there is no security. Instead, Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
+The Rezolve SDK has no built-in authentication mechansim, but that is not to say there is no security. Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
 
 Exactly how you implement authentication in your app will depend on what authorization system you use. You may either:
 
 - Utilize an existing authentication server, and adapt it to serve the JWT required by Rezolve. This makes most sense if you already have a community of users with logins.
 
-- Utilize Rezolve User Authentication (RUA), our implementation of a JWT-aware auth system. If you do not have an existing auth system, adopting RUA may save development time, as opposed to implementing a new system from the ground up.
+- Utilize Rezolve User Authentication (RUA), our implementation of a JWT-aware auth system. If you do not have an existing auth system, adopting RUA may save development time, as opposed to implementing a new system from the ground up. Your Rezolve sales representative can help you with this decision.
 
 The primary task in implementing user management is to create the JWT that will allow you to bind a Partner user to a Rezolve profile. Through a server-to-server transaction, you can create a new Rezolve User Profile, and get back an identifying `entityId` that you should persist in your authentication database, as an addition to your user record. This `entityId` will then be used by the Rezolve SDK to identify the user to the Rezolve Server. 
 

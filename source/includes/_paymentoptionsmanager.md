@@ -14,7 +14,17 @@ PaymentOptionsManager retrieves payment options and shipping options, for either
 ### Method: PaymentOptionsManager.GetCartOptions
 
 ```swift
+// Fetch PaymentOption for cart
+rezolveSession.paymentOptionManager.getCartOptions(
+    merchantId: merchantId,
+    cartId: cartId,
+    callback: { (paymentOptionList: [PaymentOption]) in
 
+        // Handle [PaymentOption]
+
+}, errorCallback: { httpResponse in
+    // Error handling code
+})
 ```
 ```java
 public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
@@ -92,7 +102,18 @@ The method returns an array of `PaymentOption` objects.
 ### Method: PaymentOptionsManager.GetProductOptions
 
 ```swift
+// Fetches PaymentOption for Product
+rezolveSession.paymentOptionManager.getProductOptions(
+    checkoutProduct: checkoutProduct,
+    merchantId: merchantId,
+    callback: { (paymentOption: PaymentOption) ->
 
+    let paymentMethods = paymentOption.supportedPaymentMethods
+    let shippings = paymentOption.supportedDeliveryMethods
+
+}, errorCallback: { httpResponse in
+    // Error handling
+})
 ```
 ```java
 public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
@@ -136,6 +157,22 @@ public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptio
                 int value = configurableOption.getValue();
                 String code = configurableOption.getCode();
             }
+        }
+
+        for (Shipping shipping : supportedDeliveryMethods) {
+            ShippingDetails shippingDetails = shipping.getShippingDetails();
+            ShippingMethod shippingMethod = shipping.getShippingMethod();
+        }
+
+        for (SupportedPaymentMethod supportedPaymentMethod : supportedPaymentMethods ) {
+            PaymentMethodData paymentMethodData = supportedPaymentMethod.getPaymentMethodData();
+            String spmType = supportedPaymentMethod.getType();
+            JSONObject originalDataJson = supportedPaymentMethod.getOriginalDataJson();
+
+            JSONObject requirements = paymentMethodData.getRequirements();
+            List<String> supportedDelivery = paymentMethodData.getSupportedDelivery();
+            List<String> supportedNetworks = paymentMethodData.getSupportedNetworks();
+            List<String> supportedTypes = paymentMethodData.getSupportedTypes();
         }
     }
 }

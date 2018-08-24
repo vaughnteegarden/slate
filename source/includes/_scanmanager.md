@@ -113,9 +113,11 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         setContentView(R.layout.scan_activity);
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
-        // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-			.getRezolveSession().getScanManager(this, true);
+        // set booleans
+        boolean barcodeEnabled = true;
+        boolean videoEnabled = true;
+        // initialize scan manager 
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getScanManager(this, barcodeEnabled, videoEnabled);
 
         // use startVideo to begin watching for scannable media
         scanManager.startVideoScan(this, rezolveScanView);
@@ -231,9 +233,11 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         setContentView(R.layout.scan_activity);
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
-        // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
-                .getRezolveSession().getScanManager(this, true);
+        // set booleans
+        boolean barcodeEnabled = true;
+        boolean videoEnabled = true;
+        // initialize scan manager 
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getScanManager(this, barcodeEnabled, videoEnabled);
 
         // use startAudioScan to being listening for watermarked media
         scanManager.startAudioScan(this, rezolveAudioVizualizationView);
@@ -276,9 +280,11 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         setContentView(R.layout.scan_activity);
         // reference our scan_view
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
-        // initialize scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, RezolveSDK.Env.SANDBOX)
-                .getRezolveSession().getScanManager(this, true);
+        // set booleans
+        boolean barcodeEnabled = true;
+        boolean videoEnabled = true;
+        // initialize scan manager 
+        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getScanManager(this, barcodeEnabled, videoEnabled);
 
         // use stopAudioScan to cease listening.
         scanManager.destroy();
