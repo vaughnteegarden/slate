@@ -1,4 +1,4 @@
-## JWT Authentication With Your Authentication Server
+## JWT Authentication
 
 **Topics**
 
@@ -37,7 +37,7 @@ When a user logs in to your auth system, generate a new Login JWT and supply to 
 
 ### JWT Flow
 
-<img src="images/GenericSWT.png" style="margin:6px 0;"><br/>[ <a href="images/GenericSWT.png" target="_blank">View full size</a> ]
+<img src="images/wsd-jwt-flow.png" style="margin:6px 0;"><br/>[ <a href="images/wsd-jwt-flow.png" target="_blank">View full size</a> ]
 
 
 
