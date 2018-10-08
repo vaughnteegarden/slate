@@ -193,7 +193,7 @@ Note the addition of the `device_id`.
 |rezolve_entity_id|your_rezolve_entity_id|use the entity_id you obtained during registration|
 |partner_entity_id|your_partner_entity_id|set it to the unique identifier for your user record|
 |exp|1520869470|Expiration, as a unix timestamp integer. Set the expiration value to a small number, now() + 30 minutes or less.|
-|device_id|An id randomly generated upon app installation and stored. This id is placed in both the JWT payload and x-header sent by the SDK. See below for generation instructions.|
+|device_id|wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a|An id randomly generated upon app installation and stored. This id is placed in both the JWT payload and x-header sent by the SDK. See below for generation instructions.|
 
 
 #### Signature

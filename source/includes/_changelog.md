@@ -2,7 +2,7 @@
 
 All notable changes to the project will be documented in this log.
 
-## Android v1.8.4, IOS v1.10.1 - October , 2018
+## Android vTODO, IOS vTODO - October , 2018
 
 ### Documentation Changes
 
