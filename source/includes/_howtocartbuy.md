@@ -3,7 +3,7 @@
 ## Product Scan, Cart flow
 
 
-<img src="images/JWT-shoppable-ad-flow-cart-buy.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-cart-buy.png" target="_blank">View full size</a> ]
+<img src="images/wsd-jwt-cart-buy-flow.png" style="margin:6px 0;"><br/>[ <a href="images/wsd-jwt-cart-buy-flow.png" target="_blank">View full size</a> ]
 
 
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.

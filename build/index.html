@@ -806,8 +806,8 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </tr>
 <tr>
 <td>device_id</td>
+<td>wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a</td>
 <td>An id randomly generated upon app installation and stored. This id is placed in both the JWT payload and x-header sent by the SDK. See below for generation instructions.</td>
-<td></td>
 </tr>
 </tbody></table>
 <h4 id='signature-2'>Signature</h4><pre class="highlight plaintext"><code>HMACSHA512(
@@ -1216,9 +1216,6 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre>
 <p>If you receive this response, call your JWT renewal endpoint. </p>
 
-          <h2 id='implementing-rua'>Implementing RUA</h2>
-<p>TODO    </p>
-
           <h2 id='product-scan-instant-buy-flow'>Product Scan, Instant Buy flow</h2>
 <p><img src="images/wsd-jwt-product-buy-flow.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-single-buy.png" target="_blank">View full size</a> ]</p>
 
@@ -1489,7 +1486,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>If either <code>completed</code> or <code>canceled</code> is returned, the listener stops and the socket closes. If <code>processing</code> is returned, the listener will remain active until the order status is updated to either <code>completed</code> or <code>canceled</code>.</p>
 
           <h2 id='product-scan-cart-flow'>Product Scan, Cart flow</h2>
-<p><img src="images/JWT-shoppable-ad-flow-cart-buy.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-cart-buy.png" target="_blank">View full size</a> ]</p>
+<p><img src="images/wsd-jwt-cart-buy-flow.png" style="margin:6px 0;"><br/>[ <a href="images/wsd-jwt-cart-buy-flow.png" target="_blank">View full size</a> ]</p>
 
 <p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
@@ -1699,7 +1696,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>If either <code>completed</code> or <code>canceled</code> is returned, the listener stops and the socket closes. If <code>processing</code> is returned, the listener will remain active until the order status is updated to either <code>completed</code> or <code>canceled</code>.</p>
 
           <h2 id='category-scan-flow'>Category Scan flow</h2>
-<p><img src="images/JWT-shoppable-ad-flow-category-scan.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-category-scan.png" target="_blank">View full size</a> ]</p>
+<p><img src="images/wsd-jwt-category-flow.png" style="margin:6px 0;"><br/>[ <a href="images/wsd-jwt-category-flow.png" target="_blank">View full size</a> ]</p>
 
 <p>Shoppable Ads can do more than link to a single product, it can link to a category of products in your Rezolve Commerce Engine. Scanning an ad that contains a category link will bring up a list of subcategories and products in that category.</p>
 
@@ -1843,7 +1840,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>Repeat step 1 above as the consumer browses through categories. Once the consumer selects a product and is ready to purchase, the process is the same as in the Instant Buy or Cart Buy flows. Note: a DisplayProduct does not contain full information on a product. You will need to call getProduct to display the detail view of the Product.</p>
 
           <h2 id='mall-flow'>Mall flow</h2>
-<p><img src="images/JWT-mall-flow.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-mall-flow.png" target="_blank">View full size</a> ]</p>
+<p><img src="images/wsd-jwt-mall-flow.png" style="margin:6px 0;"><br/>[ <a href="images/wsd-jwt-mall-flow.png" target="_blank">View full size</a> ]</p>
 
 <p>Mall is the only method for finding products that does not require an ad scan. A consumer enters the mall by clicking on a &quot;Mall&quot; navigation option within the mobile app. The Mall showcases active merchants in an attractive layout that is condusive to casual browsing and subsequent purchasing. </p>
 
@@ -2999,7 +2996,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='android-v1-8-4-ios-v1-10-1-october-2018'>Android v1.8.4, IOS v1.10.1 - October , 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
+<h2 id='android-vtodo-ios-vtodo-october-2018'>Android vTODO, IOS vTODO - October , 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
 <ul>
 <li>Added tutorial for Trigger Manager</li>
 <li>Added tutorial for Background Listening</li>
