@@ -2,39 +2,14 @@
 
 All notable changes to the project will be documented in this log.
 
-## Android v1.8.4, IOS v1.10.1 - August 9, 2018
+## Android v1.8.4, IOS v1.10.1 - October , 2018
 
-### Android
+### Documentation Changes
 
-#### Added 
-
-- List of `CustomConfigurableOptions` added to `OrderProduct` class.
-- `CustomOption` fields for user input.
-- `getOrdersV2` method in `UserActivityManager`
-- `NotificationHelper` class.
-- `TriggerManager` class.
-- `isVirtual` flag for Product.
-- `PaymentOptionManager`
-- `CheckoutManagerV2`
-- `CheckoutBundleV2`
-- `DeliveryMethod`
-- Rezolve Auto Detect Service to listen for ads in backgorund
-- Credit Cards may have the number fully edited by users
-- Auto Torch for the scan screen. If the device has a light sensor the scan screen is able to turn on the flash light automatically to help on capture process.
-
-#### Changed
-
-- `CustomConfigurableOptions` added to `CheckoutProduct`.
-- Fixed parsing methods for shipping details.
-- `CustomOption` optionId is now an integer.
-- Fixed a bug on `CustomOption` validator that prevented the validation of dates.
-- Fixed QR codes scan.
-- Fixes on the location sent on a buy if the user didn't allow location on the app.
-- Several improvements and bugfixes on the video and audio scan process.
-- New LICENSE.TXT file with updated use terms.
-- Fixed a bug where starting the Rezolve Auto Detect Service before login could crash the SDK.
-- Fixed an issue that could crash the SDK if a credit card data was updated without changes on the credit card number.
-
+- Added tutorial for Trigger Manager
+- Added tutorial for Background Listening
+- Added tutorial for Click & Collect
+- Removed manually created module reference docs and replaced them with module reference docs generated from source. 
 
 ### IOS
 
@@ -63,14 +38,63 @@ All notable changes to the project will be documented in this log.
 - Fixed `CartManager`: The payment_option key removed from the payload
 - Fixed `InStorePickupManager`: The `payment_option` key removed from the payload
 - Fixed On createSession 401 weren't dispatching properly error to app handle it.
+- Fixed `PaymentOptionManager.getProductOptions(checkoutProduct:merchantId:callback:errorCallback:)` updated JSON sent to server
+- Fixed Regression serialisation on `CustomOption.swift`
 - `getScanManager` now accept username, password and env as parameter
+- Deprecated `ProductManager.getProductsAndCategories`, use `ProductManager.getProductsAndCategoriesV2` instead.
+- Deprecagted `ProductManager.getCategories` use `ProductManager.getPaginatedCategories` instead
 - Breaking change: `Merchant.contactInformation` type changed from tuple to class
 - Breaking change: Order have a new property orderId
+- Breaking change: `HistoryTransaction` model updated
+- Breaking change: Change type of "value" member on `CustomOption` from `Any?` to `[String]`
+- Breaking change: `PaymentOptionManager.getProductOptions(checkoutProduct:merchantId:callback:errorCallback:)` updated JSON sent to server
+
 
 #### Deleted
 
 - Removed Websocket support from SDK
 - Custom Option Array Fix.
+
+
+### Android
+
+#### Added 
+
+- List of `CustomConfigurableOptions` added to `OrderProduct` class.
+- `CustomOption` fields for user input.
+- `getOrdersV2` method in `UserActivityManager`
+- `NotificationHelper` class.
+- `TriggerManager` class.
+- `isVirtual` flag for Product.
+- `PaymentOptionManager`
+- `CheckoutManagerV2`
+- `CheckoutBundleV2`
+- `DeliveryMethod`
+- Rezolve Auto Detect Service to listen for ads in backgorund
+- Credit Cards may have the number fully edited by users
+- Auto Torch for the scan screen. If the device has a light sensor the scan screen is able to turn on the flash light automatically to help on capture process.
+- Rezolve Auto Detect Service to listen for ads in backgorund
+- Credit Cards may have the number fully edited by users
+- Read custom resolver url from shared preferences.
+
+#### Changed
+
+- `CustomConfigurableOptions` added to `CheckoutProduct`.
+- Fixed parsing methods for shipping details.
+- `CustomOption` optionId is now an integer.
+- Fixed a bug on `CustomOption` validator that prevented the validation of dates.
+- Fixed QR codes scan.
+- Fixed the location sent on a buy if the user didn't allow location on the app.
+- Fixed several improvements and bugfixes on the video and audio scan process.
+- New LICENSE.TXT file with updated use terms.
+- Fixed a bug where starting the Rezolve Auto Detect Service before login could crash the SDK.
+- Fixed an issue that could crash the SDK if a credit card data was updated without changes on the credit card number.
+- Fixed `StoreAddress` model.
+- Fixed issue when `ScanManager` torch methods were not responsive.
+
+
+
+
 
 
 

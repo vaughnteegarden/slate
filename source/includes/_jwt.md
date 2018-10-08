@@ -1,4 +1,4 @@
-## Implementing JWT Authentication on Your Authentication Server
+## JWT Authentication With Your Authentication Server
 
 **Topics**
 
@@ -32,6 +32,7 @@ When a user logs in to your auth system, generate a new Login JWT and supply to 
 |partner_auth_key|The Auth key you are assigned by Rezolve. This plays the role of the JWT Secret. The partner_auth_key is typically a ~90 character hash.|
 |JWT token|A JSON Web Token, consisting of a header, payload, and signature. The header and signature are signed with the parther_auth_key, above. It is used as a bearer token when communicating with the Rezolve server.|
 |accessToken|In the IOS and Android code samples, the accessToken is the JWT Token you generated.|
+|deviceId|An id that is randomly generated upon app install and stored. This id is placed in both the JWT payload and x-header sent by the SDK. The Rezolve server checks that these values match to deter request origin spoofing. All calls except Registration calls require this.|
 
 
 ### JWT Flow
@@ -150,9 +151,11 @@ The endpoint will reply with an entity id and the partner id. You should save th
 
 ### Logging in a User
 
-Once a Rezolve User has been registered and an `entity_id` obtained, you can log in the user. If you just registered the user, you can reuse the `Register JWT` as the `accessToken`.  
+Once a Rezolve User has been registered and an `entity_id` obtained, you can log in the user using the instructions below. 
 
-For returning users, log them in via your normal method in your auth server. Then create a new `Login JWT`, and use it as the `accessToken` in the `createSession` method.
+For returning users, log them in via your normal method in your auth server, and then follow the instructions below.
+
+Create a new `Login JWT`, and use it as the `accessToken` in the `createSession` method.
 
 #### JWT Header
 
@@ -174,11 +177,14 @@ Note the addition of the "auth" line.
 
 #### JWT Payload
 
+Note the addition of the `device_id`.
+
 ```JSON
 {
 	"rezolve_entity_id": "entity123",
 	"partner_entity_id": "partner_entity_id",
-	"exp": 1520869470
+	"exp": 1520869470, 
+    "device_id": "wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"
 }
 ```
 
@@ -187,7 +193,7 @@ Note the addition of the "auth" line.
 |rezolve_entity_id|your_rezolve_entity_id|use the entity_id you obtained during registration|
 |partner_entity_id|your_partner_entity_id|set it to the unique identifier for your user record|
 |exp|1520869470|Expiration, as a unix timestamp integer. Set the expiration value to a small number, now() + 30 minutes or less.|
-
+|device_id|An id randomly generated upon app installation and stored. This id is placed in both the JWT payload and x-header sent by the SDK. See below for generation instructions.|
 
 
 #### Signature
@@ -200,6 +206,44 @@ HMACSHA512(
 )
 ```
 Sign the header and payload with the `partner_auth_key`.
+
+#### Generating the device_id
+
+```swift
+// IOS uses the IOS "identifierForVendor" string, so there is no need to generate it. 
+// The IOS SDK pulls this value automatically using `UIDevice.current.identifierForVendor?.uuidString` and supplies it to the SDK for the x-header.
+// You will need to use this same call to supply the device_id to your auth server for storage with the user profile.
+
+UIDevice.current.identifierForVendor?.uuidString
+```
+
+```java
+// generate the random id
+String deviceId = UUID.randomUUID().toString();
+
+// store the device_id
+private static void writeDeviceIdFile(File deviceidfile) throws IOException {
+    FileOutputStream out = new FileOutputStream(deviceidfile);
+    String id = UUID.randomUUID().toString();
+    out.write(id.getBytes());
+    out.close();
+}
+
+// read the stored device_id
+private static String readDeviceIdFile(File deviceidfile) throws IOException {
+    RandomAccessFile f = new RandomAccessFile(deviceidfile, "r");
+    byte[] bytes = new byte[(int) f.length()];
+    f.readFully(bytes);
+    f.close();
+    return new String(bytes);
+}
+
+// supply the random id to the SDK
+RezolveSDK.setDeviceIdHeader(deviceId);
+
+```
+
+To generate and set the device_id, see the OS specific examples to the right. On IOS it is handled automatically using `identifierForVendor?.uuidString`.  Android must manually generate, store, read, and pass the `device_id` to the SDK. 
 
 #### Create the Session
 
@@ -241,12 +285,16 @@ String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
 String accessToken = "abc123.abc123.abc123";  // JWT token from auth server
 String entityId = "123";	// from auth server
 String partnerId = "123";   // from auth server
+String deviceId = "wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"; // from stored device_id, see "Generating the device_id" above
 
 // NEW session requires Login JWT  from auth server (customer auth or RUA)
 RezolveSDK.getInstance(API_KEY, ENVIRONMENT).createSession( accessToken, entityId, partnerId, new RezolveInterface() {
 
 	@Override
 	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
+        // set device_id so it can be passed in x-header
+        RezolveSDK.setDeviceIdHeader(deviceId);
+    
 		// use created session to access managers.  Example...
 		rezolveSession.getAddressbookManager().get(...);
 	}

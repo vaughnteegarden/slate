@@ -1,5 +1,3 @@
-
-
 ## Product Scan, Instant Buy flow
 
 

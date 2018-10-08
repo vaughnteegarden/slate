@@ -17,21 +17,10 @@ includes:
 - howtocartbuy
 - howtocategory
 - howtomall
+- howtotriggermanager
+- howtobackgroundlistening
 - errorhandling
 - moduleref
-- addressbookmanager
-- authenticationmanager
-- checkoutmanagerv2
-- checkoutmanager
-- favoritemanager
-- merchantmanager
-- phonebookmanager
-- productmanager
-- profilemanager
-- scanmanager
-- useractivitymanager
-- walletmanager
-- apicheck
 - changelog
 
 search: true
