@@ -536,28 +536,8 @@ You can switch between IOS and Android by clicking the tabs above.
 </ul>
 
 <p>The primary task in implementing user management is to create the JWT that will allow you to bind a Partner user to a Rezolve profile. Through a server-to-server transaction, you can create a new Rezolve User Profile, and get back an identifying <code>entityId</code> that you should persist in your authentication database, as an addition to your user record. This <code>entityId</code> will then be used by the Rezolve SDK to identify the user to the Rezolve Server. </p>
-<h2 id='session-management-introduction'>Session Management Introduction</h2>
-<p>Once a Rezolve Profile has been established, and an <code>entityId</code> secured, there is no Login per-se in the Rezolve system. Whether or not the SDK can talk to Rezolve Services depends on supplying a valid JWT to the SDK from your auth system. If the user-specific JWT you supply is valid, you are able to create a session, and access the SDK capabilities. </p>
 
-<p>Expiring a session is as simple as expiring the JWT token. So it is up to the partner&#39;s auth server to either renew the JWT when it expires, or to set an expiration when the partner consumer logs out. </p>
-
-<p>More on User Management and Session Management can be sound in the sections on JWT Authorization and RUA.  Look at whichever section is relevant to your situation.</p>
-<h2 id='consumer-profile-management'>Consumer Profile Management</h2>
-<p>Once you have established a session, you have access to the consumer&#39;s records. These include:</p>
-
-<ul>
-<li>Consumer Profile - Via the <code>ConsumerProfileManager</code>. Name, email, and device profile (phone info) for the consumer</li>
-<li>Address Book - Via the <code>AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes.</li>
-<li>Phone Book - Via the <code>PhonebookManager</code>. A collection of phone numbers associated with the profile. </li>
-<li>Favorites - Via the <code>FavouriteManager</code>. Reserved for future functionality, &quot;Favorites&quot; are collections of unique devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.</li>
-<li>Wallet - Via the <code>WalletManager</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</li>
-</ul>
-
-<p>There are no specific flows to consider when managing the customer profile and associated records.</p>
-
-<p>AddressbookManager, FavouriteManager, PhonebookManager and WalletManager support the following CRUD operations: <code>create</code>, <code>update</code>, <code>delete</code>, <code>getAll</code>, <code>get</code>.</p>
-
-<p>ProfileManager supports only <code>update</code> and <code>get</code>.</p>
+<p>A valid JWT is required to initialize the SDK and start a sesssion. </p>
 
           <h2 id='jwt-authentication'>JWT Authentication</h2>
 <p><strong>Topics</strong></p>
@@ -1127,6 +1107,23 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre>
 <p>If you receive this response, call your JWT renewal endpoint. </p>
 
+          <h2 id='consumer-profile-management'>Consumer Profile Management</h2>
+<p>Once you have established a session, you have access to the consumer&#39;s records. These include:</p>
+
+<ul>
+<li>Consumer Profile - Via the <code>ConsumerProfileManager</code>. Name, email, and device profile (phone info) for the consumer</li>
+<li>Address Book - Via the <code>AddressbookManager</code>. A collection of postal addresses, to be used for ship-to and bill-to purposes.</li>
+<li>Phone Book - Via the <code>PhonebookManager</code>. A collection of phone numbers associated with the profile. </li>
+<li>Favorites - Via the <code>FavouriteManager</code>. Reserved for future functionality, &quot;Favorites&quot; are collections of unique devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.</li>
+<li>Wallet - Via the <code>WalletManager</code>. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.</li>
+</ul>
+
+<p>There are no specific flows to consider when managing the customer profile and associated records.</p>
+
+<p>AddressbookManager, FavouriteManager, PhonebookManager and WalletManager support the following CRUD operations: <code>create</code>, <code>update</code>, <code>delete</code>, <code>getAll</code>, <code>get</code>.</p>
+
+<p>ProfileManager supports only <code>update</code> and <code>get</code>.</p>
+
           <h2 id='product-scan-instant-buy-flow'>Product Scan, Instant Buy flow</h2>
 <p><img src="images/wsd-jwt-product-buy-flow.png" style="margin:6px 0;"><br/>[ <a href="images/JWT-shoppable-ad-flow-single-buy.png" target="_blank">View full size</a> ]</p>
 
@@ -1222,98 +1219,85 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 </code></pre>
 <p>First, initialize <code>scanManager</code>, and enable the scan screen using <code>session.startVideoScan()</code>, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts <code>merchantId</code>, <code>catalogId</code>, and <code>productId</code> from the image, automatically calling <code>getProduct</code>. The scanManager returns a <code>product</code> object.</p>
-<h4 id='2-create-an-order-and-get-an-order-total'>2. Create an order and get an order total</h4><pre class="highlight swift tab-swift"><code><span class="kd">func</span> <span class="nf">onProductResult</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="kt">Product</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="p">{</span>
+<h4 id='2-get-shipping-and-payment-options-for-the-product'>2. Get shipping and payment options for the product</h4><pre class="highlight swift tab-swift"><code>    <span class="c1">// Fetches PaymentOption for Product</span>
+    <span class="n">rezolveSession</span><span class="o">.</span><span class="nf">getProductOptions</span><span class="p">(</span>
+        <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
+        <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
+        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">paymentOption</span><span class="p">:</span> <span class="kt">PaymentOption</span><span class="p">)</span> <span class="o">-&gt;</span>
 
-    <span class="n">session</span><span class="o">.</span><span class="n">addressbookManager</span><span class="o">.</span><span class="nf">get</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="s">"1"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">remoteAddress</span><span class="p">:</span> <span class="kt">Address</span><span class="p">)</span> <span class="k">in</span>
+        <span class="k">let</span> <span class="nv">paymentMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedPaymentMethods</span>
+        <span class="k">let</span> <span class="nv">shippings</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span>
 
-      <span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="nf">createCheckoutProductWithVariant</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="n">product</span><span class="p">)</span>
+    <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">httpResponse</span> <span class="k">in</span>
+        <span class="c1">// Error handling</span>
+    <span class="p">})</span>
 
-      <span class="c1">// Fetches PaymentOptions for Product</span>
-        <span class="n">rezolveSession</span><span class="o">.</span><span class="n">paymentOptionManager</span><span class="o">.</span><span class="nf">getProductOptions</span><span class="p">(</span>
-            <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
-            <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
-            <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">paymentOption</span><span class="p">:</span> <span class="kt">PaymentOption</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="c1">/// for this example we assume the user chooses the first option. In reality, display all options to the user, and let them choose.</span>
+    <span class="k">let</span> <span class="nv">supportedPaymentMethod</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedPaymentMethods</span><span class="o">.</span><span class="n">first</span><span class="o">!</span>
+    <span class="k">let</span> <span class="nv">shippingMethod</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span><span class="o">.</span><span class="n">first</span><span class="o">!</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PaymentOptionsMgr</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PaymentOptionInterface</span> <span class="o">{</span>
 
-            <span class="k">let</span> <span class="nv">paymentMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedPaymentMethods</span>
-            <span class="k">let</span> <span class="nv">shippings</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
 
-        <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">httpResponse</span> <span class="k">in</span>
-            <span class="c1">// Error handling</span>
-        <span class="p">})</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">PaymentOptionManager</span> <span class="n">pom</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPaymentOptionManager</span><span class="o">();</span>
 
-        <span class="c1">/// Creates product checkoutBundle</span>
-        <span class="k">let</span> <span class="nv">productBundleV2</span> <span class="o">=</span> <span class="nf">createProductCheckoutBundleV2</span><span class="p">(</span>
-            <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
-            <span class="nv">deliveryMethod</span><span class="p">:</span> <span class="n">deliveryMethod</span><span class="p">,</span>
-            <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
-            <span class="nv">optionId</span><span class="p">:</span> <span class="n">optionId</span><span class="p">,</span>
-            <span class="nv">paymentMethod</span><span class="p">:</span> <span class="n">paymentMethod</span><span class="p">,</span>
-            <span class="nv">phoneId</span><span class="p">:</span> <span class="n">phoneId</span>
-        <span class="p">)</span>
+        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"12345"</span><span class="o">;</span>
+        <span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CheckoutProduct</span><span class="o">();</span>
 
-        <span class="c1">/// Create a payment request</span>
-        <span class="k">let</span> <span class="nv">paymentCard</span> <span class="o">=</span> <span class="c1">// RezolveSDK.PaymentCard</span>
-        <span class="k">let</span> <span class="nv">cardCVV</span> <span class="o">=</span> <span class="s">"000"</span> <span class="c1">// Card CVV</span>
-        <span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span>
-            <span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> 
-            <span class="nv">cvv</span><span class="p">:</span> <span class="n">cardCVV</span>
-        <span class="p">)</span>
+        <span class="c1">// get PaymentOptions for a product</span>
+        <span class="n">pom</span><span class="o">.</span><span class="na">getProductOptions</span><span class="o">(</span><span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">merchantId</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
-        <span class="c1">/// Call Checkout method to get an Order</span>
-        <span class="n">rezolveSession</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">checkout</span><span class="p">(</span>
-            <span class="nv">bundle</span><span class="p">:</span> <span class="n">productBundleV2</span><span class="p">,</span> 
-            <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">order</span> <span class="k">in</span> 
-                <span class="c1">// Order handling</span>
-            <span class="p">},</span>
-            <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> 
-                <span class="c1">// Error handling</span>
-        <span class="p">})</span>
-
-      <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="nd">@Override</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductResult</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// get product info</span>
-    <span class="n">String</span> <span class="n">product_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-    <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
-    <span class="n">String</span> <span class="n">subtitle</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getSubtitle</span><span class="o">();</span>
-    <span class="c1">// ... etc</span>
+    <span class="o">}</span>
 
 
-    <span class="c1">// create a CheckoutProduct object with the product id , and set the quantity</span>
-    <span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CheckoutProduct</span><span class="o">();</span>
-    <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">product_id</span><span class="o">));</span>
-    <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setQty</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductOptionsSuccess</span><span class="o">(</span><span class="n">PaymentOption</span> <span class="n">paymentOption</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">CheckoutProduct</span><span class="o">&gt;</span> <span class="n">checkoutProducts</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getCheckoutProducts</span><span class="o">();</span>
+        <span class="n">JSONObject</span> <span class="n">paymentOptionOptions</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getOptions</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Shipping</span><span class="o">&gt;</span> <span class="n">supportedDeliveryMethods</span> <span class="o">=</span>  <span class="n">paymentOption</span><span class="o">.</span><span class="na">getSupportedDeliveryMethods</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">SupportedPaymentMethod</span><span class="o">&gt;</span> <span class="n">supportedPaymentMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getSupportedPaymentMethods</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
 
+        <span class="k">for</span> <span class="o">(</span><span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">:</span> <span class="n">checkoutProducts</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// breakdown checkoutProduct object</span>
+            <span class="kt">float</span> <span class="n">qty</span> <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getQty</span><span class="o">();</span>
+            <span class="n">Placement</span> <span class="n">productPlacement</span> <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getProductPlacement</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">cpId</span>  <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">ConfigurableOption</span><span class="o">&gt;</span> <span class="n">configurableOptions</span> <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getConfigurableOptions</span><span class="o">();</span>
 
-    <span class="c1">// get a CheckoutManager</span>
-    <span class="kd">final</span> <span class="n">CheckoutManager</span> <span class="n">checkout</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getCheckoutManager</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">placementId</span> <span class="o">=</span> <span class="n">productPlacement</span><span class="o">.</span><span class="na">getPlacementId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">adId</span> <span class="o">=</span> <span class="n">productPlacement</span><span class="o">.</span><span class="na">getAdId</span><span class="o">();</span>
 
-    <span class="c1">// create a product checkout bundle for standard home delivery</span>
-    <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use real merchant id</span>
-    <span class="n">String</span> <span class="n">addressId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use real consumer address id</span>
-    <span class="n">String</span> <span class="n">phonebookId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use real consumer phonebook id</span>
-    <span class="n">CheckoutBundle</span> <span class="n">checkoutBundle</span> <span class="o">=</span> <span class="n">CheckoutBundle</span><span class="o">.</span><span class="na">createProductCheckoutBundle</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">addressId</span><span class="o">,</span> <span class="n">checkoutProduct</span><span class="o">);</span>
-
-    <span class="c1">// call CheckoutCart to get an Order object with totals</span>
-    <span class="n">checkout</span><span class="o">.</span><span class="na">checkoutProduct</span><span class="o">(</span><span class="n">checkoutBundle</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCheckoutProductSuccess</span><span class="o">(</span><span class="n">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// extract order details</span>
-            <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">breakdowns</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
-            <span class="kt">float</span> <span class="n">finalPrice</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
-
-            <span class="c1">// extract price breakdowns</span>
-            <span class="k">for</span> <span class="o">(</span><span class="n">PriceBreakdown</span> <span class="n">priceBreakdown</span> <span class="o">:</span> <span class="n">breakdowns</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="kt">float</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">priceBreakdown</span><span class="o">.</span><span class="na">getAmount</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">priceBreakdown</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">ConfigurableOption</span> <span class="n">configurableOption</span> <span class="o">:</span> <span class="n">configurableOptions</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">configurableOption</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">code</span> <span class="o">=</span> <span class="n">configurableOption</span><span class="o">.</span><span class="na">getCode</span><span class="o">();</span>
             <span class="o">}</span>
         <span class="o">}</span>
-    <span class="o">});</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">Shipping</span> <span class="n">shipping</span> <span class="o">:</span> <span class="n">supportedDeliveryMethods</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ShippingDetails</span> <span class="n">shippingDetails</span> <span class="o">=</span> <span class="n">shipping</span><span class="o">.</span><span class="na">getShippingDetails</span><span class="o">();</span>
+            <span class="n">ShippingMethod</span> <span class="n">shippingMethod</span> <span class="o">=</span> <span class="n">shipping</span><span class="o">.</span><span class="na">getShippingMethod</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="n">SupportedPaymentMethod</span> <span class="n">supportedPaymentMethod</span> <span class="o">:</span> <span class="n">supportedPaymentMethods</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="n">PaymentMethodData</span> <span class="n">paymentMethodData</span> <span class="o">=</span> <span class="n">supportedPaymentMethod</span><span class="o">.</span><span class="na">getPaymentMethodData</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">spmType</span> <span class="o">=</span> <span class="n">supportedPaymentMethod</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+            <span class="n">JSONObject</span> <span class="n">originalDataJson</span> <span class="o">=</span> <span class="n">supportedPaymentMethod</span><span class="o">.</span><span class="na">getOriginalDataJson</span><span class="o">();</span>
+
+            <span class="n">JSONObject</span> <span class="n">requirements</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getRequirements</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">supportedDelivery</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getSupportedDelivery</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">supportedNetworks</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getSupportedNetworks</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">supportedTypes</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getSupportedTypes</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>Once you have product information, create a CheckoutProduct object. Then call the SDK <code>CheckoutManager.checkoutProduct</code> method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.</p>
+<p>Call <code>PaymentOptionManager</code> to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. </p>
 <h4 id='3-show-payment-card-choices'>3. Show payment card choices</h4><pre class="highlight swift tab-swift"><code>
   <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
       <span class="c1">// handle list of cards here</span>
@@ -1333,41 +1317,130 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>Use <code>walletManager.getAll</code> to list the available card choices. If the consumer wishes to buy, they will select a payment card to use, and provide confirmation of ordering intent.</p>
 
 <p>We recommend using a &quot;slide to buy&quot; button to confirm purchase intent, while preserving the maximum ease of use.</p>
-<h4 id='4-submit-payment-for-order'>4. Submit payment for order</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">PARIS_LOCATION</span> <span class="o">=</span> <span class="kt">RezolveLocation</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">point</span><span class="p">,</span> <span class="nv">coordinates</span><span class="p">:</span> <span class="p">(</span><span class="nv">latitude</span><span class="p">:</span> <span class="mf">48.8736645</span><span class="p">,</span> <span class="nv">longitude</span><span class="p">:</span> <span class="mf">2.2910793</span><span class="p">))</span>
+<h4 id='4-create-a-checkout-bundle-checkout-the-produc-to-get-totals-and-create-an-order'>4. Create a checkout bundle, checkout the produc to get totals, and create an order</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">productBundleV2</span> <span class="o">=</span> <span class="nf">createProductCheckoutBundleV2</span><span class="p">(</span>
+    <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
+    <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">),</span> <span class="c1">// address id is blank because this is only needed for Click and Collect</span>
+    <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
+    <span class="nv">optionId</span><span class="p">:</span> <span class="n">optionId</span><span class="p">,</span>
+    <span class="nv">paymentMethod</span><span class="p">:</span> <span class="n">paymentMethod</span><span class="p">,</span>
+    <span class="nv">phoneId</span><span class="p">:</span> <span class="n">phoneId</span>
+<span class="p">)</span>
 
-<span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">remoteCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="kt">CVV</span><span class="p">)</span>
+<span class="n">rezolveSession</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">checkout</span><span class="p">(</span>
+    <span class="nv">bundle</span><span class="p">:</span> <span class="n">productBundleV2</span><span class="p">,</span> 
+    <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">order</span> <span class="k">in</span> 
+        <span class="c1">// Order handling</span>
+    <span class="p">},</span>
+    <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> 
+        <span class="c1">// Error handling</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductResult</span><span class="o">(</span><span class="n">Product</span> <span class="n">product</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// get product info</span>
+    <span class="n">String</span> <span class="n">product_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">title</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getTitle</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">subtitle</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">getSubtitle</span><span class="o">();</span>
+    <span class="c1">// ... etc</span>
 
-<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">PARIS_LOCATION</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
+    <span class="c1">// create a CheckoutProduct object with the product id , and set the quantity</span>
+    <span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CheckoutProduct</span><span class="o">();</span>
+    <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">product_id</span><span class="o">));</span>
+    <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">setQty</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
 
-<span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create a paymentRequest object, and then use this with the checkoutBundle object and rezolveLocation object to purchase the item.</span>
+   <span class="c1">// use info from productPaymentOption to populate Shipping and PaymentMethod choices...</span>
+    <span class="n">String</span> <span class="n">productPaymentOptionId</span> <span class="o">=</span> <span class="n">productPaymentOption</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">SupportedPaymentMethod</span><span class="o">&gt;</span> <span class="n">supportedPaymentMethods</span> <span class="o">=</span> <span class="n">productPaymentOption</span><span class="o">.</span><span class="na">getSupportedPaymentMethods</span><span class="o">();</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Shipping</span><span class="o">&gt;</span> <span class="n">deliveryMethods</span> <span class="o">=</span> <span class="n">productPaymentOption</span><span class="o">.</span><span class="na">getSupportedDeliveryMethods</span><span class="o">();</span>
+    <span class="n">SupportedPaymentMethod</span> <span class="n">supportedPaymentMethod</span> <span class="o">=</span> <span class="n">supportedPaymentMethods</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// in reality customer chooses an option here</span>
+    <span class="n">Shipping</span> <span class="n">deliveryMethod</span> <span class="o">=</span> <span class="n">deliveryMethods</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// in reality customer chooses an option here</span>
+    <span class="n">String</span> <span class="n">phonebookId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use real consumer phonebook id</span>
+    <span class="c1">// create the delivery unit</span>
+    <span class="n">DeliveryUnit</span> <span class="n">deliveryUnit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeliveryUnit</span><span class="o">(</span><span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span> 
+
+    <span class="c1">// create a product checkout bundle           </span>
+    <span class="n">CheckoutBundleV2</span><span class="o">.</span><span class="na">createProductCheckoutBundleV2</span><span class="o">(</span><span class="n">merchantId</span><span class="o">,</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">phoneId</span><span class="o">,</span> <span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">deliveryUnit</span><span class="o">);</span>
+
+    <span class="c1">// call the CheckoutProductOption method to get an order object and totals</span>
+    <span class="n">checkout</span><span class="o">.</span><span class="na">checkoutProductOption</span><span class="o">(</span><span class="n">productCheckoutBundleV2</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutV2Callback</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCheckoutProductSuccess</span><span class="o">(</span><span class="n">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// get pricing breakdown and final price</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">pricingBreakdown</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
+            <span class="kt">float</span> <span class="n">finalPrice</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getFinalPrice</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+
+            <span class="c1">// create a paymentRequest object, and then use this with the checkoutProduct object to purchase the item.</span>
+            <span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// use consumer's chosen payment card</span>
+            <span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use actual cvv</span>
+            <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">checkout</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">paymentCard</span><span class="o">,</span><span class="n">cvv</span><span class="o">);</span>
+
+            <span class="c1">// buy a single product</span>
+            <span class="n">checkout</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">productCheckoutBundleV2</span><span class="o">,</span> <span class="n">orderId</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutV2Callback</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductOptionBuySuccess</span><span class="o">(</span><span class="n">OrderSummary</span> <span class="n">orderSummary</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kd">super</span><span class="o">.</span><span class="na">onProductOptionBuySuccess</span><span class="o">(</span><span class="n">orderSummary</span><span class="o">);</span>
+                    <span class="c1">//display order summary</span>
+                    <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+                    <span class="n">JSONObject</span> <span class="n">orderData</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getData</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</code></pre>
+<p>Once you have product information, create a CheckoutProduct object. Then call the SDK <code>CheckoutManager.checkoutProduct</code> method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.</p>
+<h4 id='5-submit-payment-for-order'>5. Submit payment for order</h4><pre class="highlight swift tab-swift"><code>    <span class="k">let</span> <span class="nv">paymentCard</span> <span class="o">=</span> <span class="c1">// RezolveSDK.PaymentCard</span>
+
+    <span class="k">let</span> <span class="nv">cardCVV</span> <span class="o">=</span> <span class="s">"000"</span> <span class="c1">// Card CVV</span>
+
+    <span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span>
+        <span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> 
+        <span class="nv">cvv</span><span class="p">:</span> <span class="n">cardCVV</span>
+    <span class="p">)</span>
+
+    <span class="n">rezolveSession</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">buy</span><span class="p">(</span>
+        <span class="nv">bundle</span><span class="p">:</span> <span class="n">productBundleV2</span><span class="p">,</span>
+        <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span>
+        <span class="nv">checkoutId</span><span class="p">:</span> <span class="n">checkoutId</span><span class="p">,</span>
+        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">checkoutOrder</span> <span class="k">in</span>
+            <span class="c1">// CheckoutOrder handling</span>
+        <span class="p">},</span>
+        <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> 
+            <span class="c1">// Error handling</span>
+    <span class="p">})</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create a paymentRequest object, and then use this with the checkoutBundle object </span>
 
 <span class="c1">// create paymentRequest object</span>
 <span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// use consumer's chosen payment card from step 3</span>
 <span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use actual cvv</span>
 <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">checkout</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">paymentCard</span><span class="o">,</span><span class="n">cvv</span><span class="o">);</span>
 
-<span class="c1">// add consumer's location</span>
-<span class="n">RezolveLocation</span> <span class="n">rezolveLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveLocation</span><span class="o">();</span>
-<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="mf">48.8736645</span><span class="o">);</span>
-<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(</span><span class="mf">2.2910793</span><span class="o">);</span>
 
 <span class="c1">// buy a single product</span>
-<span class="n">checkout</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">checkoutBundle</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span> <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductOrderPlaced</span><span class="o">(</span><span class="n">String</span> <span class="n">merchantId</span><span class="o">,</span> <span class="n">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// show order confirmation</span>
-    <span class="o">}</span>
-<span class="o">});</span>
+<span class="n">checkoutManagerV2</span><span class="o">.</span><span class="na">buyProduct</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">productCheckoutBundleV2</span><span class="o">,</span> <span class="n">orderId</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductOptionBuySuccess</span><span class="o">(</span><span class="n">OrderSummary</span> <span class="n">orderSummary</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// skip this call, ContactInformation entity is not public</span>
+    <span class="c1">// Merchant.ContactInformation contactInformation = orderSummary.getContactInformation();</span>
+    <span class="n">JSONObject</span> <span class="n">orderData</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getData</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">partnerId</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getPartnerId</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">partnerName</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getPartnerName</span><span class="o">();</span>
+<span class="o">}</span>
+
 </code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code>createPaymentRequest</code> method. This creates the encrypted <code>paymentRequest</code> object needed for checkout.</p>
 
-<p>Pass a <code>checkoutBundle</code> object, <code>phonebookId</code> string, a <code>rezolveLocation</code> object, the <code>paymentRequest</code> object, and an interface or callback to the <code>buyProduct</code> method. The success response will be the <code>order id</code> as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
+<p>In this tutorial, we assume the user chose credit card payment. Note that <code>paymentRequest</code> is actually optional here, and can be null. To determine if it&#39;s needed, please check selected <code>SupportedPaymentMethod</code>&#39;s type.</p>
+
+<p>Pass a <code>paymentRequest</code> object, checkoutBundleV2<code>object, the</code>orderId<code>, and an interface or callback to the</code>buyProduct<code>method. The success response will an</code>OrderSummary` object. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
 
 <p>When the method returns successfully, it will automatically initiate the signOrderUpdate method.</p>
-<h4 id='5-wait-for-signorderupdate-to-return-a-final-order-status'>5. Wait for signOrderUpdate to return a final order status.</h4><pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+<h4 id='6-wait-for-signorderupdate-to-return-a-final-order-status'>6. Wait for signOrderUpdate to return a final order status.</h4><pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
-<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span>
+<span class="n">session</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span>
 
     <span class="nf">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
 
@@ -1490,10 +1563,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 </code></pre>
 <p>First, initialize <code>scanManager</code>, and enable the scan screen using <code>session.startVideo()</code>, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts <code>merchantId</code>, <code>catalogId</code>, and <code>productId</code> from the image, automatically calling <code>getProduct</code>. The scanManager returns a <code>product</code> object.</p>
-<h4 id='2-add-the-product-to-the-cart-and-create-an-order-with-an-order-total'>2. Add the product to the cart, and create an order with an order total</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="nf">createCheckoutProductWithVariant</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="n">product</span><span class="p">)</span>
+<h4 id='2-add-product-to-the-cart'>2. Add Product to the Cart</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">checkoutProduct</span> <span class="o">=</span> <span class="nf">createCheckoutProductWithVariant</span><span class="p">(</span><span class="nv">product</span><span class="p">:</span> <span class="n">product</span><span class="p">)</span>
 
 <span class="n">session</span><span class="o">.</span><span class="n">cartManager</span><span class="o">.</span><span class="nf">createCartWithProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">product</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">cartDetails</span> <span class="k">in</span>
-
 
 <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// add product to cart</span>
@@ -1515,19 +1587,101 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
                 <span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="n">cartDetails</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
                 <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">//use actual merchant id</span>
                 <span class="n">String</span> <span class="n">addressId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>  <span class="c1">//use actual address id</span>
-
-                <span class="c1">// create checkoutBundle</span>
-                <span class="n">CheckoutBundle</span> <span class="n">checkoutBundle</span> <span class="o">=</span> <span class="n">CheckoutBundle</span><span class="o">.</span><span class="na">createCartCheckoutBundle</span> <span class="o">(</span> <span class="n">cartId</span><span class="o">,</span>  <span class="n">merchantId</span><span class="o">,</span> <span class="n">addressId</span> <span class="o">);</span>
-
-                <span class="c1">//  get order id and totals for a cart</span>
-                <span class="n">checkout</span><span class="o">.</span><span class="na">checkoutCart</span><span class="o">(</span><span class="n">checkoutBundle</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">});</span>
     <span class="o">}</span>
 <span class="o">});</span>
+</code></pre><h4 id='3-get-shipping-and-payment-options-for-the-cart'>3. Get shipping and payment options for the cart</h4><pre class="highlight swift tab-swift"><code>    <span class="c1">// Fetch PaymentOption for cart</span>
+    <span class="n">rezolveSession</span><span class="o">.</span><span class="n">paymentOptionManager</span><span class="o">.</span><span class="nf">getCartOptions</span><span class="p">(</span>
+        <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
+        <span class="nv">cartId</span><span class="p">:</span> <span class="n">cartId</span><span class="p">,</span>
+        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">paymentOptionList</span><span class="p">:</span> <span class="p">[</span><span class="kt">PaymentOption</span><span class="p">])</span> <span class="k">in</span>
+
+            <span class="c1">// Handle [PaymentOption]</span>
+
+    <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">httpResponse</span> <span class="k">in</span>
+        <span class="c1">// Error handling code</span>
+    <span class="p">})</span>
+
+    <span class="c1">/// for this example we assume the user chooses the first option. In reality, display all options to the user, and let them choose.</span>
+    <span class="k">let</span> <span class="nv">supportedPaymentMethod</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedPaymentMethods</span><span class="o">.</span><span class="n">first</span><span class="o">!</span>
+    <span class="k">let</span> <span class="nv">shippingMethod</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span><span class="o">.</span><span class="n">first</span><span class="o">!</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PaymentOptionsMgr</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PaymentOptionInterface</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">PaymentOptionManager</span> <span class="n">pom</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPaymentOptionManager</span><span class="o">();</span>
+
+        <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"12345"</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="s">"12345"</span><span class="o">;</span>
+
+        <span class="c1">// get PaymentOptions for cart</span>
+        <span class="n">pom</span><span class="o">.</span><span class="na">getCartOptions</span><span class="o">(</span> <span class="n">merchantId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCartOptionsSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">PaymentOption</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">PaymentOption</span> <span class="n">paymentOption</span> <span class="o">:</span> <span class="n">list</span> <span class="o">){</span>
+            <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">SupportedPaymentMethod</span><span class="o">&gt;</span> <span class="n">supportedPaymentMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getSupportedPaymentMethods</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">Shipping</span><span class="o">&gt;</span> <span class="n">supportedDeliveryMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getSupportedDeliveryMethods</span><span class="o">();</span>
+            <span class="n">JSONObject</span> <span class="n">options</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getOptions</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">CheckoutProduct</span><span class="o">&gt;</span> <span class="n">checkoutProducts</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="na">getCheckoutProducts</span><span class="o">();</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="n">SupportedPaymentMethod</span> <span class="n">supportedPaymentMethod</span> <span class="o">:</span> <span class="n">supportedPaymentMethods</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="n">PaymentMethodData</span> <span class="n">paymentMethodData</span> <span class="o">=</span> <span class="n">supportedPaymentMethod</span><span class="o">.</span><span class="na">getPaymentMethodData</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">spmType</span> <span class="o">=</span> <span class="n">supportedPaymentMethod</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+                <span class="n">JSONObject</span> <span class="n">originalDataJson</span> <span class="o">=</span> <span class="n">supportedPaymentMethod</span><span class="o">.</span><span class="na">getOriginalDataJson</span><span class="o">();</span>
+
+                <span class="n">JSONObject</span> <span class="n">requirements</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getRequirements</span><span class="o">();</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">supportedDelivery</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getSupportedDelivery</span><span class="o">();</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">supportedNetworks</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getSupportedNetworks</span><span class="o">();</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">supportedTypes</span> <span class="o">=</span> <span class="n">paymentMethodData</span><span class="o">.</span><span class="na">getSupportedTypes</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="n">Shipping</span> <span class="n">shipping</span> <span class="o">:</span> <span class="n">supportedDeliveryMethods</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ShippingDetails</span> <span class="n">shippingDetails</span> <span class="o">=</span> <span class="n">shipping</span><span class="o">.</span><span class="na">getShippingDetails</span><span class="o">();</span>
+                <span class="n">ShippingMethod</span> <span class="n">shippingMethod</span> <span class="o">=</span> <span class="n">shipping</span><span class="o">.</span><span class="na">getShippingMethod</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">:</span> <span class="n">checkoutProducts</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// breakdown checkoutProduct object</span>
+                <span class="kt">float</span> <span class="n">qty</span> <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getQty</span><span class="o">();</span>
+                <span class="n">Placement</span> <span class="n">productPlacement</span> <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getProductPlacement</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">cpId</span>  <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">ConfigurableOption</span><span class="o">&gt;</span> <span class="n">configurableOptions</span> <span class="o">=</span> <span class="n">checkoutProduct</span><span class="o">.</span><span class="na">getConfigurableOptions</span><span class="o">();</span>
+
+                <span class="n">String</span> <span class="n">placementId</span> <span class="o">=</span> <span class="n">productPlacement</span><span class="o">.</span><span class="na">getPlacementId</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">adId</span> <span class="o">=</span> <span class="n">productPlacement</span><span class="o">.</span><span class="na">getAdId</span><span class="o">();</span>
+
+                <span class="k">for</span> <span class="o">(</span><span class="n">ConfigurableOption</span> <span class="n">configurableOption</span> <span class="o">:</span> <span class="n">configurableOptions</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">configurableOption</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                    <span class="n">String</span> <span class="n">code</span> <span class="o">=</span> <span class="n">configurableOption</span><span class="o">.</span><span class="na">getCode</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+<span class="c1">// Assuming the user picks traditional shipping. </span>
+<span class="c1">// Click and Collect options are discussed in a separate tutorial.</span>
+<span class="c1">// Create DeliveryUnit as follows:  </span>
+
+
 </code></pre>
-<p>Once you have product information, create a CheckoutProduct object.  Then call the SDK <code>CheckoutManager.checkoutCart</code> method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.</p>
-<h4 id='3-show-payment-card-choices'>3. Show payment card choices</h4><pre class="highlight swift tab-swift"><code>  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
+<p>Call <code>PaymentOptionManager</code> to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. </p>
+<h4 id='4-show-payment-card-choices'>4. Show payment card choices</h4><pre class="highlight swift tab-swift"><code>  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
       <span class="c1">// handle list of cards here</span>
   <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="n">rezolveSession</span><span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">WalletCallback</span><span class="o">()</span> <span class="o">{</span>
@@ -1542,42 +1696,93 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>Use <code>walletManager.getAll</code> to list the available card choices. If the consumer wishes to buy, they will select a payment card to use, and provide confirmation of ordering intent.</p>
 
 <p>We recommend using a &quot;slide to buy&quot; button to confirm purchase intent, while preserving the maximum ease of use.</p>
-<h4 id='4-submit-payment-for-order'>4. Submit payment for order</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">PARIS_LOCATION</span> <span class="o">=</span> <span class="kt">RezolveLocation</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">point</span><span class="p">,</span> <span class="nv">coordinates</span><span class="p">:</span> <span class="p">(</span><span class="nv">latitude</span><span class="p">:</span> <span class="mf">48.8736645</span><span class="p">,</span> <span class="nv">longitude</span><span class="p">:</span> <span class="mf">2.2910793</span><span class="p">))</span>
+<h4 id='5-create-a-checkout-bundle-checkout-the-cart-to-get-totals-and-create-an-order'>5. Create a checkout bundle, checkout the cart to get totals, and create an order</h4><pre class="highlight swift tab-swift"><code>    <span class="k">let</span> <span class="nv">cartCheckoutBundleV2</span> <span class="o">=</span> <span class="nf">createCartCheckoutBundleV2</span><span class="p">(</span>
+        <span class="nv">cartId</span><span class="p">:</span> <span class="n">cartId</span><span class="p">,</span>
+        <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">),</span> <span class="c1">// address id is blank because this is only needed for Click and Collect</span>
+        <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
+        <span class="nv">optionId</span><span class="p">:</span> <span class="n">optionId</span><span class="p">,</span>
+        <span class="nv">paymentMethod</span><span class="p">:</span> <span class="n">paymentMethod</span><span class="p">,</span>
+        <span class="nv">phoneId</span><span class="p">:</span> <span class="n">phoneId</span>
+    <span class="p">)</span>
 
-<span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">createPaymentRequest</span><span class="p">(</span><span class="nv">paymentCard</span><span class="p">:</span> <span class="n">remoteCard</span><span class="p">,</span> <span class="nv">cvv</span><span class="p">:</span> <span class="kt">CVV</span><span class="p">)</span>
+    <span class="n">rezolveSession</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">checkout</span><span class="p">(</span>
+        <span class="nv">bundle</span><span class="p">:</span> <span class="n">cartCheckoutBundleV2</span><span class="p">,</span> 
+        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Order</span> <span class="k">in</span> 
+            <span class="c1">// Order handling</span>
+        <span class="p">},</span>
+        <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> 
+            <span class="c1">// Error handling</span>
+    <span class="p">})</span>
 
-<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyProduct</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">PARIS_LOCATION</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create a Cart Checkout Bundle</span>
+<span class="n">String</span> <span class="n">phonebookId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use real consumer phonebook id</span>
+<span class="n">String</span> <span class="n">optionId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// get this from productPaymentOption.getId();</span>
+<span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+<span class="n">SupportedPaymentMethod</span> <span class="n">supportedPaymentMethod</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SupportedPaymentMethod</span><span class="o">();</span> <span class="c1">//get this from productPaymentOption.getSupportedPaymentMethods()</span>
+<span class="c1">// create the delivery unit</span>
+<span class="n">DeliveryUnit</span> <span class="n">deliveryUnit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeliveryUnit</span><span class="o">(</span><span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span> 
+<span class="n">CheckoutBundleV2</span> <span class="n">checkoutBundleV2</span> <span class="o">=</span> <span class="n">CheckoutBundleV2</span><span class="o">.</span><span class="na">createCartCheckoutBundleV2</span><span class="o">(</span> <span class="n">merchantId</span><span class="o">,</span> <span class="n">optionId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span> <span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">deliveryUnit</span><span class="o">);</span>
 
-
-<span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">// create a paymentRequest object, and then use this with the checkoutProduct object and rezolveLocation object to purchase the item.</span>
-<span class="c1">// create paymentRequest object</span>
-<span class="n">PaymentCard</span> <span class="n">paymentCard2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// use consumer's chosen payment card from step 3</span>
-<span class="n">String</span> <span class="n">cvv2</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use actual cvv</span>
-<span class="n">PaymentRequest</span> <span class="n">paymentRequest2</span> <span class="o">=</span> <span class="n">checkout</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">paymentCard</span><span class="o">,</span><span class="n">cvv</span><span class="o">);</span>
-
-<span class="c1">// add consumer's location</span>
-<span class="n">RezolveLocation</span> <span class="n">rezolveLocation2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveLocation</span><span class="o">();</span>
-<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="mf">48.8736645</span><span class="o">);</span>
-<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(</span><span class="mf">2.2910793</span><span class="o">);</span>
-
-<span class="c1">// buy the cart</span>
-<span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// either buy current cart, or use getCarts to choose a cart</span>
-
-<span class="n">checkout</span><span class="o">.</span><span class="na">buyCart</span><span class="o">(</span> <span class="n">checkoutBundle</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span> <span class="n">rezolveLocation</span><span class="o">,</span> <span class="n">paymentRequest</span><span class="o">,</span>  <span class="k">new</span> <span class="n">CheckoutCallback</span><span class="o">()</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCartOrderPlaced</span><span class="o">(</span><span class="n">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// display order confirmation</span>
+<span class="c1">// call CheckoutCartOption method to get an order object and totals</span>
+<span class="n">checkout</span><span class="o">.</span><span class="na">checkoutCartOption</span><span class="o">(</span><span class="n">cartCheckoutBundleV2</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutV2Callback</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCartOptionCheckoutSuccess</span><span class="o">(</span><span class="n">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCartOptionCheckoutSuccess</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+        <span class="c1">// get order id</span>
+        <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+        <span class="c1">// get price breakdowns</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">PriceBreakdown</span><span class="o">&gt;</span> <span class="n">priceBreakdowns</span> <span class="o">=</span> <span class="n">order</span><span class="o">.</span><span class="na">getBreakdowns</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">});</span>
 </code></pre>
+<p>Create a cart checkout bundle.  Then call the SDK <code>CheckoutManagerV2.checkoutCart</code> method (Android) or <code>CheckoutManagerV2.checkout</code> (IOS)  method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.</p>
+<h4 id='6-submit-payment-for-order'>6. Submit payment for order</h4><pre class="highlight swift tab-swift"><code>    <span class="k">let</span> <span class="nv">paymentCard</span> <span class="o">=</span> <span class="c1">// RezolveSDK.PaymentCard</span>
+
+    <span class="k">let</span> <span class="nv">cardCVV</span> <span class="o">=</span> <span class="s">"000"</span> <span class="c1">// Card CVV</span>
+
+    <span class="k">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span>
+        <span class="nv">paymentCard</span><span class="p">:</span> <span class="n">paymentCard</span><span class="p">,</span> 
+        <span class="nv">cvv</span><span class="p">:</span> <span class="n">cardCVV</span>
+    <span class="p">)</span>
+
+    <span class="c1">// buy the cart</span>
+    <span class="n">rezolveSession</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">buy</span><span class="p">(</span>
+        <span class="nv">bundle</span><span class="p">:</span> <span class="n">cartCheckoutBundleV2</span><span class="p">,</span>
+        <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span>
+        <span class="nv">checkoutId</span><span class="p">:</span> <span class="n">checkoutId</span><span class="p">,</span>
+        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">checkoutOrder</span> <span class="k">in</span>
+            <span class="c1">// Handle checkoutOrder</span>
+        <span class="p">},</span>
+        <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span> 
+            <span class="c1">// Handle error</span>
+    <span class="p">})</span>
+</code></pre><pre class="highlight java tab-java"><code>    <span class="c1">// create a paymentRequest object, and then use this with the checkoutProduct object to purchase the cart.</span>
+    <span class="n">PaymentCard</span> <span class="n">paymentCard</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PaymentCard</span><span class="o">();</span> <span class="c1">// use consumer's chosen payment card</span>
+    <span class="n">String</span> <span class="n">cvv</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use actual cvv</span>
+    <span class="n">PaymentRequest</span> <span class="n">paymentRequest</span> <span class="o">=</span> <span class="n">checkout</span><span class="o">.</span><span class="na">createPaymentRequest</span><span class="o">(</span><span class="n">paymentCard</span><span class="o">,</span><span class="n">cvv</span><span class="o">);</span>
+
+    <span class="c1">// buy the cart</span>
+    <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>  <span class="c1">// get from order.getOrderId();</span>
+    <span class="n">checkout</span><span class="o">.</span><span class="na">buyCart</span><span class="o">(</span><span class="n">paymentRequest</span><span class="o">,</span> <span class="n">cartCheckoutBundleV2</span><span class="o">,</span> <span class="n">orderId</span><span class="o">,</span> <span class="k">new</span> <span class="n">CheckoutV2Callback</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCartOptionBuySuccess</span><span class="o">(</span><span class="n">OrderSummary</span> <span class="n">orderSummary</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">onCartOptionBuySuccess</span><span class="o">(</span><span class="n">orderSummary</span><span class="o">);</span>
+            <span class="c1">//display order summary</span>
+            <span class="n">String</span> <span class="n">orderId</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getOrderId</span><span class="o">();</span>
+            <span class="n">JSONObject</span> <span class="n">orderData</span> <span class="o">=</span> <span class="n">orderSummary</span><span class="o">.</span><span class="na">getData</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+</code></pre>
 <p>When the user confirms intent, pass the card choice and the entered CVV value to the <code>createPaymentRequest</code> method. This creates the encrypted <code>paymentRequest</code> object needed for checkout.</p>
 
-<p>Pass the <code>checkoutBundle</code> object, <code>phonebookId</code> string, a <code>rezolveLocation</code> object, the <code>paymentRequest</code> object, and an interface or callback to the <code>buyCart</code> method. The success response will be the <code>order id</code> as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
+<p>In this tutorial, we assume the user chose credit card payment. Note that <code>paymentRequest</code> is actually optional here, and can be null. To determine if it&#39;s needed, please check selected <code>SupportedPaymentMethod</code>&#39;s type.</p>
+
+<p>Pass the <code>paymentRequest</code> object, the<code>checkoutBundleV2</code> object, the <code>orderId</code>,  and an interface or callback to the <code>buyCart</code> method. The success response will be the <code>order id</code> as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
 
 <p>When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback.</p>
-<h4 id='5-wait-for-signorderupdate-to-return-a-final-order-status'>5. Wait for signOrderUpdate to return a final order status.</h4><pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
+<h4 id='7-wait-for-signorderupdate-to-return-a-final-order-status'>7. Wait for signOrderUpdate to return a final order status.</h4><pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
 
-<span class="n">session</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span>
+<span class="n">session</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">signOrderUpdate</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">order</span><span class="p">:</span> <span class="n">order</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span>
 
     <span class="nf">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
 
@@ -2300,6 +2505,184 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="o">}</span>
 </code></pre>
 <p>If the consumer clicks a Product, call <code>getProduct</code> to fetch full product information. At this point, the user can either add the product to their cart, click &quot;buy now&quot;, or press &quot;back&quot; to navigate to the category view. </p>
+
+          <h2 id='click-and-collect'>Click and Collect</h2>
+<p>Click and Collect enables users to select products online, and pick them up in-store. The consumer may either pay online, or pay in-store.</p>
+
+<p>Please note that your Resolve Commerce Engine must have Pick Up In Store enabled under the Advanced menu, for this option to apply. </p>
+
+<p>The Click and Collect flow is no different from in the Cart Buy or Instant Buy examples, it is only the user chosen values that change. </p>
+<h4 id='1-choices-returned-by-paymentoptionmanager'>1. Choices returned by PaymentOptionManager</h4><pre class="highlight swift tab-swift"><code><span class="c1">// Fetches PaymentOption for Product</span>
+<span class="n">rezolveSession</span><span class="o">.</span><span class="nf">getProductOptions</span><span class="p">(</span>
+    <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
+    <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
+    <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">paymentOption</span><span class="p">:</span> <span class="kt">PaymentOption</span><span class="p">)</span> <span class="o">-&gt;</span>
+
+    <span class="k">let</span> <span class="nv">paymentMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedPaymentMethods</span>
+    <span class="k">let</span> <span class="nv">shippings</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span>
+
+<span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">httpResponse</span> <span class="k">in</span>
+    <span class="c1">// Error handling</span>
+<span class="p">})</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">paymentOptionManager</span><span class="o">.</span><span class="na">getProductOptions</span><span class="o">(</span><span class="n">checkoutProduct</span><span class="o">,</span> <span class="n">merchantId</span><span class="o">,</span> <span class="k">new</span> <span class="n">PaymentOptionCallback</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProductOptionsSuccess</span><span class="o">(</span><span class="n">PaymentOption</span> <span class="n">paymentOption</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">setPaymentOption</span><span class="o">(</span><span class="n">paymentOption</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="kd">final</span> <span class="n">RezolveError</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+
+</code></pre>
+<p>When you call PaymentOptionManager, it returns a list of your payment and shipment options.</p>
+<h4 id='2-inspecting-the-returned-options'>2. Inspecting the returned options</h4><pre class="highlight plaintext"><code>{
+  "type": "standard",
+  "supported_shipping_methods": [
+    {
+      "execute": {
+        "method_code": "flatrate",
+        "manual_payment_label": "Pay on Collection",
+        "extension_attributes": null,
+        "display_name": "Fixed",
+        "carrier_code": "flatrate"
+      },
+      "details": {
+        "store_details": null
+      }
+    },
+    {
+      "execute": {
+        "method_code": "storepickup",
+        "manual_payment_label": "Pay on Collection",
+        "extension_attributes": [
+          {
+            "value": "2",
+            "code": "pickup_store"
+          }
+        ],
+        "display_name": "Pickup In Store",
+        "carrier_code": "storepickup"
+      },
+      "details": {
+        "store_details": {
+          "telephone": "01234456789",
+          "pickup_store": 2,
+          "opening_times": [
+
+          ],
+          "name": "Chao Yang Store",
+          "location": {
+            "longitude": 116.2573779,
+            "latitude": 39.9390628
+          },
+          "email": "china2@storepickuptesting.com",
+          "description": null,
+          "address": {
+            "street2": "",
+            "street1": "14 Dongsuan Huan Beilu",
+            "region": "Beijing",
+            "post_code": "100026",
+            "country": "\u00e4\u00b8\u00ad\u013a\u203a\u02dd",
+            "city": "BEIJING"
+          }
+        }
+      }
+    },
+    {
+      "execute": {
+        "method_code": "storepickup",
+        "manual_payment_label": "Pay on Collection",
+        "extension_attributes": [
+          {
+            "value": "1",
+            "code": "pickup_store"
+          }
+        ],
+        "display_name": "Pickup In Store",
+        "carrier_code": "storepickup"
+      },
+      "details": {
+        "store_details": {
+          "telephone": "01234456789",
+          "pickup_store": 1,
+          "opening_times": [
+
+          ],
+          "name": "China Qingdao Shi Store",
+          "location": {
+            "longitude": 36.3867744,
+            "latitude": 117.6466473
+          },
+          "email": "chinar@storepickuptesting.com",
+          "description": null,
+          "address": {
+            "street2": "",
+            "street1": "63 RENMIN LU",
+            "region": "Shandong",
+            "post_code": "266033",
+            "country": "\u00e4\u00b8\u00ad\u013a\u203a\u02dd",
+            "city": "QINGDAO SHI"
+          }
+        }
+      }
+    }
+  ],
+  "supported_payment_methods": [
+    {
+      "type": "union_pay",
+      "data": {
+        "supported_types": [
+
+        ],
+        "supported_shipping": [
+          "storepickup",
+          "flatrate"
+        ],
+        "supported_networks": [
+
+        ],
+        "requirements": {
+          "rezolve_phone": true
+        }
+      }
+    }
+  ],
+  "options": {
+
+  },
+  "id": "aa665b54-7166-4a53-a275-9b4f693770dc"
+}
+</code></pre>
+<p>To the right is a sample of data returned by <code>PaymentOptionsManager.getProductOptions</code>. Look at the <code>supported_shipping_methods</code> node at the top of the file. If the list contains at least one child with <code>execute.method_code: storepickup</code> it means user can buy the product with Click and Collect. Every store where collecting the purchase is available will be listed as a separate item under <code>supported_shipping_methods</code>.</p>
+
+<p>At this point user should select a payment method. They are listed under the <code>supported_payment_methods</code> node. In some cases, like the example shown, there is one payment method available. In others, there might be more. For example, if <code>SupportedPaymentMethod has type: cash</code>, cash payment may only be allowed with Click and Collect and not in Delivery. To verify that we need <code>SupportedPaymentMethod</code> to be provided as an argument when creating a <code>DeliveryUnit</code>.</p>
+<h4 id='3-creating-the-delivery-unit-delivery-method'>3. Creating the Delivery Unit/Delivery Method</h4><pre class="highlight swift tab-swift"><code>    <span class="c1">// standard shipping example</span>
+    <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span>  <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">)</span>
+
+    <span class="c1">// Click and Collect example</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">shipping</span> <span class="o">=</span> <span class="n">shippingMethod</span><span class="p">,</span> <span class="k">let</span> <span class="nv">store</span> <span class="o">=</span> <span class="n">shipping</span><span class="o">.</span><span class="n">store</span> <span class="k">else</span> <span class="p">{</span> <span class="nf">preconditionFailure</span><span class="p">()</span> <span class="p">}</span>
+    <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span>  <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="s">"storepickup"</span><span class="p">)</span> 
+    <span class="n">deliveryMethod</span><span class="o">.</span><span class="n">pickupStore</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">store</span><span class="o">.</span><span class="n">pickupStore</span><span class="p">)</span><span class="o">!</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// standard shipping example</span>
+<span class="n">DeliveryUnit</span> <span class="n">deliveryUnit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeliveryUnit</span><span class="o">(</span><span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+
+<span class="c1">// Click and Collect example</span>
+<span class="n">DeliveryUnit</span> <span class="n">deliveryUnit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeliveryUnit</span><span class="o">(</span><span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">supportedDeliveryMethod</span><span class="o">.</span><span class="na">getShippingMethod</span><span class="o">().</span><span class="na">getExtensionAttributes</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">getValue</span><span class="o">()));</span>
+</code></pre>
+<p>Android calls this object <code>DeliveryUnit</code>, IOS uses <code>DeliveryMethod</code></p>
+
+<p><code>DeliveryUnit</code> (Android) is created using the chosen <code>supportedPaymentMethod</code> and the address id of the pick up store. </p>
+
+<p><code>DeliveryMethod</code> only requires the address id of the pick up store.</p>
+
+<p>See the <code>extension_attributes</code> node for this store id. </p>
+
+<p><code>&quot;extension_attributes&quot;: [ { &quot;value&quot;: &quot;2&quot;, &quot;code&quot;: &quot;pickup_store&quot; } ]</code></p>
+
+<p>Create the <code>DeliveryUnit</code>/<code>DeliveryMethod</code> as shown at right. </p>
+
+<p><code>DeliveryUnit</code>/<code>DeliveryMethod</code> is then passed to create the <code>CheckoutBundleV2</code>, which is used to get totals before purchasing the product. </p>
 
           <h2 id='trigger-manager'>Trigger Manager</h2>
 <p>Triggers are specially formatted media in the Rezolve system that can point to products, categories, and other resources. Image Engagements and Audio Engagements are a type of trigger, and these are handled by <code>ScanManager</code>. Touch Triggers are handled by <code>TriggerManager</code>. Touch Triggers are essentially URLs that are typically rendered as a touchable link or button onscreen. </p>

@@ -12,10 +12,12 @@ toc_footers:
 includes:
 - howtobasic
 - howtojwt
+- howtoconsumerprofile
 - howtoinstantbuy
 - howtocartbuy
 - howtocategory
 - howtomall
+- howtoclickandcollect
 - howtotriggermanager
 - howtobackgroundlistening
 - errorhandling

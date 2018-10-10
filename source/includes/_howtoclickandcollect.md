@@ -159,7 +159,7 @@ When you call PaymentOptionManager, it returns a list of your payment and shipme
 }
 ```
 
-To the right is a sample of data returned by `PaymentOptionsManager.getProductOptions`. Look at the `supported_shipping_methods` node at the top of the file. If the list contains at least one child with `"`execute.method_code: storepickup`"` it means user can buy the product with Click and Collect. Every store where collecting the purchase is available will be listed as a separate item under `supported_shipping_methods`.
+To the right is a sample of data returned by `PaymentOptionsManager.getProductOptions`. Look at the `supported_shipping_methods` node at the top of the file. If the list contains at least one child with `execute.method_code: storepickup` it means user can buy the product with Click and Collect. Every store where collecting the purchase is available will be listed as a separate item under `supported_shipping_methods`.
 
 At this point user should select a payment method. They are listed under the `supported_payment_methods` node. In some cases, like the example shown, there is one payment method available. In others, there might be more. For example, if `SupportedPaymentMethod has type: cash`, cash payment may only be allowed with Click and Collect and not in Delivery. To verify that we need `SupportedPaymentMethod` to be provided as an argument when creating a `DeliveryUnit`.
 
