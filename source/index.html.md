@@ -11,7 +11,7 @@ toc_footers:
 
 includes:
 - howtobasic
-- jwt
+- howtojwt
 - howtoinstantbuy
 - howtocartbuy
 - howtocategory

@@ -848,7 +848,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre>
 <p>To generate and set the device_id, see the OS specific examples to the right. On IOS it is handled automatically using <code>identifierForVendor?.uuidString</code>.  Android must manually generate, store, read, and pass the <code>device_id</code> to the SDK. </p>
 <h4 id='create-the-session'>Create the Session</h4>
-<p>In the samples to the right, <code>accessToken</code> is one of the JWT tokens you created above. If you just registered the user, you can reuse the <code>register JWT</code> token here. Otherwise, use a <code>login JWT</code>.</p>
+<p>In the samples to the right, <code>accessToken</code> is the Login JWT token you created above. </p>
+
+<p>Note in the Android sample you are also passing in an AuthRequestProvider. This is used for handling expiring JWT sessions, and is explained in the next section.</p>
 <pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
@@ -883,8 +885,19 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="n">String</span> <span class="n">partnerId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>   <span class="c1">// from auth server</span>
 <span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="s">"wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"</span><span class="o">;</span> <span class="c1">// from stored device_id, see "Generating the device_id" above</span>
 
-<span class="c1">// NEW session requires Login JWT  from auth server (customer auth or RUA)</span>
-<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+<span class="c1">// Use builder to create instance of SDK and set SDK Params</span>
+<span class="c1">// Pass in an AuthRequestProvider here, to handle expiring JWT tokens</span>
+<span class="n">rezolveSDK</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+               <span class="o">.</span><span class="na">setApiKey</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">)</span>
+               <span class="o">.</span><span class="na">setEnv</span><span class="o">(</span><span class="n">ENVIRONMENT</span><span class="o">)</span>
+               <span class="o">.</span><span class="na">setAuthRequestProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">PartnerAuthRequestProvider</span><span class="o">(</span><span class="n">AuthService</span><span class="o">.</span><span class="na">getInstance</span><span class="o">()))</span>
+               <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="c1">// Set JWT Auth Token from partner auth server</span>
+<span class="n">rezolveSDK</span><span class="o">.</span><span class="na">setAuthToken</span><span class="o">(</span><span class="n">accessToken</span><span class="o">);</span>
+
+<span class="c1">// Start session, again supplying JWT auth token</span>
+<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
@@ -1010,152 +1023,60 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="p">})</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Example Authentication Interface</span>
-<span class="o">{</span>
-    <span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">partner</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">auth</span><span class="o">;</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// example Partner Auth Request Provider </span>
+<span class="c1">// this would handle partner user login against partner server, password reset,</span>
+<span class="c1">// as well as JWT token renewal</span>
+<span class="kd">class</span> <span class="nc">PartnerAuthRequestProvider</span> <span class="kd">implements</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">AuthRequestProvider</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">AuthService</span> <span class="n">authService</span><span class="o">;</span>
+    <span class="n">RuaAuthRequestProvider</span><span class="o">(</span><span class="n">AuthService</span> <span class="n">authService</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span> <span class="n">authService</span> <span class="o">=</span> <span class="n">authService</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">GetAuthRequest</span> <span class="nf">getAuthRequest</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">Looper</span><span class="o">.</span><span class="na">myLooper</span><span class="o">()</span> <span class="o">==</span> <span class="n">Looper</span><span class="o">.</span><span class="na">getMainLooper</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">"You can't run this method from main thread"</span><span class="o">);</span>
+        <span class="o">}</span>
 
-    <span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.network.HttpResponse</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">okhttp3.Response</span><span class="o">;</span>
+        <span class="c1">//set blocking call as the refresh token callback</span>
+        <span class="kd">final</span> <span class="n">RefreshTokenCallbackToBlockingCall</span> <span class="n">callback</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RefreshTokenCallbackToBlockingCall</span><span class="o">();</span>
+        <span class="n">authService</span><span class="o">.</span><span class="na">refreshAuthToken</span><span class="o">(</span><span class="n">callback</span><span class="o">);</span>
 
-    <span class="c1">//AuthInterface defines how callbacks for several auth operations will work</span>
-    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AuthInterface</span> <span class="o">{</span>
-        <span class="kt">void</span> <span class="nf">onUserRegisterSuccess</span><span class="o">(</span><span class="n">UserResponse</span> <span class="n">userResponse</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onUserRegiserFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onUserLoginSuccess</span><span class="o">(</span><span class="n">UserResponse</span> <span class="n">userResponse</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onUserLoginFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onUserDetailsUpdateSuccess</span><span class="o">(</span><span class="n">UserResponse</span> <span class="n">userResponse</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onUserDetailsUpdateFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">);</span>
-
-        <span class="kt">void</span> <span class="nf">onForgotPasswordSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onForgotPasswordFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">);</span>
-
-        <span class="kt">void</span> <span class="nf">onChangePasswordSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onChangePasswordFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">);</span>
-
-        <span class="kt">void</span> <span class="nf">onTokenRenewSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">);</span>
-        <span class="kt">void</span> <span class="nf">onTokenRenewFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">);</span>
-
-        <span class="kt">void</span> <span class="nf">onLogoutSuccess</span><span class="o">();</span>
-        <span class="kt">void</span> <span class="nf">onLogoutFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">);</span>
-
-        <span class="kt">void</span> <span class="nf">onVerificationCodeSuccess</span><span class="o">();</span>
-        <span class="kt">void</span> <span class="nf">onVerificationCodeFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">);</span>
+        <span class="c1">// ping the partner auth service</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">GetAuthRequest</span> <span class="n">authRequest</span> <span class="o">=</span> <span class="n">PartnerPingCallbackToBlockingCall</span><span class="o">.</span><span class="na">getResult</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">authRequest</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
-<span class="c1">// Example Authentication Callback</span>
-<span class="o">{</span>
-<span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">partner</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">auth</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">RefreshTokenCallbackToBlockingCall</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">GetAuthRequest</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">CountDownLatch</span> <span class="n">countDownLatch</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CountDownLatch</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
 
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.network.HttpResponse</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">okhttp3.Response</span><span class="o">;</span>
-
-    <span class="c1">//AuthCallback creates a concrete implementation of AuthInterface that the app may rely on</span>
-    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AuthCallback</span> <span class="kd">implements</span> <span class="n">AuthInterface</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUserRegisterSuccess</span><span class="o">(</span><span class="n">UserResponse</span> <span class="n">userResponse</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUserRegiserFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUserLoginSuccess</span><span class="o">(</span><span class="n">UserResponse</span> <span class="n">userResponse</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUserLoginFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUserDetailsUpdateSuccess</span><span class="o">(</span><span class="n">UserResponse</span> <span class="n">userResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUserDetailsUpdateFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onForgotPasswordSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onForgotPasswordFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onChangePasswordSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onChangePasswordFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onTokenRenewSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onTokenREnewFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onLogoutSuccess</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onLogoutFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onVerificationCodeSuccess</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onVerificationCodeFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+    <span class="c1">// on successful refresh, wait for the ping response </span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRefreshAuthTokenSuccess</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">String</span> <span class="n">authToken</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">GetAuthRequest</span><span class="o">.</span><span class="na">authorizationHeader</span><span class="o">(</span><span class="n">authToken</span><span class="o">);</span>
+        <span class="n">countDownLatch</span><span class="o">.</span><span class="na">countDown</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span>
 
-<span class="c1">// Example Authentication Manager</span>
-<span class="o">{</span>
-    <span class="c1">//AuthenticationManager implements several methods to create sessions, update passwords, etc</span>
-    <span class="c1">//This method is called to renew the authorization token</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">renewJwtToken</span><span class="o">(</span><span class="kd">final</span> <span class="n">AuthInterface</span> <span class="n">authInterface</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="n">okHttpClient</span><span class="o">.</span><span class="na">httpGet</span><span class="o">(</span><span class="n">CREDENTIALS</span><span class="o">+</span><span class="s">"ping"</span><span class="o">,</span> <span class="k">new</span> <span class="n">LoginResponseHandler</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span>
-
-                <span class="n">String</span> <span class="n">authHeader</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getResponseJson</span><span class="o">().</span><span class="na">optString</span><span class="o">(</span><span class="s">"accessToken"</span><span class="o">);</span>
-                <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">headers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-                <span class="n">headers</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">,</span> <span class="n">authHeader</span><span class="o">);</span>
-                <span class="n">okHttpClient</span><span class="o">.</span><span class="na">setHeaders</span><span class="o">(</span><span class="n">headers</span><span class="o">);</span>
-                <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">Constants</span><span class="o">.</span><span class="na">API_KEY</span><span class="o">,</span> <span class="n">Constants</span><span class="o">.</span><span class="na">ENV</span><span class="o">).</span><span class="na">setAuthToken</span><span class="o">(</span><span class="n">authHeader</span><span class="o">);</span>
-
-                <span class="k">if</span><span class="o">(</span><span class="n">authInterface</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">authInterface</span><span class="o">.</span><span class="na">onTokenRenewSuccess</span><span class="o">(</span><span class="n">response</span><span class="o">,</span> <span class="n">responseWithHeaders</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span><span class="o">(</span><span class="n">authInterface</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">authInterface</span><span class="o">.</span><span class="na">onTokenRenewFailure</span><span class="o">(</span><span class="n">errorResponse</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="c1">// Example of Authentication Manager Use With Rezolve AddressbookManager.getAll</span>
-<span class="o">{</span>
-    <span class="c1">//RezolveApp is an entity that implements all Rezolve SDK managers and provides infrastrucuture to access Rezolve API services</span>
-    <span class="c1">//</span>
-    <span class="c1">// On this example the app already stablished a Rezolve Session and is trying to get the user addresses from the Rezolve SDK AddressbookManager</span>
-
-    <span class="c1">//This is the method called to get the AddressBook from the Rezolve API</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">attemptToGetAddressBook</span><span class="o">(</span><span class="kd">final</span> <span class="n">RezolveSession</span> <span class="n">session</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">retryOnFail</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">//We don't check session for nullity here because this was done by the caller</span>
-        <span class="n">session</span><span class="o">.</span><span class="na">getAddressbookManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">new</span> <span class="n">AddressbookCallback</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onAddressbookGetAllSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Address</span><span class="o">&gt;</span> <span class="n">addresses</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">setAddresses</span><span class="o">(</span><span class="n">addresses</span><span class="o">);</span>
-            <span class="o">}</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">httpResponse</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">//In case of failure we check if we must try again and if the fail was due to an </span>
-                <span class="c1">//expired session token. If it is, the server returns a code 401</span>
-                <span class="k">if</span><span class="o">(</span><span class="n">retryOnFail</span> <span class="o">&amp;&amp;</span> <span class="n">httpResponse</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">httpResponse</span><span class="o">.</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">401</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c1">//We get a new instance of our AuthenticationManager and request a new JWT token</span>
-                    <span class="n">AuthenticationManager</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">renewJwtToken</span><span class="o">(</span><span class="k">new</span> <span class="n">AuthCallback</span><span class="o">()</span> <span class="o">{</span>
-                        <span class="nd">@Override</span>
-                        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onTokenRenewSuccess</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Response</span> <span class="n">responseWithHeaders</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="c1">//If we get a new token, we recursivelly try to get address book again</span>
-                            <span class="n">attemptToGetAddressBook</span><span class="o">(</span><span class="n">session</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-                        <span class="o">}</span>
-
-                        <span class="nd">@Override</span>
-                        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onTokenRenewFailure</span><span class="o">(</span><span class="n">HttpResponse</span> <span class="n">errorResponse</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="c1">//If the token renewal is failed we log the error. We could ask user to login again.</span>
-                            <span class="n">Log</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">errorResponse</span><span class="o">);</span>
-                        <span class="o">}</span>
-                    <span class="o">});</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="c1">//If the first request failed by any reason other than 401 we log the error</span>
-                    <span class="n">Log</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">httpResponse</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
+    <span class="c1">// getResult is only triggered after a result is received from the partner auth server</span>
+    <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">GetAuthRequest</span> <span class="nf">getResult</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">countDownLatch</span><span class="o">.</span><span class="na">await</span><span class="o">();</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// handle the exception</span>
+        <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
 <p>The Login JWT you generate is included in the headers of every SDK transmission. Thus, when your consumer logs out, you can expire the JWT, and the app will cease communication with the Rezolve server. To do this, create a new JWT with an expiration stamp in the past, and supply it to the SDK.</p>
 
-<p>This also means you are required to handle JWT token expiration/renewal if you want a session to continue. To do this smoothly without interrupting the user session, Rezolve recommends creating a wrapper around any call that contacts the server. If the server returns an authorization error, you can call your token renewal endpoint and issue a new JWT. </p>
+<p>This also means you are required to handle JWT token expiration/renewal if you want a session to continue. </p>
 
 <p>Examples are provided to the right. These are NOT an example of implementing SDK code, but rather an example of implementing session rewnewal with your own authentication server. </p>
 
 <p><strong>IOS</strong></p>
+
+<p>To handle session expiration smoothly, without interrupting the user session, Rezolve recommends creating a wrapper around any call that contacts the server. If the server returns an authorization error, you can call your token renewal endpoint and issue a new JWT. </p>
 
 <p>The sample shows two classes, an <code>AuthService</code> class and an <code>AddressBookViewController</code> class. </p>
 
@@ -1175,23 +1096,13 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p><strong>Android</strong></p>
 
-<p>The first three samples show an example of how you might implement an Authentication Manager.  </p>
+<p>The SDK makes every call to the Rezolve server using an http client; if a call to the server results in a &quot;401 token expired&quot; response, the http client will ask for a new token. The Partner Auth Service you passed in to the SDK Builder must handle this JWT renewal.</p>
 
-<p>The Authentication Manager may, for example, process username/passwords for login, handle registering your users, and handle password resets.  It should also handle the JSON Web Tokens to register, create session, and maintain session with Rezolve. </p>
+<p>It should be noted that the Partner Auth Service will typically handle all partner auth needs. Duties may include processesing username/passwords for login, handling registering your users, and handling password resets, in addition to JWT renewal. </p>
 
-<p>The Authentication Interface and Authentication Callbacks provide the Authentication Manager features to your developer in a standard and convenient way. </p>
+<p>The code examples show one way of implementing JWT renewal. </p>
 
-<p>The final sample, &quot;Example of Authentication Manager Use With Rezolve AddressbookManager.getAll&quot;, gives an example of wrapping the <code>AddressbookManager.getAll</code> method. </p>
-
-<ol>
-<li>Pass in the <code>session</code>, and a <code>retryOnFail</code> boolean</li>
-<li>the method calls the <code>getAddressbookManager().getAll</code> method</li>
-<li>If the call succeeds, proceed as normal.</li>
-<li>If the call results in an error, check if the error is a 401</li>
-<li>If the error is a 401, and the <code>retryOnFail</code> is true, request a new JWT, calling the <code>renewJwtToken</code> method. Then retry the request.</li>
-<li>If the error is 401, and <code>retryOnFail</code> is false, we know that we requested a new token and the token provided was expired (indicating end of login session at auth server). Do not retry.</li>
-<li>If a different error occurs, log and handle the error. </li>
-</ol>
+<p>In the class <code>PartnerAuthRequestProvider</code> the Partner Auth Service implements <code>RezolveSDK.AuthRequestProvider</code>, to handle the requirements of the SDK. If the http client receives a &quot;401 token expired&quot;, it will call &quot;RezolveSDK.GetAuthRequest&quot; to either confirm logout or renew the token. The token is renewed, but is only returned if the ping to the partner auth server suceededs. If the partner auth server says the user is not logged in, the renewed token is not returned, and the user can no longer make requests.</p>
 <h3 id='http-error-responses'>HTTP Error Responses</h3><h4 id='403'>403</h4><pre class="highlight plaintext"><code>{
     "type": "Authentication"
     "code": "1"
@@ -2988,11 +2899,11 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
           <h1 id='module-reference-docs'>Module Reference Docs</h1>
 <p>Module reference docs are generated from commented source code.  IOS docs are generated using Jazzy (https://github.com/realm/jazzy) and Android docs are generated using Doxygen (http://www.doxygen.nl/).</p>
 
-<p>The following links will open in a new window.</p>
+<p>The following links will open in a new window. Close the window to return to this documentation.</p>
 
-<h3><a href="ios">IOS Module Documentation</a></h3>
+<h3><a href="ios" target="_blank">IOS Module Documentation</a></h3>
 
-<h3><a href="android">Android Module Documentation</a></h3>
+<h3><a href="android/html" target="_blank">Android Module Documentation</a></h3>
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
