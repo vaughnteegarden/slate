@@ -158,8 +158,6 @@ The Module Reference section exclusively documents using Feature Interfaces, as 
 
 > Example JSON for 1 large image, and 4 associated "thumbnail" images
 
-
-
 ```JSON
       "image": "https:\/\/s3.amazonaws.com\/1\/27\/Image.png",
       "image_thumbs": [
@@ -171,7 +169,6 @@ The Module Reference section exclusively documents using Feature Interfaces, as 
 ```
 
 When large images are uploaded to the merchant portal, the portal automatically generates a series of smaller images, which are referred to as thumbnails even though some are fairly large. The rules for thumbnail generation are as follows:
-
 
 * Generated images respect the aspect ratio of the original image; their height/width ratio will not be distorted
 * If the uploaded image is: 
@@ -200,33 +197,10 @@ Exactly how you implement authentication in your app will depend on what authori
 
 The primary task in implementing user management is to create the JWT that will allow you to bind a Partner user to a Rezolve profile. Through a server-to-server transaction, you can create a new Rezolve User Profile, and get back an identifying `entityId` that you should persist in your authentication database, as an addition to your user record. This `entityId` will then be used by the Rezolve SDK to identify the user to the Rezolve Server. 
 
-## Session Management Introduction
-
-Once a Rezolve Profile has been established, and an `entityId` secured, there is no Login per-se in the Rezolve system. Whether or not the SDK can talk to Rezolve Services depends on supplying a valid JWT to the SDK from your auth system. If the user-specific JWT you supply is valid, you are able to create a session, and access the SDK capabilities. 
-
-Expiring a session is as simple as expiring the JWT token. So it is up to the partner's auth server to either renew the JWT when it expires, or to set an expiration when the partner consumer logs out. 
-
-More on User Management and Session Management can be sound in the sections on JWT Authorization and RUA.  Look at whichever section is relevant to your situation.
+A valid JWT is required to initialize the SDK and start a sesssion. 
 
 
 
-
-## Consumer Profile Management
-
-
-Once you have established a session, you have access to the consumer's records. These include:
-
-* Consumer Profile - Via the `ConsumerProfileManager`. Name, email, and device profile (phone info) for the consumer
-* Address Book - Via the `AddressbookManager`. A collection of postal addresses, to be used for ship-to and bill-to purposes.
-* Phone Book - Via the `PhonebookManager`. A collection of phone numbers associated with the profile. 
-* Favorites - Via the `FavouriteManager`. Reserved for future functionality, "Favorites" are collections of unique devices that can be topped up.  A favorite can represent a mobile phone, a tollway transponder, or other device/account.
-* Wallet - Via the `WalletManager`. Wallet lets you store credit card info securely, and lets the consumer maintain the list of cards. There can be multiple cards.
-
-There are no specific flows to consider when managing the customer profile and associated records.
-
-AddressbookManager, FavouriteManager, PhonebookManager and WalletManager support the following CRUD operations: `create`, `update`, `delete`, `getAll`, `get`.
-
-ProfileManager supports only `update` and `get`.
 
 
 

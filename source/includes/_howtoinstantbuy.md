@@ -109,108 +109,92 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
 First, initialize `scanManager`, and enable the scan screen using `session.startVideoScan()`, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts `merchantId`, `catalogId`, and `productId` from the image, automatically calling `getProduct`. The scanManager returns a `product` object.
 
 
-
-
-
-#### 2. Create an order and get an order total
+#### 2. Get shipping and payment options for the product
 
 ```swift
-func onProductResult(product: Product) -> Void {
+    // Fetches PaymentOption for Product
+    rezolveSession.getProductOptions(
+        checkoutProduct: checkoutProduct,
+        merchantId: merchantId,
+        callback: { (paymentOption: PaymentOption) ->
 
-    session.addressbookManager.get(id: "1") { (remoteAddress: Address) in
+        let paymentMethods = paymentOption.supportedPaymentMethods
+        let shippings = paymentOption.supportedDeliveryMethods
 
-      let checkoutProduct = createCheckoutProductWithVariant(product: product)
+    }, errorCallback: { httpResponse in
+        // Error handling
+    })
 
-      // Fetches PaymentOptions for Product
-        rezolveSession.paymentOptionManager.getProductOptions(
-            checkoutProduct: checkoutProduct,
-            merchantId: merchantId,
-            callback: { (paymentOption: PaymentOption) ->
+    /// for this example we assume the user chooses the first option. In reality, display all options to the user, and let them choose.
+    let supportedPaymentMethod = paymentOption.supportedPaymentMethods.first!
+    let shippingMethod = paymentOption.supportedDeliveryMethods.first!
+```
 
-            let paymentMethods = paymentOption.supportedPaymentMethods
-            let shippings = paymentOption.supportedDeliveryMethods
+```java
+public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
 
-        }, errorCallback: { httpResponse in
-            // Error handling
-        })
-        
-        /// Creates product checkoutBundle
-        let productBundleV2 = createProductCheckoutBundleV2(
-            checkoutProduct: checkoutProduct,
-            deliveryMethod: deliveryMethod,
-            merchantId: merchantId,
-            optionId: optionId,
-            paymentMethod: paymentMethod,
-            phoneId: phoneId
-        )
-        
-        /// Create a payment request
-        let paymentCard = // RezolveSDK.PaymentCard
-        let cardCVV = "000" // Card CVV
-        let paymentRequest = PaymentRequest(
-            paymentCard: paymentCard, 
-            cvv: cardCVV
-        )
-        
-        /// Call Checkout method to get an Order
-        rezolveSession.checkoutManagerV2.checkout(
-            bundle: productBundleV2, 
-            callback: { order in 
-                // Order handling
-            },
-            errorCallback: { _ in 
-                // Error handling
-        })
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
 
-      }, errorCallback: { print($0) })
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PaymentOptionManager pom = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getPaymentOptionManager();
+
+        String merchantId = "12345";
+        CheckoutProduct checkoutProduct = new CheckoutProduct();
+
+        // get PaymentOptions for a product
+        pom.getProductOptions(checkoutProduct, merchantId, this);
+
+    }
+
+
+    @Override
+    public void onProductOptionsSuccess(PaymentOption paymentOption) {
+        String id = paymentOption.getId();
+        List<CheckoutProduct> checkoutProducts = paymentOption.getCheckoutProducts();
+        JSONObject paymentOptionOptions = paymentOption.getOptions();
+        List<Shipping> supportedDeliveryMethods =  paymentOption.getSupportedDeliveryMethods();
+        List<SupportedPaymentMethod> supportedPaymentMethods = paymentOption.getSupportedPaymentMethods();
+        String type = paymentOption.getType();
+
+        for (CheckoutProduct checkoutProduct : checkoutProducts) {
+            // breakdown checkoutProduct object
+            float qty = checkoutProduct.getQty();
+            Placement productPlacement = checkoutProduct.getProductPlacement();
+            int cpId  = checkoutProduct.getId();
+            List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+
+            String placementId = productPlacement.getPlacementId();
+            String adId = productPlacement.getAdId();
+
+            for (ConfigurableOption configurableOption : configurableOptions) {
+                int value = configurableOption.getValue();
+                String code = configurableOption.getCode();
+            }
+        }
+
+        for (Shipping shipping : supportedDeliveryMethods) {
+            ShippingDetails shippingDetails = shipping.getShippingDetails();
+            ShippingMethod shippingMethod = shipping.getShippingMethod();
+        }
+
+        for (SupportedPaymentMethod supportedPaymentMethod : supportedPaymentMethods ) {
+            PaymentMethodData paymentMethodData = supportedPaymentMethod.getPaymentMethodData();
+            String spmType = supportedPaymentMethod.getType();
+            JSONObject originalDataJson = supportedPaymentMethod.getOriginalDataJson();
+
+            JSONObject requirements = paymentMethodData.getRequirements();
+            List<String> supportedDelivery = paymentMethodData.getSupportedDelivery();
+            List<String> supportedNetworks = paymentMethodData.getSupportedNetworks();
+            List<String> supportedTypes = paymentMethodData.getSupportedTypes();
+        }
     }
 }
 ```
-```java
-@Override
-public void onProductResult(Product product) {
-	// get product info
-	String product_id = product.getId();
-	String title = product.getTitle();
-	String subtitle = product.getSubtitle();
-	// ... etc
 
-
-	// create a CheckoutProduct object with the product id , and set the quantity
-	CheckoutProduct checkoutProduct = new CheckoutProduct();
-	checkoutProduct.setId(Integer.parseInt(product_id));
-	checkoutProduct.setQty(1);
-
-
-	// get a CheckoutManager
-	final CheckoutManager checkout = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getCheckoutManager();
-
-	// create a product checkout bundle for standard home delivery
-	String merchantId = "123"; // use real merchant id
-	String addressId = "123"; // use real consumer address id
-	String phonebookId = "123"; // use real consumer phonebook id
-	CheckoutBundle checkoutBundle = CheckoutBundle.createProductCheckoutBundle(merchantId, addressId, checkoutProduct);
-
-	// call CheckoutCart to get an Order object with totals
-	checkout.checkoutProduct(checkoutBundle, new CheckoutCallback() {
-		public void onCheckoutProductSuccess(Order order) {
-			// extract order details
-			List<PriceBreakdown> breakdowns = order.getBreakdowns();
-			float finalPrice = order.getFinalPrice();
-			String orderId = order.getOrderId();
-
-			// extract price breakdowns
-			for (PriceBreakdown priceBreakdown : breakdowns ) {
-				float amount = priceBreakdown.getAmount();
-				String type = priceBreakdown.getType();
-			}
-		}
-	});
-}
-```
-
-Once you have product information, create a CheckoutProduct object. Then call the SDK `CheckoutManager.checkoutProduct` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
-
+Call `PaymentOptionManager` to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. 
 
 
 #### 3. Show payment card choices
@@ -238,64 +222,158 @@ rezolveSession.getWalletManager().getAll(new WalletCallback() {
 
 ```
 
-
-
 Use `walletManager.getAll` to list the available card choices. If the consumer wishes to buy, they will select a payment card to use, and provide confirmation of ordering intent.
-
 
 We recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
 
-
-#### 4. Submit payment for order
+#### 4. Create a checkout bundle, checkout the produc to get totals, and create an order
 
 ```swift
-let PARIS_LOCATION = RezolveLocation(type: .point, coordinates: (latitude: 48.8736645, longitude: 2.2910793))
+let productBundleV2 = createProductCheckoutBundleV2(
+    checkoutProduct: checkoutProduct,
+    let deliveryMethod = DeliveryMethod(addressId: ""), // address id is blank because this is only needed for Click and Collect
+    merchantId: merchantId,
+    optionId: optionId,
+    paymentMethod: paymentMethod,
+    phoneId: phoneId
+)
 
-let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
-
-session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, callback: { (order: CheckoutOrder) in
-
-
-}, errorCallback: { print($0) })
+rezolveSession.checkoutManagerV2.checkout(
+    bundle: productBundleV2, 
+    callback: { order in 
+        // Order handling
+    },
+    errorCallback: { _ in 
+        // Error handling
+})
 ```
 ```java
-// create a paymentRequest object, and then use this with the checkoutBundle object and rezolveLocation object to purchase the item.
+@Override
+public void onProductResult(Product product) {
+	// get product info
+	String product_id = product.getId();
+	String title = product.getTitle();
+	String subtitle = product.getSubtitle();
+	// ... etc
+
+
+	// create a CheckoutProduct object with the product id , and set the quantity
+	CheckoutProduct checkoutProduct = new CheckoutProduct();
+	checkoutProduct.setId(Integer.parseInt(product_id));
+	checkoutProduct.setQty(1);
+
+   // use info from productPaymentOption to populate Shipping and PaymentMethod choices...
+    String productPaymentOptionId = productPaymentOption.getId();
+    List<SupportedPaymentMethod> supportedPaymentMethods = productPaymentOption.getSupportedPaymentMethods();
+    List<Shipping> deliveryMethods = productPaymentOption.getSupportedDeliveryMethods();
+    SupportedPaymentMethod supportedPaymentMethod = supportedPaymentMethods.get(0);  // in reality customer chooses an option here
+    Shipping deliveryMethod = deliveryMethods.get(0); // in reality customer chooses an option here
+    String phonebookId = "123"; // use real consumer phonebook id
+    // create the delivery unit
+    DeliveryUnit deliveryUnit = new DeliveryUnit(supportedPaymentMethod, address.getId()); 
+
+    // create a product checkout bundle           
+	CheckoutBundleV2.createProductCheckoutBundleV2(merchantId, paymentOption.getId(), checkoutProduct, phoneId, supportedPaymentMethod, deliveryUnit);
+
+    // call the CheckoutProductOption method to get an order object and totals
+    checkout.checkoutProductOption(productCheckoutBundleV2, new CheckoutV2Callback() {
+        public void onCheckoutProductSuccess(Order order) {
+            // get pricing breakdown and final price
+            List<PriceBreakdown> pricingBreakdown = order.getBreakdowns();
+            float finalPrice = order.getFinalPrice();
+            String orderId = order.getOrderId();
+
+            // create a paymentRequest object, and then use this with the checkoutProduct object to purchase the item.
+            PaymentCard paymentCard = new PaymentCard(); // use consumer's chosen payment card
+            String cvv = "123"; // use actual cvv
+            PaymentRequest paymentRequest = checkout.createPaymentRequest(paymentCard,cvv);
+
+            // buy a single product
+            checkout.buyProduct(paymentRequest, productCheckoutBundleV2, orderId, new CheckoutV2Callback() {
+                @Override
+                public void onProductOptionBuySuccess(OrderSummary orderSummary) {
+                    super.onProductOptionBuySuccess(orderSummary);
+                    //display order summary
+                    String orderId = orderSummary.getOrderId();
+                    JSONObject orderData = orderSummary.getData();
+                }
+            });
+
+        }
+    });
+}
+```
+
+Once you have product information, create a CheckoutProduct object. Then call the SDK `CheckoutManager.checkoutProduct` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
+
+
+
+#### 5. Submit payment for order
+
+```swift
+    let paymentCard = // RezolveSDK.PaymentCard
+
+    let cardCVV = "000" // Card CVV
+
+    let paymentRequest = PaymentRequest(
+        paymentCard: paymentCard, 
+        cvv: cardCVV
+    )
+
+    rezolveSession.checkoutManagerV2.buy(
+        bundle: productBundleV2,
+        paymentRequest: paymentRequest,
+        checkoutId: checkoutId,
+        callback: { checkoutOrder in
+            // CheckoutOrder handling
+        },
+        errorCallback: { _ in 
+            // Error handling
+    })
+```
+```java
+// create a paymentRequest object, and then use this with the checkoutBundle object 
 
 // create paymentRequest object
 PaymentCard paymentCard = new PaymentCard(); // use consumer's chosen payment card from step 3
 String cvv = "123"; // use actual cvv
 PaymentRequest paymentRequest = checkout.createPaymentRequest(paymentCard,cvv);
 
-// add consumer's location
-RezolveLocation rezolveLocation = new RezolveLocation();
-rezolveLocation.setLatitude(48.8736645);
-rezolveLocation.setLongitude(2.2910793);
 
 // buy a single product
-checkout.buyProduct(checkoutBundle, phonebookId, rezolveLocation, paymentRequest, new CheckoutCallback() {
-	public void onProductOrderPlaced(String merchantId, String orderId) {
-		// show order confirmation
-	}
-});
+checkoutManagerV2.buyProduct(paymentRequest, productCheckoutBundleV2, orderId, this);
+
+@Override
+public void onProductOptionBuySuccess(OrderSummary orderSummary) {
+    // skip this call, ContactInformation entity is not public
+    // Merchant.ContactInformation contactInformation = orderSummary.getContactInformation();
+    JSONObject orderData = orderSummary.getData();
+    String orderId = orderSummary.getOrderId();
+    String partnerId = orderSummary.getPartnerId();
+    String partnerName = orderSummary.getPartnerName();
+}
+
 ```
 
 
 
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass a `checkoutBundle` object, `phonebookId` string, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyProduct` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
+In this tutorial, we assume the user chose credit card payment. Note that `paymentRequest` is actually optional here, and can be null. To determine if it's needed, please check selected `SupportedPaymentMethod`'s type.
+
+Pass a `paymentRequest` object, checkoutBundleV2` object, the `orderId`, and an interface or callback to the `buyProduct` method. The success response will an `OrderSummary` object. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
 When the method returns successfully, it will automatically initiate the signOrderUpdate method.
 
 
 
-#### 5. Wait for signOrderUpdate to return a final order status.
+#### 6. Wait for signOrderUpdate to return a final order status.
 
 ```swift
-session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
+session.checkoutManagerV2.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
 
-session.checkoutManager.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
+session.checkoutManagerV2.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
 
     print(status)
 

@@ -109,16 +109,12 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
 First, initialize `scanManager`, and enable the scan screen using `session.startVideo()`, and capture a watermarked image. The scanManager recognizes the encoded product data, and extracts `merchantId`, `catalogId`, and `productId` from the image, automatically calling `getProduct`. The scanManager returns a `product` object.
 
 
-
-
-
-#### 2. Add the product to the cart, and create an order with an order total
+#### 2. Add Product to the Cart
 
 ```swift
 let checkoutProduct = createCheckoutProductWithVariant(product: product)
 
 session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
-
 
 }, errorCallback: { print($0) })
 ```
@@ -142,12 +138,6 @@ checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallbac
                 String cartId = cartDetails.getId();
                 String merchantId = "123"; //use actual merchant id
                 String addressId = "123";  //use actual address id
-
-                // create checkoutBundle
-                CheckoutBundle checkoutBundle = CheckoutBundle.createCartCheckoutBundle ( cartId,  merchantId, addressId );
-
-                //  get order id and totals for a cart
-                checkout.checkoutCart(checkoutBundle,this);
             }
         });
     }
@@ -155,11 +145,106 @@ checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallbac
 ```
 
 
-Once you have product information, create a CheckoutProduct object.  Then call the SDK `CheckoutManager.checkoutCart` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
+#### 3. Get shipping and payment options for the cart
+
+```swift
+    // Fetch PaymentOption for cart
+    rezolveSession.paymentOptionManager.getCartOptions(
+        merchantId: merchantId,
+        cartId: cartId,
+        callback: { (paymentOptionList: [PaymentOption]) in
+
+            // Handle [PaymentOption]
+
+    }, errorCallback: { httpResponse in
+        // Error handling code
+    })
+
+    /// for this example we assume the user chooses the first option. In reality, display all options to the user, and let them choose.
+    let supportedPaymentMethod = paymentOption.supportedPaymentMethods.first!
+    let shippingMethod = paymentOption.supportedDeliveryMethods.first!
+```
+
+```java
+public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
+
+    private final static String API_KEY = "your_api_key";
+    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PaymentOptionManager pom = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getPaymentOptionManager();
+
+        String merchantId = "12345";
+        String cartId = "12345";
+
+        // get PaymentOptions for cart
+        pom.getCartOptions( merchantId, cartId, this);
+    }
+
+    @Override
+    public void onCartOptionsSuccess(List<PaymentOption> list) {
+        for (PaymentOption paymentOption : list ){
+            String type = paymentOption.getType();
+            List<SupportedPaymentMethod> supportedPaymentMethods = paymentOption.getSupportedPaymentMethods();
+            List<Shipping> supportedDeliveryMethods = paymentOption.getSupportedDeliveryMethods();
+            JSONObject options = paymentOption.getOptions();
+            String id = paymentOption.getId();
+            List<CheckoutProduct> checkoutProducts = paymentOption.getCheckoutProducts();
+
+            for (SupportedPaymentMethod supportedPaymentMethod : supportedPaymentMethods ) {
+                PaymentMethodData paymentMethodData = supportedPaymentMethod.getPaymentMethodData();
+                String spmType = supportedPaymentMethod.getType();
+                JSONObject originalDataJson = supportedPaymentMethod.getOriginalDataJson();
+
+                JSONObject requirements = paymentMethodData.getRequirements();
+                List<String> supportedDelivery = paymentMethodData.getSupportedDelivery();
+                List<String> supportedNetworks = paymentMethodData.getSupportedNetworks();
+                List<String> supportedTypes = paymentMethodData.getSupportedTypes();
+            }
+
+            for (Shipping shipping : supportedDeliveryMethods) {
+                ShippingDetails shippingDetails = shipping.getShippingDetails();
+                ShippingMethod shippingMethod = shipping.getShippingMethod();
+            }
+
+            for (CheckoutProduct checkoutProduct : checkoutProducts) {
+                // breakdown checkoutProduct object
+                float qty = checkoutProduct.getQty();
+                Placement productPlacement = checkoutProduct.getProductPlacement();
+                int cpId  = checkoutProduct.getId();
+                List<ConfigurableOption> configurableOptions = checkoutProduct.getConfigurableOptions();
+
+                String placementId = productPlacement.getPlacementId();
+                String adId = productPlacement.getAdId();
+
+                for (ConfigurableOption configurableOption : configurableOptions) {
+                    int value = configurableOption.getValue();
+                    String code = configurableOption.getCode();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(HttpResponse httpResponse) {
+        // handle error
+    }
+}
 
 
+// Assuming the user picks traditional shipping. 
+// Click and Collect options are discussed in a separate tutorial.
+// Create DeliveryUnit as follows:  
 
-#### 3. Show payment card choices
+
+```
+
+Call `PaymentOptionManager` to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. 
+
+
+#### 4. Show payment card choices
 
 ```swift
   mySession?.walletManager.getAll() { (listOfCards: Array<PaymentCard>) in
@@ -181,58 +266,118 @@ Use `walletManager.getAll` to list the available card choices. If the consumer w
 
 We recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
-
-
-#### 4. Submit payment for order
+#### 5. Create a checkout bundle, checkout the cart to get totals, and create an order
 
 ```swift
-let PARIS_LOCATION = RezolveLocation(type: .point, coordinates: (latitude: 48.8736645, longitude: 2.2910793))
+    let cartCheckoutBundleV2 = createCartCheckoutBundleV2(
+        cartId: cartId,
+        let deliveryMethod = DeliveryMethod(addressId: ""), // address id is blank because this is only needed for Click and Collect
+        merchantId: merchantId,
+        optionId: optionId,
+        paymentMethod: paymentMethod,
+        phoneId: phoneId
+    )
 
-let paymentRequest = session.checkoutManager.createPaymentRequest(paymentCard: remoteCard, cvv: CVV)
+    rezolveSession.checkoutManagerV2.checkout(
+        bundle: cartCheckoutBundleV2, 
+        callback: { Order in 
+            // Order handling
+        },
+        errorCallback: { _ in 
+            // Error handling
+    })
 
-session.checkoutManager.buyProduct(merchantId: MERCHANT_ID, checkoutProduct: checkoutProduct, address: remoteAddress, paymentRequest: paymentRequest, location: PARIS_LOCATION, callback: { (order: CheckoutOrder) in
-
-
-}, errorCallback: { print($0) })
 ```
 ```java
-// create a paymentRequest object, and then use this with the checkoutProduct object and rezolveLocation object to purchase the item.
-// create paymentRequest object
-PaymentCard paymentCard2 = new PaymentCard(); // use consumer's chosen payment card from step 3
-String cvv2 = "123"; // use actual cvv
-PaymentRequest paymentRequest2 = checkout.createPaymentRequest(paymentCard,cvv);
+// create a Cart Checkout Bundle
+String phonebookId = "123"; // use real consumer phonebook id
+String optionId = "123"; // get this from productPaymentOption.getId();
+String cartId = "123";
+SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); //get this from productPaymentOption.getSupportedPaymentMethods()
+// create the delivery unit
+DeliveryUnit deliveryUnit = new DeliveryUnit(supportedPaymentMethod, address.getId()); 
+CheckoutBundleV2 checkoutBundleV2 = CheckoutBundleV2.createCartCheckoutBundleV2( merchantId, optionId, cartId, phonebookId, supportedPaymentMethod, deliveryUnit);
 
-// add consumer's location
-RezolveLocation rezolveLocation2 = new RezolveLocation();
-rezolveLocation.setLatitude(48.8736645);
-rezolveLocation.setLongitude(2.2910793);
-
-// buy the cart
-String cartId = "123"; // either buy current cart, or use getCarts to choose a cart
-
-checkout.buyCart( checkoutBundle, phonebookId, rezolveLocation, paymentRequest,  new CheckoutCallback() {
-	public void onCartOrderPlaced(String orderId) {
-		// display order confirmation
-	}
+// call CheckoutCartOption method to get an order object and totals
+checkout.checkoutCartOption(cartCheckoutBundleV2, new CheckoutV2Callback() {
+    @Override
+    public void onCartOptionCheckoutSuccess(Order order) {
+        super.onCartOptionCheckoutSuccess(order);
+        // get order id
+        String orderId = order.getOrderId();
+        // get price breakdowns
+        List<PriceBreakdown> priceBreakdowns = order.getBreakdowns();
+    }
 });
 ```
 
+Create a cart checkout bundle.  Then call the SDK `CheckoutManagerV2.checkoutCart` method (Android) or `CheckoutManagerV2.checkout` (IOS)  method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
 
+
+
+
+
+
+
+#### 6. Submit payment for order
+
+```swift
+    let paymentCard = // RezolveSDK.PaymentCard
+
+    let cardCVV = "000" // Card CVV
+
+    let paymentRequest = PaymentRequest(
+        paymentCard: paymentCard, 
+        cvv: cardCVV
+    )
+
+    // buy the cart
+    rezolveSession.checkoutManagerV2.buy(
+        bundle: cartCheckoutBundleV2,
+        paymentRequest: paymentRequest,
+        checkoutId: checkoutId,
+        callback: { checkoutOrder in
+            // Handle checkoutOrder
+        },
+        errorCallback: { error in 
+            // Handle error
+    })
+```
+```java
+    // create a paymentRequest object, and then use this with the checkoutProduct object to purchase the cart.
+    PaymentCard paymentCard = new PaymentCard(); // use consumer's chosen payment card
+    String cvv = "123"; // use actual cvv
+    PaymentRequest paymentRequest = checkout.createPaymentRequest(paymentCard,cvv);
+
+    // buy the cart
+    String orderId = "123";  // get from order.getOrderId();
+    checkout.buyCart(paymentRequest, cartCheckoutBundleV2, orderId, new CheckoutV2Callback() {
+        @Override
+        public void onCartOptionBuySuccess(OrderSummary orderSummary) {
+            super.onCartOptionBuySuccess(orderSummary);
+            //display order summary
+            String orderId = orderSummary.getOrderId();
+            JSONObject orderData = orderSummary.getData();
+        }
+    });
+```
 
 When the user confirms intent, pass the card choice and the entered CVV value to the `createPaymentRequest` method. This creates the encrypted `paymentRequest` object needed for checkout.
 
-Pass the `checkoutBundle` object, `phonebookId` string, a `rezolveLocation` object, the `paymentRequest` object, and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
+In this tutorial, we assume the user chose credit card payment. Note that `paymentRequest` is actually optional here, and can be null. To determine if it's needed, please check selected `SupportedPaymentMethod`'s type.
+
+Pass the `paymentRequest` object, the`checkoutBundleV2` object, the `orderId`,  and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
 When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback.
 
 
 
-#### 5. Wait for signOrderUpdate to return a final order status.
+#### 7. Wait for signOrderUpdate to return a final order status.
 
 ```swift
-session.checkoutManager.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
+session.checkoutManagerV2.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
 
-session.checkoutManager.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
+session.checkoutManagerV2.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
 
     print(status)
 
