@@ -22,19 +22,33 @@ class ViewController: UIViewController, ProductDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        	// Initialize RezolveSDK
+            let rezolveSdk = RezolveSDK(
+                apiKey: REZOLVE_API_KEY, 
+                env: REZOLVE_SDK_ENV, 
+                config: config, 
+                dataClient: dataClient
+            )
 
-        let signUpRequest = createSingUpRequest()
+            // Creates Session
+            rezolveSdk.createSession(
+                accessToken: token, 
+                entityId: entityId, 
+                partnerId: partnerId, 
+                callback: { session in
 
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+                    self.session = session
+                    self.session?.getScanManager().productResultDelegate = self
+                    self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
 
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+                }, errorCallback: { response in
+                if response.statusCode == 401 { // Invalid token return
+                    // Developer shoud put token refreshing logic
+                    // using `credentials/ping` endpoint
+                }
 
-                self.session = session
-                self.session?.getScanManager().productResultDelegate = self
-                self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
-
-            }, errorCallback: { print($0) })
+                   // Handle other errors
+	       })
         }
     }
 
@@ -83,8 +97,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-          .getRezolveSession().getScanManager(this, true);
+        scanManager = RezolveSDK.getInstance().getRezolveSession().getScanManager(this, true);
 
           //start video scan to acquire image
           scanManager.startVideoScan(this, rezolveScanView);
@@ -168,13 +181,10 @@ checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallbac
 ```java
 public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
 
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PaymentOptionManager pom = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getPaymentOptionManager();
+        PaymentOptionManager pom = RezolveSDK.getInstance().getRezolveSession().getPaymentOptionManager();
 
         String merchantId = "12345";
         String cartId = "12345";
@@ -243,6 +253,8 @@ public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptio
 
 Call `PaymentOptionManager` to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. 
 
+Note: You must repeat this call if the user chooses a different product variant (size, color, etc), changes product quantity, changes shipping choice, or changes payment option.
+
 
 #### 4. Show payment card choices
 
@@ -271,7 +283,7 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 ```swift
     let cartCheckoutBundleV2 = createCartCheckoutBundleV2(
         cartId: cartId,
-        let deliveryMethod = DeliveryMethod(addressId: ""), // address id is blank because this is only needed for Click and Collect
+        let delivery = DeliveryMethod(addressId: addressObject.id), // address id is blank because this is only needed for Click and Collect
         merchantId: merchantId,
         optionId: optionId,
         paymentMethod: paymentMethod,
@@ -294,6 +306,7 @@ String phonebookId = "123"; // use real consumer phonebook id
 String optionId = "123"; // get this from productPaymentOption.getId();
 String cartId = "123";
 SupportedPaymentMethod supportedPaymentMethod = new SupportedPaymentMethod(); //get this from productPaymentOption.getSupportedPaymentMethods()
+
 // create the delivery unit
 DeliveryUnit deliveryUnit = new DeliveryUnit(supportedPaymentMethod, address.getId()); 
 CheckoutBundleV2 checkoutBundleV2 = CheckoutBundleV2.createCartCheckoutBundleV2( merchantId, optionId, cartId, phonebookId, supportedPaymentMethod, deliveryUnit);

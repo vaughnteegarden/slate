@@ -78,7 +78,7 @@ public class AutoDetectSampleActivity extends AppCompatActivity implements AutoD
         // When app goes background the app should start the service
         if (rezolveAutoDetectManager == null) {
             // Request RezolveSDK for a instance of the AutoDetectManager
-            rezolveAutoDetectManager = RezolveSDK.getInstance(Constants.API_KEY, Constants.ENV).getRezolveSession().getAutoDetectManager();
+            rezolveAutoDetectManager = RezolveSDK.getInstance().getRezolveSession().getAutoDetectManager();
         }
         // Start the service passing the caller Activity, an optional notification and the AutoDetectInterface Callback.
         // Here we don't pass the optional notification, so the RezolveSDK will provide a default Notification for the app.
@@ -162,7 +162,7 @@ public class AutoDetectSampleActivity2 extends AppCompatActivity implements Auto
 
         // When app goes background the app should start the service
         if (rezolveAutoDetectManager == null) {
-            rezolveAutoDetectManager = RezolveSDK.getInstance(Constants.API_KEY, Constants.ENV).getRezolveSession().getAutoDetectManager();
+            rezolveAutoDetectManager = RezolveSDK.getInstance().getRezolveSession().getAutoDetectManager();
         }
         // Start the service passing the caller Activity, an optional notification and the AutoDetectInterface Callback.
         // Here we send the custom notifiction we have created

@@ -167,7 +167,7 @@ At this point user should select a payment method. They are listed under the `su
 
 ```swift
     // standard shipping example
-    let deliveryMethod =  DeliveryMethod(addressId: "")
+    let delivery = DeliveryMethod(addressId: addressObject.id)
 
     // Click and Collect example
     guard let shipping = shippingMethod, let store = shipping.store else { preconditionFailure() }
@@ -186,7 +186,7 @@ Android calls this object `DeliveryUnit`, IOS uses `DeliveryMethod`
 
 `DeliveryUnit` (Android) is created using the chosen `supportedPaymentMethod` and the address id of the pick up store. 
 
-`DeliveryMethod` only requires the address id of the pick up store.
+`DeliveryMethod` has no need of an id for the object creation, so an empty `String` used to feel the `addressId` present in the constructor.
 
 See the `extension_attributes` node for this store id. 
 

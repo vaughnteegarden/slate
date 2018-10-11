@@ -84,14 +84,10 @@ extension ViewController: ProductDelegate {
 ``` java
 public class TriggerMgr extends AppCompatActivity implements TriggerInterface {
 
-
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TriggerManager triggerManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getTriggerManager();
+        TriggerManager triggerManager = RezolveSDK.getInstance().getRezolveSession().getTriggerManager();
 
         String triggerUrl = "http://rzlv.co/2/3/13/169?ad=20&placement=25";
 

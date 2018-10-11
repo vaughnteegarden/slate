@@ -16,11 +16,29 @@ class RezolveSDK1ViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // initialize SDK
-        // possible values for RezolveEnv enum are .Sandbox, .Production
-        let API_KEY: String  = "1234567890"
-        let ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: ENVIRONMENT)
+        // Initialize RezolveSDK
+        let rezolveSdk = RezolveSDK(
+            apiKey: REZOLVE_API_KEY, 
+            env: REZOLVE_SDK_ENV, 
+            config: config, 
+            dataClient: dataClient
+        )
+
+        // Creates Session
+        rezolveSdk.createSession(
+            accessToken: token, 
+            entityId: entityId, 
+            partnerId: partnerId, 
+            callback: { session in
+                // Store session
+            }, errorCallback: { response in
+                if response.statusCode == 401 { // Invalid token return
+                    // Developer shoud put token refreshing logic
+                    // using `credentials/ping` endpoint
+                }
+
+            // Handle other errors
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -99,8 +117,16 @@ public class MyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
  		...
-        RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-        .createSession(accessToken, entityId, partnerId, deviceProfile, new RezolveInterface() {
+        rezolveSDK = new RezolveSDK.Builder()
+           .setApiKey(API_KEY)
+           .setEnv(ENVIRONMENT)
+           .setAuthRequestProvider(new PartnerAuthRequestProvider(AuthService.getInstance()))
+           .build();
+
+            rezolveSDK.setAuthToken(accessToken);
+
+            rezolveSDK.createSession( accessToken, entityId, partnerId, new RezolveInterface() {
+
 
             @Override
             public void onInitializationSuccess(RezolveSession rezolveSession, String 
@@ -132,7 +158,7 @@ public class MyActivity extends AppCompatActivity implements WalletInterface {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// .getRezolveSession gets an already created session
-		RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession()
+		RezolveSDK.getInstance().getRezolveSession()
         .getWalletManager().getAll(this);
 	}
 

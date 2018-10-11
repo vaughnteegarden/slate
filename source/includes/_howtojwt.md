@@ -301,7 +301,7 @@ rezolveSDK = new RezolveSDK.Builder()
 rezolveSDK.setAuthToken(accessToken);
 
 // Start session, again supplying JWT auth token
-RezolveSDK.createSession( accessToken, entityId, partnerId, new RezolveInterface() {
+rezolveSDK.createSession( accessToken, entityId, partnerId, new RezolveInterface() {
 
 	@Override
 	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {

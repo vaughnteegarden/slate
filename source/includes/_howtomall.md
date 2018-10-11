@@ -62,15 +62,12 @@ internal final class ApiClient {
 ```java
 public class Merchants extends AppCompatActivity implements MerchantInterface {
 
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MerchantInterface merchantInterface;
 
-        MerchantManager merchantManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getMerchantManager();
+        MerchantManager merchantManager = RezolveSDK.getInstance().getRezolveSession().getMerchantManager();
 
         // get merchants
         merchantManager.getMerchants(this, this);
@@ -149,15 +146,12 @@ class ViewController: UIViewController {
 }
 ```
 ```java
-private final static String API_KEY = "your_api_key";
-private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
-
 @Override
 protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	ProductInterface productInterface;
 
-	ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
+	ProductManager myProductManager = RezolveSDK.getInstance().getRezolveSession().getProductManager();
 
 	// get categories
 	String merchantId = "123";
@@ -340,15 +334,12 @@ class ViewController: UIViewController {
 ```java
 public class Products2 extends AppCompatActivity implements ProductInterface {
 
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProductInterface productInterface;
 
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getProductManager();
+        ProductManager myProductManager = RezolveSDK.getInstance().getRezolveSession().getProductManager();
 
 		merchantId = "123";
 		Category category = new Category();
@@ -507,15 +498,11 @@ class ViewController: UIViewController {
 // get a single product using ProductInterface
 public class Products extends AppCompatActivity implements ProductInterface {
 
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ProductManager myProductManager = RezolveSDK.getInstance(API_KEY, 
-        ENVIRONMENT).getRezolveSession().getProductManager();
+        ProductManager myProductManager = RezolveSDK.getInstance().getRezolveSession().getProductManager();
 		
         // get single product
         Product product = new Product();

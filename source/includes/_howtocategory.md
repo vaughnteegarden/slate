@@ -22,19 +22,33 @@ class ViewController: UIViewController, ProductDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        // Initialize RezolveSDK
+            let rezolveSdk = RezolveSDK(
+                apiKey: REZOLVE_API_KEY, 
+                env: REZOLVE_SDK_ENV, 
+                config: config, 
+                dataClient: dataClient
+            )
 
-        let signUpRequest = createSingUpRequest()
+            // Creates Session
+            rezolveSdk.createSession(
+                accessToken: token, 
+                entityId: entityId, 
+                partnerId: partnerId, 
+                callback: { session in
 
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+                    self.session = session
+                    self.session?.getScanManager().productResultDelegate = self
+                    self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
 
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+                }, errorCallback: { response in
+                if response.statusCode == 401 { // Invalid token return
+                    // Developer shoud put token refreshing logic
+                    // using `credentials/ping` endpoint
+                }
 
-                self.session = session
-                self.session?.getScanManager().productResultDelegate = self
-                self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
-
-            }, errorCallback: { print($0) })
+                   // Handle other errors
+	       })
         }
     }
 
@@ -93,8 +107,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         rezolveScanView = (RezolveScanView)findViewById(R.id.scan_view);
 
         //get scan manager
-        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT)
-          .getRezolveSession().getScanManager(this, true);
+        scanManager = RezolveSDK.getInstance().getRezolveSession().getScanManager(this, true);
 
           //start video scan to acquire image
           scanManager.startVideoScan(this, rezolveScanView);

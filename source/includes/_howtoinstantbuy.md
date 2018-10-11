@@ -21,19 +21,33 @@ class ViewController: UIViewController, ProductDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
+        // Initialize RezolveSDK
+            let rezolveSdk = RezolveSDK(
+                apiKey: REZOLVE_API_KEY, 
+                env: REZOLVE_SDK_ENV, 
+                config: config, 
+                dataClient: dataClient
+            )
 
-        let signUpRequest = createSingUpRequest()
+            // Creates Session
+            rezolveSdk.createSession(
+                accessToken: token, 
+                entityId: entityId, 
+                partnerId: partnerId, 
+                callback: { session in
 
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
+                    self.session = session
+                    self.session?.getScanManager().productResultDelegate = self
+                    self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
 
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
+                }, errorCallback: { response in
+                if response.statusCode == 401 { // Invalid token return
+                    // Developer shoud put token refreshing logic
+                    // using `credentials/ping` endpoint
+                }
 
-                self.session = session
-                self.session?.getScanManager().productResultDelegate = self
-                self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
-
-            }, errorCallback: { print($0) })
+                   // Handle other errors
+	       })
         }
     }
 
@@ -84,7 +98,7 @@ public class ScanActivity extends AppCompatActivity implements ScanManagerInterf
         //get scan manager
         boolean barcodeenabled = true;
         boolean videoenabled = true;
-        scanManager = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getScanManager(this, barcodeenabled, videoenabled );                                     
+        scanManager = RezolveSDK.getInstance().getRezolveSession().getScanManager(this, barcodeenabled, videoenabled );                                     
 
         //start video scan to acquire image
         scanManager.startVideoScan(this, rezolveScanView);
@@ -116,7 +130,7 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
     rezolveSession.getProductOptions(
         checkoutProduct: checkoutProduct,
         merchantId: merchantId,
-        callback: { (paymentOption: PaymentOption) ->
+        callback: { (paymentOption: PaymentOption) in
 
         let paymentMethods = paymentOption.supportedPaymentMethods
         let shippings = paymentOption.supportedDeliveryMethods
@@ -133,13 +147,10 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 ```java
 public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptionInterface {
 
-    private final static String API_KEY = "your_api_key";
-    private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PaymentOptionManager pom = RezolveSDK.getInstance(API_KEY, ENVIRONMENT).getRezolveSession().getPaymentOptionManager();
+        PaymentOptionManager pom = RezolveSDK.getInstance().getRezolveSession().getPaymentOptionManager();
 
         String merchantId = "12345";
         CheckoutProduct checkoutProduct = new CheckoutProduct();
@@ -196,6 +207,8 @@ public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptio
 
 Call `PaymentOptionManager` to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. 
 
+Note: You must repeat this call if the user chooses a different product variant (size, color, etc), changes product quantity, changes shipping choice, or changes payment option.
+
 
 #### 3. Show payment card choices
 
@@ -232,7 +245,7 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 ```swift
 let productBundleV2 = createProductCheckoutBundleV2(
     checkoutProduct: checkoutProduct,
-    let deliveryMethod = DeliveryMethod(addressId: ""), // address id is blank because this is only needed for Click and Collect
+    let delivery = DeliveryMethod(addressId: addressObject.id), // address id is blank because this is only needed for Click and Collect
     merchantId: merchantId,
     optionId: optionId,
     paymentMethod: paymentMethod,
@@ -270,6 +283,7 @@ public void onProductResult(Product product) {
     SupportedPaymentMethod supportedPaymentMethod = supportedPaymentMethods.get(0);  // in reality customer chooses an option here
     Shipping deliveryMethod = deliveryMethods.get(0); // in reality customer chooses an option here
     String phonebookId = "123"; // use real consumer phonebook id
+    
     // create the delivery unit
     DeliveryUnit deliveryUnit = new DeliveryUnit(supportedPaymentMethod, address.getId()); 
 
@@ -362,7 +376,7 @@ When the user confirms intent, pass the card choice and the entered CVV value to
 
 In this tutorial, we assume the user chose credit card payment. Note that `paymentRequest` is actually optional here, and can be null. To determine if it's needed, please check selected `SupportedPaymentMethod`'s type.
 
-Pass a `paymentRequest` object, checkoutBundleV2` object, the `orderId`, and an interface or callback to the `buyProduct` method. The success response will an `OrderSummary` object. Note that this does not mean the order was confirmed, only that the request was successfully received.
+Pass a `paymentRequest` object, `checkoutBundleV2` object, the `orderId`, and an interface or callback to the `buyProduct` method. The success response will an `OrderSummary` object. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
 When the method returns successfully, it will automatically initiate the signOrderUpdate method.
 

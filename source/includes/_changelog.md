@@ -2,9 +2,9 @@
 
 All notable changes to the project will be documented in this log.
 
-## Android vTODO, IOS vTODO - October , 2018
+## Android v2.0.0, IOS v1.11.10 - October 11, 2018
 
-### Documentation Changes
+### Major Documentation Changes
 
 - Added tutorial for Trigger Manager
 - Added tutorial for Background Listening
