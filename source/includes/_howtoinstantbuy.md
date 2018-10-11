@@ -209,6 +209,8 @@ Call `PaymentOptionManager` to get shipping and payment options for the current 
 
 Note: You must repeat this call if the user chooses a different product variant (size, color, etc), changes product quantity, changes shipping choice, or changes payment option.
 
+For more information on what is returned by `getProductOptions`, see the <a href="#background-listening">Background Listening</a> tutorial.
+
 
 #### 3. Show payment card choices
 
@@ -240,7 +242,7 @@ Use `walletManager.getAll` to list the available card choices. If the consumer w
 We recommend using a "slide to buy" button to confirm purchase intent, while preserving the maximum ease of use.
 
 
-#### 4. Create a checkout bundle, checkout the produc to get totals, and create an order
+#### 4. Create a checkout bundle, checkout the product to get totals, and create an order
 
 ```swift
 let productBundleV2 = createProductCheckoutBundleV2(
@@ -319,7 +321,7 @@ public void onProductResult(Product product) {
 }
 ```
 
-Once you have product information, create a CheckoutProduct object. Then call the SDK `CheckoutManager.checkoutProduct` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
+Once you have product information, create a CheckoutProduct object. Then call the SDK `CheckoutManagerV2.checkoutProduct` method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.
 
 
 

@@ -511,13 +511,13 @@ The `AddressBookViewController` is an example of how you would implement the `Ad
 
 **Android**
 
-The SDK makes every call to the Rezolve server using an http client; if a call to the server results in a "401 token expired" response, the http client will ask for a new token. The Partner Auth Service you passed in to the SDK Builder must handle this JWT renewal.
+The SDK makes every call to the Rezolve server using an http client; if a call to the server results in a "401 token expired" response, the http client will ask for a new token using `RezolveSDK.AuthRequestProvider`. The Partner Auth Service you passed in to the SDK Builder must handle this JWT renewal.
 
 It should be noted that the Partner Auth Service will typically handle all partner auth needs. Duties may include processesing username/passwords for login, handling registering your users, and handling password resets, in addition to JWT renewal. 
 
 The code examples show one way of implementing JWT renewal. 
 
-In the class `PartnerAuthRequestProvider` the Partner Auth Service implements `RezolveSDK.AuthRequestProvider`, to handle the requirements of the SDK. If the http client receives a "401 token expired", it will call "RezolveSDK.GetAuthRequest" to either confirm logout or renew the token. The token is renewed, but is only returned if the ping to the partner auth server suceededs. If the partner auth server says the user is not logged in, the renewed token is not returned, and the user can no longer make requests.
+In the class `PartnerAuthRequestProvider` the Partner Auth Service implements `RezolveSDK.AuthRequestProvider`, to handle the JWT renewal requirements of the SDK. If the http client receives a "401 token expired", it will call `RezolveSDK.GetAuthRequest` to either confirm logout or renew the token. The token is renewed, but is only returned if the ping to the partner auth server to check login status suceededs. If the partner auth server says the user is not logged in, the renewed token is not returned, and the user can no longer make requests. If the user is still logged in, the updated JWT is returned.
 
 
 

@@ -8,7 +8,7 @@
 
 The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.
 
-In the Cart Buy flow, one or more products are added to a cart. Each merchant will have a separate cart, and multiple carts can contain products at a time. For this example we are assuming only one cart is active, but you can check for multiple carts using `CheckoutManager.getCarts`.
+In the Cart Buy flow, one or more products are added to a cart. Each merchant will have a separate cart, and multiple carts can contain products at a time. For this example we are assuming only one cart is active, but you can check for multiple carts using `CheckoutManagerV2.getCarts`.
 
 
 
@@ -157,6 +157,7 @@ checkout.addProductToCart(this, checkoutProduct, merchantId, new CheckoutCallbac
 });
 ```
 
+Call `CheckoutManagerV2.addProductToCart` to add the product to cart.
 
 #### 3. Get shipping and payment options for the cart
 
@@ -254,6 +255,8 @@ public class PaymentOptionsMgr extends AppCompatActivity implements PaymentOptio
 Call `PaymentOptionManager` to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. 
 
 Note: You must repeat this call if the user chooses a different product variant (size, color, etc), changes product quantity, changes shipping choice, or changes payment option.
+
+For more information on what is returned by `getCartOptions`, see the <a href="#background-listening">Background Listening</a> tutorial.
 
 
 #### 4. Show payment card choices

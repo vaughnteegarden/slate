@@ -319,15 +319,13 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>Rezolve advises using <strong><a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a></strong> to capture app problems on both IOS and Android.</p>
 
 <p>We will not provide development support if you have not integrated Crashlytics or a similar tool.</p>
-<h2 id='download-the-rezolve-insidetm-sdk-amp-get-an-api-key'>Download the Rezolve Inside<sup>TM</sup> SDK &amp; Get an API Key</h2>
+<h2 id='download-the-rezolve-insidetm-sdk-amp-get-an-api-key'>Download the Rezolve Inside<sup>TM</sup> SDK &amp; Get an API Key</h2><h3 id='request-api-key-amp-download-sdk'><a href="license.html" target="_blank">Request API Key &amp; Download SDK</a></h3>
 <p>Latest release versions:</p>
 
 <ul>
-<li>IOS: 1.7.6.1</li>
-<li>Android: 1.7.5 </li>
+<li>IOS: 1.11.10</li>
+<li>Android: 2.0.0 </li>
 </ul>
-
-<p>To download the latest version, please <a href="license.html" target="_blank">go here to supply your contact info and agree to the SDK license</a>.</p>
 
 <p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
 <h2 id='set-up-the-sdk-ios'>Set up the SDK - IOS</h2>
@@ -370,11 +368,29 @@ You can switch between IOS and Android by clicking the tabs above.
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-        <span class="c1">// initialize SDK</span>
-        <span class="c1">// possible values for RezolveEnv enum are .Sandbox, .Production</span>
-        <span class="k">let</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span>  <span class="o">=</span> <span class="s">"1234567890"</span>
-        <span class="k">let</span> <span class="nv">ENVIRONMENT</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"sandbox-api-tw.rzlvtest.co"</span>
-        <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">ENVIRONMENT</span><span class="p">)</span>
+        <span class="c1">// Initialize RezolveSDK</span>
+        <span class="k">let</span> <span class="nv">rezolveSdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
+            <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">REZOLVE_API_KEY</span><span class="p">,</span> 
+            <span class="nv">env</span><span class="p">:</span> <span class="kt">REZOLVE_SDK_ENV</span><span class="p">,</span> 
+            <span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> 
+            <span class="nv">dataClient</span><span class="p">:</span> <span class="n">dataClient</span>
+        <span class="p">)</span>
+
+        <span class="c1">// Creates Session</span>
+        <span class="n">rezolveSdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+            <span class="nv">accessToken</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> 
+            <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> 
+            <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> 
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">session</span> <span class="k">in</span>
+                <span class="c1">// Store session</span>
+            <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">401</span> <span class="p">{</span> <span class="c1">// Invalid token return</span>
+                    <span class="c1">// Developer shoud put token refreshing logic</span>
+                    <span class="c1">// using `credentials/ping` endpoint</span>
+                <span class="p">}</span>
+
+            <span class="c1">// Handle other errors</span>
+        <span class="p">})</span>
     <span class="p">}</span>
 
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
@@ -440,8 +456,16 @@ You can switch between IOS and Android by clicking the tabs above.
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="o">...</span>
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">createSession</span><span class="o">(</span><span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="n">deviceProfile</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">rezolveSDK</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+           <span class="o">.</span><span class="na">setApiKey</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">)</span>
+           <span class="o">.</span><span class="na">setEnv</span><span class="o">(</span><span class="n">ENVIRONMENT</span><span class="o">)</span>
+           <span class="o">.</span><span class="na">setAuthRequestProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">PartnerAuthRequestProvider</span><span class="o">(</span><span class="n">AuthService</span><span class="o">.</span><span class="na">getInstance</span><span class="o">()))</span>
+           <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+            <span class="n">rezolveSDK</span><span class="o">.</span><span class="na">setAuthToken</span><span class="o">(</span><span class="n">accessToken</span><span class="o">);</span>
+
+            <span class="n">rezolveSDK</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+
 
             <span class="nd">@Override</span>
             <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> 
@@ -473,7 +497,7 @@ You can switch between IOS and Android by clicking the tabs above.
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// .getRezolveSession gets an already created session</span>
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">()</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">()</span>
         <span class="o">.</span><span class="na">getWalletManager</span><span class="o">().</span><span class="na">getAll</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
     <span class="o">}</span>
 
@@ -877,7 +901,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="n">rezolveSDK</span><span class="o">.</span><span class="na">setAuthToken</span><span class="o">(</span><span class="n">accessToken</span><span class="o">);</span>
 
 <span class="c1">// Start session, again supplying JWT auth token</span>
-<span class="n">RezolveSDK</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">rezolveSDK</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
@@ -1076,13 +1100,13 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p><strong>Android</strong></p>
 
-<p>The SDK makes every call to the Rezolve server using an http client; if a call to the server results in a &quot;401 token expired&quot; response, the http client will ask for a new token. The Partner Auth Service you passed in to the SDK Builder must handle this JWT renewal.</p>
+<p>The SDK makes every call to the Rezolve server using an http client; if a call to the server results in a &quot;401 token expired&quot; response, the http client will ask for a new token using <code>RezolveSDK.AuthRequestProvider</code>. The Partner Auth Service you passed in to the SDK Builder must handle this JWT renewal.</p>
 
 <p>It should be noted that the Partner Auth Service will typically handle all partner auth needs. Duties may include processesing username/passwords for login, handling registering your users, and handling password resets, in addition to JWT renewal. </p>
 
 <p>The code examples show one way of implementing JWT renewal. </p>
 
-<p>In the class <code>PartnerAuthRequestProvider</code> the Partner Auth Service implements <code>RezolveSDK.AuthRequestProvider</code>, to handle the requirements of the SDK. If the http client receives a &quot;401 token expired&quot;, it will call &quot;RezolveSDK.GetAuthRequest&quot; to either confirm logout or renew the token. The token is renewed, but is only returned if the ping to the partner auth server suceededs. If the partner auth server says the user is not logged in, the renewed token is not returned, and the user can no longer make requests.</p>
+<p>In the class <code>PartnerAuthRequestProvider</code> the Partner Auth Service implements <code>RezolveSDK.AuthRequestProvider</code>, to handle the JWT renewal requirements of the SDK. If the http client receives a &quot;401 token expired&quot;, it will call <code>RezolveSDK.GetAuthRequest</code> to either confirm logout or renew the token. The token is renewed, but is only returned if the ping to the partner auth server to check login status suceededs. If the partner auth server says the user is not logged in, the renewed token is not returned, and the user can no longer make requests. If the user is still logged in, the updated JWT is returned.</p>
 <h3 id='http-error-responses'>HTTP Error Responses</h3><h4 id='403'>403</h4><pre class="highlight plaintext"><code>{
     "type": "Authentication"
     "code": "1"
@@ -1137,19 +1161,33 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-        <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">SDK_ENV</span><span class="p">)</span>
+        <span class="c1">// Initialize RezolveSDK</span>
+            <span class="k">let</span> <span class="nv">rezolveSdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
+                <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">REZOLVE_API_KEY</span><span class="p">,</span> 
+                <span class="nv">env</span><span class="p">:</span> <span class="kt">REZOLVE_SDK_ENV</span><span class="p">,</span> 
+                <span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> 
+                <span class="nv">dataClient</span><span class="p">:</span> <span class="n">dataClient</span>
+            <span class="p">)</span>
 
-        <span class="k">let</span> <span class="nv">signUpRequest</span> <span class="o">=</span> <span class="nf">createSingUpRequest</span><span class="p">()</span>
+            <span class="c1">// Creates Session</span>
+            <span class="n">rezolveSdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+                <span class="nv">accessToken</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> 
+                <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> 
+                <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> 
+                <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">session</span> <span class="k">in</span>
 
-        <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">view</span> <span class="k">as!</span> <span class="kt">ScanCameraView</span><span class="p">)</span>
 
-            <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> <span class="nv">device</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+                <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">401</span> <span class="p">{</span> <span class="c1">// Invalid token return</span>
+                    <span class="c1">// Developer shoud put token refreshing logic</span>
+                    <span class="c1">// using `credentials/ping` endpoint</span>
+                <span class="p">}</span>
 
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">view</span> <span class="k">as!</span> <span class="kt">ScanCameraView</span><span class="p">)</span>
-
-            <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+                   <span class="c1">// Handle other errors</span>
+           <span class="p">})</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -1197,7 +1235,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="c1">//get scan manager</span>
         <span class="kt">boolean</span> <span class="n">barcodeenabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="kt">boolean</span> <span class="n">videoenabled</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="n">scanManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getScanManager</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">barcodeenabled</span><span class="o">,</span> <span class="n">videoenabled</span> <span class="o">);</span>                                     
+        <span class="n">scanManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getScanManager</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">barcodeenabled</span><span class="o">,</span> <span class="n">videoenabled</span> <span class="o">);</span>                                     
 
         <span class="c1">//start video scan to acquire image</span>
         <span class="n">scanManager</span><span class="o">.</span><span class="na">startVideoScan</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">rezolveScanView</span><span class="o">);</span>
@@ -1223,7 +1261,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="n">rezolveSession</span><span class="o">.</span><span class="nf">getProductOptions</span><span class="p">(</span>
         <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
         <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
-        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">paymentOption</span><span class="p">:</span> <span class="kt">PaymentOption</span><span class="p">)</span> <span class="o">-&gt;</span>
+        <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">paymentOption</span><span class="p">:</span> <span class="kt">PaymentOption</span><span class="p">)</span> <span class="k">in</span>
 
         <span class="k">let</span> <span class="nv">paymentMethods</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedPaymentMethods</span>
         <span class="k">let</span> <span class="nv">shippings</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span>
@@ -1237,13 +1275,10 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="k">let</span> <span class="nv">shippingMethod</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span><span class="o">.</span><span class="n">first</span><span class="o">!</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PaymentOptionsMgr</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PaymentOptionInterface</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">PaymentOptionManager</span> <span class="n">pom</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPaymentOptionManager</span><span class="o">();</span>
+        <span class="n">PaymentOptionManager</span> <span class="n">pom</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPaymentOptionManager</span><span class="o">();</span>
 
         <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"12345"</span><span class="o">;</span>
         <span class="n">CheckoutProduct</span> <span class="n">checkoutProduct</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CheckoutProduct</span><span class="o">();</span>
@@ -1298,6 +1333,10 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="o">}</span>
 </code></pre>
 <p>Call <code>PaymentOptionManager</code> to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. </p>
+
+<p>Note: You must repeat this call if the user chooses a different product variant (size, color, etc), changes product quantity, changes shipping choice, or changes payment option.</p>
+
+<p>For more information on what is returned by <code>getProductOptions</code>, see the <a href="#background-listening">Background Listening</a> tutorial.</p>
 <h4 id='3-show-payment-card-choices'>3. Show payment card choices</h4><pre class="highlight swift tab-swift"><code>
   <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
       <span class="c1">// handle list of cards here</span>
@@ -1317,9 +1356,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>Use <code>walletManager.getAll</code> to list the available card choices. If the consumer wishes to buy, they will select a payment card to use, and provide confirmation of ordering intent.</p>
 
 <p>We recommend using a &quot;slide to buy&quot; button to confirm purchase intent, while preserving the maximum ease of use.</p>
-<h4 id='4-create-a-checkout-bundle-checkout-the-produc-to-get-totals-and-create-an-order'>4. Create a checkout bundle, checkout the produc to get totals, and create an order</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">productBundleV2</span> <span class="o">=</span> <span class="nf">createProductCheckoutBundleV2</span><span class="p">(</span>
+<h4 id='4-create-a-checkout-bundle-checkout-the-product-to-get-totals-and-create-an-order'>4. Create a checkout bundle, checkout the product to get totals, and create an order</h4><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">productBundleV2</span> <span class="o">=</span> <span class="nf">createProductCheckoutBundleV2</span><span class="p">(</span>
     <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
-    <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">),</span> <span class="c1">// address id is blank because this is only needed for Click and Collect</span>
+    <span class="k">let</span> <span class="nv">delivery</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="n">addressObject</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="c1">// address id is blank because this is only needed for Click and Collect</span>
     <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
     <span class="nv">optionId</span><span class="p">:</span> <span class="n">optionId</span><span class="p">,</span>
     <span class="nv">paymentMethod</span><span class="p">:</span> <span class="n">paymentMethod</span><span class="p">,</span>
@@ -1355,6 +1394,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="n">SupportedPaymentMethod</span> <span class="n">supportedPaymentMethod</span> <span class="o">=</span> <span class="n">supportedPaymentMethods</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// in reality customer chooses an option here</span>
     <span class="n">Shipping</span> <span class="n">deliveryMethod</span> <span class="o">=</span> <span class="n">deliveryMethods</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// in reality customer chooses an option here</span>
     <span class="n">String</span> <span class="n">phonebookId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// use real consumer phonebook id</span>
+
     <span class="c1">// create the delivery unit</span>
     <span class="n">DeliveryUnit</span> <span class="n">deliveryUnit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeliveryUnit</span><span class="o">(</span><span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span> 
 
@@ -1389,7 +1429,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="o">});</span>
 <span class="o">}</span>
 </code></pre>
-<p>Once you have product information, create a CheckoutProduct object. Then call the SDK <code>CheckoutManager.checkoutProduct</code> method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.</p>
+<p>Once you have product information, create a CheckoutProduct object. Then call the SDK <code>CheckoutManagerV2.checkoutProduct</code> method to create an order and get totals.  The response order object includes an order id, order total, and price breakdowns.</p>
 <h4 id='5-submit-payment-for-order'>5. Submit payment for order</h4><pre class="highlight swift tab-swift"><code>    <span class="k">let</span> <span class="nv">paymentCard</span> <span class="o">=</span> <span class="c1">// RezolveSDK.PaymentCard</span>
 
     <span class="k">let</span> <span class="nv">cardCVV</span> <span class="o">=</span> <span class="s">"000"</span> <span class="c1">// Card CVV</span>
@@ -1435,7 +1475,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p>In this tutorial, we assume the user chose credit card payment. Note that <code>paymentRequest</code> is actually optional here, and can be null. To determine if it&#39;s needed, please check selected <code>SupportedPaymentMethod</code>&#39;s type.</p>
 
-<p>Pass a <code>paymentRequest</code> object, checkoutBundleV2<code>object, the</code>orderId<code>, and an interface or callback to the</code>buyProduct<code>method. The success response will an</code>OrderSummary` object. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
+<p>Pass a <code>paymentRequest</code> object, <code>checkoutBundleV2</code> object, the <code>orderId</code>, and an interface or callback to the <code>buyProduct</code> method. The success response will an <code>OrderSummary</code> object. Note that this does not mean the order was confirmed, only that the request was successfully received.</p>
 
 <p>When the method returns successfully, it will automatically initiate the signOrderUpdate method.</p>
 <h4 id='6-wait-for-signorderupdate-to-return-a-final-order-status'>6. Wait for signOrderUpdate to return a final order status.</h4><pre class="highlight swift tab-swift"><code><span class="n">session</span><span class="o">.</span><span class="n">checkoutManagerV2</span><span class="o">.</span><span class="nf">buyCart</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">MERCHANT_ID</span><span class="p">,</span> <span class="nv">cart</span><span class="p">:</span> <span class="n">cartDetails</span><span class="p">,</span> <span class="nv">address</span><span class="p">:</span> <span class="n">remoteAddress</span><span class="p">,</span> <span class="nv">paymentRequest</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">DEFAULT_LOCATIONS</span><span class="p">,</span> <span class="nv">phone</span><span class="p">:</span> <span class="n">phone</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">order</span><span class="p">:</span> <span class="kt">CheckoutOrder</span><span class="p">)</span> <span class="k">in</span>
@@ -1474,7 +1514,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p>The premise of Shoppable Ads is to capture an image scan (usually of an advertisement) using the Scan Manager, resolve it into a product URL, fetch the product info, and enable purchase via saved account information.</p>
 
-<p>In the Cart Buy flow, one or more products are added to a cart. Each merchant will have a separate cart, and multiple carts can contain products at a time. For this example we are assuming only one cart is active, but you can check for multiple carts using <code>CheckoutManager.getCarts</code>.</p>
+<p>In the Cart Buy flow, one or more products are added to a cart. Each merchant will have a separate cart, and multiple carts can contain products at a time. For this example we are assuming only one cart is active, but you can check for multiple carts using <code>CheckoutManagerV2.getCarts</code>.</p>
 <h4 id='1-capture-image-and-get-product'>1. Capture image and get product</h4><pre class="highlight swift tab-swift"><code><span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">ProductDelegate</span> <span class="p">{</span>
 
     <span class="k">var</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">?</span>
@@ -1482,19 +1522,33 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-        <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">SDK_ENV</span><span class="p">)</span>
+            <span class="c1">// Initialize RezolveSDK</span>
+            <span class="k">let</span> <span class="nv">rezolveSdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
+                <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">REZOLVE_API_KEY</span><span class="p">,</span> 
+                <span class="nv">env</span><span class="p">:</span> <span class="kt">REZOLVE_SDK_ENV</span><span class="p">,</span> 
+                <span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> 
+                <span class="nv">dataClient</span><span class="p">:</span> <span class="n">dataClient</span>
+            <span class="p">)</span>
 
-        <span class="k">let</span> <span class="nv">signUpRequest</span> <span class="o">=</span> <span class="nf">createSingUpRequest</span><span class="p">()</span>
+            <span class="c1">// Creates Session</span>
+            <span class="n">rezolveSdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+                <span class="nv">accessToken</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> 
+                <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> 
+                <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> 
+                <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">session</span> <span class="k">in</span>
 
-        <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">view</span> <span class="k">as!</span> <span class="kt">ScanCameraView</span><span class="p">)</span>
 
-            <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> <span class="nv">device</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+                <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">401</span> <span class="p">{</span> <span class="c1">// Invalid token return</span>
+                    <span class="c1">// Developer shoud put token refreshing logic</span>
+                    <span class="c1">// using `credentials/ping` endpoint</span>
+                <span class="p">}</span>
 
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">view</span> <span class="k">as!</span> <span class="kt">ScanCameraView</span><span class="p">)</span>
-
-            <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+                   <span class="c1">// Handle other errors</span>
+           <span class="p">})</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -1540,8 +1594,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="n">rezolveScanView</span> <span class="o">=</span> <span class="o">(</span><span class="n">RezolveScanView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">scan_view</span><span class="o">);</span>
 
         <span class="c1">//get scan manager</span>
-        <span class="n">scanManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">)</span>
-          <span class="o">.</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getScanManager</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">scanManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getScanManager</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
           <span class="c1">//start video scan to acquire image</span>
           <span class="n">scanManager</span><span class="o">.</span><span class="na">startVideoScan</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">rezolveScanView</span><span class="o">);</span>
@@ -1591,7 +1644,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="o">});</span>
     <span class="o">}</span>
 <span class="o">});</span>
-</code></pre><h4 id='3-get-shipping-and-payment-options-for-the-cart'>3. Get shipping and payment options for the cart</h4><pre class="highlight swift tab-swift"><code>    <span class="c1">// Fetch PaymentOption for cart</span>
+</code></pre>
+<p>Call <code>CheckoutManagerV2.addProductToCart</code> to add the product to cart.</p>
+<h4 id='3-get-shipping-and-payment-options-for-the-cart'>3. Get shipping and payment options for the cart</h4><pre class="highlight swift tab-swift"><code>    <span class="c1">// Fetch PaymentOption for cart</span>
     <span class="n">rezolveSession</span><span class="o">.</span><span class="n">paymentOptionManager</span><span class="o">.</span><span class="nf">getCartOptions</span><span class="p">(</span>
         <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
         <span class="nv">cartId</span><span class="p">:</span> <span class="n">cartId</span><span class="p">,</span>
@@ -1608,13 +1663,10 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="k">let</span> <span class="nv">shippingMethod</span> <span class="o">=</span> <span class="n">paymentOption</span><span class="o">.</span><span class="n">supportedDeliveryMethods</span><span class="o">.</span><span class="n">first</span><span class="o">!</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PaymentOptionsMgr</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">PaymentOptionInterface</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">PaymentOptionManager</span> <span class="n">pom</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPaymentOptionManager</span><span class="o">();</span>
+        <span class="n">PaymentOptionManager</span> <span class="n">pom</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getPaymentOptionManager</span><span class="o">();</span>
 
         <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"12345"</span><span class="o">;</span>
         <span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="s">"12345"</span><span class="o">;</span>
@@ -1681,6 +1733,10 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 </code></pre>
 <p>Call <code>PaymentOptionManager</code> to get shipping and payment options for the current merchant. This tutorial assumes the consumer chose a form of credit card payment, and chose home delivery. </p>
+
+<p>Note: You must repeat this call if the user chooses a different product variant (size, color, etc), changes product quantity, changes shipping choice, or changes payment option.</p>
+
+<p>For more information on what is returned by <code>getCartOptions</code>, see the <a href="#background-listening">Background Listening</a> tutorial.</p>
 <h4 id='4-show-payment-card-choices'>4. Show payment card choices</h4><pre class="highlight swift tab-swift"><code>  <span class="n">mySession</span><span class="p">?</span><span class="o">.</span><span class="n">walletManager</span><span class="o">.</span><span class="nf">getAll</span><span class="p">()</span> <span class="p">{</span> <span class="p">(</span><span class="nv">listOfCards</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">PaymentCard</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
       <span class="c1">// handle list of cards here</span>
   <span class="p">}</span>
@@ -1698,7 +1754,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>We recommend using a &quot;slide to buy&quot; button to confirm purchase intent, while preserving the maximum ease of use.</p>
 <h4 id='5-create-a-checkout-bundle-checkout-the-cart-to-get-totals-and-create-an-order'>5. Create a checkout bundle, checkout the cart to get totals, and create an order</h4><pre class="highlight swift tab-swift"><code>    <span class="k">let</span> <span class="nv">cartCheckoutBundleV2</span> <span class="o">=</span> <span class="nf">createCartCheckoutBundleV2</span><span class="p">(</span>
         <span class="nv">cartId</span><span class="p">:</span> <span class="n">cartId</span><span class="p">,</span>
-        <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">),</span> <span class="c1">// address id is blank because this is only needed for Click and Collect</span>
+        <span class="k">let</span> <span class="nv">delivery</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="n">addressObject</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="c1">// address id is blank because this is only needed for Click and Collect</span>
         <span class="nv">merchantId</span><span class="p">:</span> <span class="n">merchantId</span><span class="p">,</span>
         <span class="nv">optionId</span><span class="p">:</span> <span class="n">optionId</span><span class="p">,</span>
         <span class="nv">paymentMethod</span><span class="p">:</span> <span class="n">paymentMethod</span><span class="p">,</span>
@@ -1719,6 +1775,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="n">String</span> <span class="n">optionId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span> <span class="c1">// get this from productPaymentOption.getId();</span>
 <span class="n">String</span> <span class="n">cartId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
 <span class="n">SupportedPaymentMethod</span> <span class="n">supportedPaymentMethod</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SupportedPaymentMethod</span><span class="o">();</span> <span class="c1">//get this from productPaymentOption.getSupportedPaymentMethods()</span>
+
 <span class="c1">// create the delivery unit</span>
 <span class="n">DeliveryUnit</span> <span class="n">deliveryUnit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeliveryUnit</span><span class="o">(</span><span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">address</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span> 
 <span class="n">CheckoutBundleV2</span> <span class="n">checkoutBundleV2</span> <span class="o">=</span> <span class="n">CheckoutBundleV2</span><span class="o">.</span><span class="na">createCartCheckoutBundleV2</span><span class="o">(</span> <span class="n">merchantId</span><span class="o">,</span> <span class="n">optionId</span><span class="o">,</span> <span class="n">cartId</span><span class="o">,</span> <span class="n">phonebookId</span><span class="o">,</span> <span class="n">supportedPaymentMethod</span><span class="o">,</span> <span class="n">deliveryUnit</span><span class="o">);</span>
@@ -1824,19 +1881,33 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-        <span class="k">let</span> <span class="nv">sdk</span><span class="p">:</span> <span class="kt">RezolveSDK</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span> <span class="nv">env</span><span class="p">:</span> <span class="kt">SDK_ENV</span><span class="p">)</span>
+        <span class="c1">// Initialize RezolveSDK</span>
+            <span class="k">let</span> <span class="nv">rezolveSdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
+                <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">REZOLVE_API_KEY</span><span class="p">,</span> 
+                <span class="nv">env</span><span class="p">:</span> <span class="kt">REZOLVE_SDK_ENV</span><span class="p">,</span> 
+                <span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> 
+                <span class="nv">dataClient</span><span class="p">:</span> <span class="n">dataClient</span>
+            <span class="p">)</span>
 
-        <span class="k">let</span> <span class="nv">signUpRequest</span> <span class="o">=</span> <span class="nf">createSingUpRequest</span><span class="p">()</span>
+            <span class="c1">// Creates Session</span>
+            <span class="n">rezolveSdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
+                <span class="nv">accessToken</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> 
+                <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> 
+                <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> 
+                <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">session</span> <span class="k">in</span>
 
-        <span class="n">sdk</span><span class="o">.</span><span class="nf">registerUser</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">view</span> <span class="k">as!</span> <span class="kt">ScanCameraView</span><span class="p">)</span>
 
-            <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> <span class="nv">device</span><span class="p">:</span> <span class="n">signUpRequest</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">session</span><span class="p">:</span> <span class="kt">RezolveSession</span><span class="p">)</span> <span class="k">in</span>
+                <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">401</span> <span class="p">{</span> <span class="c1">// Invalid token return</span>
+                    <span class="c1">// Developer shoud put token refreshing logic</span>
+                    <span class="c1">// using `credentials/ping` endpoint</span>
+                <span class="p">}</span>
 
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="n">productResultDelegate</span> <span class="o">=</span> <span class="k">self</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">session</span><span class="p">?</span><span class="o">.</span><span class="nf">getScanManager</span><span class="p">()</span><span class="o">.</span><span class="nf">startVideoScan</span><span class="p">(</span><span class="nv">scanCameraView</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">view</span> <span class="k">as!</span> <span class="kt">ScanCameraView</span><span class="p">)</span>
-
-            <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+                   <span class="c1">// Handle other errors</span>
+           <span class="p">})</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -1892,8 +1963,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="n">rezolveScanView</span> <span class="o">=</span> <span class="o">(</span><span class="n">RezolveScanView</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">scan_view</span><span class="o">);</span>
 
         <span class="c1">//get scan manager</span>
-        <span class="n">scanManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">)</span>
-          <span class="o">.</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getScanManager</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">scanManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getScanManager</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
           <span class="c1">//start video scan to acquire image</span>
           <span class="n">scanManager</span><span class="o">.</span><span class="na">startVideoScan</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">rezolveScanView</span><span class="o">);</span>
@@ -2007,15 +2077,12 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Merchants</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">MerchantInterface</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
         <span class="n">MerchantInterface</span> <span class="n">merchantInterface</span><span class="o">;</span>
 
-        <span class="n">MerchantManager</span> <span class="n">merchantManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getMerchantManager</span><span class="o">();</span>
+        <span class="n">MerchantManager</span> <span class="n">merchantManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getMerchantManager</span><span class="o">();</span>
 
         <span class="c1">// get merchants</span>
         <span class="n">merchantManager</span><span class="o">.</span><span class="na">getMerchants</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
@@ -2084,15 +2151,12 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
-
-<span class="nd">@Override</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="nd">@Override</span>
 <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
     <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
     <span class="n">ProductInterface</span> <span class="n">productInterface</span><span class="o">;</span>
 
-    <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+    <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
 
     <span class="c1">// get categories</span>
     <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
@@ -2268,15 +2332,12 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products2</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
         <span class="n">ProductInterface</span> <span class="n">productInterface</span><span class="o">;</span>
 
-        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
 
         <span class="n">merchantId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
         <span class="n">Category</span> <span class="n">category</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Category</span><span class="o">();</span>
@@ -2428,15 +2489,11 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// get a single product using ProductInterface</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Products</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ProductInterface</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
-        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> 
-        <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
+        <span class="n">ProductManager</span> <span class="n">myProductManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getProductManager</span><span class="o">();</span>
 
         <span class="c1">// get single product</span>
         <span class="n">Product</span> <span class="n">product</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Product</span><span class="o">();</span>
@@ -2511,7 +2568,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p>Please note that your Resolve Commerce Engine must have Pick Up In Store enabled under the Advanced menu, for this option to apply. </p>
 
-<p>The Click and Collect flow is no different from in the Cart Buy or Instant Buy examples, it is only the user chosen values that change. </p>
+<p>The Click and Collect flow is no different from in the Cart Buy or Instant Buy examples, it is only the user-chosen values that change. </p>
 <h4 id='1-choices-returned-by-paymentoptionmanager'>1. Choices returned by PaymentOptionManager</h4><pre class="highlight swift tab-swift"><code><span class="c1">// Fetches PaymentOption for Product</span>
 <span class="n">rezolveSession</span><span class="o">.</span><span class="nf">getProductOptions</span><span class="p">(</span>
     <span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">checkoutProduct</span><span class="p">,</span>
@@ -2535,7 +2592,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="o">});</span>
 
 </code></pre>
-<p>When you call PaymentOptionManager, it returns a list of your payment and shipment options.</p>
+<p>When you call <code>PaymentOptionManager.getProductOptions</code>, it returns a list of your payment and shipment options.</p>
 <h4 id='2-inspecting-the-returned-options'>2. Inspecting the returned options</h4><pre class="highlight plaintext"><code>{
   "type": "standard",
   "supported_shipping_methods": [
@@ -2656,9 +2713,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre>
 <p>To the right is a sample of data returned by <code>PaymentOptionsManager.getProductOptions</code>. Look at the <code>supported_shipping_methods</code> node at the top of the file. If the list contains at least one child with <code>execute.method_code: storepickup</code> it means user can buy the product with Click and Collect. Every store where collecting the purchase is available will be listed as a separate item under <code>supported_shipping_methods</code>.</p>
 
-<p>At this point user should select a payment method. They are listed under the <code>supported_payment_methods</code> node. In some cases, like the example shown, there is one payment method available. In others, there might be more. For example, if <code>SupportedPaymentMethod has type: cash</code>, cash payment may only be allowed with Click and Collect and not in Delivery. To verify that we need <code>SupportedPaymentMethod</code> to be provided as an argument when creating a <code>DeliveryUnit</code>.</p>
+<p>At this point the user should select a payment method. They are listed under the <code>supported_payment_methods</code> node. In some cases, like the example shown, there is one payment method available. In others, there might be more. For example, if <code>SupportedPaymentMethod has type: cash</code>, cash payment may only be allowed with Click and Collect and not in Delivery. To verify that we need <code>SupportedPaymentMethod</code> to be provided as an argument when creating a <code>DeliveryUnit</code>.</p>
 <h4 id='3-creating-the-delivery-unit-delivery-method'>3. Creating the Delivery Unit/Delivery Method</h4><pre class="highlight swift tab-swift"><code>    <span class="c1">// standard shipping example</span>
-    <span class="k">let</span> <span class="nv">deliveryMethod</span> <span class="o">=</span>  <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="s">""</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">delivery</span> <span class="o">=</span> <span class="kt">DeliveryMethod</span><span class="p">(</span><span class="nv">addressId</span><span class="p">:</span> <span class="n">addressObject</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
     <span class="c1">// Click and Collect example</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">shipping</span> <span class="o">=</span> <span class="n">shippingMethod</span><span class="p">,</span> <span class="k">let</span> <span class="nv">store</span> <span class="o">=</span> <span class="n">shipping</span><span class="o">.</span><span class="n">store</span> <span class="k">else</span> <span class="p">{</span> <span class="nf">preconditionFailure</span><span class="p">()</span> <span class="p">}</span>
@@ -2674,7 +2731,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p><code>DeliveryUnit</code> (Android) is created using the chosen <code>supportedPaymentMethod</code> and the address id of the pick up store. </p>
 
-<p><code>DeliveryMethod</code> only requires the address id of the pick up store.</p>
+<p><code>DeliveryMethod</code> (IOS) has no need of an id for the object creation, so an empty <code>String</code> used to feel the <code>addressId</code> present in the constructor.</p>
 
 <p>See the <code>extension_attributes</code> node for this store id. </p>
 
@@ -2763,14 +2820,10 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="p">}</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TriggerMgr</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">TriggerInterface</span> <span class="o">{</span>
 
-
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co"</span><span class="o">;</span>
-
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">TriggerManager</span> <span class="n">triggerManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getTriggerManager</span><span class="o">();</span>
+        <span class="n">TriggerManager</span> <span class="n">triggerManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getTriggerManager</span><span class="o">();</span>
 
         <span class="n">String</span> <span class="n">triggerUrl</span> <span class="o">=</span> <span class="s">"http://rzlv.co/2/3/13/169?ad=20&amp;placement=25"</span><span class="o">;</span>
 
@@ -2959,7 +3012,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="c1">// When app goes background the app should start the service</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">rezolveAutoDetectManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
             <span class="c1">// Request RezolveSDK for a instance of the AutoDetectManager</span>
-            <span class="n">rezolveAutoDetectManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">Constants</span><span class="o">.</span><span class="na">API_KEY</span><span class="o">,</span> <span class="n">Constants</span><span class="o">.</span><span class="na">ENV</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAutoDetectManager</span><span class="o">();</span>
+            <span class="n">rezolveAutoDetectManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAutoDetectManager</span><span class="o">();</span>
         <span class="o">}</span>
         <span class="c1">// Start the service passing the caller Activity, an optional notification and the AutoDetectInterface Callback.</span>
         <span class="c1">// Here we don't pass the optional notification, so the RezolveSDK will provide a default Notification for the app.</span>
@@ -3037,7 +3090,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
         <span class="c1">// When app goes background the app should start the service</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">rezolveAutoDetectManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">rezolveAutoDetectManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">Constants</span><span class="o">.</span><span class="na">API_KEY</span><span class="o">,</span> <span class="n">Constants</span><span class="o">.</span><span class="na">ENV</span><span class="o">).</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAutoDetectManager</span><span class="o">();</span>
+            <span class="n">rezolveAutoDetectManager</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getRezolveSession</span><span class="o">().</span><span class="na">getAutoDetectManager</span><span class="o">();</span>
         <span class="o">}</span>
         <span class="c1">// Start the service passing the caller Activity, an optional notification and the AutoDetectInterface Callback.</span>
         <span class="c1">// Here we send the custom notifiction we have created</span>
@@ -3290,7 +3343,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='android-vtodo-ios-vtodo-october-2018'>Android vTODO, IOS vTODO - October , 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
+<h2 id='android-v2-0-0-ios-v1-11-10-october-11-2018'>Android v2.0.0, IOS v1.11.10 - October 11, 2018</h2><h3 id='major-documentation-changes'>Major Documentation Changes</h3>
 <ul>
 <li>Added tutorial for Trigger Manager</li>
 <li>Added tutorial for Background Listening</li>

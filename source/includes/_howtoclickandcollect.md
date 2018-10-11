@@ -4,7 +4,7 @@ Click and Collect enables users to select products online, and pick them up in-s
 
 Please note that your Resolve Commerce Engine must have Pick Up In Store enabled under the Advanced menu, for this option to apply. 
 
-The Click and Collect flow is no different from in the Cart Buy or Instant Buy examples, it is only the user chosen values that change. 
+The Click and Collect flow is no different from in the Cart Buy or Instant Buy examples, it is only the user-chosen values that change. 
 
 #### 1. Choices returned by PaymentOptionManager
 
@@ -35,7 +35,7 @@ paymentOptionManager.getProductOptions(checkoutProduct, merchantId, new PaymentO
 
 ```
 
-When you call PaymentOptionManager, it returns a list of your payment and shipment options.
+When you call `PaymentOptionManager.getProductOptions`, it returns a list of your payment and shipment options.
 
 #### 2. Inspecting the returned options
 
@@ -161,7 +161,7 @@ When you call PaymentOptionManager, it returns a list of your payment and shipme
 
 To the right is a sample of data returned by `PaymentOptionsManager.getProductOptions`. Look at the `supported_shipping_methods` node at the top of the file. If the list contains at least one child with `execute.method_code: storepickup` it means user can buy the product with Click and Collect. Every store where collecting the purchase is available will be listed as a separate item under `supported_shipping_methods`.
 
-At this point user should select a payment method. They are listed under the `supported_payment_methods` node. In some cases, like the example shown, there is one payment method available. In others, there might be more. For example, if `SupportedPaymentMethod has type: cash`, cash payment may only be allowed with Click and Collect and not in Delivery. To verify that we need `SupportedPaymentMethod` to be provided as an argument when creating a `DeliveryUnit`.
+At this point the user should select a payment method. They are listed under the `supported_payment_methods` node. In some cases, like the example shown, there is one payment method available. In others, there might be more. For example, if `SupportedPaymentMethod has type: cash`, cash payment may only be allowed with Click and Collect and not in Delivery. To verify that we need `SupportedPaymentMethod` to be provided as an argument when creating a `DeliveryUnit`.
 
 #### 3. Creating the Delivery Unit/Delivery Method
 
@@ -186,7 +186,7 @@ Android calls this object `DeliveryUnit`, IOS uses `DeliveryMethod`
 
 `DeliveryUnit` (Android) is created using the chosen `supportedPaymentMethod` and the address id of the pick up store. 
 
-`DeliveryMethod` has no need of an id for the object creation, so an empty `String` used to feel the `addressId` present in the constructor.
+`DeliveryMethod` (IOS) has no need of an id for the object creation, so an empty `String` used to feel the `addressId` present in the constructor.
 
 See the `extension_attributes` node for this store id. 
 
