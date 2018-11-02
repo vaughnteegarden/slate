@@ -20,6 +20,7 @@ includes:
 - howtoclickandcollect
 - howtotriggermanager
 - howtobackgroundlistening
+- howtoact
 - errorhandling
 - moduleref
 - changelog

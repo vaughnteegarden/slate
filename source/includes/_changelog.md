@@ -2,6 +2,14 @@
 
 All notable changes to the project will be documented in this log.
 
+## Documentaiton Update - November 2, 2018
+
+This is a documentation-only update.
+
+#### Added
+
+- Added tutorial on how to present data for an Act.
+
 ## Android v2.0.0, IOS v1.11.10 - October 11, 2018
 
 ### Major Documentation Changes
