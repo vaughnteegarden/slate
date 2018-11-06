@@ -3276,6 +3276,34 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p>Get <code>partnerId</code>, <code>merchantId</code>, <code>categoryId</code>, <code>productId</code>, <code>adId</code> and <code>placmentId</code> from the returned list array for that item. If no <code>adId</code> and/or <code>placementId</code> are available, omit the <code>?ad=[adId]&amp;placement=[placementId]</code> part of the url (note that in this case, no stats will be gathered when this item is displayed or purchased).</p>
 
+          <h2 id='act'>Act</h2>
+<p>An Act is a special type of product that can be configured in the Rezolve Commerce Engine. Acts are used to ask questions of the consumer and to collect their contact information. </p>
+
+<p>There is no specific data structure within the SDK that represents an Act; it is a particular configuration of product that has no weight and no price. If you receive a product with no weight and no price, you should render it as an Act. You do this by omitting certain information when displaying the item. You must do this in four places:</p>
+
+<ul>
+<li>The Product detail view</li>
+<li>The Post-Purchase screen</li>
+<li>The My Activity list view</li>
+<li>The My Activity detail view</li>
+</ul>
+<h4 id='product-detail-view'>Product Detail View</h4>
+<p>Remove price, quantity, payment details, delivery details, order summary, and the add-to-cart icon. Change the &quot;Instant Buy&quot; text to &quot;Act Now&quot;.</p>
+
+<p><img src="images/product-view.png" style="margin:6px 0;"><br/>[ <a href="images/product-view.png" target="_blank">View full size</a> ]</p>
+<h4 id='post-purchase-screen'>Post-Purchase Screen</h4>
+<p>Omit quantity, price, payment details, delivery details, order summary, and pick-up-location map.</p>
+
+<p><img src="images/post-purchase-view.png" style="margin:6px 0;"><br/>[ <a href="images/post-purchase-view.png" target="_blank">View full size</a> ]</p>
+<h4 id='my-activity-list-view'>My Activity List View</h4>
+<p>Omit the Order Total currency amounts from this screen.</p>
+
+<p><img src="images/my-activity-list.png" style="margin:6px 0;"><br/>[ <a href="images/my-activity-list.png" target="_blank">View full size</a> ]</p>
+<h4 id='my-activity-detail-view'>My Activity Detail View</h4>
+<p>Change &quot;Payment Successful&quot; header to &quot;Submitted&quot;. Remove &quot;order&quot; text from &quot;Your order ref:&quot;. Omit quantity, price, payment details, delivery details, order summary, pick-up-location map, and QR code area.</p>
+
+<p><img src="images/my-activity-detail-view.png" style="margin:6px 0;"><br/>[ <a href="images/my-activity-detail-view.png" target="_blank">View full size</a> ]</p>
+
           <h1 id='error-handling'>Error Handling</h1><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"errors"</span><span class="p">:[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -3343,6 +3371,12 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
+<h2 id='documentaiton-update-november-2-2018'>Documentaiton Update - November 2, 2018</h2>
+<p>This is a documentation-only update.</p>
+<h4 id='added'>Added</h4>
+<ul>
+<li>Added tutorial on how to present data for an Act.</li>
+</ul>
 <h2 id='android-v2-0-0-ios-v1-11-10-october-11-2018'>Android v2.0.0, IOS v1.11.10 - October 11, 2018</h2><h3 id='major-documentation-changes'>Major Documentation Changes</h3>
 <ul>
 <li>Added tutorial for Trigger Manager</li>
@@ -3350,7 +3384,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Added tutorial for Click &amp; Collect</li>
 <li>Removed manually created module reference docs and replaced them with module reference docs generated from source. </li>
 </ul>
-<h3 id='ios'>IOS</h3><h4 id='added'>Added</h4>
+<h3 id='ios'>IOS</h3><h4 id='added-2'>Added</h4>
 <ul>
 <li>Support for virtual products</li>
 <li><code>x-rezolve-device-id</code> for all Core calls</li>
@@ -3391,7 +3425,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Removed Websocket support from SDK</li>
 <li>Custom Option Array Fix.</li>
 </ul>
-<h3 id='android'>Android</h3><h4 id='added-2'>Added</h4>
+<h3 id='android'>Android</h3><h4 id='added-3'>Added</h4>
 <ul>
 <li>List of <code>CustomConfigurableOptions</code> added to <code>OrderProduct</code> class.</li>
 <li><code>CustomOption</code> fields for user input.</li>
@@ -3432,7 +3466,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Updated IOS version to be compatible with IOS version 9 and onward, instead of 10 and onward</li>
 <li>Updated IOS to be compatible with latest releases of SWIFT (4.x) and XCode (9.x)</li>
 </ul>
-<h2 id='android-v1-7-5-ios-v1-6-5-may-5-2018'>Android v1.7.5, IOS v1.6.5 - May 5, 2018</h2><h3 id='added-3'>Added</h3>
+<h2 id='android-v1-7-5-ios-v1-6-5-may-5-2018'>Android v1.7.5, IOS v1.6.5 - May 5, 2018</h2><h3 id='added-4'>Added</h3>
 <ul>
 <li>New section on Generic JWT Authentication, with sequence diagram.</li>
 <li>AuthenticationManager.createSession, v2, added.</li>
@@ -3503,7 +3537,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>DeviceProfile object removed from createSession. </li>
 <li>Removed Merchant handling from ProductManager</li>
 </ul>
-<h2 id='android-v1-5-37-ios-v1-5-40-dec-19-2017'>Android v1.5.37, IOS v1.5.40 - Dec 19 2017</h2><h3 id='added-4'>Added</h3>
+<h2 id='android-v1-5-37-ios-v1-5-40-dec-19-2017'>Android v1.5.37, IOS v1.5.40 - Dec 19 2017</h2><h3 id='added-5'>Added</h3>
 <ul>
 <li>PhonebookManager Class</li>
 <li>MerchantManager Class</li>
