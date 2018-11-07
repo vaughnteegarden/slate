@@ -3277,9 +3277,9 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <p>Get <code>partnerId</code>, <code>merchantId</code>, <code>categoryId</code>, <code>productId</code>, <code>adId</code> and <code>placmentId</code> from the returned list array for that item. If no <code>adId</code> and/or <code>placementId</code> are available, omit the <code>?ad=[adId]&amp;placement=[placementId]</code> part of the url (note that in this case, no stats will be gathered when this item is displayed or purchased).</p>
 
           <h2 id='act'>Act</h2>
-<p>An Act is a special type of product that can be configured in the Rezolve Commerce Engine. Acts are used to ask questions of the consumer and to collect their contact information. </p>
+<p>An Act is a type of consumer questionnaire that can be created in the Rezolve Commerce Engine. Acts are used to solicit information and collect consumer answers and contact information. No payment is required to submit an Act.</p>
 
-<p>There is no specific data structure within the SDK that represents an Act; it is a particular configuration of product that has no weight and no price. If you receive a product with no weight and no price, you should render it as an Act. You do this by omitting certain information when displaying the item. You must do this in four places:</p>
+<p>There is no specific data structure within the SDK that represents an Act; data-wise, it is a particular configuration of product that has no weight and no price. If your application receives a product with no weight and no price, you should display it as an Act. You do this by omitting certain information when displaying the item. You must do this in four places:</p>
 
 <ul>
 <li>The Product detail view</li>
@@ -3296,7 +3296,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p><img src="images/post-purchase-view.png" style="margin:6px 0;"><br/>[ <a href="images/post-purchase-view.png" target="_blank">View full size</a> ]</p>
 <h4 id='my-activity-list-view'>My Activity List View</h4>
-<p>Omit the Order Total currency amounts from this screen.</p>
+<p>Omit the Order Total currency amounts from this screen. Change the order status text to &quot;submitted&quot;.</p>
 
 <p><img src="images/my-activity-list.png" style="margin:6px 0;"><br/>[ <a href="images/my-activity-list.png" target="_blank">View full size</a> ]</p>
 <h4 id='my-activity-detail-view'>My Activity Detail View</h4>

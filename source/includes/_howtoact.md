@@ -1,8 +1,8 @@
 ## Act
 
-An Act is a special type of product that can be configured in the Rezolve Commerce Engine. Acts are used to ask questions of the consumer and to collect their contact information. 
+An Act is a type of consumer questionnaire that can be created in the Rezolve Commerce Engine. Acts are used to solicit information and collect consumer answers and contact information. No payment is required to submit an Act.
 
-There is no specific data structure within the SDK that represents an Act; it is a particular configuration of product that has no weight and no price. If you receive a product with no weight and no price, you should render it as an Act. You do this by omitting certain information when displaying the item. You must do this in four places:
+There is no specific data structure within the SDK that represents an Act; data-wise, it is a particular configuration of product that has no weight and no price. If your application receives a product with no weight and no price, you should display it as an Act. You do this by omitting certain information when displaying the item. You must do this in four places:
 
 - The Product detail view
 - The Post-Purchase screen
@@ -23,7 +23,7 @@ Omit quantity, price, payment details, delivery details, order summary, and pick
 
 #### My Activity List View
 
-Omit the Order Total currency amounts from this screen.
+Omit the Order Total currency amounts from this screen. Change the order status text to "submitted".
 
 <img src="images/my-activity-list.png" style="margin:6px 0;"><br/>[ <a href="images/my-activity-list.png" target="_blank">View full size</a> ]
 
