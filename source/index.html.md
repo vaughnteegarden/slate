@@ -71,7 +71,9 @@ The Rezolve Inside<sup>TM</sup> SDK is a full-featured application suite. Capabi
 * Consumer account creation, consumer profile, and purchase history
 * Wallet management
 
+<!-- ************************
 The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-the-art security model (see <a href="images/RezolveOverview-Security.pdf">see security overview PDF</a>).
+***************************** -->
 
 
 ## Intended audience
@@ -118,11 +120,11 @@ We will not provide development support if you have not integrated Crashlytics o
 
 ## Download the Rezolve Inside<sup>TM</sup> SDK & Get an API Key
 
-### <a href="license.html" target="_blank">Request API Key & Download SDK</a>
+### <a href="license.html" target="_blank">Request API Key</a>
 
 Latest release versions:
 
-- IOS: 1.11.10
+- IOS: 1.11.19
 - Android: 2.0.0 
 
 If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
@@ -132,37 +134,81 @@ If this is your first time downloading the SDK, you will be provided with an API
 
 The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
-The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:
+The IOS SDK is distributed via <a href="https://cocoapods.org/about" target="_blank">CocoaPods</a>. 
 
-1. Open your existing project root directory.<br/><br/>
-2. Create a directory called Rezolve.<br/><img src="images/ios-step2.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
-3. Copy all zip content to this new directory.<br/><img src="images/ios-step3.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
-4. Next, go to the app target’s General configuration page. Add the framework target to the Embedded Binaries section by clicking the Add icon,<br/><img src="images/ios-add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
-6. Click "Add Other", <br/><img src="images/ios-step5a.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
-7. ...and pick the framework file from the Rezolve directory you created in step 2. Do NOT drag in the framework from Finder.<br/><img src="images/ios-step5b.png" style="margin:6px 0; border:1px solid #333;"><br/><br/>
+### Using CocoaPods
 
+#### Setting up the SDK
+
+Install the latest version of [CocoaPods](https://guides.cocoapods.org/using/getting-started.html)
+
+Add the RezolveSDK pod into your Podfile.
+
+`
+pod 'RezolveSDK'
+`
+
+Run the following command
+
+`
+pod install
+`
+
+Don't forget to use the `.xcworkspace` file to open your project in Xcode, instead of the `.xcodeproj` file, from here on out.
+
+#### Updating the SDK
+
+Every new release of the RezolveSDK can be updated by typing
+
+`
+pod update
+`
 
 ## Set up the SDK - Android
 
 The target IDE for Android instructions is **Android Studio**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
-The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:
+The Android SDK is distributed via the Rezolve Nexus/Maven repository. 
 
-<ol>
-<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. <br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li></ol>
+### Update root gradle.properties
 
 ```java
-flatDir {
-    dirs 'libs'
+// in /gradle.properties
+REZOLVE_SDK_REPOSITORY_URL="https://nexus.rezo.lv/repository/maven-sdk-releases/"
+REZOLVE_SDK_REPOSITORY_USERNAME="PUT_YOUR_USERNAME_HERE"
+REZOLVE_SDK_REPOSITORY_PASSWORD="PUT_YOUR_PASSWORD_HERE"
+```
+
+Update the gradle.properties file in the root folder of your project and set variables for the repository url, username and repository password.  Your Nexus username and password will be assigned to you when you receive your API Key.
+
+### Update :app module build.gradle to add repository
+
+```java
+// in /app/build.gradle
+repositories {
+  google()
+  jcenter()
+  maven {
+    url REZOLVE_SDK_REPOSITORY_URL
+    credentials {
+      username REZOLVE_SDK_REPOSITORY_USERNAME
+      password REZOLVE_SDK_REPOSITORY_PASSWORD
+    }
+  }
 }
 ```
 
-<ol start="2"><li>In the project-level gradle file, specify the libs dir as "flatDir". <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li></ol>
+Add Rezolve repository to build.gradle file in your :app module. Set the rezolveSdkVersion to the version you wish to use. 
+
+### Update :app module build.gradle to add sdk dependency
 
 ```java
-compile(name:'rezolve-sdk-1.0-release', ext: 'aar')
+// in /app/build.gradle
+dependencies {
+  def rezolveSdkVersion = "2.0.0"
+  implementation "com.rezolve:sdk-android:$rezolveSdkVersion"
+  // ...
+}
 ```
 
-<ol start="3"><li>Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency (change filename/version as needed to match your download). If necessary, re-sync the project.<br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li><li>The SDK is ready to use.</li></ol>
-
-
+Add Rezolve SDK dependency to build.gradle file in your :app module:

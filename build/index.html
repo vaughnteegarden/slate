@@ -264,7 +264,9 @@ You can switch between IOS and Android by clicking the tabs above.
 <li>Wallet management</li>
 </ul>
 
-<p>The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-the-art security model (see <a href="images/RezolveOverview-Security.pdf">see security overview PDF</a>).</p>
+<!-- ************************
+The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-the-art security model (see <a href="images/RezolveOverview-Security.pdf">see security overview PDF</a>).
+***************************** -->
 <h2 id='intended-audience'>Intended audience</h2>
 <p>This document is intended for experienced IOS and Android developer. It is expected that you have built apps before, and know your way around an IDE.</p>
 <h2 id='term-definitions'>Term Definitions</h2>
@@ -319,11 +321,11 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>Rezolve advises using <strong><a href="https://fabric.io/kits/ios/crashlytics">Fabric Crashlytics</a></strong> to capture app problems on both IOS and Android.</p>
 
 <p>We will not provide development support if you have not integrated Crashlytics or a similar tool.</p>
-<h2 id='download-the-rezolve-insidetm-sdk-amp-get-an-api-key'>Download the Rezolve Inside<sup>TM</sup> SDK &amp; Get an API Key</h2><h3 id='request-api-key-amp-download-sdk'><a href="license.html" target="_blank">Request API Key &amp; Download SDK</a></h3>
+<h2 id='download-the-rezolve-insidetm-sdk-amp-get-an-api-key'>Download the Rezolve Inside<sup>TM</sup> SDK &amp; Get an API Key</h2><h3 id='request-api-key'><a href="license.html" target="_blank">Request API Key</a></h3>
 <p>Latest release versions:</p>
 
 <ul>
-<li>IOS: 1.11.10</li>
+<li>IOS: 1.11.19</li>
 <li>Android: 2.0.0 </li>
 </ul>
 
@@ -331,31 +333,61 @@ You can switch between IOS and Android by clicking the tabs above.
 <h2 id='set-up-the-sdk-ios'>Set up the SDK - IOS</h2>
 <p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
-<p>The IOS SDK is distributed as a framework. This makes it easy to embed Rezolve capabilities in your app. The steps are as follows:</p>
+<p>The IOS SDK is distributed via <a href="https://cocoapods.org/about" target="_blank">CocoaPods</a>. </p>
+<h3 id='using-cocoapods'>Using CocoaPods</h3><h4 id='setting-up-the-sdk'>Setting up the SDK</h4>
+<p>Install the latest version of <a href="https://guides.cocoapods.org/using/getting-started.html">CocoaPods</a></p>
 
-<ol>
-<li>Open your existing project root directory.<br/><br/></li>
-<li>Create a directory called Rezolve.<br/><img src="images/ios-step2.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
-<li>Copy all zip content to this new directory.<br/><img src="images/ios-step3.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
-<li>Next, go to the app target’s General configuration page. Add the framework target to the Embedded Binaries section by clicking the Add icon,<br/><img src="images/ios-add-framework.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
-<li>Click &quot;Add Other&quot;, <br/><img src="images/ios-step5a.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
-<li>...and pick the framework file from the Rezolve directory you created in step 2. Do NOT drag in the framework from Finder.<br/><img src="images/ios-step5b.png" style="margin:6px 0; border:1px solid #333;"><br/><br/></li>
-</ol>
+<p>Add the RezolveSDK pod into your Podfile.</p>
+
+<p><code>
+pod &#39;RezolveSDK&#39;
+</code></p>
+
+<p>Run the following command</p>
+
+<p><code>
+pod install
+</code></p>
+
+<p>Don&#39;t forget to use the <code>.xcworkspace</code> file to open your project in Xcode, instead of the <code>.xcodeproj</code> file, from here on out.</p>
+<h4 id='updating-the-sdk'>Updating the SDK</h4>
+<p>Every new release of the RezolveSDK can be updated by typing</p>
+
+<p><code>
+pod update
+</code></p>
 <h2 id='set-up-the-sdk-android'>Set up the SDK - Android</h2>
 <p>The target IDE for Android instructions is <strong>Android Studio</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
-<p>The Android SDK is distributed as an .aar library. This makes it easy to import Rezolve capabilities into your app. The steps are as follows:</p>
-
-<ol>
-<li> In your project, change to the Project view, and add the .aar file you downloaded to the /libs folder. If prompted by Android Studio to select the file association, pick “Archive”. <br/><img src="images/import-1-addtolib.png" style="margin:6px 0;"><br/><img src="images/import-2-lib.png" style="margin:6px 0;"><br/><br/></li></ol>
-<pre class="highlight java tab-java"><code><span class="n">flatDir</span> <span class="o">{</span>
-    <span class="n">dirs</span> <span class="err">'</span><span class="n">libs</span><span class="err">'</span>
+<p>The Android SDK is distributed via the Rezolve Nexus/Maven repository. </p>
+<h3 id='update-root-gradle-properties'>Update root gradle.properties</h3><pre class="highlight java tab-java"><code><span class="c1">// in /gradle.properties</span>
+<span class="n">REZOLVE_SDK_REPOSITORY_URL</span><span class="o">=</span><span class="s">"https://nexus.rezo.lv/repository/maven-sdk-releases/"</span>
+<span class="n">REZOLVE_SDK_REPOSITORY_USERNAME</span><span class="o">=</span><span class="s">"PUT_YOUR_USERNAME_HERE"</span>
+<span class="n">REZOLVE_SDK_REPOSITORY_PASSWORD</span><span class="o">=</span><span class="s">"PUT_YOUR_PASSWORD_HERE"</span>
+</code></pre>
+<p>Update the gradle.properties file in the root folder of your project and set variables for the repository url, username and repository password.  Your Nexus username and password will be assigned to you when you receive your API Key.</p>
+<h3 id='update-app-module-build-gradle-to-add-repository'>Update :app module build.gradle to add repository</h3><pre class="highlight java tab-java"><code><span class="c1">// in /app/build.gradle</span>
+<span class="n">repositories</span> <span class="o">{</span>
+  <span class="n">google</span><span class="o">()</span>
+  <span class="n">jcenter</span><span class="o">()</span>
+  <span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="n">REZOLVE_SDK_REPOSITORY_URL</span>
+    <span class="n">credentials</span> <span class="o">{</span>
+      <span class="n">username</span> <span class="n">REZOLVE_SDK_REPOSITORY_USERNAME</span>
+      <span class="n">password</span> <span class="n">REZOLVE_SDK_REPOSITORY_PASSWORD</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<ol start="2"><li>In the project-level gradle file, specify the libs dir as "flatDir". <br/><img src="images/import-3-addtogradle.png" style="margin:6px 0;"><br/><br/></li></ol>
-<pre class="highlight java tab-java"><code><span class="n">compile</span><span class="o">(</span><span class="nl">name:</span><span class="err">'</span><span class="n">rezolve</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="n">release</span><span class="err">'</span><span class="o">,</span> <span class="nl">ext:</span> <span class="err">'</span><span class="n">aar</span><span class="err">'</span><span class="o">)</span>
+<p>Add Rezolve repository to build.gradle file in your :app module. Set the rezolveSdkVersion to the version you wish to use. </p>
+<h3 id='update-app-module-build-gradle-to-add-sdk-dependency'>Update :app module build.gradle to add sdk dependency</h3><pre class="highlight java tab-java"><code><span class="c1">// in /app/build.gradle</span>
+<span class="n">dependencies</span> <span class="o">{</span>
+  <span class="n">def</span> <span class="n">rezolveSdkVersion</span> <span class="o">=</span> <span class="s">"2.0.0"</span>
+  <span class="n">implementation</span> <span class="s">"com.rezolve:sdk-android:$rezolveSdkVersion"</span>
+  <span class="c1">// ...</span>
+<span class="o">}</span>
 </code></pre>
-<ol start="3"><li>Lastly, in the application-level gradle file, add the Rezolve Inside<sup>TM</sup> SDK as a dependency (change filename/version as needed to match your download). If necessary, re-sync the project.<br/><img src="images/import-4-addtodepen.png" style="margin:6px 0;"><br/><br/></li><li>The SDK is ready to use.</li></ol>
+<p>Add Rezolve SDK dependency to build.gradle file in your :app module:</p>
 
           <h1 id='sdk-feature-use'>SDK Feature Use</h1>
 <p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>
@@ -3371,11 +3403,24 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='documentaiton-update-november-2-2018'>Documentaiton Update - November 2, 2018</h2>
-<p>This is a documentation-only update.</p>
-<h4 id='added'>Added</h4>
+<h2 id='android-android-v2-0-0-ios-v1-11-19-nov-9-2018'>Android Android v2.0.0, IOS v1.11.19 - Nov 9, 2018</h2>
+<p>Only the IOS SDK receives an update in this release. Both Android and IOS developers should note the new Act documentation.</p>
+<h3 id='documentation-changes'>Documentation Changes</h3>
 <ul>
 <li>Added tutorial on how to present data for an Act.</li>
+<li>New install instructions for IOS SDK (CocoaPods)</li>
+<li>New install instructions for Android SDK (Nexus/Maven)</li>
+</ul>
+<h3 id='ios-changes'>IOS Changes</h3>
+<ul>
+<li><code>HistoryItemProduct</code> implementation changed</li>
+<li>Scanmanager internal libraries updated</li>
+<li><code>CheckoutBundleV2.deliveryMethod</code> changed type to <code>DeliveryMethod?</code></li>
+<li><code>CheckoutBundleV2.paymentMethod</code> changed type to <code>SupportedPaymentMethod?</code></li>
+<li><code>createProductCheckoutBundleV2</code> changed parameter type from <code>deliveryMethod</code> to <code>DeliveryMethod</code></li>
+<li><code>createProductCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
+<li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>deliveryMethod</code> to <code>DeliveryMethod</code></li>
+<li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
 </ul>
 <h2 id='android-v2-0-0-ios-v1-11-10-october-11-2018'>Android v2.0.0, IOS v1.11.10 - October 11, 2018</h2><h3 id='major-documentation-changes'>Major Documentation Changes</h3>
 <ul>
@@ -3384,7 +3429,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Added tutorial for Click &amp; Collect</li>
 <li>Removed manually created module reference docs and replaced them with module reference docs generated from source. </li>
 </ul>
-<h3 id='ios'>IOS</h3><h4 id='added-2'>Added</h4>
+<h3 id='ios'>IOS</h3><h4 id='added'>Added</h4>
 <ul>
 <li>Support for virtual products</li>
 <li><code>x-rezolve-device-id</code> for all Core calls</li>
@@ -3425,7 +3470,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Removed Websocket support from SDK</li>
 <li>Custom Option Array Fix.</li>
 </ul>
-<h3 id='android'>Android</h3><h4 id='added-3'>Added</h4>
+<h3 id='android'>Android</h3><h4 id='added-2'>Added</h4>
 <ul>
 <li>List of <code>CustomConfigurableOptions</code> added to <code>OrderProduct</code> class.</li>
 <li><code>CustomOption</code> fields for user input.</li>
@@ -3466,7 +3511,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Updated IOS version to be compatible with IOS version 9 and onward, instead of 10 and onward</li>
 <li>Updated IOS to be compatible with latest releases of SWIFT (4.x) and XCode (9.x)</li>
 </ul>
-<h2 id='android-v1-7-5-ios-v1-6-5-may-5-2018'>Android v1.7.5, IOS v1.6.5 - May 5, 2018</h2><h3 id='added-4'>Added</h3>
+<h2 id='android-v1-7-5-ios-v1-6-5-may-5-2018'>Android v1.7.5, IOS v1.6.5 - May 5, 2018</h2><h3 id='added-3'>Added</h3>
 <ul>
 <li>New section on Generic JWT Authentication, with sequence diagram.</li>
 <li>AuthenticationManager.createSession, v2, added.</li>
@@ -3537,7 +3582,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>DeviceProfile object removed from createSession. </li>
 <li>Removed Merchant handling from ProductManager</li>
 </ul>
-<h2 id='android-v1-5-37-ios-v1-5-40-dec-19-2017'>Android v1.5.37, IOS v1.5.40 - Dec 19 2017</h2><h3 id='added-5'>Added</h3>
+<h2 id='android-v1-5-37-ios-v1-5-40-dec-19-2017'>Android v1.5.37, IOS v1.5.40 - Dec 19 2017</h2><h3 id='added-4'>Added</h3>
 <ul>
 <li>PhonebookManager Class</li>
 <li>MerchantManager Class</li>

@@ -2,13 +2,36 @@
 
 All notable changes to the project will be documented in this log.
 
-## Documentaiton Update - November 2, 2018
 
-This is a documentation-only update.
 
-#### Added
+
+
+## Android Android v2.0.0, IOS v1.11.19 - Nov 9, 2018
+
+Only the IOS SDK receives an update in this release. Both Android and IOS developers should note the new Act documentation.
+
+### Documentation Changes
 
 - Added tutorial on how to present data for an Act.
+- New install instructions for IOS SDK (CocoaPods)
+- New install instructions for Android SDK (Nexus/Maven)
+
+### IOS Changes
+
+- `HistoryItemProduct` implementation changed
+- Scanmanager internal libraries updated
+- `CheckoutBundleV2.deliveryMethod` changed type to `DeliveryMethod?`
+- `CheckoutBundleV2.paymentMethod` changed type to `SupportedPaymentMethod?`
+- `createProductCheckoutBundleV2` changed parameter type from `deliveryMethod` to `DeliveryMethod`
+- `createProductCheckoutBundleV2` changed parameter type from `paymentMethod` to `SupportedPaymentMethod?`
+- `createCartCheckoutBundleV2` changed parameter type from `deliveryMethod` to `DeliveryMethod`
+- `createCartCheckoutBundleV2` changed parameter type from `paymentMethod` to `SupportedPaymentMethod?`
+
+
+
+
+
+
 
 ## Android v2.0.0, IOS v1.11.10 - October 11, 2018
 
