@@ -198,7 +198,7 @@ repositories {
 }
 ```
 
-Add Rezolve repository to build.gradle file in your :app module. Set the rezolveSdkVersion to the version you wish to use. 
+Add Rezolve repository to build.gradle file in your :app module. 
 
 ### Update :app module build.gradle to add sdk dependency
 
@@ -211,4 +211,4 @@ dependencies {
 }
 ```
 
-Add Rezolve SDK dependency to build.gradle file in your :app module:
+Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `rezolveSdkVersion` to the version you wish to use. To upgrade to a new release, update `rezolveSdkVersion` to the latest version.
