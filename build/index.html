@@ -361,25 +361,28 @@ pod update
 
 <p>The Android SDK is distributed via the Rezolve Nexus/Maven repository. </p>
 <h3 id='update-root-gradle-properties'>Update root gradle.properties</h3><pre class="highlight java tab-java"><code><span class="c1">// in /gradle.properties</span>
-<span class="n">REZOLVE_SDK_REPOSITORY_URL</span><span class="o">=</span><span class="s">"https://nexus.rezo.lv/repository/maven-sdk-releases/"</span>
-<span class="n">REZOLVE_SDK_REPOSITORY_USERNAME</span><span class="o">=</span><span class="s">"PUT_YOUR_USERNAME_HERE"</span>
-<span class="n">REZOLVE_SDK_REPOSITORY_PASSWORD</span><span class="o">=</span><span class="s">"PUT_YOUR_PASSWORD_HERE"</span>
+<span class="n">REZOLVE_SDK_REPOSITORY_URL</span><span class="o">=</span><span class="nl">https:</span><span class="c1">//nexus.rezo.lv/repository/maven-sdk-releases/</span>
+<span class="n">REZOLVE_SDK_REPOSITORY_USERNAME</span><span class="o">=</span><span class="n">PUT_YOUR_USERNAME_HERE</span>
+<span class="n">REZOLVE_SDK_REPOSITORY_PASSWORD</span><span class="o">=</span><span class="n">PUT_YOUR_PASSWORD_HERE</span>
 </code></pre>
 <p>Update the gradle.properties file in the root folder of your project and set variables for the repository url, username and repository password.  Your Nexus username and password will be assigned to you when you receive your API Key.</p>
-<h3 id='update-app-module-build-gradle-to-add-repository'>Update :app module build.gradle to add repository</h3><pre class="highlight java tab-java"><code><span class="c1">// in /app/build.gradle</span>
-<span class="n">repositories</span> <span class="o">{</span>
-  <span class="n">google</span><span class="o">()</span>
-  <span class="n">jcenter</span><span class="o">()</span>
-  <span class="n">maven</span> <span class="o">{</span>
-    <span class="n">url</span> <span class="n">REZOLVE_SDK_REPOSITORY_URL</span>
-    <span class="n">credentials</span> <span class="o">{</span>
-      <span class="n">username</span> <span class="n">REZOLVE_SDK_REPOSITORY_USERNAME</span>
-      <span class="n">password</span> <span class="n">REZOLVE_SDK_REPOSITORY_PASSWORD</span>
+<h3 id='update-root-build-gradle-to-add-repository'>Update root build.gradle to add repository</h3><pre class="highlight java tab-java"><code><span class="c1">// in /build.gradle</span>
+<span class="n">allprojects</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">mavenLocal</span><span class="o">()</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="n">REZOLVE_SDK_REPOSITORY_URL</span>
+            <span class="n">credentials</span> <span class="o">{</span>
+                <span class="n">username</span> <span class="n">REZOLVE_SDK_REPOSITORY_USERNAME</span>
+                <span class="n">password</span> <span class="n">REZOLVE_SDK_REPOSITORY_PASSWORD</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">google</span><span class="o">()</span>
+        <span class="n">jcenter</span><span class="o">()</span>
     <span class="o">}</span>
-  <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
-<p>Add Rezolve repository to build.gradle file in your :app module. </p>
+<p>Add the Rezolve repository to your root build.gradle file, in the <code>allprojects</code> block. </p>
 <h3 id='update-app-module-build-gradle-to-add-sdk-dependency'>Update :app module build.gradle to add sdk dependency</h3><pre class="highlight java tab-java"><code><span class="c1">// in /app/build.gradle</span>
 <span class="n">dependencies</span> <span class="o">{</span>
   <span class="n">def</span> <span class="n">rezolveSdkVersion</span> <span class="o">=</span> <span class="s">"2.0.0"</span>
@@ -387,7 +390,7 @@ pod update
   <span class="c1">// ...</span>
 <span class="o">}</span>
 </code></pre>
-<p>Add Rezolve SDK dependency to build.gradle file in your :app module. Set the <code>rezolveSdkVersion</code> to the version you wish to use. To upgrade to a new release, update <code>rezolveSdkVersion</code> to the latest version.</p>
+<p>Add Rezolve SDK dependency to build.gradle file in your :app module. Set the <code>rezolveSdkVersion</code> to the version you wish to use. Note it is important to use double quotes as shown around the implementation string, or <code>$rezolveSdkVersion</code> won&#39;t be evaluated. To upgrade to a new release, update <code>rezolveSdkVersion</code> to the latest version.</p>
 
           <h1 id='sdk-feature-use'>SDK Feature Use</h1>
 <p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>

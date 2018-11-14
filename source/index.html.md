@@ -174,31 +174,34 @@ The Android SDK is distributed via the Rezolve Nexus/Maven repository.
 
 ```java
 // in /gradle.properties
-REZOLVE_SDK_REPOSITORY_URL="https://nexus.rezo.lv/repository/maven-sdk-releases/"
-REZOLVE_SDK_REPOSITORY_USERNAME="PUT_YOUR_USERNAME_HERE"
-REZOLVE_SDK_REPOSITORY_PASSWORD="PUT_YOUR_PASSWORD_HERE"
+REZOLVE_SDK_REPOSITORY_URL=https://nexus.rezo.lv/repository/maven-sdk-releases/
+REZOLVE_SDK_REPOSITORY_USERNAME=PUT_YOUR_USERNAME_HERE
+REZOLVE_SDK_REPOSITORY_PASSWORD=PUT_YOUR_PASSWORD_HERE
 ```
 
 Update the gradle.properties file in the root folder of your project and set variables for the repository url, username and repository password.  Your Nexus username and password will be assigned to you when you receive your API Key.
 
-### Update :app module build.gradle to add repository
+### Update root build.gradle to add repository
 
 ```java
-// in /app/build.gradle
-repositories {
-  google()
-  jcenter()
-  maven {
-    url REZOLVE_SDK_REPOSITORY_URL
-    credentials {
-      username REZOLVE_SDK_REPOSITORY_USERNAME
-      password REZOLVE_SDK_REPOSITORY_PASSWORD
+// in /build.gradle
+allprojects {
+    repositories {
+        mavenLocal()
+        maven {
+			url REZOLVE_SDK_REPOSITORY_URL
+			credentials {
+				username REZOLVE_SDK_REPOSITORY_USERNAME
+				password REZOLVE_SDK_REPOSITORY_PASSWORD
+			}
+        }
+        google()
+        jcenter()
     }
-  }
 }
 ```
 
-Add Rezolve repository to build.gradle file in your :app module. 
+Add the Rezolve repository to your root build.gradle file, in the `allprojects` block. 
 
 ### Update :app module build.gradle to add sdk dependency
 
@@ -211,4 +214,4 @@ dependencies {
 }
 ```
 
-Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `rezolveSdkVersion` to the version you wish to use. To upgrade to a new release, update `rezolveSdkVersion` to the latest version.
+Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `rezolveSdkVersion` to the version you wish to use. Note it is important to use double quotes as shown around the implementation string, or `$rezolveSdkVersion` won't be evaluated. To upgrade to a new release, update `rezolveSdkVersion` to the latest version.
