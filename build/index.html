@@ -395,72 +395,67 @@ pod update
           <h1 id='sdk-feature-use'>SDK Feature Use</h1>
 <p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>
 <h2 id='basic-usage'>Basic Usage</h2><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
-
-<span class="c1">// Import the following library:</span>
 <span class="kd">import</span> <span class="kt">RezolveSDK</span>
 
-<span class="kd">class</span> <span class="kt">RezolveSDK1ViewController</span><span class="p">:</span> <span class="kt">ViewController</span> <span class="p">{</span>
+
+<span class="kd">class</span> <span class="kt">SandboxViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">API_ENVIRONMENT</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"sandbox-api-tw.rzlvtest.co"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">accessToken</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"abc123.abc123.abc123"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"123"</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"123"</span>
+
     <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-        <span class="c1">// Initialize RezolveSDK</span>
-        <span class="k">let</span> <span class="nv">rezolveSdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
-            <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">REZOLVE_API_KEY</span><span class="p">,</span> 
-            <span class="nv">env</span><span class="p">:</span> <span class="kt">REZOLVE_SDK_ENV</span><span class="p">,</span> 
-            <span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> 
-            <span class="nv">dataClient</span><span class="p">:</span> <span class="n">dataClient</span>
+        <span class="k">var</span> <span class="nv">sdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
+            <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span>
+            <span class="nv">env</span><span class="p">:</span> <span class="kt">API_ENVIRONMENT</span>
         <span class="p">)</span>
 
-        <span class="c1">// Creates Session</span>
-        <span class="n">rezolveSdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span>
-            <span class="nv">accessToken</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span> 
-            <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> 
-            <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">,</span> 
-            <span class="nv">callback</span><span class="p">:</span> <span class="p">{</span> <span class="n">session</span> <span class="k">in</span>
-                <span class="c1">// Store session</span>
-            <span class="p">},</span> <span class="nv">errorCallback</span><span class="p">:</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
-                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">401</span> <span class="p">{</span> <span class="c1">// Invalid token return</span>
-                    <span class="c1">// Developer shoud put token refreshing logic</span>
-                    <span class="c1">// using `credentials/ping` endpoint</span>
-                <span class="p">}</span>
+        <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">accessToken</span><span class="p">:</span> <span class="n">accessToken</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">)</span> <span class="p">{</span> <span class="n">session</span>
 
-            <span class="c1">// Handle other errors</span>
-        <span class="p">})</span>
-    <span class="p">}</span>
-
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">didReceiveMemoryWarning</span><span class="p">()</span>
+            <span class="c1">// your rezolve SDK logic here</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Import the following classes:</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveInterface</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSDK</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.RezolveSession</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.customer.DeviceProfile</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.foreign.SignUpRequest</span><span class="o">;</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">accessToken</span> <span class="o">=</span> <span class="s">"abc123.abc123.abc123"</span><span class="o">;</span>  <span class="c1">// JWT token from auth server</span>
+<span class="n">String</span> <span class="n">entityId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>    <span class="c1">// from auth server</span>
+<span class="n">String</span> <span class="n">partnerId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>   <span class="c1">// from auth server</span>
+<span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="s">"wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"</span><span class="o">;</span> <span class="c1">// from stored device_id, see "Generating the device_id" above</span>
 
-<span class="c1">// To handle server responses you will need to import interfaces or</span>
-<span class="c1">// abstract classes from the following packages:</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.callbacks.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.core.interfaces.*</span><span class="o">;</span>
+<span class="c1">// Use builder to create instance of SDK and set SDK Params</span>
+<span class="c1">// Pass in an AuthRequestProvider here, to handle expiring JWT tokens</span>
+<span class="n">rezolveSDK</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+               <span class="o">.</span><span class="na">setApiKey</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">)</span>
+               <span class="o">.</span><span class="na">setEnv</span><span class="o">(</span><span class="n">ENVIRONMENT</span><span class="o">)</span>
+               <span class="o">.</span><span class="na">setAuthRequestProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">PartnerAuthRequestProvider</span><span class="o">(</span><span class="n">AuthService</span><span class="o">.</span><span class="na">getInstance</span><span class="o">()))</span>
+               <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
+<span class="c1">// Set JWT Auth Token from partner auth server</span>
+<span class="n">rezolveSDK</span><span class="o">.</span><span class="na">setAuthToken</span><span class="o">(</span><span class="n">accessToken</span><span class="o">);</span>
 
-<span class="c1">// Rezolve SDK operates on models from com.rezolve.sdk.model subpackages. </span>
-<span class="c1">// For example to handle a response from getMerchants query you will need </span>
-<span class="c1">// a Merchant model:</span>
+<span class="c1">// Start session, again supplying JWT auth token</span>
+<span class="n">rezolveSDK</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
 
-<span class="kn">import</span> <span class="nn">com.rezolve.sdk.model.shop.Merchant</span><span class="o">;</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// set device_id so it can be passed in x-header</span>
+        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">setDeviceIdHeader</span><span class="o">(</span><span class="n">deviceId</span><span class="o">);</span>
 
+        <span class="c1">// use created session to access managers.  Example...</span>
+        <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAddressbookManager</span><span class="o">().</span><span class="na">get</span><span class="o">(...);</span>
+    <span class="o">}</span>
 
-
-<span class="c1">// initialize SDK</span>
-
-<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
-
-<span class="n">RezolveSDK</span> <span class="n">sdk</span> <span class="o">=</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">,</span> <span class="n">ENVIRONMENT</span><span class="o">);</span>
-
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationFailure</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// handle error</span>
+    <span class="o">}</span>
+<span class="o">});</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
 <span class="c1">// On Android 6.0+, you will have to specifically request the last two. </span>
 <span class="c1">// See https://developer.android.com/training/permissions/requesting.html</span>
@@ -472,13 +467,15 @@ pod update
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
 
 </code></pre>
-<p>To get started, import the SDK into your code file.</p>
+<p>Initializing the SDK requires: 
+ - API-Key - assigned when you signed up for API access
+ - Environment url - usually <code>https://sandbox-api-tw.rzlvtest.co</code> for first time implementations
+ - an Access Token - a JSON Web Token created by your auth server
+ - an Entity Id - this is the unique id of the user 
+ - a Partner Id - this is your partner id, assigned when you signed up for API access
+ - a Device Id - a unique identifier for the smartphone. </p>
 
-<p>The SDK must be initialized before use. When initializing the SDK, you must specify your <code>API Key</code>, and the <code>server environment</code> you are targeting.</p>
-
-<p>Your <code>API Key</code> is supplied to you when you set up a developer account with Rezolve.</p>
-
-<p>Your <code>server environment</code> is a string, and is provided at the same time as your API key.</p>
+<p>More info on all these parameters may be found in <strong><a href="#jwt-authentication">JWT Authentication</a></strong>.</p>
 <h2 id='android-specific-instructions-on-managers'>Android-specific instructions on Managers</h2><pre class="highlight java tab-java"><code>
 <span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
 
@@ -660,9 +657,7 @@ pod update
 <aside class="notice">
 **Note:**
 
-For testing via cURL or Postman without a server-side JWT library, you can use https://jwt.io/#debugger to generate valid JWT tokens. 
-
-Use https://www.epochconverter.com/ to generate the token expiration in Epoch time. 
+For testing via cURL or Postman without a server-side JWT library, you can use https://jwt.io/#debugger to generate valid JWT tokens. <br><br>Use https://www.epochconverter.com/ to generate the token expiration in Epoch time. <br><br><a href="images/postman-example.zip">Click here for screenshots showing registration using jwt.io and Postman.</a>
 </aside>
 <h4 id='requirements'>Requirements</h4>
 <p>You must possess:</p>

@@ -8,75 +8,69 @@ This section describes the usage of the SDK to build specific feature-related fu
 
 ```swift
 import UIKit
-
-// Import the following library:
 import RezolveSDK
 
-class RezolveSDK1ViewController: ViewController {
+
+class SandboxViewController: UIViewController {
+
+    private var API_KEY: String = "your_api_key"
+    private var API_ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
+    private var accessToken: String = "abc123.abc123.abc123"
+    private var entityId: String = "123"
+    private var partnerId: String = "123"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Initialize RezolveSDK
-        let rezolveSdk = RezolveSDK(
-            apiKey: REZOLVE_API_KEY, 
-            env: REZOLVE_SDK_ENV, 
-            config: config, 
-            dataClient: dataClient
+        
+        var sdk = RezolveSDK(
+            apiKey: API_KEY,
+            env: API_ENVIRONMENT
         )
-
-        // Creates Session
-        rezolveSdk.createSession(
-            accessToken: token, 
-            entityId: entityId, 
-            partnerId: partnerId, 
-            callback: { session in
-                // Store session
-            }, errorCallback: { response in
-                if response.statusCode == 401 { // Invalid token return
-                    // Developer shoud put token refreshing logic
-                    // using `credentials/ping` endpoint
-                }
-
-            // Handle other errors
-        })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+        
+        sdk.createSession(accessToken: accessToken, entityId: entityId, partnerId: partnerId) { session
+            
+            // your rezolve SDK logic here
+        }
     }
 }
 
 ```
-
 ```java
-// Import the following classes:
-import com.rezolve.sdk.RezolveInterface;
-import com.rezolve.sdk.RezolveSDK;
-import com.rezolve.sdk.RezolveSession;
-import com.rezolve.sdk.model.customer.DeviceProfile;
-import com.rezolve.sdk.model.foreign.SignUpRequest;
+String API_KEY = "your_api_key";
+String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
+String accessToken = "abc123.abc123.abc123";  // JWT token from auth server
+String entityId = "123";	// from auth server
+String partnerId = "123";   // from auth server
+String deviceId = "wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"; // from stored device_id, see "Generating the device_id" above
 
-// To handle server responses you will need to import interfaces or
-// abstract classes from the following packages:
-import com.rezolve.sdk.core.callbacks.*;
-import com.rezolve.sdk.core.interfaces.*;
+// Use builder to create instance of SDK and set SDK Params
+// Pass in an AuthRequestProvider here, to handle expiring JWT tokens
+rezolveSDK = new RezolveSDK.Builder()
+               .setApiKey(API_KEY)
+               .setEnv(ENVIRONMENT)
+               .setAuthRequestProvider(new PartnerAuthRequestProvider(AuthService.getInstance()))
+               .build();
 
+// Set JWT Auth Token from partner auth server
+rezolveSDK.setAuthToken(accessToken);
 
-// Rezolve SDK operates on models from com.rezolve.sdk.model subpackages. 
-// For example to handle a response from getMerchants query you will need 
-// a Merchant model:
+// Start session, again supplying JWT auth token
+rezolveSDK.createSession( accessToken, entityId, partnerId, new RezolveInterface() {
 
-import com.rezolve.sdk.model.shop.Merchant;
+	@Override
+	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
+        // set device_id so it can be passed in x-header
+        RezolveSDK.setDeviceIdHeader(deviceId);
+    
+		// use created session to access managers.  Example...
+		rezolveSession.getAddressbookManager().get(...);
+	}
 
-
-
-// initialize SDK
-
-private final static String API_KEY = "your_api_key";
-private final static String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
-
-RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, ENVIRONMENT);
-
+	@Override
+	public void onInitializationFailure() {
+		// handle error
+	}
+});
 ```
 
 ```java
@@ -92,14 +86,16 @@ RezolveSDK sdk = RezolveSDK.getInstance(API_KEY, ENVIRONMENT);
 
 ```
 
-To get started, import the SDK into your code file.
-
-The SDK must be initialized before use. When initializing the SDK, you must specify your `API Key`, and the `server environment` you are targeting.
-
-Your `API Key` is supplied to you when you set up a developer account with Rezolve.
-
-Your `server environment` is a string, and is provided at the same time as your API key.
-
+Initializing the SDK requires: 
+ - API-Key - assigned when you signed up for API access
+ - Environment url - usually `https://sandbox-api-tw.rzlvtest.co` for first time implementations
+ - an Access Token - a JSON Web Token created by your auth server
+ - an Entity Id - this is the unique id of the user 
+ - a Partner Id - this is your partner id, assigned when you signed up for API access
+ - a Device Id - a unique identifier for the smartphone. 
+ 
+More info on all these parameters may be found in **<a href="#jwt-authentication">JWT Authentication</a>**.
+ 
 
 
 ## Android-specific instructions on Managers
