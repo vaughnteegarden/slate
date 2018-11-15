@@ -87,12 +87,13 @@ rezolveSDK.createSession( accessToken, entityId, partnerId, new RezolveInterface
 ```
 
 Initializing the SDK requires: 
- - API-Key - assigned when you signed up for API access
- - Environment url - usually `https://sandbox-api-tw.rzlvtest.co` for first time implementations
- - an Access Token - a JSON Web Token created by your auth server
- - an Entity Id - this is the unique id of the user 
- - a Partner Id - this is your partner id, assigned when you signed up for API access
- - a Device Id - a unique identifier for the smartphone. 
+
+- API-Key - assigned when you signed up for API access
+- Environment url - usually `https://sandbox-api-tw.rzlvtest.co` for first time implementations
+- an Access Token - a JSON Web Token created by your auth server
+- an Entity Id - this is the unique id of the user 
+- a Partner Id - this is your partner id, assigned when you signed up for API access
+- a Device Id - a unique identifier for the smartphone. 
  
 More info on all these parameters may be found in **<a href="#jwt-authentication">JWT Authentication</a>**.
  

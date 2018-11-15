@@ -467,13 +467,16 @@ pod update
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
 
 </code></pre>
-<p>Initializing the SDK requires: 
- - API-Key - assigned when you signed up for API access
- - Environment url - usually <code>https://sandbox-api-tw.rzlvtest.co</code> for first time implementations
- - an Access Token - a JSON Web Token created by your auth server
- - an Entity Id - this is the unique id of the user 
- - a Partner Id - this is your partner id, assigned when you signed up for API access
- - a Device Id - a unique identifier for the smartphone. </p>
+<p>Initializing the SDK requires: </p>
+
+<ul>
+<li>API-Key - assigned when you signed up for API access</li>
+<li>Environment url - usually <code>https://sandbox-api-tw.rzlvtest.co</code> for first time implementations</li>
+<li>an Access Token - a JSON Web Token created by your auth server</li>
+<li>an Entity Id - this is the unique id of the user </li>
+<li>a Partner Id - this is your partner id, assigned when you signed up for API access</li>
+<li>a Device Id - a unique identifier for the smartphone. </li>
+</ul>
 
 <p>More info on all these parameters may be found in <strong><a href="#jwt-authentication">JWT Authentication</a></strong>.</p>
 <h2 id='android-specific-instructions-on-managers'>Android-specific instructions on Managers</h2><pre class="highlight java tab-java"><code>
@@ -657,7 +660,7 @@ pod update
 <aside class="notice">
 **Note:**
 
-For testing via cURL or Postman without a server-side JWT library, you can use https://jwt.io/#debugger to generate valid JWT tokens. <br><br>Use https://www.epochconverter.com/ to generate the token expiration in Epoch time. <br><br><a href="images/postman-example.zip">Click here for screenshots showing registration using jwt.io and Postman.</a>
+For testing via cURL or Postman without a server-side JWT library, you can use <a href="https://jwt.io/#debugger" target="_blank">https://jwt.io/#debugger</a> to generate valid JWT tokens. <br><br>Use <a href="https://www.epochconverter.com/" target="_blank">https://www.epochconverter.com/</a> to generate the token expiration in Epoch time. <br><br><a href="images/postman-example.zip">Click here for screenshots showing registration using jwt.io and Postman.</a>
 </aside>
 <h4 id='requirements'>Requirements</h4>
 <p>You must possess:</p>

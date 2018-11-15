@@ -46,7 +46,7 @@ When a user logs in to your auth system, generate a new Login JWT and supply to 
 <aside class="notice">
 **Note:**
 
-For testing via cURL or Postman without a server-side JWT library, you can use https://jwt.io/#debugger to generate valid JWT tokens. <br><br>Use https://www.epochconverter.com/ to generate the token expiration in Epoch time. <br><br><a href="images/postman-example.zip">Click here for screenshots showing registration using jwt.io and Postman.</a>
+For testing via cURL or Postman without a server-side JWT library, you can use <a href="https://jwt.io/#debugger" target="_blank">https://jwt.io/#debugger</a> to generate valid JWT tokens. <br><br>Use <a href="https://www.epochconverter.com/" target="_blank">https://www.epochconverter.com/</a> to generate the token expiration in Epoch time. <br><br><a href="images/postman-example.zip">Click here for screenshots showing registration using jwt.io and Postman.</a>
 </aside>
 
 #### Requirements
