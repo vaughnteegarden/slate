@@ -6,9 +6,7 @@ All notable changes to the project will be documented in this log.
 
 
 
-## Android Android v2.0.0, IOS v1.11.19 - Nov 9, 2018
-
-Only the IOS SDK receives an update in this release. Both Android and IOS developers should note the new Act documentation.
+## Android Android v2.0.1, IOS v1.11.20 - Nov 21, 2018
 
 ### Documentation Changes
 
@@ -27,7 +25,10 @@ Only the IOS SDK receives an update in this release. Both Android and IOS develo
 - `createCartCheckoutBundleV2` changed parameter type from `deliveryMethod` to `DeliveryMethod`
 - `createCartCheckoutBundleV2` changed parameter type from `paymentMethod` to `SupportedPaymentMethod?`
 
+### Android Changes
 
+ - Added abort purchase method to cancel orders without cleaning the cart on QuickPass canceling.
+ - Fixed wrong base price with certain options
 
 
 

@@ -124,8 +124,8 @@ We will not provide development support if you have not integrated Crashlytics o
 
 Latest release versions:
 
-- IOS: 1.11.19
-- Android: 2.0.0 
+- IOS: 1.11.20
+- Android: 2.0.1
 
 If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
 
@@ -208,7 +208,7 @@ Add the Rezolve repository to your root build.gradle file, in the `allprojects` 
 ```java
 // in /app/build.gradle
 dependencies {
-  def rezolveSdkVersion = "2.0.0"
+  def rezolveSdkVersion = "2.0.1"
   implementation "com.rezolve:sdk-android:$rezolveSdkVersion"
   // ...
 }

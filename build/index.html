@@ -325,8 +325,8 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>Latest release versions:</p>
 
 <ul>
-<li>IOS: 1.11.19</li>
-<li>Android: 2.0.0 </li>
+<li>IOS: 1.11.20</li>
+<li>Android: 2.0.1</li>
 </ul>
 
 <p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
@@ -385,7 +385,7 @@ pod update
 <p>Add the Rezolve repository to your root build.gradle file, in the <code>allprojects</code> block. </p>
 <h3 id='update-app-module-build-gradle-to-add-sdk-dependency'>Update :app module build.gradle to add sdk dependency</h3><pre class="highlight java tab-java"><code><span class="c1">// in /app/build.gradle</span>
 <span class="n">dependencies</span> <span class="o">{</span>
-  <span class="n">def</span> <span class="n">rezolveSdkVersion</span> <span class="o">=</span> <span class="s">"2.0.0"</span>
+  <span class="n">def</span> <span class="n">rezolveSdkVersion</span> <span class="o">=</span> <span class="s">"2.0.1"</span>
   <span class="n">implementation</span> <span class="s">"com.rezolve:sdk-android:$rezolveSdkVersion"</span>
   <span class="c1">// ...</span>
 <span class="o">}</span>
@@ -3404,9 +3404,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='android-android-v2-0-0-ios-v1-11-19-nov-9-2018'>Android Android v2.0.0, IOS v1.11.19 - Nov 9, 2018</h2>
-<p>Only the IOS SDK receives an update in this release. Both Android and IOS developers should note the new Act documentation.</p>
-<h3 id='documentation-changes'>Documentation Changes</h3>
+<h2 id='android-android-v2-0-1-ios-v1-11-20-nov-21-2018'>Android Android v2.0.1, IOS v1.11.20 - Nov 21, 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
 <ul>
 <li>Added tutorial on how to present data for an Act.</li>
 <li>New install instructions for IOS SDK (CocoaPods)</li>
@@ -3422,6 +3420,11 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li><code>createProductCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>deliveryMethod</code> to <code>DeliveryMethod</code></li>
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
+</ul>
+<h3 id='android-changes'>Android Changes</h3>
+<ul>
+<li>Added abort purchase method to cancel orders without cleaning the cart on QuickPass canceling.</li>
+<li>Fixed wrong base price with certain options</li>
 </ul>
 <h2 id='android-v2-0-0-ios-v1-11-10-october-11-2018'>Android v2.0.0, IOS v1.11.10 - October 11, 2018</h2><h3 id='major-documentation-changes'>Major Documentation Changes</h3>
 <ul>
