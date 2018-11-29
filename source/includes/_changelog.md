@@ -6,7 +6,7 @@ All notable changes to the project will be documented in this log.
 
 
 
-## Android Android v2.0.1, IOS v1.11.20 - Nov 21, 2018
+## Android v2.0.1, IOS v1.11.20 - Nov 21, 2018
 
 ### Documentation Changes
 

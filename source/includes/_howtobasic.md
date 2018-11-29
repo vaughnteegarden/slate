@@ -4,99 +4,6 @@ This section describes the usage of the SDK to build specific feature-related fu
 
 
 
-## Basic Usage
-
-```swift
-import UIKit
-import RezolveSDK
-
-
-class SandboxViewController: UIViewController {
-
-    private var API_KEY: String = "your_api_key"
-    private var API_ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
-    private var accessToken: String = "abc123.abc123.abc123"
-    private var entityId: String = "123"
-    private var partnerId: String = "123"
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        var sdk = RezolveSDK(
-            apiKey: API_KEY,
-            env: API_ENVIRONMENT
-        )
-        
-        sdk.createSession(accessToken: accessToken, entityId: entityId, partnerId: partnerId) { session
-            
-            // your rezolve SDK logic here
-        }
-    }
-}
-
-```
-```java
-String API_KEY = "your_api_key";
-String ENVIRONMENT = "https://sandbox-api-tw.rzlvtest.co/api";
-String accessToken = "abc123.abc123.abc123";  // JWT token from auth server
-String entityId = "123";	// from auth server
-String partnerId = "123";   // from auth server
-String deviceId = "wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"; // from stored device_id, see "Generating the device_id" above
-
-// Use builder to create instance of SDK and set SDK Params
-// Pass in an AuthRequestProvider here, to handle expiring JWT tokens
-rezolveSDK = new RezolveSDK.Builder()
-               .setApiKey(API_KEY)
-               .setEnv(ENVIRONMENT)
-               .setAuthRequestProvider(new PartnerAuthRequestProvider(AuthService.getInstance()))
-               .build();
-
-// Set JWT Auth Token from partner auth server
-rezolveSDK.setAuthToken(accessToken);
-
-// Start session, again supplying JWT auth token
-rezolveSDK.createSession( accessToken, entityId, partnerId, new RezolveInterface() {
-
-	@Override
-	public void onInitializationSuccess(RezolveSession rezolveSession, String entityId, String partnerId) {
-        // set device_id so it can be passed in x-header
-        RezolveSDK.setDeviceIdHeader(deviceId);
-    
-		// use created session to access managers.  Example...
-		rezolveSession.getAddressbookManager().get(...);
-	}
-
-	@Override
-	public void onInitializationFailure() {
-		// handle error
-	}
-});
-```
-
-```java
-// Note: the SDK's manifest requests the following permissions:
-// On Android 6.0+, you will have to specifically request the last two. 
-// See https://developer.android.com/training/permissions/requesting.html
-
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.CAMERA" />
-
-```
-
-Initializing the SDK requires: 
-
-- API-Key - assigned when you signed up for API access
-- Environment url - usually `https://sandbox-api-tw.rzlvtest.co` for first time implementations
-- an Access Token - a JSON Web Token created by your auth server
-- an Entity Id - this is the unique id of the user 
-- a Partner Id - this is your partner id, assigned when you signed up for API access
-- a Device Id - a unique identifier for the smartphone. 
- 
-More info on all these parameters may be found in **<a href="#jwt-authentication">JWT Authentication</a>**.
- 
 
 
 ## Android-specific instructions on Managers
@@ -223,8 +130,83 @@ The primary task in implementing user management is to create the JWT that will 
 A valid JWT is required to initialize the SDK and start a sesssion. 
 
 
+## Minimum Implementation
+
+As a developer, you may be thinking "There is a lot of documentation here. What is the minimum feature set I need to implement to make a technical demo?" 
+
+It depends on what you want to demonstrate, but the typical demonstration of Rezolve's offering looks like:
+
+**Scan Engagement**&nbsp;&nbsp;&nbsp;>>>&nbsp;&nbsp;&nbsp;**View Product**&nbsp;&nbsp;&nbsp;>>>&nbsp;&nbsp;&nbsp;**Instant Buy**
+
+This section walks you through the minimum implementation required to accomplish and end-to-end demo. Several shortcuts are identified. These shortcuts are not appropriate for any app processing real transactions, but are acceptible for a technical demonstration on the Sandbox server. 
+
+### 1. Authentication
+
+Two things must be in place before the SDK can communicate with the server
+
+1. You must have an API Key and Partner Id, and be must talking to the correct Environment.  This information was provided to you when you signed up for API Access. 
+2. You must have a valid JSON Web Token. A JWT Secret was provided when you signed up for API Access, and is used to create the JWT. 
+
+Examples of both authenticaton measures are shown under **<a href="#jwt-authentication">JWT Authentication</a>** .
+
+**Shortcut Alert**
+
+New developers sometimes get stuck on #2, JWT Authentication, as it is somewhat complex and requires a server-to-server integration. For a technical trial, instead of modifying your auth server, you can take a partial shortcut:
+
+At <a href="#create-the-registration-jwt">Create the Registration JWT</a>, there are links to an online JWT debugger, epoch converter, and a zip file with screenshots showing how to use these with <a href="https://www.getpostman.com/" target="_blank">Postman</a> to manually create and use JSON Web Tokens.  You must create the Registration JWT, and then create the Login JWT, as documented and get your `entity_id`.  But when creating the Login JWT, create one with an expiration date well in the future, 6 months from the current date.  You can then use this JWT and the corresponding `entity_id` in your code while you test. This frees you from doing full auth server integration for a simple technical trial.
+
+Be aware this is UNSAFE for production, or even pilot use. For any rollout involving real consumers and real purchases, you must do the auth server integration, so JWT tokens are tied properly to login status for a single user, and tokens can be renewed and expired.
+
+### 2. Profile Building Blocks
+
+The end consumer is represented by a Profile. Attached to this profile are one or more addresses, one or more phone numbers, and one or more payment devices. To create these objects, you must implement:
+
+* ConsumerProfileManager - and create a profile record
+* AddressbookManager - and create an address record
+* PhonebookManager - and create a phone record.
+* WalletManager - and add a credit card. (we recommend using VISA 4111 1111 1111 1111 for testing)
+
+During the scan and purchase flow, ids for profile, address, phone, and payment device will be needed. You will get these by querying the above managers to get to get the ids of the records you created.
+
+See **<a href="#consumer-profile-management">Consumer Profile Management</a>**. 
+
+**Shortcut Alert**
+
+Normally, you would create a UI for each of these managers, allowing the consumer to enter their information.
+
+For a technical demo, you might forgo creating an UI.  Instead, after authentication, to a GET to each manager, and if incomplete or null results are returned, create the needed record from hard coded data. 
+
+### 3. The Scan Interface
+
+You must implement ScanManager, and all it's methods. 
+
+You will also need ProductManager, to get and parse the retrieved product. 
+
+See the example at **<a href="#product-scan-instant-buy-flow">Product Scan, Instant Buy Flow</a>**.
 
 
+### 4. Checkout and Payment
 
+Checkout and payment rely upon the following managers. 
 
+* PaymentOptionsManager 
+* CheckoutManagerV2 
+
+You must at least stub all the methods of these managers. But you may notice there are some methods specific to cart, and some specific to product. For instant buy, you only need to fully implement the PRODUCT methods. 
+
+**Shortcut Alert**
+
+It is recommended you display full product info after the scan, and implement a slide-to-buy control to make the purchase. However, you might skip the interactive UI where the consumer would normally choose quantity, shipping address, and payment card, and have these choices hard coded instead. 
+
+Note that a simple product requires only a choice of quantity, so these are easiest to make a demo with.
+
+See the example at **<a href="#product-scan-instant-buy-flow">Product Scan, Instant Buy Flow</a>**.
+
+### Conclusion
+
+The above steps outline the absolute shortest route to a fully functional tech demonstraton. Please follow them, and embrace the shortcuts provided, to create your tech demo in the minimal time. 
+
+But be aware that the Minimum Implementation is suitable for a Technical Demo only. Any application that will be given to consumers and used to make real purchases must fully implement JWT Auth, a proper Consumer UI, and included features omitted from this section, like Mall, Shopping Cart, Multi-Cart, and more.  
+
+The <a href="#reference-app">Rezolve Reference App</a> is a great example of a full-featured implementation. If you haven't already, request access and give it a try.  
 

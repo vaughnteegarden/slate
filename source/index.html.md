@@ -42,11 +42,11 @@ The **Rezolve Inside<sup>TM</sup> SDK** is a software development kit that enabl
 
 To learn more about what the Rezolve Inside<sup>TM</sup> SDK can offer your app, <a href="images/RezolveOverview-Platform.pdf">click here for a platform overview PDF</a>.
 
-## Demo App
+## Reference App
 
-A Rezolve demo app is available, and is a great way to experience Rezolve's offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.
+A Rezolve Reference App is available, and is a great way to experience Rezolve's offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.
 
-If you would like access to the demo app, email Stephen Meli (stephen@rezolve.com) the following information:
+If you would like access to the reference app, email Stephen Meli (stephen@rezolve.com) the following information:
 
 1. Your full name
 2. Your company
@@ -215,3 +215,18 @@ dependencies {
 ```
 
 Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `rezolveSdkVersion` to the version you wish to use. Note it is important to use double quotes as shown around the implementation string, or `$rezolveSdkVersion` won't be evaluated. To upgrade to a new release, update `rezolveSdkVersion` to the latest version.
+
+### Permissions
+
+```java
+// Note: the SDK's manifest requests the following permissions:
+// On Android 6.0+, you will have to specifically request the last two. 
+// See https://developer.android.com/training/permissions/requesting.html
+
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.CAMERA" />
+
+```

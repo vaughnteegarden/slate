@@ -236,10 +236,10 @@ You can switch between IOS and Android by clicking the tabs above.
 <p>The <strong>Rezolve Inside<sup>TM</sup> SDK</strong> is a software development kit that enables mobile app developers to integrate Rezolve’s mobile commerce and engagement capabilities into their new or existing mobile apps.</p>
 
 <p>To learn more about what the Rezolve Inside<sup>TM</sup> SDK can offer your app, <a href="images/RezolveOverview-Platform.pdf">click here for a platform overview PDF</a>.</p>
-<h2 id='demo-app'>Demo App</h2>
-<p>A Rezolve demo app is available, and is a great way to experience Rezolve&#39;s offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.</p>
+<h2 id='reference-app'>Reference App</h2>
+<p>A Rezolve Reference App is available, and is a great way to experience Rezolve&#39;s offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.</p>
 
-<p>If you would like access to the demo app, email Stephen Meli (stephen@rezolve.com) the following information:</p>
+<p>If you would like access to the reference app, email Stephen Meli (stephen@rezolve.com) the following information:</p>
 
 <ol>
 <li>Your full name</li>
@@ -391,72 +391,7 @@ pod update
 <span class="o">}</span>
 </code></pre>
 <p>Add Rezolve SDK dependency to build.gradle file in your :app module. Set the <code>rezolveSdkVersion</code> to the version you wish to use. Note it is important to use double quotes as shown around the implementation string, or <code>$rezolveSdkVersion</code> won&#39;t be evaluated. To upgrade to a new release, update <code>rezolveSdkVersion</code> to the latest version.</p>
-
-          <h1 id='sdk-feature-use'>SDK Feature Use</h1>
-<p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>
-<h2 id='basic-usage'>Basic Usage</h2><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
-<span class="kd">import</span> <span class="kt">RezolveSDK</span>
-
-
-<span class="kd">class</span> <span class="kt">SandboxViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
-
-    <span class="kd">private</span> <span class="k">var</span> <span class="nv">API_KEY</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"your_api_key"</span>
-    <span class="kd">private</span> <span class="k">var</span> <span class="nv">API_ENVIRONMENT</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"sandbox-api-tw.rzlvtest.co"</span>
-    <span class="kd">private</span> <span class="k">var</span> <span class="nv">accessToken</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"abc123.abc123.abc123"</span>
-    <span class="kd">private</span> <span class="k">var</span> <span class="nv">entityId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"123"</span>
-    <span class="kd">private</span> <span class="k">var</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"123"</span>
-
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
-
-        <span class="k">var</span> <span class="nv">sdk</span> <span class="o">=</span> <span class="kt">RezolveSDK</span><span class="p">(</span>
-            <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">API_KEY</span><span class="p">,</span>
-            <span class="nv">env</span><span class="p">:</span> <span class="kt">API_ENVIRONMENT</span>
-        <span class="p">)</span>
-
-        <span class="n">sdk</span><span class="o">.</span><span class="nf">createSession</span><span class="p">(</span><span class="nv">accessToken</span><span class="p">:</span> <span class="n">accessToken</span><span class="p">,</span> <span class="nv">entityId</span><span class="p">:</span> <span class="n">entityId</span><span class="p">,</span> <span class="nv">partnerId</span><span class="p">:</span> <span class="n">partnerId</span><span class="p">)</span> <span class="p">{</span> <span class="n">session</span>
-
-            <span class="c1">// your rezolve SDK logic here</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-</code></pre><pre class="highlight java tab-java"><code><span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">accessToken</span> <span class="o">=</span> <span class="s">"abc123.abc123.abc123"</span><span class="o">;</span>  <span class="c1">// JWT token from auth server</span>
-<span class="n">String</span> <span class="n">entityId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>    <span class="c1">// from auth server</span>
-<span class="n">String</span> <span class="n">partnerId</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>   <span class="c1">// from auth server</span>
-<span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="s">"wlkCDA2Hy/CfMqVAShslBAR/0sAiuRIUm5jOg0a"</span><span class="o">;</span> <span class="c1">// from stored device_id, see "Generating the device_id" above</span>
-
-<span class="c1">// Use builder to create instance of SDK and set SDK Params</span>
-<span class="c1">// Pass in an AuthRequestProvider here, to handle expiring JWT tokens</span>
-<span class="n">rezolveSDK</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
-               <span class="o">.</span><span class="na">setApiKey</span><span class="o">(</span><span class="n">API_KEY</span><span class="o">)</span>
-               <span class="o">.</span><span class="na">setEnv</span><span class="o">(</span><span class="n">ENVIRONMENT</span><span class="o">)</span>
-               <span class="o">.</span><span class="na">setAuthRequestProvider</span><span class="o">(</span><span class="k">new</span> <span class="n">PartnerAuthRequestProvider</span><span class="o">(</span><span class="n">AuthService</span><span class="o">.</span><span class="na">getInstance</span><span class="o">()))</span>
-               <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-
-<span class="c1">// Set JWT Auth Token from partner auth server</span>
-<span class="n">rezolveSDK</span><span class="o">.</span><span class="na">setAuthToken</span><span class="o">(</span><span class="n">accessToken</span><span class="o">);</span>
-
-<span class="c1">// Start session, again supplying JWT auth token</span>
-<span class="n">rezolveSDK</span><span class="o">.</span><span class="na">createSession</span><span class="o">(</span> <span class="n">accessToken</span><span class="o">,</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">partnerId</span><span class="o">,</span> <span class="k">new</span> <span class="n">RezolveInterface</span><span class="o">()</span> <span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationSuccess</span><span class="o">(</span><span class="n">RezolveSession</span> <span class="n">rezolveSession</span><span class="o">,</span> <span class="n">String</span> <span class="n">entityId</span><span class="o">,</span> <span class="n">String</span> <span class="n">partnerId</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// set device_id so it can be passed in x-header</span>
-        <span class="n">RezolveSDK</span><span class="o">.</span><span class="na">setDeviceIdHeader</span><span class="o">(</span><span class="n">deviceId</span><span class="o">);</span>
-
-        <span class="c1">// use created session to access managers.  Example...</span>
-        <span class="n">rezolveSession</span><span class="o">.</span><span class="na">getAddressbookManager</span><span class="o">().</span><span class="na">get</span><span class="o">(...);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onInitializationFailure</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// handle error</span>
-    <span class="o">}</span>
-<span class="o">});</span>
-</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
+<h3 id='permissions'>Permissions</h3><pre class="highlight java tab-java"><code><span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
 <span class="c1">// On Android 6.0+, you will have to specifically request the last two. </span>
 <span class="c1">// See https://developer.android.com/training/permissions/requesting.html</span>
 
@@ -467,18 +402,8 @@ pod update
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
 
 </code></pre>
-<p>Initializing the SDK requires: </p>
-
-<ul>
-<li>API-Key - assigned when you signed up for API access</li>
-<li>Environment url - usually <code>https://sandbox-api-tw.rzlvtest.co</code> for first time implementations</li>
-<li>an Access Token - a JSON Web Token created by your auth server</li>
-<li>an Entity Id - this is the unique id of the user </li>
-<li>a Partner Id - this is your partner id, assigned when you signed up for API access</li>
-<li>a Device Id - a unique identifier for the smartphone. </li>
-</ul>
-
-<p>More info on all these parameters may be found in <strong><a href="#jwt-authentication">JWT Authentication</a></strong>.</p>
+          <h1 id='sdk-feature-use'>SDK Feature Use</h1>
+<p>This section describes the usage of the SDK to build specific feature-related functionalities.</p>
 <h2 id='android-specific-instructions-on-managers'>Android-specific instructions on Managers</h2><pre class="highlight java tab-java"><code>
 <span class="c1">//  THE FOLLOWING TWO METHODS ARE EQUIVALENT, but Interface saves effort</span>
 
@@ -597,6 +522,79 @@ pod update
 <p>The primary task in implementing user management is to create the JWT that will allow you to bind a Partner user to a Rezolve profile. Through a server-to-server transaction, you can create a new Rezolve User Profile, and get back an identifying <code>entityId</code> that you should persist in your authentication database, as an addition to your user record. This <code>entityId</code> will then be used by the Rezolve SDK to identify the user to the Rezolve Server. </p>
 
 <p>A valid JWT is required to initialize the SDK and start a sesssion. </p>
+<h2 id='minimum-implementation'>Minimum Implementation</h2>
+<p>As a developer, you may be thinking &quot;There is a lot of documentation here. What is the minimum feature set I need to implement to make a technical demo?&quot; </p>
+
+<p>It depends on what you want to demonstrate, but the typical demonstration of Rezolve&#39;s offering looks like:</p>
+
+<p><strong>Scan Engagement</strong>&nbsp;&nbsp;&nbsp;&gt;&gt;&gt;&nbsp;&nbsp;&nbsp;<strong>View Product</strong>&nbsp;&nbsp;&nbsp;&gt;&gt;&gt;&nbsp;&nbsp;&nbsp;<strong>Instant Buy</strong></p>
+
+<p>This section walks you through the minimum implementation required to accomplish and end-to-end demo. Several shortcuts are identified. These shortcuts are not appropriate for any app processing real transactions, but are acceptible for a technical demonstration on the Sandbox server. </p>
+<h3 id='1-authentication'>1. Authentication</h3>
+<p>Two things must be in place before the SDK can communicate with the server</p>
+
+<ol>
+<li>You must have an API Key and Partner Id, and be must talking to the correct Environment.  This information was provided to you when you signed up for API Access. </li>
+<li>You must have a valid JSON Web Token. A JWT Secret was provided when you signed up for API Access, and is used to create the JWT. </li>
+</ol>
+
+<p>Examples of both authenticaton measures are shown under <strong><a href="#jwt-authentication">JWT Authentication</a></strong> .</p>
+
+<p><strong>Shortcut Alert</strong></p>
+
+<p>New developers sometimes get stuck on #2, JWT Authentication, as it is somewhat complex and requires a server-to-server integration. For a technical trial, instead of modifying your auth server, you can take a partial shortcut:</p>
+
+<p>At <a href="#create-the-registration-jwt">Create the Registration JWT</a>, there are links to an online JWT debugger, epoch converter, and a zip file with screenshots showing how to use these with <a href="https://www.getpostman.com/" target="_blank">Postman</a> to manually create and use JSON Web Tokens.  You must create the Registration JWT, and then create the Login JWT, as documented and get your <code>entity_id</code>.  But when creating the Login JWT, create one with an expiration date well in the future, 6 months from the current date.  You can then use this JWT and the corresponding <code>entity_id</code> in your code while you test. This frees you from doing full auth server integration for a simple technical trial.</p>
+
+<p>Be aware this is UNSAFE for production, or even pilot use. For any rollout involving real consumers and real purchases, you must do the auth server integration, so JWT tokens are tied properly to login status for a single user, and tokens can be renewed and expired.</p>
+<h3 id='2-profile-building-blocks'>2. Profile Building Blocks</h3>
+<p>The end consumer is represented by a Profile. Attached to this profile are one or more addresses, one or more phone numbers, and one or more payment devices. To create these objects, you must implement:</p>
+
+<ul>
+<li>ConsumerProfileManager - and create a profile record</li>
+<li>AddressbookManager - and create an address record</li>
+<li>PhonebookManager - and create a phone record.</li>
+<li>WalletManager - and add a credit card. (we recommend using VISA 4111 1111 1111 1111 for testing)</li>
+</ul>
+
+<p>During the scan and purchase flow, ids for profile, address, phone, and payment device will be needed. You will get these by querying the above managers to get to get the ids of the records you created.</p>
+
+<p>See <strong><a href="#consumer-profile-management">Consumer Profile Management</a></strong>. </p>
+
+<p><strong>Shortcut Alert</strong></p>
+
+<p>Normally, you would create a UI for each of these managers, allowing the consumer to enter their information.</p>
+
+<p>For a technical demo, you might forgo creating an UI.  Instead, after authentication, to a GET to each manager, and if incomplete or null results are returned, create the needed record from hard coded data. </p>
+<h3 id='3-the-scan-interface'>3. The Scan Interface</h3>
+<p>You must implement ScanManager, and all it&#39;s methods. </p>
+
+<p>You will also need ProductManager, to get and parse the retrieved product. </p>
+
+<p>See the example at <strong><a href="#product-scan-instant-buy-flow">Product Scan, Instant Buy Flow</a></strong>.</p>
+<h3 id='4-checkout-and-payment'>4. Checkout and Payment</h3>
+<p>Checkout and payment rely upon the following managers. </p>
+
+<ul>
+<li>PaymentOptionsManager </li>
+<li>CheckoutManagerV2 </li>
+</ul>
+
+<p>You must at least stub all the methods of these managers. But you may notice there are some methods specific to cart, and some specific to product. For instant buy, you only need to fully implement the PRODUCT methods. </p>
+
+<p><strong>Shortcut Alert</strong></p>
+
+<p>It is recommended you display full product info after the scan, and implement a slide-to-buy control to make the purchase. However, you might skip the interactive UI where the consumer would normally choose quantity, shipping address, and payment card, and have these choices hard coded instead. </p>
+
+<p>Note that a simple product requires only a choice of quantity, so these are easiest to make a demo with.</p>
+
+<p>See the example at <strong><a href="#product-scan-instant-buy-flow">Product Scan, Instant Buy Flow</a></strong>.</p>
+<h3 id='conclusion'>Conclusion</h3>
+<p>The above steps outline the absolute shortest route to a fully functional tech demonstraton. Please follow them, and embrace the shortcuts provided, to create your tech demo in the minimal time. </p>
+
+<p>But be aware that the Minimum Implementation is suitable for a Technical Demo only. Any application that will be given to consumers and used to make real purchases must fully implement JWT Auth, a proper Consumer UI, and included features omitted from this section, like Mall, Shopping Cart, Multi-Cart, and more.  </p>
+
+<p>The <a href="#reference-app">Rezolve Reference App</a> is a great example of a full-featured implementation. If you haven&#39;t already, request access and give it a try.  </p>
 
           <h2 id='jwt-authentication'>JWT Authentication</h2>
 <p><strong>Topics</strong></p>
@@ -3404,7 +3402,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='android-android-v2-0-1-ios-v1-11-20-nov-21-2018'>Android Android v2.0.1, IOS v1.11.20 - Nov 21, 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
+<h2 id='android-v2-0-1-ios-v1-11-20-nov-21-2018'>Android v2.0.1, IOS v1.11.20 - Nov 21, 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
 <ul>
 <li>Added tutorial on how to present data for an Act.</li>
 <li>New install instructions for IOS SDK (CocoaPods)</li>
