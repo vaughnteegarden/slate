@@ -132,6 +132,14 @@ A valid JWT is required to initialize the SDK and start a sesssion.
 
 ## Minimum Implementation
 
+**Topics**
+
+* <a href="#1-authentication">1. Authentication</a>
+* <a href="#2-profile-building-blocks">2. Profile Building Blocks</a>
+* <a href="#3-the-scan-interface">3. The Scan Interface</a>
+* <a href="4-checkout-and-payment">4. Checkout and Payment</a>
+* <a href="#conclusion">Conclusion</a>
+
 As a developer, you may be thinking "There is a lot of documentation here. What is the minimum feature set I need to implement to make a technical demo?" 
 
 It depends on what you want to demonstrate, but the typical demonstration of Rezolve's offering looks like:
