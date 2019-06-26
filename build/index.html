@@ -3357,6 +3357,164 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
 <p><img src="images/my-activity-detail-view.png" style="margin:6px 0;"><br/>[ <a href="images/my-activity-detail-view.png" target="_blank">View full size</a> ]</p>
 
+          <h2 id='merchant-and-product-search'>Merchant and Product Search</h2>
+<p>Search is available to aid in the presentation and usability of large malls and/or large product catalogs. You can search for merchants, or for products.</p>
+<h3 id='merchant-search'>Merchant Search</h3><pre class="highlight swift tab-swift"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// set up parameters for merchant search</span>
+<span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">MerchantSearchOrderBy</span> <span class="n">merchantSearchOrderBy</span> <span class="o">=</span> <span class="n">MerchantSearchOrderBy</span><span class="o">.</span><span class="na">LOCATION</span><span class="o">;</span>
+<span class="n">SearchDirection</span> <span class="n">searchDirection</span> <span class="o">=</span> <span class="n">SearchDirection</span><span class="o">.</span><span class="na">ASC</span><span class="o">;</span>
+<span class="n">Integer</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="n">Integer</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">50</span><span class="o">;</span>
+<span class="n">RezolveLocation</span> <span class="n">rezolveLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveLocation</span><span class="o">();</span>
+<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="mf">40.6726499</span><span class="o">);</span>
+<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(-</span><span class="mf">73.9502622</span><span class="o">);</span>
+<span class="n">MerchantSearchData</span> <span class="n">merchantSearchData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MerchantSearchData</span><span class="o">(</span><span class="n">query</span><span class="o">,</span><span class="n">merchantSearchOrderBy</span><span class="o">,</span><span class="n">searchDirection</span><span class="o">,</span><span class="n">offset</span><span class="o">,</span><span class="n">limit</span><span class="o">,</span><span class="n">rezolveLocation</span><span class="o">);</span>
+
+<span class="c1">// set up merchant search interface and handle results</span>
+<span class="n">MerchantSearchInterface</span> <span class="n">merchantSearchInterface</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MerchantSearchInterface</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSearchMerchantsSuccess</span><span class="o">(</span><span class="n">MerchantSearchResult</span> <span class="n">merchantSearchResult</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">page</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="na">getPage</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">total</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="na">getTotal</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Merchant</span><span class="o">&gt;</span> <span class="n">merchants</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="na">getMerchants</span><span class="o">();</span>
+
+        <span class="c1">//iterate over merchants array</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Merchant</span> <span class="n">merchant</span> <span class="o">:</span> <span class="n">merchants</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">banner</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getBanner</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">bannerThumbs</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getBannerThumbs</span><span class="o">();</span>
+            <span class="n">Double</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getDistance</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">infoEmail</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getInfoEmail</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">infoName</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getInfoName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">infoPhone</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getInfoPhone</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">logo</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getLogo</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">logoThumgs</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getLogoThumbs</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">partnerId</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getPartnerId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">partnerName</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getPartnerName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">priority</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getPriority</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">DisplayStore</span><span class="o">&gt;</span> <span class="n">stores</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getStores</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">tagline</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getTagline</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">TermsAndConditions</span><span class="o">&gt;</span> <span class="n">termsAndConditionsList</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="na">getTermsAndConditionsList</span><span class="o">();</span>
+
+            <span class="c1">// get list of store locations associated with this merchant</span>
+            <span class="k">for</span><span class="o">(</span><span class="n">DisplayStore</span> <span class="nl">displayStore:</span><span class="n">stores</span><span class="o">){</span>
+                 <span class="kt">int</span> <span class="n">storeId</span> <span class="o">=</span> <span class="n">displayStore</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+                 <span class="n">RezolveLocation</span> <span class="n">storeLocation</span> <span class="o">=</span> <span class="n">displayStore</span><span class="o">.</span><span class="na">getLocation</span><span class="o">();</span>
+                 <span class="n">String</span> <span class="n">storeName</span> <span class="o">=</span> <span class="n">displayStore</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="c1">// get terms of conditions for merchant</span>
+            <span class="k">for</span><span class="o">(</span><span class="n">TermsAndConditions</span> <span class="n">termsAndConditions</span> <span class="o">:</span> <span class="n">termsAndConditionsList</span><span class="o">){</span>
+                <span class="n">String</span> <span class="n">termsCheckboxText</span> <span class="o">=</span> <span class="n">termsAndConditions</span><span class="o">.</span><span class="na">getCheckboxText</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">termsContent</span> <span class="o">=</span> <span class="n">termsAndConditions</span><span class="o">.</span><span class="na">getContent</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">termsId</span> <span class="o">=</span> <span class="n">termsAndConditions</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">termsName</span> <span class="o">=</span> <span class="n">termsAndConditions</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">termsStoreId</span> <span class="o">=</span> <span class="n">termsAndConditions</span><span class="o">.</span><span class="na">getStoreId</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">RezolveError</span> <span class="n">rezolveError</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error gracefully</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c1">// initiate merchant search</span>
+<span class="n">merchantManager</span><span class="o">.</span><span class="na">searchMerchants</span><span class="o">(</span><span class="k">this</span><span class="o">,</span><span class="n">merchantSearchData</span><span class="o">,</span><span class="n">merchantSearchInterface</span><span class="o">);</span>
+</code></pre>
+<p>Merchant search offers the following features:</p>
+
+<ul>
+<li>The ability to list all merchants, sorted by distance to the end user.</li>
+<li>The ability to enter a merchant name query, and sort results by Score or Distance.</li>
+<li>Ability to order results ascending or descending.</li>
+</ul>
+
+<p>Note that to return merchants sorted by distance, each merchant in your ecosystem must configure at least one &quot;Store&quot; in the Merchant Portal, supplying latitude and longitude. Which ever merchant has a store closest the user will be returned first.  </p>
+
+<p>To search for a merchant you must supply the following parameters:</p>
+
+<ul>
+<li>Query string - Optional. Leave blank to get all merchants. If more than one term is supplied, terms are matched on an AND basis. </li>
+<li>Offset - For pagination, offset is the number of pages of results to skip. Setting this to zero gets the first page of results.</li>
+<li>Limit - For pagination, the number of results to return per page.</li>
+<li>Sort By - Should merchants be sorted by LOCATION or by search SCORE.</li>
+<li>Sort Direction - ASC or DESC</li>
+<li>Location - Optional. The latitude and longitude of the consumer phone. Merchant list cannot be sorted by distance without this parameter.</li>
+</ul>
+
+<p>See code samples to the right.</p>
+<h3 id='product-search'>Product Search</h3><pre class="highlight swift tab-swift"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// set up parameters for product search</span>
+<span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">"book"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">merchantId2</span> <span class="o">=</span> <span class="s">"123"</span><span class="o">;</span>
+<span class="n">ProductSearchOrderBy</span> <span class="n">productSearchOrderBy</span> <span class="o">=</span> <span class="n">ProductSearchOrderBy</span><span class="o">.</span><span class="na">SCORE</span><span class="o">;</span>
+<span class="n">SearchDirection</span> <span class="n">searchDirection</span> <span class="o">=</span> <span class="n">SearchDirection</span><span class="o">.</span><span class="na">DESC</span><span class="o">;</span>
+<span class="n">ProductType</span> <span class="n">productType</span> <span class="o">=</span> <span class="n">ProductType</span><span class="o">.</span><span class="na">ALL</span><span class="o">;</span>
+<span class="n">Integer</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="n">Integer</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">50</span><span class="o">;</span>
+<span class="n">RezolveLocation</span> <span class="n">rezolveLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RezolveLocation</span><span class="o">();</span>
+<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="mf">40.6726499</span><span class="o">);</span>
+<span class="n">rezolveLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(-</span><span class="mf">73.9502622</span><span class="o">);</span>
+<span class="n">ProductSearchData</span> <span class="n">productSearchData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProductSearchData</span><span class="o">(</span><span class="n">query</span><span class="o">,</span><span class="n">merchantId2</span><span class="o">,</span><span class="n">productSearchOrderBy</span><span class="o">,</span><span class="n">searchDirection</span><span class="o">,</span><span class="n">productType</span><span class="o">,</span><span class="n">offset</span><span class="o">,</span><span class="n">limit</span><span class="o">,</span><span class="n">rezolveLocation</span><span class="o">);</span>
+
+<span class="c1">// set up product search interface and handle results</span>
+<span class="n">ProductSearchInterface</span> <span class="n">productSearchInterface</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProductSearchInterface</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSearchProductsSuccess</span><span class="o">(</span><span class="n">ProductSearchResult</span> <span class="n">productSearchResult</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Integer</span> <span class="n">page</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="na">getPage</span><span class="o">();</span>
+        <span class="n">Integer</span> <span class="n">total</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="na">getTotal</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">DisplayProduct</span><span class="o">&gt;</span> <span class="n">displayProducts</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="na">getDisplayProducts</span><span class="o">();</span>
+
+        <span class="c1">// iterate over list of display proucts</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">DisplayProduct</span> <span class="nl">displayProduct:</span><span class="n">displayProducts</span><span class="o">){</span>
+            <span class="n">String</span> <span class="n">productId</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">merchantId</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getMerchantId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">categoryId</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getCategoryId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">categoryName</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getCategoryName</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">image</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getImage</span><span class="o">();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">imageThumbs</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getImageThumbs</span><span class="o">();</span>
+            <span class="kt">float</span> <span class="n">price</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+            <span class="n">Placement</span> <span class="n">productPlacement</span> <span class="o">=</span> <span class="n">displayProduct</span><span class="o">.</span><span class="na">getProductPlacement</span><span class="o">();</span>
+            <span class="c1">// get product placement details</span>
+            <span class="n">String</span> <span class="n">adId</span> <span class="o">=</span> <span class="n">productPlacement</span><span class="o">.</span><span class="na">getAdId</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">placementId</span> <span class="o">=</span> <span class="n">productPlacement</span><span class="o">.</span><span class="na">getPlacementId</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">RezolveError</span> <span class="n">rezolveError</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// handle error gracefully</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="c1">// initiate product search</span>
+<span class="n">productManager</span><span class="o">.</span><span class="na">searchProducts</span><span class="o">(</span><span class="k">this</span><span class="o">,</span><span class="n">productSearchData</span><span class="o">,</span> <span class="n">productSearchInterface</span><span class="o">);</span>
+</code></pre>
+<p>Product search offers the following features:</p>
+
+<ul>
+<li>Search products across all merchants in your ecosystem </li>
+<li>Search the products of a single merchant (by specifying a merchant id)</li>
+<li>Sort results by search SCORE or PRICE</li>
+<li>Sort direction ASC or DESC</li>
+</ul>
+
+<p>To search for products you must supply the following parameters:</p>
+
+<ul>
+<li>Query string - Optional. Leaving blank will return all products. If more than one term is supplied, terms are matched on an AND basis. </li>
+<li>Merchant Id - Optional. If supplied, restricts product search to the specified merchant.</li>
+<li>Offset - For pagination, offset is the number of pages to skip. Setting this to zero gets the first page of results.</li>
+<li>Limit - For pagination, the number of results to return per page.</li>
+<li>Sort By - Sort by search SCORE or PRICE</li>
+<li>Sort Direction - ASC or DESC</li>
+<li>Product Type - Can be PRODUCTS, ACTS, or ALL.</li>
+</ul>
+
           <h1 id='error-handling'>Error Handling</h1><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"errors"</span><span class="p">:[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -3424,13 +3582,107 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='android-v2-0-1-ios-v1-11-20-nov-21-2018'>Android v2.0.1, IOS v1.11.20 - Nov 21, 2018</h2><h3 id='documentation-changes'>Documentation Changes</h3>
+<h2 id='android-v2-1-0-ios-v1-11-24-june-26-2019'>Android v2.1.0, IOS v1.11.24 - June 26, 2019</h2><h3 id='documentation-changes'>Documentation Changes</h3>
+<ul>
+<li>Added tutorial for Search</li>
+<li>New install instructions for IOS SDK (CocoaPods)</li>
+<li>Updated module reference docs for both platforms</li>
+</ul>
+<h3 id='ios-changes'>IOS Changes</h3>
+<ul>
+<li>Added new method in Product Manager, allowing searching for products based on various criteria.</li>
+<li>Added new method in Merchant Manager, allowing searching for merchants based on various criteria.</li>
+<li>Added new, optional parameter fullName to Address object.</li>
+<li>Added distance property to Merchant&#39;s model.</li>
+<li>Added new property PriceOption to Product object.</li>
+<li>Added option to suspend and resume the process of audio/video capturing during scan.</li>
+<li>Added explicit handling of Act products with new is_act parameter on Product model.</li>
+<li>Added new full_name parameter on Address model to dinstinguish from address_2.</li>
+<li>Added phone_book_id parameter on Address model to allow for uniue Phone Number on each Address model.</li>
+<li>Added getRootCategory endpoint, gets the root category for the selected merchant</li>
+<li>Added getCartProduct added for fetching product information when there is no category</li>
+<li>Added getMerchants endpoint, added optional parameter to fetch only active Merchants, represented as Bool<br/><br/></li>
+<li>Updated getProducts</li>
+<li>Updated PageResult&#39;s sorting direction now uses enum instead of string.</li>
+<li>Updated getCategories endpoint </li>
+<li>Misc bug fixes &amp; small optimizations</li>
+</ul>
+<h3 id='android-changes'>Android Changes</h3>
+<ul>
+<li>Added hashCode, equals implementation for CustomOption, OptionValue</li>
+<li>Added toString implementation to CustomOption, OptionValue models</li>
+<li>Added HttpClientConfig to RezolveSdk.Builder</li>
+<li>Added missing interface to DisplayProduct.</li>
+<li>Added default page navigation filter.</li>
+<li>Added product and category ids.</li>
+<li>Added a getter for scanned objects.</li>
+<li>Added ScanManagerHelper.</li>
+<li>Added .equal() methods for Placement and CheckoutProduct.</li>
+<li>Added hashCode methods for CheckoutProduct and Placement.</li>
+<li>Added missing flags to DisplayProduct.</li>
+<li>Added equals and hashcode methods added for ConfigurableOption and CustomConfigurableOption.</li>
+<li>Add visibility flag to the /merchant call.</li>
+<li>Added CustomAttribute class.</li>
+<li>Added Multiple Exception types catching in HttpClient.enqueueRequest to reduce code duplication</li>
+<li>Added equals, hashCode and toString methods for PaymentCard.</li>
+<li>Added proguard rule for MerchantFilter</li>
+<li>Added merchants search method.</li>
+<li>Added MerchantSearchResult and DisplayStore models.</li>
+<li>Added required fields to DisplayProduct and Merchant. Use SearchMerchantResult and SearchProductResult as wrappers. </li>
+<li>Added TermsAndCondtitions.</li>
+<li>Added merchant_id as a param to SearchData.</li>
+<li>Added ProductSearchData and MerchantSearchData.</li>
+<li>Added toString, eqals and hashcode methods to new and modified classes. </li>
+<li>Added ProductSearchInterface and MerchantSearchInterface.</li>
+<li>Added &quot;total&quot; field to search responses. </li>
+<li>Added &quot;itemsPerPage&quot; to SearchData.</li>
+<li>Added support for too large quantity error</li>
+<li>Added missing return statement in Links.jsonToEntity</li>
+<li>Added factory method to create PageNavigationFilter from Link object</li>
+<li>Added getOkHttpClient to HttpClient</li>
+<li>Added distance field to Merchant<br/><br/></li>
+<li>Changed /options endpoint to v4</li>
+<li>Fixed rder details under my Activity shows QR for Delivery orders</li>
+<li>Changed /category endpoint used by ScanManager to v2.</li>
+<li>Changed item limit back to 30.</li>
+<li>Changed product to be parcelable</li>
+<li>Changed torch support methods to reside in another class.</li>
+<li>Changed all interfaces to extend error interface.</li>
+<li>Changed scan logic to move away from ScanManager.</li>
+<li>Changed image reader to reside in ScanImageHelper class.</li>
+<li>Changed scan audio logic moved to ScanAudioHelper</li>
+<li>Changed RezolveScanResult modification to prevent returning to the user if the engagement has expired.</li>
+<li>Changed clear cache thread priority to background. Make Credentials fields final.</li>
+<li>Changed so allowed to add interceptors to HttpClientConfig.</li>
+<li>Changed OrderDetails status to enum.</li>
+<li>Changed; if scanned image is a QR code, check if it belongs to rezolve.</li>
+<li>Change type of returned scan errors.</li>
+<li>Fixed return error type for scan error.</li>
+<li>Changed new &#39;include_cart_button_on_listing&#39; flag to be handled by Android SDK</li>
+<li>Changed cart buttons flag by moving to Category.</li>
+<li>Fixed query param name.</li>
+<li>Changed CustomAttribute to AdditionalAttribute</li>
+<li>Fixed bug in HttpClient.enqueueRequest method that could crash the app.</li>
+<li>Changed HttpResponse implementation to throw catched exceptions.</li>
+<li>Changed MerchantFilter enum name to MerchantVisibility.</li>
+<li>Changed override onSearchMerchantsSuccess in MerchantCallback</li>
+<li>Changed do not set param to all when product type is null. This option is not supported yet on the - server side.</li>
+<li>Changed SearchOrderBy by replacing with MerchantSearchOrderBy, ProductSearchOrderBy</li>
+<li>Changed search data param include_in_result -&gt; include_in_results</li>
+<li>Fixed hashCode, equals implementation in (Merchant|Product)SearchData</li>
+<li>Fixed bug in DisplayProduct.jsonToEntity</li>
+<li>Changed include_in_results param to have lowercase values (all, products, acts)</li>
+<li>Changed Link[] to Links object with named fields<br/><br/></li>
+<li>Deprecated old getMerchants method. </li>
+<li>Deprecate old /category methods.</li>
+</ul>
+<h2 id='android-v2-0-1-ios-v1-11-20-nov-21-2018'>Android v2.0.1, IOS v1.11.20 - Nov 21, 2018</h2><h3 id='documentation-changes-2'>Documentation Changes</h3>
 <ul>
 <li>Added tutorial on how to present data for an Act.</li>
 <li>New install instructions for IOS SDK (CocoaPods)</li>
 <li>New install instructions for Android SDK (Nexus/Maven)</li>
 </ul>
-<h3 id='ios-changes'>IOS Changes</h3>
+<h3 id='ios-changes-2'>IOS Changes</h3>
 <ul>
 <li><code>HistoryItemProduct</code> implementation changed</li>
 <li>Scanmanager internal libraries updated</li>
@@ -3441,7 +3693,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>deliveryMethod</code> to <code>DeliveryMethod</code></li>
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
 </ul>
-<h3 id='android-changes'>Android Changes</h3>
+<h3 id='android-changes-2'>Android Changes</h3>
 <ul>
 <li>Added abort purchase method to cancel orders without cleaning the cart on QuickPass canceling.</li>
 <li>Fixed wrong base price with certain options</li>

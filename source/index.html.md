@@ -21,6 +21,7 @@ includes:
 - howtotriggermanager
 - howtobackgroundlistening
 - howtoact
+- howtosearch
 - errorhandling
 - moduleref
 - changelog

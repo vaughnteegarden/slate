@@ -3,6 +3,105 @@
 All notable changes to the project will be documented in this log.
 
 
+## Android v2.1.0, IOS v1.11.24 - June 26, 2019
+
+### Documentation Changes
+
+- Added tutorial for Search
+- New install instructions for IOS SDK (CocoaPods)
+- Updated module reference docs for both platforms
+
+### IOS Changes
+
+- Added new method in Product Manager, allowing searching for products based on various criteria.
+- Added new method in Merchant Manager, allowing searching for merchants based on various criteria.
+- Added new, optional parameter fullName to Address object.
+- Added distance property to Merchant's model.
+- Added new property PriceOption to Product object.
+- Added option to suspend and resume the process of audio/video capturing during scan.
+- Added explicit handling of Act products with new is_act parameter on Product model.
+- Added new full_name parameter on Address model to dinstinguish from address_2.
+- Added phone_book_id parameter on Address model to allow for uniue Phone Number on each Address model.
+- Added getRootCategory endpoint, gets the root category for the selected merchant
+- Added getCartProduct added for fetching product information when there is no category
+- Added getMerchants endpoint, added optional parameter to fetch only active Merchants, represented as Bool<br/><br/>
+- Updated getProducts
+- Updated PageResult's sorting direction now uses enum instead of string.
+- Updated getCategories endpoint 
+- Misc bug fixes & small optimizations
+
+### Android Changes
+
+- Added hashCode, equals implementation for CustomOption, OptionValue
+- Added toString implementation to CustomOption, OptionValue models
+- Added HttpClientConfig to RezolveSdk.Builder
+- Added missing interface to DisplayProduct.
+- Added default page navigation filter.
+- Added product and category ids.
+- Added a getter for scanned objects.
+- Added ScanManagerHelper.
+- Added .equal() methods for Placement and CheckoutProduct.
+- Added hashCode methods for CheckoutProduct and Placement.
+- Added missing flags to DisplayProduct.
+- Added equals and hashcode methods added for ConfigurableOption and CustomConfigurableOption.
+- Add visibility flag to the /merchant call.
+- Added CustomAttribute class.
+- Added Multiple Exception types catching in HttpClient.enqueueRequest to reduce code duplication
+- Added equals, hashCode and toString methods for PaymentCard.
+- Added proguard rule for MerchantFilter
+- Added merchants search method.
+- Added MerchantSearchResult and DisplayStore models.
+- Added required fields to DisplayProduct and Merchant. Use SearchMerchantResult and SearchProductResult as wrappers. 
+- Added TermsAndCondtitions.
+- Added merchant_id as a param to SearchData.
+- Added ProductSearchData and MerchantSearchData.
+- Added toString, eqals and hashcode methods to new and modified classes. 
+- Added ProductSearchInterface and MerchantSearchInterface.
+- Added "total" field to search responses. 
+- Added "itemsPerPage" to SearchData.
+- Added support for too large quantity error
+- Added missing return statement in Links.jsonToEntity
+- Added factory method to create PageNavigationFilter from Link object
+- Added getOkHttpClient to HttpClient
+- Added distance field to Merchant<br/><br/>
+- Changed /options endpoint to v4
+- Fixed rder details under my Activity shows QR for Delivery orders
+- Changed /category endpoint used by ScanManager to v2.
+- Changed item limit back to 30.
+- Changed product to be parcelable
+- Changed torch support methods to reside in another class.
+- Changed all interfaces to extend error interface.
+- Changed scan logic to move away from ScanManager.
+- Changed image reader to reside in ScanImageHelper class.
+- Changed scan audio logic moved to ScanAudioHelper
+- Changed RezolveScanResult modification to prevent returning to the user if the engagement has expired.
+- Changed clear cache thread priority to background. Make Credentials fields final.
+- Changed so allowed to add interceptors to HttpClientConfig.
+- Changed OrderDetails status to enum.
+- Changed; if scanned image is a QR code, check if it belongs to rezolve.
+- Change type of returned scan errors.
+- Fixed return error type for scan error.
+- Changed new 'include_cart_button_on_listing' flag to be handled by Android SDK
+- Changed cart buttons flag by moving to Category.
+- Fixed query param name.
+- Changed CustomAttribute to AdditionalAttribute
+- Fixed bug in HttpClient.enqueueRequest method that could crash the app.
+- Changed HttpResponse implementation to throw catched exceptions.
+- Changed MerchantFilter enum name to MerchantVisibility.
+- Changed override onSearchMerchantsSuccess in MerchantCallback
+- Changed do not set param to all when product type is null. This option is not supported yet on the - server side.
+- Changed SearchOrderBy by replacing with MerchantSearchOrderBy, ProductSearchOrderBy
+- Changed search data param include_in_result -> include_in_results
+- Fixed hashCode, equals implementation in (Merchant|Product)SearchData
+- Fixed bug in DisplayProduct.jsonToEntity
+- Changed include_in_results param to have lowercase values (all, products, acts)
+- Changed Link[] to Links object with named fields<br/><br/>
+- Deprecated old getMerchants method. 
+- Deprecate old /category methods.
+
+
+
+
 
 
 
