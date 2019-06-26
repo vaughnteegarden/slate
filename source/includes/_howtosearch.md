@@ -80,7 +80,7 @@ Merchant search offers the following features:
 * The ability to enter a merchant name query, and sort results by Score or Distance.
 * Ability to order results ascending or descending.
 
-Note that to return merchants sorted by distance, each merchant in your ecosystem must configure at least one "Store" in the Merchant Portal, supplying latitude and longitude. Which ever merchant has a store closest the user will be returned first.  
+Note that to return merchants sorted by distance, each merchant in your ecosystem must configure at least one "Store" in the Merchant Portal, supplying latitude and longitude. Which ever merchant has a store closest to the user will be returned first.  
 
 
 To search for a merchant you must supply the following parameters:
@@ -163,3 +163,6 @@ To search for products you must supply the following parameters:
 * Sort By - Sort by search SCORE or PRICE
 * Sort Direction - ASC or DESC
 * Product Type - Can be PRODUCTS, ACTS, or ALL.
+* Location - Optional. The latitude and longitude of the consumer phone.
+
+See code samples to the right.

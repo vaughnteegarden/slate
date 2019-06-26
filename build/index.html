@@ -3433,7 +3433,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Ability to order results ascending or descending.</li>
 </ul>
 
-<p>Note that to return merchants sorted by distance, each merchant in your ecosystem must configure at least one &quot;Store&quot; in the Merchant Portal, supplying latitude and longitude. Which ever merchant has a store closest the user will be returned first.  </p>
+<p>Note that to return merchants sorted by distance, each merchant in your ecosystem must configure at least one &quot;Store&quot; in the Merchant Portal, supplying latitude and longitude. Which ever merchant has a store closest to the user will be returned first.  </p>
 
 <p>To search for a merchant you must supply the following parameters:</p>
 
@@ -3513,7 +3513,10 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Sort By - Sort by search SCORE or PRICE</li>
 <li>Sort Direction - ASC or DESC</li>
 <li>Product Type - Can be PRODUCTS, ACTS, or ALL.</li>
+<li>Location - Optional. The latitude and longitude of the consumer phone.</li>
 </ul>
+
+<p>See code samples to the right.</p>
 
           <h1 id='error-handling'>Error Handling</h1><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"errors"</span><span class="p">:[</span><span class="w">
