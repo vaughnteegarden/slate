@@ -135,35 +135,38 @@ If this is your first time downloading the SDK, you will be provided with an API
 
 The target IDE for IOS instructions is **XCode**. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.
 
-The IOS SDK is distributed via <a href="https://cocoapods.org/about" target="_blank">CocoaPods</a>. 
+### CocoaPods
 
-### Using CocoaPods
+The Rezolve IOS SDK is distributed through <a href="https://cocoapods.org/about" target="_blank">CocoaPods</a>. In order to proceed with installing the SDK, as a prerequisite, first install the latest version of CocoaPods:
 
-#### Setting up the SDK
+`sudo gem install cocoapods`
 
-Install the latest version of [CocoaPods](https://guides.cocoapods.org/using/getting-started.html)
+### Install Rezolve SDK
 
-Add the RezolveSDK pod into your Podfile.
+The SDK can now be installed in your own project by adding the following in `Podfile`:
 
-`
-pod 'RezolveSDK'
-`
+```swift
+use_frameworks!
 
-Run the following command
+target 'Sample' do
+    pod 'RezolveSDK'
+end
+```
+### &nbsp;
 
-`
-pod install
-`
+Keep in mind that Sample is just a placeholder, and should be substituted by your own App Target name. Now just run the following command on a Terminal window pointing to the directory of your Podfile:
 
-Don't forget to use the `.xcworkspace` file to open your project in Xcode, instead of the `.xcodeproj` file, from here on out.
+`pod install`
+
+Don’t forget to use the `.xcworkspace` file to open your project in Xcode, instead of the `.xcodeproj` file, from here on out.
+
+
 
 #### Updating the SDK
 
 Every new release of the RezolveSDK can be updated by typing
 
-`
-pod update
-`
+`pod update ResolveSDK`
 
 ## Set up the SDK - Android
 

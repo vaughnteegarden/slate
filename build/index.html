@@ -332,30 +332,27 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
 <h2 id='set-up-the-sdk-ios'>Set up the SDK - IOS</h2>
 <p>The target IDE for IOS instructions is <strong>XCode</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
+<h3 id='cocoapods'>CocoaPods</h3>
+<p>The Rezolve IOS SDK is distributed through <a href="https://cocoapods.org/about" target="_blank">CocoaPods</a>. In order to proceed with installing the SDK, as a prerequisite, first install the latest version of CocoaPods:</p>
 
-<p>The IOS SDK is distributed via <a href="https://cocoapods.org/about" target="_blank">CocoaPods</a>. </p>
-<h3 id='using-cocoapods'>Using CocoaPods</h3><h4 id='setting-up-the-sdk'>Setting up the SDK</h4>
-<p>Install the latest version of <a href="https://guides.cocoapods.org/using/getting-started.html">CocoaPods</a></p>
+<p><code>sudo gem install cocoapods</code></p>
+<h3 id='install-rezolve-sdk'>Install Rezolve SDK</h3>
+<p>The SDK can now be installed in your own project by adding the following in <code>Podfile</code>:</p>
+<pre class="highlight swift tab-swift"><code><span class="n">use_frameworks</span><span class="o">!</span>
 
-<p>Add the RezolveSDK pod into your Podfile.</p>
+<span class="n">target</span> <span class="err">'</span><span class="kt">Sample</span><span class="err">'</span> <span class="k">do</span>
+    <span class="n">pod</span> <span class="err">'</span><span class="kt">RezolveSDK</span><span class="err">'</span>
+<span class="n">end</span>
+</code></pre><h3 id='nbsp'>&nbsp;</h3>
+<p>Keep in mind that Sample is just a placeholder, and should be substituted by your own App Target name. Now just run the following command on a Terminal window pointing to the directory of your Podfile:</p>
 
-<p><code>
-pod &#39;RezolveSDK&#39;
-</code></p>
+<p><code>pod install</code></p>
 
-<p>Run the following command</p>
-
-<p><code>
-pod install
-</code></p>
-
-<p>Don&#39;t forget to use the <code>.xcworkspace</code> file to open your project in Xcode, instead of the <code>.xcodeproj</code> file, from here on out.</p>
+<p>Don’t forget to use the <code>.xcworkspace</code> file to open your project in Xcode, instead of the <code>.xcodeproj</code> file, from here on out.</p>
 <h4 id='updating-the-sdk'>Updating the SDK</h4>
 <p>Every new release of the RezolveSDK can be updated by typing</p>
 
-<p><code>
-pod update
-</code></p>
+<p><code>pod update ResolveSDK</code></p>
 <h2 id='set-up-the-sdk-android'>Set up the SDK - Android</h2>
 <p>The target IDE for Android instructions is <strong>Android Studio</strong>. If you use a different IDE you may have to follow a different series of steps, please refer to your IDE documentation to understand how to incorporate third party SDKs into your IDE.</p>
 
