@@ -3,7 +3,7 @@
 All notable changes to the project will be documented in this log.
 
 
-## Android v2.1.0, IOS v1.11.24 - June 26, 2019
+## Android v2.1.0, IOS v1.11.25 - June 26, 2019
 
 ### Documentation Changes
 
@@ -13,6 +13,7 @@ All notable changes to the project will be documented in this log.
 
 ### IOS Changes
 
+- Added new method in Product Manager, `getAdditionalAttributes` 
 - Added new method in Product Manager, allowing searching for products based on various criteria.
 - Added new method in Merchant Manager, allowing searching for merchants based on various criteria.
 - Added new, optional parameter fullName to Address object.
