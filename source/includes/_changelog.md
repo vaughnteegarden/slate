@@ -2,6 +2,14 @@
 
 All notable changes to the project will be documented in this log.
 
+## IOS 1.11.26 - September 24, 2019
+
+This release is IOS only.
+
+### IOS Changes
+
+- Compiled SDK with latest Xcode 11 & Swift 5.1
+- Removed the need for having the new Mac Catalyst feature enabled
 
 ## Android v2.1.0, IOS v1.11.25 - June 26, 2019
 
