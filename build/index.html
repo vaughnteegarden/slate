@@ -325,7 +325,7 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>Latest release versions:</p>
 
 <ul>
-<li>Android: 2.1.0</li>
+<li>Android: 2.2.0</li>
 <li>IOS: 1.11.26</li>
 </ul>
 
@@ -397,6 +397,9 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.WRITE_EXTERNAL_STORAGE"</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.RECORD_AUDIO"</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
+
+<span class="c1">// FOREGROUND_SERVICE permission is only needed if you implement the Background Listening feature.</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.FOREGROUND_SERVICE"</span> <span class="o">/&gt;</span>
 
 </code></pre>
           <h1 id='sdk-feature-use'>SDK Feature Use</h1>
@@ -3677,6 +3680,32 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
+<h2 id='android-2-2-0-october-10-2019'>Android 2.2.0 - October 10, 2019</h2>
+<p>This release is Android only.</p>
+<h3 id='android-changes'>Android Changes</h3>
+<ul>
+<li>StoreDetails class added to OrderDetails. </li>
+<li>Added isVirtual field to PriceOption</li>
+<li>Added equals, hashCode implementation to PriceOption</li>
+<li>Added doxygen comments for RezolveLocation, StoreAddress and StoreTime.</li>
+<li>isDefault field added to ShippingMethod. Added doxygen comments. </li>
+<li>Constructors of ShippingMethod and ExtensionAttribute are now private. Added missing toString(), equals(Object o) and hashCode() methods for these classes.</li>
+<li>Add logic to support override settings of resolver based on app flavour </li>
+<li>Implement logic to support the new status for order &quot;pre-canceled&quot; which sits between &quot;pending&quot; and &quot;cancelled&quot;/&quot;complete&quot;</li>
+<li>On failed scan, return ScannedData in onScanError callback, if available.</li>
+<li>Added new RezolveError.</li>
+<li>Added flag to CustomerProfile</li>
+<li>Change to avoid reusing ScanManager when requested manager has a different params.</li>
+<li>Fix extra&#39;s name for AudioDetectService. </li>
+<li>Add merchant_id to product response.</li>
+<li>Added documentation of Merchant class</li>
+<li>Added documentation of MerchantManager class</li>
+<li>Added documentation of Order class</li>
+<li>Added documentation of OrderHistoryObject</li>
+<li>onProductResult from ScanManagerInterface and TriggerInterface now return categoryId</li>
+<li>Allow ScanManager initialization when only one of required permissions is given</li>
+<li>Pass information if scanned product is an ACT or not.</li>
+</ul>
 <h2 id='ios-1-11-26-september-24-2019'>IOS 1.11.26 - September 24, 2019</h2>
 <p>This release is IOS only.</p>
 <h3 id='ios-changes'>IOS Changes</h3>
@@ -3710,7 +3739,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Updated getCategories endpoint </li>
 <li>Misc bug fixes &amp; small optimizations</li>
 </ul>
-<h3 id='android-changes'>Android Changes</h3>
+<h3 id='android-changes-2'>Android Changes</h3>
 <ul>
 <li>Added hashCode, equals implementation for CustomOption, OptionValue</li>
 <li>Added toString implementation to CustomOption, OptionValue models</li>
@@ -3796,7 +3825,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>deliveryMethod</code> to <code>DeliveryMethod</code></li>
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
 </ul>
-<h3 id='android-changes-2'>Android Changes</h3>
+<h3 id='android-changes-3'>Android Changes</h3>
 <ul>
 <li>Added abort purchase method to cancel orders without cleaning the cart on QuickPass canceling.</li>
 <li>Fixed wrong base price with certain options</li>

@@ -2,6 +2,37 @@
 
 All notable changes to the project will be documented in this log.
 
+
+## Android 2.2.0 - October 10, 2019
+
+This release is Android only.
+
+### Android Changes
+
+- StoreDetails class added to OrderDetails. 
+- Added isVirtual field to PriceOption
+- Added equals, hashCode implementation to PriceOption
+- Added doxygen comments for RezolveLocation, StoreAddress and StoreTime.
+- isDefault field added to ShippingMethod. Added doxygen comments. 
+- Constructors of ShippingMethod and ExtensionAttribute are now private. Added missing toString(), equals(Object o) and hashCode() methods for these classes.
+- Add logic to support override settings of resolver based on app flavour 
+- Implement logic to support the new status for order "pre-canceled" which sits between "pending" and "cancelled"/"complete"
+- On failed scan, return ScannedData in onScanError callback, if available.
+- Added new RezolveError.
+- Added flag to CustomerProfile
+- Change to avoid reusing ScanManager when requested manager has a different params.
+- Fix extra's name for AudioDetectService. 
+- Add merchant_id to product response.
+- Added documentation of Merchant class
+- Added documentation of MerchantManager class
+- Added documentation of Order class
+- Added documentation of OrderHistoryObject
+- onProductResult from ScanManagerInterface and TriggerInterface now return categoryId
+- Allow ScanManager initialization when only one of required permissions is given
+- Pass information if scanned product is an ACT or not.
+
+
+
 ## IOS 1.11.26 - September 24, 2019
 
 This release is IOS only.

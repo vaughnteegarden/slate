@@ -125,7 +125,7 @@ We will not provide development support if you have not integrated Crashlytics o
 
 Latest release versions:
 
-- Android: 2.1.0
+- Android: 2.2.0
 - IOS: 1.11.26
 
 If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
@@ -232,5 +232,8 @@ Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `re
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.CAMERA" />
+    
+// FOREGROUND_SERVICE permission is only needed if you implement the Background Listening feature.
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 ```
