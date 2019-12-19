@@ -2,6 +2,21 @@
 
 All notable changes to the project will be documented in this log.
 
+## Android 2.3.1, IOS 1.11.28 - November 21, 2019
+
+Cumulative release of several minor version updates.
+
+### Android Changes
+
+- Implement logic in Android SDK to Support 1D Barcode Scanning
+- Fix QR code scanning currently recognizes QR code as 1d barcode
+- Add a ProGuard configuration in the SDK to ensure that app modules that depend on the SDK do not have to manually update their ProGuard files to use Rezolve library.
+
+### IOS Changes
+
+- Updated `AuthenticationManager` public initializer.
+- Migration to `Xcode 11.2` and Swift `Swift 5.1.2`.
+
 
 ## Android 2.2.0 - October 10, 2019
 
@@ -36,6 +51,9 @@ This release is Android only.
 ## IOS 1.11.26 - September 24, 2019
 
 This release is IOS only.
+
+- Compiled SDK with latest Xcode 11 & Swift 5.1.
+- Removed the need for having the new Mac Catalyst feature enabled
 
 ### IOS Changes
 

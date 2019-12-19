@@ -325,8 +325,8 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>Latest release versions:</p>
 
 <ul>
-<li>Android: 2.2.0</li>
-<li>IOS: 1.11.26</li>
+<li>Android: 2.3.1</li>
+<li>IOS: 1.11.28</li>
 </ul>
 
 <p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
@@ -3680,9 +3680,22 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
+<h2 id='android-2-3-1-ios-1-11-28-november-21-2019'>Android 2.3.1, IOS 1.11.28 - November 21, 2019</h2>
+<p>Cumulative release of several minor version updates.</p>
+<h3 id='android-changes'>Android Changes</h3>
+<ul>
+<li>Implement logic in Android SDK to Support 1D Barcode Scanning</li>
+<li>Fix QR code scanning currently recognizes QR code as 1d barcode</li>
+<li>Add a ProGuard configuration in the SDK to ensure that app modules that depend on the SDK do not have to manually update their ProGuard files to use Rezolve library.</li>
+</ul>
+<h3 id='ios-changes'>IOS Changes</h3>
+<ul>
+<li>Updated <code>AuthenticationManager</code> public initializer.</li>
+<li>Migration to <code>Xcode 11.2</code> and Swift <code>Swift 5.1.2</code>.</li>
+</ul>
 <h2 id='android-2-2-0-october-10-2019'>Android 2.2.0 - October 10, 2019</h2>
 <p>This release is Android only.</p>
-<h3 id='android-changes'>Android Changes</h3>
+<h3 id='android-changes-2'>Android Changes</h3>
 <ul>
 <li>StoreDetails class added to OrderDetails. </li>
 <li>Added isVirtual field to PriceOption</li>
@@ -3708,7 +3721,12 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </ul>
 <h2 id='ios-1-11-26-september-24-2019'>IOS 1.11.26 - September 24, 2019</h2>
 <p>This release is IOS only.</p>
-<h3 id='ios-changes'>IOS Changes</h3>
+
+<ul>
+<li>Compiled SDK with latest Xcode 11 &amp; Swift 5.1.</li>
+<li>Removed the need for having the new Mac Catalyst feature enabled</li>
+</ul>
+<h3 id='ios-changes-2'>IOS Changes</h3>
 <ul>
 <li>Compiled SDK with latest Xcode 11 &amp; Swift 5.1</li>
 <li>Removed the need for having the new Mac Catalyst feature enabled</li>
@@ -3719,7 +3737,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>New install instructions for IOS SDK (CocoaPods)</li>
 <li>Updated module reference docs for both platforms</li>
 </ul>
-<h3 id='ios-changes-2'>IOS Changes</h3>
+<h3 id='ios-changes-3'>IOS Changes</h3>
 <ul>
 <li>Added new method in Product Manager, <code>getAdditionalAttributes</code> </li>
 <li>Added new method in Product Manager, allowing searching for products based on various criteria.</li>
@@ -3739,7 +3757,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Updated getCategories endpoint </li>
 <li>Misc bug fixes &amp; small optimizations</li>
 </ul>
-<h3 id='android-changes-2'>Android Changes</h3>
+<h3 id='android-changes-3'>Android Changes</h3>
 <ul>
 <li>Added hashCode, equals implementation for CustomOption, OptionValue</li>
 <li>Added toString implementation to CustomOption, OptionValue models</li>
@@ -3814,7 +3832,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>New install instructions for IOS SDK (CocoaPods)</li>
 <li>New install instructions for Android SDK (Nexus/Maven)</li>
 </ul>
-<h3 id='ios-changes-3'>IOS Changes</h3>
+<h3 id='ios-changes-4'>IOS Changes</h3>
 <ul>
 <li><code>HistoryItemProduct</code> implementation changed</li>
 <li>Scanmanager internal libraries updated</li>
@@ -3825,7 +3843,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>deliveryMethod</code> to <code>DeliveryMethod</code></li>
 <li><code>createCartCheckoutBundleV2</code> changed parameter type from <code>paymentMethod</code> to <code>SupportedPaymentMethod?</code></li>
 </ul>
-<h3 id='android-changes-3'>Android Changes</h3>
+<h3 id='android-changes-4'>Android Changes</h3>
 <ul>
 <li>Added abort purchase method to cancel orders without cleaning the cart on QuickPass canceling.</li>
 <li>Fixed wrong base price with certain options</li>
