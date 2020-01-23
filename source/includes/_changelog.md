@@ -2,6 +2,13 @@
 
 All notable changes to the project will be documented in this log.
 
+## IOS 1.11.30 - January 23, 2020
+
+- Supressed consecutive `Background Listening` notifications every time the SDK is sent to the background.
+- Migration to `Xcode 11.3.1`.
+- Added `EAN13` Symbology for improved 1D Barcode detection.
+
+
 ## Android 2.3.1, IOS 1.11.28 - November 21, 2019
 
 Cumulative release of several minor version updates.

@@ -126,7 +126,7 @@ We will not provide development support if you have not integrated Crashlytics o
 Latest release versions:
 
 - Android: 2.3.1
-- IOS: 1.11.28
+- IOS: 1.11.30
 
 If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
 
