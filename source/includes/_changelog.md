@@ -2,6 +2,10 @@
 
 All notable changes to the project will be documented in this log.
 
+## IOS 1.11.31 - January 28, 2020
+
+- Update to invoke `TriggerManager` automatically on 1D Barcode detection.
+
 ## IOS 1.11.30 - January 23, 2020
 
 - Supressed consecutive `Background Listening` notifications every time the SDK is sent to the background.
