@@ -9,17 +9,21 @@ The Click and Collect flow is no different from in the Cart Buy or Instant Buy e
 #### 1. Choices returned by PaymentOptionManager
 
 ```swift
-// Fetches PaymentOption for Product
-rezolveSession.getProductOptions(
-    checkoutProduct: checkoutProduct,
-    merchantId: merchantId,
-    callback: { (paymentOption: PaymentOption) ->
+let sampleCheckoutProduct = createCheckoutProductWithVariant(product: product)
+let sampleMerchantID = "12"
 
-    let paymentMethods = paymentOption.supportedPaymentMethods
-    let shippings = paymentOption.supportedDeliveryMethods
-
-}, errorCallback: { httpResponse in
-    // Error handling
+rezolveSession?.paymentOptionManager.getPaymentOptionFor(checkoutProduct: sampleCheckoutProduct, merchantId: sampleMerchantID) { (result: Result<PaymentOption, RezolveError>) in
+		switch result {
+    case .success(let option):
+      	{
+          	// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.
+          	let paymentMethod  = option.supportedPaymentMethods.first!
+          	let shippingMethod = option.supportedDeliveryMethods.first!
+        }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
+    }
 })
 ```
 ```java
@@ -166,13 +170,11 @@ At this point the user should select a payment method. They are listed under the
 #### 3. Creating the Delivery Unit/Delivery Method
 
 ```swift
-    // standard shipping example
-    let delivery = DeliveryMethod(addressId: addressObject.id)
+// Standard shipping example
+let deliveryMethod = CheckoutShippingMethod(type: "flatrate", addressId: address.id)
 
-    // Click and Collect example
-    guard let shipping = shippingMethod, let store = shipping.store else { preconditionFailure() }
-    let deliveryMethod =  DeliveryMethod(addressId: "", type: "storepickup") 
-    deliveryMethod.pickupStore = Int(store.pickupStore)!
+// Click and Collect example
+let deliveryMethod = CheckoutShippingMethod(type: "storepickup", pickupStore: store.pickupStore)
 ```
 ```java
 // standard shipping example

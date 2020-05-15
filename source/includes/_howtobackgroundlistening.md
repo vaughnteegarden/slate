@@ -15,44 +15,26 @@ The implementation for Android and IOS are somewhat different, so see individual
 #### 1. Start Background Listening, Listen, and Display Results
 
 ```swift
-Module: ScanManager Background Listening
-import UIKit
-import RezolveSDK
+// Initialize `ScanManager` based on your RezolveSDK Session
 
-class ScanManagerViewController: UIViewController {
-
-    @IBOutlet var scanCameraView: ScanCameraView?
-
-    var mySession: RezolveSession?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //self.mySession = ... // initialize session
-
-        let scanManager = self.mySession?.getScanManager()
-
-        scanManager?.productResultDelegate = self
-        scanManager?.rezolveScanResultDelegate = self
-        scanManager?.autoDetectManagerDelegate = self
-
-        scanManager?.startVideoScan(scanCameraView: self.scanCameraView!)
-        scanManager?.startAudioScan()
-    }
+guard let scanManager = rezolveSession?.getScanManager() else {
+  	return
 }
 
-extension ScanViewController: AutoDetectManagerDelegate
-{
+scanManager.autoDetectManagerDelegate = self
+try? scanManager.startVideoScan(scanCameraView: self.view as! ScanCameraView, rectOfInterest: .frame)
+try? scanManager.startAudioScan()
+
+extension ViewController: AutoDetectManagerDelegate {
+  	
     func onAutoDetectStopListening(resolved: [AutoDetectResult]) {
-        print( "Auto Detect Results:\n" )
-        for current in resolved {
-            print( current.description() )
+        for item in resolved {
+            print(item.description())
         }
     }
-
+		
     func onAutoDetectError(error: String) {
-        print( "Auto Detect Error:\n" )
-        print( error )
+        // Handle error gracefully
     }
 }
 ```
@@ -267,65 +249,42 @@ This helper can be used to display notification to the user that Background List
 #### 2. Display item Consumer selects using Trigger Manager
 
 ```swift
-Module: TriggerManager
-import UIKit
-import RezolveSDK
+// Sample URL and `TriggerManager` initialization
 
-class ScanManagerViewController: UIViewController {
+let url = URL(string: "http://rzlv.co/1/2/3/8?ad=20&placement=25")
 
-    @IBOutlet var scanCameraView: ScanCameraView?
-
-    var mySession: RezolveSession?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //self.mySession = ... // initialize session
-
-        let url = URL(string: "http://rzlv.co/1/2/3/8?ad=20&placement=25")
-
-        self.mySession.triggerManager.resolve(
-            url: url!,
-            productDelegate: self,
-            onRezolveTriggerStart: {},
-            onRezolveTriggerEnd: {},
-            errorCallback: { error in }
-        )
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-
-        scanManager?.stop()
-    }
-}
+rezolveSession?.triggerManager.resolve(
+    url: url!,
+    productDelegate: self,
+    onRezolveTriggerStart: {},
+    onRezolveTriggerEnd: {},
+    errorCallback: { error in }
+)
 
 extension ViewController: ProductDelegate {
-
-
+  	
     func onStartRecognizeImage() {
-
+      	// Suggestion: Show an interstitial loader
     }
-
+  	
     func onFinishRecognizeImage() {
-
+      	// Suggestion: Hide an interstitial loader
     }
-
-    func onProductResult(product: Product) {
-    }
-
+  	
     func onCategoryResult(merchantId: String, category: RezolveCategory) {
-		//display category result
+				// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
-    func onCategoryProductsResult(
-      merchantId: String,
-      category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
-		//display product result
+  	
+    func onCategoryProductsResult(merchantId: String, category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
+      	// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
+  	
+  	func onProductResult(product: Product) {
+      	// See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
+    }
+  	
     func onError(error: String) {
-
+      	// Handle error gracefully
     }
 }
 ```

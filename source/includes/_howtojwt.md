@@ -208,13 +208,12 @@ Sign the header and payload with the `partner_auth_key`.
 #### Generating the device_id
 
 ```swift
-// IOS uses the IOS "identifierForVendor" string, so there is no need to generate it. 
-// The IOS SDK pulls this value automatically using `UIDevice.current.identifierForVendor?.uuidString` and supplies it to the SDK for the x-header.
+// iOS uses the iOS "identifierForVendor" string, so there is no need to generate it. 
+// The iOS SDK pulls this value automatically using `UIDevice.current.identifierForVendor?.uuidString` and supplies it to the SDK for the x-header.
 // You will need to use this same call to supply the device_id to your auth server for storage with the user profile.
 
 UIDevice.current.identifierForVendor?.uuidString
 ```
-
 ```java
 // generate the random id
 String deviceId = UUID.randomUUID().toString();
@@ -254,24 +253,26 @@ Note in the Android sample you are also passing in an AuthRequestProvider. This 
 import UIKit
 import RezolveSDK
 
-
 class SandboxViewController: UIViewController {
 
-    private var API_KEY: String = "your_api_key"
-    private var API_ENVIRONMENT: String = "sandbox-api-tw.rzlvtest.co"
-    private var accessToken: String = "abc123.abc123.abc123"
-    private var entityId: String = "123"
+    private let API_KEY: String = "your_api_key"
+    private let API_ENVIRONMENT: RezolveEnv = .sandbox
+    private let accessToken: String = "abc123.abc123.abc123"
+    private let entityId: String = "123"
     private var partnerId: String = "123"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var sdk = RezolveSDK(
-            apiKey: API_KEY,
-            env: API_ENVIRONMENT
-        )
+      	let sdk = Rezolve(apiKey: API_KEY,
+                          partnerId: partnerId,
+                          subPartnerId: nil,
+                          environment: API_ENVIRONMENT,
+                          config: nil,
+                          sspActManagerSettings: nil,
+                          coordinatesConverter: .default)
         
-        sdk.createSession(accessToken: accessToken, entityId: entityId, partnerId: partnerId) { session
+        sdk.createSession(accessToken: accessToken, username: "", entityId: entityId, partnerId: partnerId) { (session, error)
             
             // your rezolve SDK logic here
         }

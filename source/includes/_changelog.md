@@ -2,6 +2,20 @@
 
 All notable changes to the project will be documented in this log.
 
+## IOS 2.0.4.1 - May 15, 2020
+
+### IOS 
+
+- Added Geofence support
+- Added SSP Manager integration
+- Added tests for SSP module
+- Added support for SSP products
+- Complete refactor of the SDK utilizing new Codable protocol and Unit Test implementation
+- Updated to `XCode 11.4`
+- Updated with merged Baidu Geofence framework with internal Geofence algorithm
+- Updated unit tests for Geofencing methods
+
+
 ## IOS 1.11.31 - January 28, 2020
 
 - Update to invoke `TriggerManager` automatically on 1D Barcode detection.

@@ -14,50 +14,30 @@ Once a merchant is selected, the consumer shifts into category/product browse mo
 #### 1. Get List of Merchants in the mall
 
 ```swift
-import RezolveSDK
-import Foundation
-
-internal final class ApiClient {
-
-    let rezolveSdk: RezolveSDK?
-
-    func getMerchants() {
-
-        self.rezolveSdk?.createSession(
-            accessToken: accessToken,
-            entityId: entityId,
-            partnerId: partnerId, 
-            callback: { rezolveSession in
-
-                rezolveSession.merchantManager.getMerchants(
-                    callback: { listOfMerchant in
-
-                        listOfMerchant.forEach {
-                            print($0.id)
-                            print($0.name)
-                            print($0.tagline)
-                            print($0.banner)
-
-                            $0.bannerThumbs.forEach { thumb in
-                                print(thumb)
-                            }
-
-                            print($0.logo)
-                            $0.logoThumbs.forEach { logo in
-                                print(logo)
-                            }
-
-                            print($0.termsAndConditions)
-                            print($0.contactInformation)
-                        }
-                    },
-                    errorCallback: { _ in 
-                        // Handle Errors
-                    }
-                )
-        })
+rezolveSession?.merchantManager.getMerchants { (result: Result<[Merchant], RezolveError>) in
+    switch result {
+    case .success(let merchants):
+        {
+            merchants.forEach {
+              	// Basic information
+                let id = $0.id
+                let name = $0.name
+                let tagline = $0.tagline
+                let contactInformation = $0.contactInformation
+              	let termsAndConditions = $0.termsAndConditions
+              	
+              	// Assets
+              	let banner = $0.banner
+              	let logo = $0.logo
+								let bannerThumbs = $0.bannerThumbs
+                let logoThumbs = $0.logoThumbs
+            }
+        }
+      	
+    case .failure(let error):
+        // Handle error gracefully
     }
-}
+})
 ```
 ```java
 public class Merchants extends AppCompatActivity implements MerchantInterface {
@@ -95,55 +75,39 @@ First, initialize `MerchantManager`, and call `GetMerchants`, providing an imple
 
 ### 2. Get list of first-level Categories for the selected Merchant
 ``` swift
-import UIKit
-import RezolveSDK
+let sampleMerchantID = "12"
 
-let MERCHANT_ID = "12"
-let CATEGORY_ID = Int32(70)
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-				// CATEGORY_ID should be null
-                session.productManager.getCategories(
-                    merchantId: MERCHANT_ID, 
-                    category: Category(id: CATEGORY_ID), 
-                    callback: { responseCategory in
-
-                        print(responseCategory.id)
-                        print(responseCategory.parentId)
-                        print(responseCategory.name)
-                        print(responseCategory.image)
-                        print(responseCategory.imageThumbs)
-                        print(responseCategory.hasProducts)
-                        print(responseCategory.hasCategories)
-                        if responseCategory.hasCategories {                     
-                            responseCategory.categories.forEach { subCategories in
-                                print(subCategories.id)
-                                print(subCategories.parentId)
-                                print(subCategories.name)
-
-                                // ...
-                            }   
-                        }
-
-                }, errorCallback: {
-                    print($0) // handle error
-                })
-            })
+rezolveSession?.productManager.getRootCategoryForMerchantWith(id: sampleMerchantID) { (result: Result<RezolveSDK.Category, RezolveError>) in
+		switch result {
+    case .success(let category):
+      	{
+          	// Basic information
+          	let id = category.id
+          	let parentId = category.parentId
+        		let name = category.name
+        		let hasCategories = category.hasCategories
+          	let hasProducts = category.hasProducts
+          	
+          	// Assets
+          	let image = category.image
+        		let imageThumbs = category.imageThumbs
+          	
+          	// Get subcategories, if any
+          	if hasCategories {
+            		category.categories.forEach { subCategory in
+                		print(subCategory.id)
+                		print(subCategory.parentId)
+                		print(subCategory.name)
+										
+                		// ...
+            		}
+        		}
         }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
     }
-}
+})
 ```
 ```java
 @Override
@@ -204,132 +168,56 @@ For subsequent navigation in categories, use `getProductsAndCategories`.
 
 ### 3. If the consumer clicks a subcategory, call `getProductsAndCategories`. 
 ``` swift
-import UIKit
-import RezolveSDK
+let sampleMerchantID = "12"
+let sampleCategoryID: Int = 70
 
-let MERCHANT_ID = "12"
-let CATEGORY_ID = Int32(70)
+let pageNavigationFilters = PageNavigationFilter(
+  	productsFilter: PageNavigation(count: 100, pageIndex: 1, sortBy: "product", sort: .ascending),
+  	categoryFilter: PageNavigation(count: 100, pageIndex: 1, sortBy: "category", sort: .ascending)
+)
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(entityId: entityId, partnerId: partnerId, device: signUpRequest.device, callback: { (session: RezolveSession) in
-
-                session.productManager.getProductsAndCatgories(
-                    merchantId: MERCHANT_ID, 
-                    category: Category(id: CATEGORY_ID), 
-                    pageNavigationFilter: PageNavigationFilter(
-                        count: 10, 
-                        pageIndex: 0, 
-                        sortBy: nil, 
-                        sort: PageNavigationSort.DESC
-                    ),
-                    callback: { responseCategory in
-
-                        print(responseCategory.id)
-                        print(responseCategory.parentId)
-                        print(responseCategory.name)
-                        print(responseCategory.image)
-                        print(responseCategory.imageThumbs)
-                        print(responseCategory.hasProducts)
-                        print(responseCategory.hasCategories)
-                        if responseCategory.hasCategories {                     
-                            responseCategory.categories.forEach { subCategories in
-                                print(subCategories.id)
-                                print(subCategories.parentId)
-                                print(subCategories.name)
-
-                                // ...
-                            }   
-                        }
-
-
-                        if let resultOfCategory = pageResultOfCategory {
-
-                            resultOfCategory.embedded.forEach { embeddedCategory in
-                                print(embeddedCategory.id)
-                                print(embeddedCategory.parentId)
-                                print(embeddedCategory.name)
-                                print(embeddedCategory.image)
-                                print(embeddedCategory.imageThumbs)
-                                print(embeddedCategory.hasProducts)
-                                if embeddedCategory.hasCategories {
-                                    // ..
-                                }
-                            }
-                        }
-
-                        if let resultOfProduct = pageResultOfProduct {
-                            resultOfProduct.embedded.forEach { embeddedProduct in
-
-                                print(embeddedProduct.id)
-                                print(embeddedProduct.merchantId)
-                                print(embeddedProduct.title)
-                                print(embeddedProduct.subtitle)
-                                print(embeddedProduct.price)
-                                print(embeddedProduct.description)
-
-                                embeddedProduct.images.forEach {
-                                    print($0)
-                                }
-
-                                embeddedProduct.options.forEach { option in
-                                    print(option.label)
-                                    print(option.code)
-                                    print(option.extraInfo)
-                                    option.values.forEach { optionValue in
-                                        print(optionValue.value)
-                                        print(optionValue.label)
-                                    }
-                                }
-
-                                embeddedProduct.optionAvailable.forEach {
-                                    $0.combination.forEach { variant in
-                                        print(code)
-                                        print(value)
-                                        print(id)
-                                    }
-                                } 
-
-                                embeddedProduct.customOptions.forEach {
-                                    print($0.isRequire)
-                                    print($0.optionId)
-                                    print($0.sortOrder)
-                                    print($0.title)
-                                    print($0.optionType)
-
-                                    $0.values.forEach { value in 
-                                        print(value.sortOrder)
-                                        print(value.title)
-                                        print(valueId)
-                                    }
-
-                                    $0.valuesId.forEach { valueId in 
-                                        print(valueId)
-                                    }
-
-                                    print($0.value)
-                                }
-
-                                print(embeddedProduct.productPlacement)
-                            }
-                        }
-
-                }, errorCallback: {
-                    print($0) // handle error
-                })
-            })
+rezolveSession?.productManager.getPaginatedCategoriesAndProducts(merchantId: sampleMerchantID, categoryId: sampleCategoryID, pageNavigationFilters: pageNavigationFilters) { (result: <Rezolve, RezolveError>) in
+		switch result {
+    case .success(let category):
+      	{
+          	// Basic information
+          	let id = category.id
+          	let parentId = category.parentId
+        		let name = category.name
+        		let hasCategories = category.hasCategories
+          	let hasProducts = category.hasProducts
+          	
+          	// Assets
+          	let image = category.image
+        		let imageThumbs = category.imageThumbs
+          	
+          	// Get subcategories, if any
+          	if hasCategories {
+            		category.categories.forEach { subCategory in
+                		print(subCategory.id)
+                		print(subCategory.parentId)
+                		print(subCategory.name)
+										
+                		// ...
+            		}
+        		}
+          	
+          	// Get display products, if any
+          	if hasProducts {
+              	category.products.forEach { displayProduct in
+                		print(displayProduct.id)
+                    print(displayProduct.name)
+                    print(displayProduct.price)
+                    
+                    // ...
+                }
+            }
         }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
     }
-}
+})
 ```
 ```java
 public class Products2 extends AppCompatActivity implements ProductInterface {
@@ -404,95 +292,72 @@ As the consumer navigates the category tree, call `getProductsAndCategories` to 
 
 ### 4. If the consumer clicks a Product, call `getProduct` 
 ``` swift
-import UIKit
-import RezolveSDK
+let sampleMerchantID = "12"
+let sampleCategoryID: Int = 70
+let sampleProductID: Int = 6
+let sampleProduct = Product(id: sampleProductID)
 
-let MERCHANT_ID = "12"
-let CATEGORY_ID = Int32(102)
-let PRODUCT_ID = "6"
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let sdk: RezolveSDK = RezolveSDK(apiKey: API_KEY, env: SDK_ENV)
-
-        let signUpRequest = createSingUpRequest()
-
-        sdk.registerUser(request: signUpRequest) { (partnerId: String, entityId: String) in
-
-            sdk.createSession(
-                entityId: entityId, 
-                partnerId: partnerId, 
-                device: signUpRequest.device, 
-                callback: { (session: RezolveSession) in
-
-                session.productManager.getProduct(
-                    merchantId: MERCHANT_ID, 
-                    categoryId: CATEGORY_ID, 
-                    productId: PRODUCT_ID, 
-                    callback:  { product in
-
-                        print(product.id)
-                        print(product.merchantId)
-                        print(product.title)
-                        print(product.subtitle)
-                        print(product.price)
-                        print(product.description)
-
-                        product.images.forEach {
-                            print($0)
-                        }
-
-                        product.options.forEach { option in
-                            print(option.label)
-                            print(option.code)
-                            print(option.extraInfo)
-                            option.values.forEach { optionValue in
-                                print(optionValue.value)
-                                print(optionValue.label)
-                            }
-                        }
-
-                        product.optionAvailable.forEach {
-                            $0.combination.forEach { variant in
-                                print(code)
-                                print(value)
-                                print(id)
-                            }
-                        } 
-
-                        product.customOptions.forEach {
-                            print($0.isRequire)
-                            print($0.optionId)
-                            print($0.sortOrder)
-                            print($0.title)
-                            print($0.optionType)
-
-                            $0.values.forEach { value in 
-                                print(value.sortOrder)
-                                print(value.title)
-                                print(valueId)
-                            }
-
-                            $0.valuesId.forEach { valueId in 
-                                print(valueId)
-                            }
-
-                            print($0.value)
-                        }
-
-                        print(product.productPlacement)
-
-                }, errorCallback: {
-
-                    print($0) // handle error
-                })
-            })
+rezolveSession?.productManager.getProductDetails(merchantId: sampleMerchantID, categoryId: sampleCategoryID, product: sampleProduct) { (result: Result<Product, RezolveError>) in
+		switch result {
+    case .success(let product):
+      	{
+        		print(product.id)
+        		print(product.merchantId)
+        		print(product.title)
+        		print(product.subtitle)
+        		print(product.price)
+        		print(product.description)
+          	
+        		product.images.forEach {
+            		print($0)
+        		}
+						
+        		product.options.forEach { option in
+            		print(option.label)
+            		print(option.code)
+            		print(option.extraInfo)
+                
+            		option.values.forEach { optionValue in
+                		print(optionValue.value)
+                		print(optionValue.label)
+            		}
+        		}
+						
+        		product.optionAvailable.forEach {
+            		$0.combination.forEach { variant in
+                		print(variant.code)
+                		print(variant.value)
+                		print(variant.id)
+            		}
+        		}
+						
+        		product.customOptions.forEach {
+            		print($0.isRequire)
+            		print($0.optionId)
+            		print($0.sortOrder)
+            		print($0.title)
+            		print($0.optionType)
+								
+            		$0.values.forEach { value in
+                		print(value.sortOrder)
+                		print(value.title)
+                		print(valueId)
+            		}
+								
+            		$0.valuesId.forEach { valueId in
+                	print(valueId)
+            		}
+								
+            		print($0.value)
+        		}
+						
+        		print(product.productPlacement)
         }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
     }
-}
+})
 ```
 ```java
 // get a single product using ProductInterface

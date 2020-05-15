@@ -16,70 +16,44 @@ To use touch triggers, the partner should watch for urls in their content stream
 #### Trigger Manager Example
 
 ``` swift
-import UIKit
-import RezolveSDK
+// Sample URL and `TriggerManager` initialization
 
-class ScanManagerViewController: UIViewController {
+let url = URL(string: "http://rzlv.co/1/2/3/8?ad=20&placement=25")
 
-    @IBOutlet var scanCameraView: ScanCameraView?
-
-    var mySession: RezolveSession?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //self.mySession = ... // initialize session
-
-        let url = URL(string: "http://rzlv.co/1/2/3/8")
-
-        self.mySession.triggerManager.resolve(
-            url: url!,
-            productDelegate: self,
-            onRezolveTriggerStart: {},
-            onRezolveTriggerEnd: {},
-            errorCallback: { error in }
-        )
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-
-        scanManager?.stop()
-    }
-}
+rezolveSession?.triggerManager.resolve(
+    url: url!,
+    productDelegate: self,
+    onRezolveTriggerStart: {},
+    onRezolveTriggerEnd: {},
+    errorCallback: { error in }
+)
 
 extension ViewController: ProductDelegate {
-
-
+  	
     func onStartRecognizeImage() {
-		// will be renamed in the future to onStartRecognizeTrigger or similar
-		// this fires when the trigger URL is sent for resolution by the Rezolve API. 
-		// could be used to start a waiting animation.
+      	// Suggestion: Show an interstitial loader
     }
-
+  	
     func onFinishRecognizeImage() {
-		// will be renamed in the future to onFinishRecognizeTrigger or similar
-		// this fires when a product, category, or error result is returned by the Rezolve API. 
-		// could be used to stop a waiting animation.
+      	// Suggestion: Hide an interstitial loader
     }
-
-    func onProductResult(product: Product) {
-		// handle product result
-    }
-
+  	
     func onCategoryResult(merchantId: String, category: RezolveCategory) {
-		// handle category result
+				// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
-    func onCategoryProductsResult(
-      merchantId: String,
-      category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
-	  // will be ignored by trigger manager, touch triggers don't return this result type
+  	
+    func onCategoryProductsResult(merchantId: String, category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
+      	// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
+  	
+  	func onProductResult(product: Product) {
+      	// See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
+    }
+  	
     func onError(error: String) {
-		// handle error
+      	// Handle error gracefully
     }
+}
 ```
 ``` java
 public class TriggerMgr extends AppCompatActivity implements TriggerInterface {

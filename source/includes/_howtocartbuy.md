@@ -15,69 +15,39 @@ In the Cart Buy flow, one or more products are added to a cart. Each merchant wi
 #### 1. Capture image and get product
 
 ```swift
-class ViewController: UIViewController, ProductDelegate {
+// Initialize `ScanManager` based on your RezolveSDK Session
 
-    var session: RezolveSession?
+guard let scanManager = rezolveSession?.getScanManager() else {
+  	return
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+scanManager.productResultDelegate = self
+try? scanManager.startVideoScan(scanCameraView: self.view as! ScanCameraView, rectOfInterest: .frame)
 
-        	// Initialize RezolveSDK
-            let rezolveSdk = RezolveSDK(
-                apiKey: REZOLVE_API_KEY, 
-                env: REZOLVE_SDK_ENV, 
-                config: config, 
-                dataClient: dataClient
-            )
-
-            // Creates Session
-            rezolveSdk.createSession(
-                accessToken: token, 
-                entityId: entityId, 
-                partnerId: partnerId, 
-                callback: { session in
-
-                    self.session = session
-                    self.session?.getScanManager().productResultDelegate = self
-                    self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
-
-                }, errorCallback: { response in
-                if response.statusCode == 401 { // Invalid token return
-                    // Developer shoud put token refreshing logic
-                    // using `credentials/ping` endpoint
-                }
-
-                   // Handle other errors
-	       })
-        }
+extension ViewController: ProductDelegate {
+  	
+    func onStartRecognizeImage() {
+      	// Suggestion: Show an interstitial loader
     }
-
-
-    func onError(error: String) -> Void {
-
-      // handle error
+  	
+    func onFinishRecognizeImage() {
+      	// Suggestion: Hide an interstitial loader
     }
-
-    func onStartRecognizeImage() -> Void {
-
-      // suggestion: show a loading indicator
+  	
+    func onCategoryResult(merchantId: String, category: RezolveSDK.Category) {
+				// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
-    func onFinishRecognizeImage() -> Void {
-
-      // suggestion: alert user with some sound
+  	
+    func onCategoryProductsResult(merchantId: String, category: RezolveSDK.Category, productsPage: PageResult<DisplayProduct>) {
+      	// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
-    func onProductResult(product: Product) -> Void {
-
+  	
+  	func onProductResult(product: Product) {
+      	// See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
     }
-
-    func onCategoryResult(category: RezolveCategory) -> Void {
-
-    }
-
-    func onCategoryProductsResult(category: RezolveCategory, productsPage: PageResult<DisplayProduct>) -> Void {
-
+  	
+    func onError(error: String) {
+      	// Handle error gracefully
     }
 }
 
@@ -125,11 +95,23 @@ First, initialize `scanManager`, and enable the scan screen using `session.start
 #### 2. Add Product to the Cart
 
 ```swift
-let checkoutProduct = createCheckoutProductWithVariant(product: product)
+let sampleCheckoutProduct = createCheckoutProductWithVariant(product: product)
+let sampleMerchantID = "12"
 
-session.cartManager.createCartWithProduct(merchantId: MERCHANT_ID, product: checkoutProduct, callback: { cartDetails in
-
-}, errorCallback: { print($0) })
+rezolveSession?.cartManager.createCartWithProduct(sampleCheckoutProduct, merchantId: sampleMerchantID) { (result: Result<CartDetails, RezolveError>) in
+		switch result {
+    case .success(let cart):
+      	{
+          	print(cart.id)
+          	print(cart.merchantId)
+          	
+          	// ...
+        }
+      	
+   	case .failure(let error):
+    		// Handle error gracefully
+    }
+})
 ```
 ```java
 // add product to cart
@@ -162,21 +144,22 @@ Call `CheckoutManagerV2.addProductToCart` to add the product to cart.
 #### 3. Get shipping and payment options for the cart
 
 ```swift
-    // Fetch PaymentOption for cart
-    rezolveSession.paymentOptionManager.getCartOptions(
-        merchantId: merchantId,
-        cartId: cartId,
-        callback: { (paymentOptionList: [PaymentOption]) in
+let sampleMerchantID = "12"
+let sampleCartID = "1"
 
-            // Handle [PaymentOption]
-
-    }, errorCallback: { httpResponse in
-        // Error handling code
-    })
-
-    /// for this example we assume the user chooses the first option. In reality, display all options to the user, and let them choose.
-    let supportedPaymentMethod = paymentOption.supportedPaymentMethods.first!
-    let shippingMethod = paymentOption.supportedDeliveryMethods.first!
+rezolveSession?.paymentOptionManager.getPaymentOptionsForCartWith(merchantId: sampleMerchantID, cartId: sampleCartID) { (result: Result<[PaymentOption], RezolveError>) in
+		switch result {
+    case .success(let options):
+      	{
+          	// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.
+          	let paymentMethod  = options.first?.supportedPaymentMethods.first
+          	let shippingMethod = options.first?.supportedDeliveryMethods.first
+        }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
+    }
+})
 ```
 
 ```java
@@ -262,9 +245,9 @@ For more information on what is returned by `getCartOptions`, see the <a href="#
 #### 4. Show payment card choices
 
 ```swift
-  mySession?.walletManager.getAll() { (listOfCards: Array<PaymentCard>) in
-      // handle list of cards here
-  }
+rezolveSession?.walletManager.getAll { (result: Result<[PaymentCard], RezolveError>) in
+    // Handle payment cards
+}
 ```
 ```java
 rezolveSession.getWalletManager().getAll(new WalletCallback() {
@@ -284,24 +267,31 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 #### 5. Create a checkout bundle, checkout the cart to get totals, and create an order
 
 ```swift
-    let cartCheckoutBundleV2 = createCartCheckoutBundleV2(
-        cartId: cartId,
-        let delivery = DeliveryMethod(addressId: addressObject.id), // address id is blank because this is only needed for Click and Collect
-        merchantId: merchantId,
-        optionId: optionId,
-        paymentMethod: paymentMethod,
-        phoneId: phoneId
-    )
+let sampleCartCheckoutBundle = CheckoutBundle(
+  	cartId: cartId,
+    shippingMethod: deliveryMethod,
+    merchantId: merchantId,
+    optionId: optionId,
+    paymentMethod: paymentMethod,
+    paymentRequest: nil,
+    phoneId: phoneId,
+    location: userLocation
+)
 
-    rezolveSession.checkoutManagerV2.checkout(
-        bundle: cartCheckoutBundleV2, 
-        callback: { Order in 
-            // Order handling
-        },
-        errorCallback: { _ in 
-            // Error handling
-    })
-
+rezolveSession?.checkoutManager.checkout(bundle: sampleCartCheckoutBundle) { (result: Result<Price, Error>) in
+		switch result {
+    case .success(let order):
+      	{
+          	print(order.id)
+          	print(order.finalPrice)
+          	
+          	// ...
+        }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
+    }
+})
 ```
 ```java
 // create a Cart Checkout Bundle
@@ -338,26 +328,35 @@ Create a cart checkout bundle.  Then call the SDK `CheckoutManagerV2.checkoutCar
 #### 6. Submit payment for order
 
 ```swift
-    let paymentCard = // RezolveSDK.PaymentCard
+let paymentCard = // RezolveSDK.PaymentCard
+let cardCVV = "000" // Card CVV
 
-    let cardCVV = "000" // Card CVV
+let sampleCartCheckoutBundle = CheckoutBundle(
+  	cartId: cartId,
+    shippingMethod: deliveryMethod,
+    merchantId: merchantId,
+    optionId: optionId,
+    paymentMethod: paymentMethod,
+    paymentRequest: PaymentRequest(paymentCard: paymentCard, cvv: cardCVV),
+    phoneId: phoneId,
+    location: userLocation
+)
 
-    let paymentRequest = PaymentRequest(
-        paymentCard: paymentCard, 
-        cvv: cardCVV
-    )
-
-    // buy the cart
-    rezolveSession.checkoutManagerV2.buy(
-        bundle: cartCheckoutBundleV2,
-        paymentRequest: paymentRequest,
-        checkoutId: checkoutId,
-        callback: { checkoutOrder in
-            // Handle checkoutOrder
-        },
-        errorCallback: { error in 
-            // Handle error
-    })
+rezolveSession?.checkoutManager.buy(bundle: sampleCartCheckoutBundle) { (result: Result<CheckoutOrder, RezolveError>) in
+		switch result {
+    case .success(let order):
+      	{
+          	print(order.id)
+          	print(order.partnerId)
+          	print(order.partnerName)
+          	
+          	// ...
+        }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
+    }
+})
 ```
 ```java
     // create a paymentRequest object, and then use this with the checkoutProduct object to purchase the cart.
@@ -384,50 +383,8 @@ In this tutorial, we assume the user chose credit card payment. Note that `payme
 
 Pass the `paymentRequest` object, the`checkoutBundleV2` object, the `orderId`,  and an interface or callback to the `buyCart` method. The success response will be the `order id` as a string. Note that this does not mean the order was confirmed, only that the request was successfully received.
 
-When the method returns successfully, in Android it will automatically initiate the signOrderUpdate method. In IOS, call signOrderUpdate in the callback.
 
-
-
-#### 7. Wait for signOrderUpdate to return a final order status.
-
-```swift
-session.checkoutManagerV2.buyCart(merchantId: MERCHANT_ID, cart: cartDetails, address: remoteAddress, paymentRequest: paymentRequest, location: DEFAULT_LOCATIONS, phone: phone, callback: { (order: CheckoutOrder) in
-
-session.checkoutManagerV2.signOrderUpdate(merchantId: MERCHANT_ID, order: order, callback: { status, transaction in
-
-    print(status)
-
-    if status == .completed {
-
-
-    }
-})
-
-}, errorCallback: { print($0) })
-```
-```java
-@Override
-public void onOrderUpdateReceived(Transaction.Status status, Transaction transaction) {
-    // get properties of status object
-    String statusLabel = status.getLabel();   // will return one of: completed, canceled, or processing
-
-    // get properties of transaction object
-    String transStatus = transaction.getStatus();
-    String transOrderId = transaction.getOrderId();
-    String transLastUpdated = transaction.getLastUpdated();
-}
-```
-
-SignOrderUpdate starts a socket listener with the order id, and waits for the server to return an order status. The server will return one of three status: 
-- completed
-- canceled
-- processing
-
-If either `completed` or `canceled` is returned, the listener stops and the socket closes. If `processing` is returned, the listener will remain active until the order status is updated to either `completed` or `canceled`.
-
-
-
-
+Note that the call to `signOrderUpdate` shown in the sequence diagram is no longer required.
 
 
 

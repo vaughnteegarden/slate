@@ -15,82 +15,39 @@ Once a product has been selected, purchasing follows one of the previous example
 #### 1. Scan a category shoppable ad,  get a getCatalog response
 
 ```swift
-class ViewController: UIViewController, ProductDelegate {
+// Initialize `ScanManager` based on your RezolveSDK Session
 
-    var session: RezolveSession?
+guard let scanManager = rezolveSession?.getScanManager() else {
+  	return
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+scanManager.productResultDelegate = self
+try? scanManager.startVideoScan(scanCameraView: self.view as! ScanCameraView, rectOfInterest: .frame)
 
-        // Initialize RezolveSDK
-            let rezolveSdk = RezolveSDK(
-                apiKey: REZOLVE_API_KEY, 
-                env: REZOLVE_SDK_ENV, 
-                config: config, 
-                dataClient: dataClient
-            )
-
-            // Creates Session
-            rezolveSdk.createSession(
-                accessToken: token, 
-                entityId: entityId, 
-                partnerId: partnerId, 
-                callback: { session in
-
-                    self.session = session
-                    self.session?.getScanManager().productResultDelegate = self
-                    self.session?.getScanManager().startVideoScan(scanCameraView: self.view as! ScanCameraView)
-
-                }, errorCallback: { response in
-                if response.statusCode == 401 { // Invalid token return
-                    // Developer shoud put token refreshing logic
-                    // using `credentials/ping` endpoint
-                }
-
-                   // Handle other errors
-	       })
-        }
+extension ViewController: ProductDelegate {
+  	
+    func onStartRecognizeImage() {
+      	// Suggestion: Show an interstitial loader
     }
-
-
-    func onError(error: String) -> Void {
-
-      // handle error
+  	
+    func onFinishRecognizeImage() {
+      	// Suggestion: Hide an interstitial loader
     }
-
-    func onStartRecognizeImage() -> Void {
-
-      // suggestion: show a loading indicator
+  	
+    func onCategoryResult(merchantId: String, category: RezolveCategory) {
+				// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
-    func onFinishRecognizeImage() -> Void {
-
-      // suggestion: alert user with some sound
+  	
+    func onCategoryProductsResult(merchantId: String, category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
+      	// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-
-    func onProductResult(product: Product) -> Void {
-
+  	
+  	func onProductResult(product: Product) {
+      	// See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
     }
-
-    func onCategoryResult(category: RezolveCategory) -> Void {
-	
-	// If category hasCategories, fetch children categories (onCategoryResult)
-		session.productManager.getCategories(merchantId: MERCHANT_ID, categoryId: category.id, callback: { category in
-
-		}, errorCallback: {
-
-		  print($0) // handle error
-		})
-    }
-
-    func onCategoryProductsResult(category: RezolveCategory, productsPage: PageResult<DisplayProduct>) -> Void {
-
-	// If category hasProducts, get product info (onCategoryProductsResult)
-		let pageNavigation: PageNavigation = PageNavigation(count: 10, pageIndex: 0, sortBy: nil, sort: PageNavigationSort.ASC)
-
-		session.productManager.getProducts(merchantId: MERCHANT_ID, categoryId: category.id, pageNavigation: pageNavigation, callback: { (pageResult: PageResult<DisplayProduct>) in
-
-		}, errorCallback: { print($0) })
+  	
+    func onError(error: String) {
+      	// Handle error gracefully
     }
 }
 ```

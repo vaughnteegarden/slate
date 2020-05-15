@@ -17,11 +17,12 @@ includes:
 - howtocartbuy
 - howtocategory
 - howtomall
+- howtosearch
 - howtoclickandcollect
 - howtotriggermanager
 - howtobackgroundlistening
+- howtolocationtrigger
 - howtoact
-- howtosearch
 - errorhandling
 - moduleref
 - changelog
@@ -126,7 +127,7 @@ We will not provide development support if you have not integrated Crashlytics o
 Latest release versions:
 
 - Android: 2.3.1
-- IOS: 1.11.31
+- IOS: 2.0.4.1
 
 If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
 
@@ -146,10 +147,12 @@ The Rezolve IOS SDK is distributed through <a href="https://cocoapods.org/about"
 The SDK can now be installed in your own project by adding the following in `Podfile`:
 
 ```swift
-use_frameworks!
+platform :ios, '10.0'
+
+use_modular_headers!
 
 target 'Sample' do
-    pod 'RezolveSDK'
+  pod 'RezolveSDK'
 end
 ```
 ### &nbsp;

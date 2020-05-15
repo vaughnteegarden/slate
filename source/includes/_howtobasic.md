@@ -117,7 +117,7 @@ Each uploaded image will have a corresponding array of thumbnails. If an object 
 
 For the purpose of the SDK, it is assumed the partner has an existing community of consumers, and has a method of authenticating them in the partner app. It is further assumed the partner wishes to introduce their consumers to Rezolve capabilities. Each partner consumer that wishes to utilize Rezolve services will need a Rezolve account.
 
-The Rezolve SDK has no built-in authentication mechansim, but that is not to say there is no security. Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
+The Rezolve SDK has no built-in authentication mechanism, but that is not to say there is no security. Rezolve is utilizing a server-to-server JWT authorization system, conformant with the **https://tools.ietf.org/html/rfc7519** standard. If you are not familiar with JSON Web Tokens, the site **https://jwt.io/** provides an excellent primer on the use of JWTs, as well as links to various JWT libraries you can utilize.
 
 Exactly how you implement authentication in your app will depend on what authorization system you use. You may either:
 
@@ -127,7 +127,7 @@ Exactly how you implement authentication in your app will depend on what authori
 
 The primary task in implementing user management is to create the JWT that will allow you to bind a Partner user to a Rezolve profile. Through a server-to-server transaction, you can create a new Rezolve User Profile, and get back an identifying `entityId` that you should persist in your authentication database, as an addition to your user record. This `entityId` will then be used by the Rezolve SDK to identify the user to the Rezolve Server. 
 
-A valid JWT is required to initialize the SDK and start a sesssion. 
+A valid JWT is required to initialize the SDK and start a session. 
 
 
 ## Minimum Implementation
@@ -146,7 +146,7 @@ It depends on what you want to demonstrate, but the typical demonstration of Rez
 
 **Scan Engagement**&nbsp;&nbsp;&nbsp;>>>&nbsp;&nbsp;&nbsp;**View Product**&nbsp;&nbsp;&nbsp;>>>&nbsp;&nbsp;&nbsp;**Instant Buy**
 
-This section walks you through the *minimum* implementation required to build a limited, functional, end-to-end demo. Several shortcuts are identified. These shortcuts are not appropriate for an app processing real transactions, but are acceptible for a technical demonstration on the Sandbox server. The shortcuts guide you to create a demo with limited UI elements, and only a single user. You are of course free to implement as many of the features as you wish to demonstrate. 
+This section walks you through the *minimum* implementation required to build a limited, functional, end-to-end demo. Several shortcuts are identified. These shortcuts are not appropriate for an app processing real transactions, but are accessible for a technical demonstration on the Sandbox server. The shortcuts guide you to create a demo with limited UI elements, and only a single user. You are of course free to implement as many of the features as you wish to demonstrate. 
 
 ### 1. Authentication
 
@@ -155,7 +155,7 @@ Two things must be in place before the SDK can communicate with the server
 1. You must have an `API Key` and `Partner Id`, and be must talking to the correct `Environment`.  This information was provided to you when you signed up for API Access.
 2. You must have a valid `JSON Web Token`, or `JWT`. A `JWT Secret` was provided when you signed up for API Access, and is used to create the `JWT`. 
 
-Examples of both authenticaton measures are shown under **<a href="#jwt-authentication">JWT Authentication</a>** .
+Examples of both authentication measures are shown under **<a href="#jwt-authentication">JWT Authentication</a>** .
 
 <aside class="notice">
 
@@ -224,7 +224,7 @@ See the example at **<a href="#product-scan-instant-buy-flow">Product Scan, Inst
 
 ### Conclusion
 
-The above steps outline the absolute shortest route to a fully functional tech demonstraton. Please follow them, and embrace the shortcuts provided, to create your tech demo in the minimal time. 
+The above steps outline the absolute shortest route to a fully functional tech demonstration. Please follow them, and embrace the shortcuts provided, to create your tech demo in the minimal time. 
 
 But be aware that the Minimum Implementation is suitable for a Technical Demo only. Any application that will be given to consumers and used to make real purchases must fully implement JWT Auth, a proper Consumer UI, and included features omitted from this section, like Mall, Shopping Cart, Multi-Cart, and more.  
 

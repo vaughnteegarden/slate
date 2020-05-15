@@ -6,6 +6,7 @@ Search is available to aid in the presentation and usability of large malls and/
 
 ```swift
 let searchData = MerchantSearchData(
+    query: nil,
     orderBy: .location,
     order: .ascending,
     deviceInfo: DeviceInfo.current,
@@ -14,56 +15,61 @@ let searchData = MerchantSearchData(
 let currentPage: Int = 1
 let itemsLimit: Int = 50
 
-rezolveSession?.merchantManager.searchForMerchants(using: searchData, page: currentPage, limit: itemsLimit, callback: { (merchantSearchResult) in
-    // Current state
-    let page = merchantSearchResult.page
-    let total = merchantSearchResult.total
-    
-    let merchants = merchantSearchResult.merchants
-    for merchant in merchants {
-        
-        // Base information
-        let id = merchant.id
-        let priority = merchant.priority
-        let name = merchant.name
-        let tagLine = merchant.tagline
-        let distance = merchant.distance
-        
-        // Assets
-        let banner = merchant.banner
-        let bannerThumbs = merchant.bannerThumbs
-        let logo = merchant.logo
-        let logoThumbs = merchant.logoThumbs
-        
-        // Extra information
-        let info = merchant.contactInformation
-        let infoEmail = info?.email
-        let infoName = info?.name
-        let infoPhone = info?.phone
-        
-        // List of Stores
-        if let stores = merchant.stores {
-            for store in stores {
-                let id = store.id
-                let name = store.name
-                let location = store.location
-            }
+rezolveSession?.merchantManager.searchForMerchants(using: searchData, page: currentPage, limit: itemsLimit) { (result: Result<MerchantSearchResult, RezolveError>) in
+		switch result {
+    case .success(let merchantSearchResult):
+        {
+            // Current state
+    				let page = merchantSearchResult.page
+    				let total = merchantSearchResult.total
+    				let merchants = merchantSearchResult.merchants
+    				
+          	for merchant in merchants {
+        				// Base information
+        				let id = merchant.id
+        				let priority = merchant.priority
+        				let name = merchant.name
+        				let tagLine = merchant.tagline
+        				let distance = merchant.distance
+              	
+              	// Assets
+        				let banner = merchant.banner
+        				let bannerThumbs = merchant.bannerThumbs
+        				let logo = merchant.logo
+        				let logoThumbs = merchant.logoThumbs
+        				
+        				// Extra information
+        				let info = merchant.contactInformation
+        				let infoEmail = info?.email
+        				let infoName = info?.name
+        				let infoPhone = info?.phone
+        				
+        				// List of Stores
+        				if let stores = merchant.stores {
+            				for store in stores {
+                			let id = store.id
+                			let name = store.name
+                			let location = store.location
+            				}
+        				}
+        				
+        				// List of Terms & Conditions
+        				let termsAndConditions = merchant.termsAndConditions
+        				
+              	for item in termsAndConditions {
+            				let id = item.id
+            				let storeId = item.storeId
+            				let name = item.name
+            				let content = item.content
+            				let checkboxText = item.checkboxText
+								}
+    				}
         }
-        
-        // List of Terms & Conditions
-        let termsAndConditions = merchant.termsAndConditions
-        for item in termsAndConditions {
-            let id = item.id
-            let storeId = item.storeId
-            let name = item.name
-            let content = item.content
-            let checkboxText = item.checkboxText
-        }
+      	
+    case .failure(let error):
+        // Handle error gracefully
     }
-    
-}) { (response) in
-    // Handle error gracefully
-}
+})
 ```
 ```java
 // set up parameters for merchant search
@@ -167,32 +173,38 @@ let productSearchData = ProductSearchData(
 let currentPage: Int = 1
 let itemsLimit: Int = 50
 
-rezolveSession?.productManager.searchForProducts(using: productSearchData, page: currentPage, limit: itemsLimit, callback: { (productSearchResult) in
-    // Current state
-    let page = productSearchResult.page
-    let total = productSearchResult.total
-    
-    let products = productSearchResult.products
-    for product in products {
-        // Base information
-        let id = product.id
-        let merchantId = product.merchantId
-        let merchantName = product.merchantName
-        let categoryId = product.categoryId
-        let categoryName = product.categoryName
-        let price = product.price
-        let isAct = product.isAct
-        let isVirtual = product.isVirtual
-        let hasRequiredOptions = product.hasRequiredOptions
-        
-        // Assets
-        let image = product.image
-        let imageThumbs = product.thumbs
+rezolveSession?.productManager.searchForProducts(using: productSearchData, page: currentPage, limit: itemsLimit, completionHandler: { (result: Result<ProductSearchResult, RezolveError>) in
+		
+		switch result {
+    case .success(let productSearchResult):
+      	{
+          	// Current state
+    				let page = productSearchResult.page
+    				let total = productSearchResult.total
+    				let products = productSearchResult.products
+						
+    				for product in products {
+        				// Base information
+        				let id = product.id
+        				let merchantId = product.merchantId
+        				let merchantName = product.merchantName
+        				let categoryId = product.categoryId
+        				let categoryName = product.categoryName
+        				let price = product.price
+        				let isAct = product.isAct
+                let isVirtual = product.isVirtual
+                let hasRequiredOptions = product.hasRequiredOptions
+        				
+                // Assets
+                let image = product.image
+                let imageThumbs = product.thumbs
+    				}
+        }
+      	
+    case .failure(let error):
+      	// Handle error gracefully
     }
-    
-}) { (httpResponse) in
-    // Handle error gracefully
-}
+})
 ```
 ```java
 // set up parameters for product search
