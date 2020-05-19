@@ -49,6 +49,8 @@ let sspActManagerSettings = SspActManagerSettings(
 
 ```
 
+Initializing location detection requires setting up the `SspActManager` with appropriate settings.
+
 ### Detecting geozones
 
 ```swift
@@ -75,6 +77,8 @@ ssp?.nearbyEngagementsManager.delegate = nil
 ```
 ```java
 ```
+
+During detection, the user's location is monitored 
 
 ### Handling detection and notification
 

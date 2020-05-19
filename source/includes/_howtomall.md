@@ -19,21 +19,21 @@ rezolveSession?.merchantManager.getMerchants { (result: Result<[Merchant], Rezol
     case .success(let merchants):
         {
             merchants.forEach {
-              	// Basic information
+                // Basic information
                 let id = $0.id
                 let name = $0.name
                 let tagline = $0.tagline
                 let contactInformation = $0.contactInformation
-              	let termsAndConditions = $0.termsAndConditions
-              	
-              	// Assets
-              	let banner = $0.banner
-              	let logo = $0.logo
-								let bannerThumbs = $0.bannerThumbs
+                let termsAndConditions = $0.termsAndConditions
+                
+                // Assets
+                let banner = $0.banner
+                let logo = $0.logo
+                let bannerThumbs = $0.bannerThumbs
                 let logoThumbs = $0.logoThumbs
             }
         }
-      	
+        
     case .failure(let error):
         // Handle error gracefully
     }
@@ -74,38 +74,39 @@ First, initialize `MerchantManager`, and call `GetMerchants`, providing an imple
 
 
 ### 2. Get list of first-level Categories for the selected Merchant
+
 ``` swift
 let sampleMerchantID = "12"
 
 rezolveSession?.productManager.getRootCategoryForMerchantWith(id: sampleMerchantID) { (result: Result<RezolveSDK.Category, RezolveError>) in
-		switch result {
+    switch result {
     case .success(let category):
-      	{
-          	// Basic information
-          	let id = category.id
-          	let parentId = category.parentId
-        		let name = category.name
-        		let hasCategories = category.hasCategories
-          	let hasProducts = category.hasProducts
-          	
-          	// Assets
-          	let image = category.image
-        		let imageThumbs = category.imageThumbs
-          	
-          	// Get subcategories, if any
-          	if hasCategories {
-            		category.categories.forEach { subCategory in
-                		print(subCategory.id)
-                		print(subCategory.parentId)
-                		print(subCategory.name)
-										
-                		// ...
-            		}
-        		}
+        {
+            // Basic information
+            let id = category.id
+            let parentId = category.parentId
+            let name = category.name
+            let hasCategories = category.hasCategories
+            let hasProducts = category.hasProducts
+            
+            // Assets
+            let image = category.image
+            let imageThumbs = category.imageThumbs
+            
+            // Get subcategories, if any
+            if hasCategories {
+                category.categories.forEach { subCategory in
+                    print(subCategory.id)
+                    print(subCategory.parentId)
+                    print(subCategory.name)
+                    
+                    // ...
+                }
+            }
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```
@@ -167,45 +168,46 @@ For subsequent navigation in categories, use `getProductsAndCategories`.
 
 
 ### 3. If the consumer clicks a subcategory, call `getProductsAndCategories`. 
+
 ``` swift
 let sampleMerchantID = "12"
 let sampleCategoryID: Int = 70
 
 let pageNavigationFilters = PageNavigationFilter(
-  	productsFilter: PageNavigation(count: 100, pageIndex: 1, sortBy: "product", sort: .ascending),
-  	categoryFilter: PageNavigation(count: 100, pageIndex: 1, sortBy: "category", sort: .ascending)
+    productsFilter: PageNavigation(count: 100, pageIndex: 1, sortBy: "product", sort: .ascending),
+    categoryFilter: PageNavigation(count: 100, pageIndex: 1, sortBy: "category", sort: .ascending)
 )
 
 rezolveSession?.productManager.getPaginatedCategoriesAndProducts(merchantId: sampleMerchantID, categoryId: sampleCategoryID, pageNavigationFilters: pageNavigationFilters) { (result: <Rezolve, RezolveError>) in
-		switch result {
+    switch result {
     case .success(let category):
-      	{
-          	// Basic information
-          	let id = category.id
-          	let parentId = category.parentId
-        		let name = category.name
-        		let hasCategories = category.hasCategories
-          	let hasProducts = category.hasProducts
-          	
-          	// Assets
-          	let image = category.image
-        		let imageThumbs = category.imageThumbs
-          	
-          	// Get subcategories, if any
-          	if hasCategories {
-            		category.categories.forEach { subCategory in
-                		print(subCategory.id)
-                		print(subCategory.parentId)
-                		print(subCategory.name)
-										
-                		// ...
-            		}
-        		}
-          	
-          	// Get display products, if any
-          	if hasProducts {
-              	category.products.forEach { displayProduct in
-                		print(displayProduct.id)
+        {
+            // Basic information
+            let id = category.id
+            let parentId = category.parentId
+            let name = category.name
+            let hasCategories = category.hasCategories
+            let hasProducts = category.hasProducts
+            
+            // Assets
+            let image = category.image
+            let imageThumbs = category.imageThumbs
+            
+            // Get subcategories, if any
+            if hasCategories {
+                category.categories.forEach { subCategory in
+                    print(subCategory.id)
+                    print(subCategory.parentId)
+                    print(subCategory.name)
+                    
+                    // ...
+                }
+            }
+            
+            // Get display products, if any
+            if hasProducts {
+                category.products.forEach { displayProduct in
+                    print(displayProduct.id)
                     print(displayProduct.name)
                     print(displayProduct.price)
                     
@@ -213,9 +215,9 @@ rezolveSession?.productManager.getPaginatedCategoriesAndProducts(merchantId: sam
                 }
             }
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```
@@ -291,6 +293,7 @@ As the consumer navigates the category tree, call `getProductsAndCategories` to 
 
 
 ### 4. If the consumer clicks a Product, call `getProduct` 
+
 ``` swift
 let sampleMerchantID = "12"
 let sampleCategoryID: Int = 70
@@ -298,64 +301,64 @@ let sampleProductID: Int = 6
 let sampleProduct = Product(id: sampleProductID)
 
 rezolveSession?.productManager.getProductDetails(merchantId: sampleMerchantID, categoryId: sampleCategoryID, product: sampleProduct) { (result: Result<Product, RezolveError>) in
-		switch result {
+    switch result {
     case .success(let product):
-      	{
-        		print(product.id)
-        		print(product.merchantId)
-        		print(product.title)
-        		print(product.subtitle)
-        		print(product.price)
-        		print(product.description)
-          	
-        		product.images.forEach {
-            		print($0)
-        		}
-						
-        		product.options.forEach { option in
-            		print(option.label)
-            		print(option.code)
-            		print(option.extraInfo)
+        {
+            print(product.id)
+            print(product.merchantId)
+            print(product.title)
+            print(product.subtitle)
+            print(product.price)
+            print(product.description)
+            
+            product.images.forEach {
+                print($0)
+            }
+            
+            product.options.forEach { option in
+                print(option.label)
+                print(option.code)
+                print(option.extraInfo)
                 
-            		option.values.forEach { optionValue in
-                		print(optionValue.value)
-                		print(optionValue.label)
-            		}
-        		}
-						
-        		product.optionAvailable.forEach {
-            		$0.combination.forEach { variant in
-                		print(variant.code)
-                		print(variant.value)
-                		print(variant.id)
-            		}
-        		}
-						
-        		product.customOptions.forEach {
-            		print($0.isRequire)
-            		print($0.optionId)
-            		print($0.sortOrder)
-            		print($0.title)
-            		print($0.optionType)
-								
-            		$0.values.forEach { value in
-                		print(value.sortOrder)
-                		print(value.title)
-                		print(valueId)
-            		}
-								
-            		$0.valuesId.forEach { valueId in
-                	print(valueId)
-            		}
-								
-            		print($0.value)
-        		}
-						
-        		print(product.productPlacement)
+                option.values.forEach { optionValue in
+                    print(optionValue.value)
+                    print(optionValue.label)
+                }
+            }
+            
+            product.optionAvailable.forEach {
+                $0.combination.forEach { variant in
+                    print(variant.code)
+                    print(variant.value)
+                    print(variant.id)
+                }
+            }
+            
+            product.customOptions.forEach {
+                print($0.isRequire)
+                print($0.optionId)
+                print($0.sortOrder)
+                print($0.title)
+                print($0.optionType)
+                
+                $0.values.forEach { value in
+                    print(value.sortOrder)
+                    print(value.title)
+                    print(valueId)
+                }
+                
+                $0.valuesId.forEach { valueId in
+                    print(valueId)
+                }
+                
+                print($0.value)
+            }
+            
+            print(product.productPlacement)
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```

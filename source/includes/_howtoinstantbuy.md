@@ -15,36 +15,36 @@ In the Instant Buy flow, we purchase the product immediately, without first addi
 // Initialize `ScanManager` based on your RezolveSDK Session
 
 guard let scanManager = rezolveSession?.getScanManager() else {
-  	return
+    return
 }
 
 scanManager.productResultDelegate = self
 try? scanManager.startVideoScan(scanCameraView: self.view as! ScanCameraView, rectOfInterest: .frame)
 
 extension ViewController: ProductDelegate {
-  	
+    
     func onStartRecognizeImage() {
-      	// Suggestion: Show an interstitial loader
+        // Suggestion: Show an interstitial loader
     }
-  	
+    
     func onFinishRecognizeImage() {
-      	// Suggestion: Hide an interstitial loader
+        // Suggestion: Hide an interstitial loader
     }
-  	
+    
     func onCategoryResult(merchantId: String, category: RezolveCategory) {
-				// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
+        // See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-  	
+    
     func onCategoryProductsResult(merchantId: String, category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
-      	// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
+        // See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-  	
-  	func onProductResult(product: Product) {
-      	// See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
+    
+    func onProductResult(product: Product) {
+        // See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
     }
-  	
+    
     func onError(error: String) {
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 }
 ```
@@ -96,16 +96,16 @@ let sampleCheckoutProduct = createCheckoutProductWithVariant(product: product)
 let sampleMerchantID = "12"
 
 rezolveSession?.paymentOptionManager.getPaymentOptionFor(checkoutProduct: sampleCheckoutProduct, merchantId: sampleMerchantID) { (result: Result<PaymentOption, RezolveError>) in
-		switch result {
+    switch result {
     case .success(let option):
-      	{
-          	// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.
-          	let paymentMethod  = option.supportedPaymentMethods.first!
-          	let shippingMethod = option.supportedDeliveryMethods.first!
+        {
+            // For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.
+            let paymentMethod  = option.supportedPaymentMethods.first!
+            let shippingMethod = option.supportedDeliveryMethods.first!
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```
@@ -206,7 +206,7 @@ We recommend using a "slide to buy" button to confirm purchase intent, while pre
 
 ```swift
 let sampleProductCheckoutBundle = CheckoutBundle(
-  	checkoutProduct: checkoutProduct,
+    checkoutProduct: checkoutProduct,
     shippingMethod: deliveryMethod,
     merchantId: merchantId,
     optionId: optionId,
@@ -217,17 +217,17 @@ let sampleProductCheckoutBundle = CheckoutBundle(
 )
 
 rezolveSession?.checkoutManager.checkout(bundle: sampleProductCheckoutBundle) { (result: Result<Price, Error>) in
-		switch result {
+    switch result {
     case .success(let order):
-      	{
-          	print(order.id)
-          	print(order.finalPrice)
-          	
-          	// ...
+        {
+            print(order.id)
+            print(order.finalPrice)
+            
+            // ...
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```
@@ -300,7 +300,7 @@ let paymentCard = // RezolveSDK.PaymentCard
 let cardCVV = "000" // Card CVV
 
 let sampleProductCheckoutBundle = CheckoutBundle(
-  	checkoutProduct: checkoutProduct,
+    checkoutProduct: checkoutProduct,
     shippingMethod: deliveryMethod,
     merchantId: merchantId,
     optionId: optionId,
@@ -311,18 +311,18 @@ let sampleProductCheckoutBundle = CheckoutBundle(
 )
 
 rezolveSession?.checkoutManager.buy(bundle: sampleProductCheckoutBundle) { (result: Result<CheckoutOrder, RezolveError>) in
-		switch result {
+    switch result {
     case .success(let order):
-      	{
-          	print(order.id)
-          	print(order.partnerId)
-          	print(order.partnerName)
-          	
-          	// ...
+        {
+            print(order.id)
+            print(order.partnerId)
+            print(order.partnerName)
+            
+            // ...
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```

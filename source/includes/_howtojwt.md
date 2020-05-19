@@ -248,7 +248,6 @@ In the samples to the right, `accessToken` is the Login JWT token you created ab
 
 Note in the Android sample you are also passing in an AuthRequestProvider. This is used for handling expiring JWT sessions, and is explained in the next section.
 
-
 ```swift
 import UIKit
 import RezolveSDK
@@ -278,7 +277,6 @@ class SandboxViewController: UIViewController {
         }
     }
 }
-
 ```
 ```java
 String API_KEY = "your_api_key";

@@ -29,29 +29,29 @@ rezolveSession?.triggerManager.resolve(
 )
 
 extension ViewController: ProductDelegate {
-  	
+    
     func onStartRecognizeImage() {
-      	// Suggestion: Show an interstitial loader
+        // Suggestion: Show an interstitial loader
     }
-  	
+    
     func onFinishRecognizeImage() {
-      	// Suggestion: Hide an interstitial loader
+        // Suggestion: Hide an interstitial loader
     }
-  	
+    
     func onCategoryResult(merchantId: String, category: RezolveCategory) {
-				// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
+        // See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-  	
+    
     func onCategoryProductsResult(merchantId: String, category: RezolveCategory, productsPage: PageResult<DisplayProduct>) {
-      	// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
+        // See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"
     }
-  	
-  	func onProductResult(product: Product) {
-      	// See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
+    
+    func onProductResult(product: Product) {
+        // See "Mall" section "4. If the consumer clicks a Product, call `getProduct`"
     }
-  	
+    
     func onError(error: String) {
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 }
 ```

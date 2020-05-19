@@ -13,16 +13,16 @@ let sampleCheckoutProduct = createCheckoutProductWithVariant(product: product)
 let sampleMerchantID = "12"
 
 rezolveSession?.paymentOptionManager.getPaymentOptionFor(checkoutProduct: sampleCheckoutProduct, merchantId: sampleMerchantID) { (result: Result<PaymentOption, RezolveError>) in
-		switch result {
+    switch result {
     case .success(let option):
-      	{
-          	// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.
-          	let paymentMethod  = option.supportedPaymentMethods.first!
-          	let shippingMethod = option.supportedDeliveryMethods.first!
+        {
+            // For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.
+            let paymentMethod  = option.supportedPaymentMethods.first!
+            let shippingMethod = option.supportedDeliveryMethods.first!
         }
-      	
+        
     case .failure(let error):
-      	// Handle error gracefully
+        // Handle error gracefully
     }
 })
 ```
