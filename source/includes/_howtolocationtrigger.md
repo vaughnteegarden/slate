@@ -78,7 +78,11 @@ ssp?.nearbyEngagementsManager.delegate = nil
 ```java
 ```
 
-During detection, the user's location is monitored 
+During detection, the user's location is monitored. Detection times vary according to OS settings. 
+
+For IOS, the following applies: "When testing your region monitoring code in iOS Simulator or on a device, realize that region events may not happen immediately after a region boundary is crossed. To prevent spurious notifications, iOS doesn't deliver region notifications until certain threshold conditions are met. Specifically, the user's location must cross the region boundary, move away from the boundary by a minimum distance, and remain at that minimum distance for at least 20 seconds before the notifications are reported.
+
+The specific threshold distances are determined by the hardware and the location technologies that are currently available. For example, if Wi-Fi is disabled, region monitoring is significantly less accurate. However, for testing purposes, you can assume that the minimum distance is approximately 200 meters."
 
 ### Handling detection and notification
 
@@ -109,3 +113,5 @@ extension RezolveGeofence: NearbyEngagementsManagerDelegate {
 ```
 ```java
 ```
+
+When a geofence is detected, the code to the right handles the geofence.
