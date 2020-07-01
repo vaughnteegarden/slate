@@ -325,8 +325,9 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>Latest release versions:</p>
 
 <ul>
-<li>Android: 2.3.1</li>
-<li>IOS: 2.0.4.1</li>
+<li>Android: 3.0.0</li>
+<li><p>Compatible Android Scan version: 3.0-alpha.0sz</p></li>
+<li><p>IOS: 2.0.4.1</p></li>
 </ul>
 
 <p>If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.</p>
@@ -384,12 +385,19 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>Add the Rezolve repository to your root build.gradle file, in the <code>allprojects</code> block. </p>
 <h3 id='update-app-module-build-gradle-to-add-sdk-dependency'>Update :app module build.gradle to add sdk dependency</h3><pre class="highlight java tab-java"><code><span class="c1">// in /app/build.gradle</span>
 <span class="n">dependencies</span> <span class="o">{</span>
-  <span class="n">def</span> <span class="n">rezolveSdkVersion</span> <span class="o">=</span> <span class="s">"2.0.1"</span>
-  <span class="n">implementation</span> <span class="s">"com.rezolve:sdk-android:$rezolveSdkVersion"</span>
-  <span class="c1">// ...</span>
+    <span class="n">def</span> <span class="n">rezolveSdkVersion</span> <span class="o">=</span> <span class="s">"3.0-alpha.0"</span>
+    <span class="n">def</span> <span class="n">rezolveSdkScanVersion</span> <span class="o">=</span> <span class="s">"3.0-alpha.0"</span>
+    <span class="c1">// ...</span>
+    <span class="n">implementation</span> <span class="s">"com.rezolve.sdk:core-android:$rezolveSdkVersion"</span>
+    <span class="n">implementation</span> <span class="s">"com.rezolve.sdk:payment-android:$rezolveSdkVersion"</span>
+    <span class="n">implementation</span> <span class="s">"com.rezolve.sdk:ssp-android:$rezolveSdkVersion"</span>
+    <span class="n">implementation</span> <span class="s">"com.rezolve.sdk:ssp-google-geofence:$rezolveSdkVersion"</span>
+    <span class="n">implementation</span> <span class="s">"com.rezolve.sdk:resolver:$rezolveSdkVersion"</span>
+    <span class="n">implementation</span> <span class="s">"com.rezolve.sdk:scan-android:$rezolveSdkScanVersion"</span>
+    <span class="c1">// ...</span>
 <span class="o">}</span>
 </code></pre>
-<p>Add Rezolve SDK dependency to build.gradle file in your :app module. Set the <code>rezolveSdkVersion</code> to the version you wish to use. Note it is important to use double quotes as shown around the implementation string, or <code>$rezolveSdkVersion</code> won&#39;t be evaluated. To upgrade to a new release, update <code>rezolveSdkVersion</code> to the latest version.</p>
+<p>Add Rezolve SDK dependency to build.gradle file in your :app module. Set the <code>rezolveSdkVersion</code> and <code>rezolveSdkScanVersion</code> to the version you wish to use. Note it is important to use double quotes as shown around the implementation strings, or <code>$rezolveSdkVersion</code> won&#39;t be evaluated. To upgrade to a new release, update <code>rezolveSdkVersion</code> and <code>rezolveSdkScanVersion</code> to the latest version.</p>
 <h3 id='permissions'>Permissions</h3><pre class="highlight java tab-java"><code><span class="c1">// Note: the SDK's manifest requests the following permissions:</span>
 <span class="c1">// On Android 6.0+, you will have to specifically request the last two. </span>
 <span class="c1">// See https://developer.android.com/training/permissions/requesting.html</span>
@@ -397,11 +405,20 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.INTERNET"</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.ACCESS_WIFI_STATE"</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.WRITE_EXTERNAL_STORAGE"</span> <span class="o">/&gt;</span>
+
+<span class="c1">// RECORD_AUDIO permission is only needed if you implement the Audio Scan feature.</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.RECORD_AUDIO"</span> <span class="o">/&gt;</span>
+
+<span class="c1">// CAMERA permission is only needed if you implement the Image Scan feature.</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.CAMERA"</span> <span class="o">/&gt;</span>
 
 <span class="c1">// FOREGROUND_SERVICE permission is only needed if you implement the Background Listening feature.</span>
 <span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.FOREGROUND_SERVICE"</span> <span class="o">/&gt;</span>
+
+<span class="c1">// Location permissions are only needed if you implement the Geofence detection feature.</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.ACCESS_FINE_LOCATION"</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="n">uses</span><span class="o">-</span><span class="n">permission</span> <span class="nl">android:</span><span class="n">name</span><span class="o">=</span><span class="s">"android.permission.ACCESS_COARSE_LOCATION"</span> <span class="o">/&gt;</span>
+
 
 </code></pre>
           <h1 id='sdk-feature-use'>SDK Feature Use</h1>
@@ -938,7 +955,6 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-
 </code></pre><pre class="highlight java tab-java"><code><span class="n">String</span> <span class="n">API_KEY</span> <span class="o">=</span> <span class="s">"your_api_key"</span><span class="o">;</span>
 <span class="n">String</span> <span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="s">"https://sandbox-api-tw.rzlvtest.co/api"</span><span class="o">;</span>
 <span class="n">String</span> <span class="n">accessToken</span> <span class="o">=</span> <span class="s">"abc123.abc123.abc123"</span><span class="o">;</span>  <span class="c1">// JWT token from auth server</span>
@@ -1231,7 +1247,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
+        <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryProductsResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">,</span> <span class="nv">productsPage</span><span class="p">:</span> <span class="kt">PageResult</span><span class="o">&lt;</span><span class="kt">DisplayProduct</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
@@ -1287,7 +1303,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">sampleMerchantID</span> <span class="o">=</span> <span class="s">"12"</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">paymentOptionManager</span><span class="o">.</span><span class="nf">getPaymentOptionFor</span><span class="p">(</span><span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">sampleCheckoutProduct</span><span class="p">,</span> <span class="nv">merchantId</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">PaymentOption</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">option</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.</span>
@@ -1392,7 +1408,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">)</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkout</span><span class="p">(</span><span class="nv">bundle</span><span class="p">:</span> <span class="n">sampleProductCheckoutBundle</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Price</span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">order</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="nf">print</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1477,7 +1493,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">)</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buy</span><span class="p">(</span><span class="nv">bundle</span><span class="p">:</span> <span class="n">sampleProductCheckoutBundle</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">CheckoutOrder</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">order</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="nf">print</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1547,7 +1563,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveSDK</span><span class="o">.</span><span class="kt">Category</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
+        <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryProductsResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveSDK</span><span class="o">.</span><span class="kt">Category</span><span class="p">,</span> <span class="nv">productsPage</span><span class="p">:</span> <span class="kt">PageResult</span><span class="o">&lt;</span><span class="kt">DisplayProduct</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
@@ -1562,7 +1578,6 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="c1">// Handle error gracefully</span>
     <span class="p">}</span>
 <span class="p">}</span>
-
 </code></pre><pre class="highlight java tab-java"><code>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScanActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">ScanManagerInterface</span><span class="o">,</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
 
@@ -1602,7 +1617,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">sampleMerchantID</span> <span class="o">=</span> <span class="s">"12"</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">cartManager</span><span class="o">.</span><span class="nf">createCartWithProduct</span><span class="p">(</span><span class="n">sampleCheckoutProduct</span><span class="p">,</span> <span class="nv">merchantId</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">CartDetails</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">cart</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="nf">print</span><span class="p">(</span><span class="n">cart</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1612,7 +1627,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="p">}</span>
 
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
-            <span class="c1">// Handle error gracefully</span>
+        <span class="c1">// Handle error gracefully</span>
     <span class="p">}</span>
 <span class="p">})</span>
 </code></pre><pre class="highlight java tab-java"><code><span class="c1">// add product to cart</span>
@@ -1644,7 +1659,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">sampleCartID</span> <span class="o">=</span> <span class="s">"1"</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">paymentOptionManager</span><span class="o">.</span><span class="nf">getPaymentOptionsForCartWith</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">,</span> <span class="nv">cartId</span><span class="p">:</span> <span class="n">sampleCartID</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">PaymentOption</span><span class="p">],</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">options</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.</span>
@@ -1759,7 +1774,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">)</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">checkout</span><span class="p">(</span><span class="nv">bundle</span><span class="p">:</span> <span class="n">sampleCartCheckoutBundle</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Price</span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">order</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="nf">print</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1810,7 +1825,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">)</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">checkoutManager</span><span class="o">.</span><span class="nf">buy</span><span class="p">(</span><span class="nv">bundle</span><span class="p">:</span> <span class="n">sampleCartCheckoutBundle</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">CheckoutOrder</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">order</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="nf">print</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1875,7 +1890,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
+        <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryProductsResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">,</span> <span class="nv">productsPage</span><span class="p">:</span> <span class="kt">PageResult</span><span class="o">&lt;</span><span class="kt">DisplayProduct</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
@@ -1984,7 +1999,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
                 <span class="c1">// Assets</span>
                 <span class="k">let</span> <span class="nv">banner</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">banner</span>
                 <span class="k">let</span> <span class="nv">logo</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">logo</span>
-                                <span class="k">let</span> <span class="nv">bannerThumbs</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">bannerThumbs</span>
+                <span class="k">let</span> <span class="nv">bannerThumbs</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">bannerThumbs</span>
                 <span class="k">let</span> <span class="nv">logoThumbs</span> <span class="o">=</span> <span class="nv">$0</span><span class="o">.</span><span class="n">logoThumbs</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -2023,30 +2038,30 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <h3 id='2-get-list-of-first-level-categories-for-the-selected-merchant'>2. Get list of first-level Categories for the selected Merchant</h3><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">sampleMerchantID</span> <span class="o">=</span> <span class="s">"12"</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getRootCategoryForMerchantWith</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">RezolveSDK</span><span class="o">.</span><span class="kt">Category</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">category</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// Basic information</span>
             <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">id</span>
             <span class="k">let</span> <span class="nv">parentId</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">parentId</span>
-                <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
-                <span class="k">let</span> <span class="nv">hasCategories</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">hasCategories</span>
+            <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">let</span> <span class="nv">hasCategories</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">hasCategories</span>
             <span class="k">let</span> <span class="nv">hasProducts</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">hasProducts</span>
 
             <span class="c1">// Assets</span>
             <span class="k">let</span> <span class="nv">image</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">image</span>
-                <span class="k">let</span> <span class="nv">imageThumbs</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">imageThumbs</span>
+            <span class="k">let</span> <span class="nv">imageThumbs</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">imageThumbs</span>
 
             <span class="c1">// Get subcategories, if any</span>
             <span class="k">if</span> <span class="n">hasCategories</span> <span class="p">{</span>
-                    <span class="n">category</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">subCategory</span> <span class="k">in</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">parentId</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">category</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">subCategory</span> <span class="k">in</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">parentId</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-                        <span class="c1">// ...</span>
-                    <span class="p">}</span>
+                    <span class="c1">// ...</span>
                 <span class="p">}</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
@@ -2115,35 +2130,35 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="p">)</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getPaginatedCategoriesAndProducts</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">,</span> <span class="nv">categoryId</span><span class="p">:</span> <span class="n">sampleCategoryID</span><span class="p">,</span> <span class="nv">pageNavigationFilters</span><span class="p">:</span> <span class="n">pageNavigationFilters</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="o">&lt;</span><span class="kt">Rezolve</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">category</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// Basic information</span>
             <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">id</span>
             <span class="k">let</span> <span class="nv">parentId</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">parentId</span>
-                <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
-                <span class="k">let</span> <span class="nv">hasCategories</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">hasCategories</span>
+            <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">let</span> <span class="nv">hasCategories</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">hasCategories</span>
             <span class="k">let</span> <span class="nv">hasProducts</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">hasProducts</span>
 
             <span class="c1">// Assets</span>
             <span class="k">let</span> <span class="nv">image</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">image</span>
-                <span class="k">let</span> <span class="nv">imageThumbs</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">imageThumbs</span>
+            <span class="k">let</span> <span class="nv">imageThumbs</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">imageThumbs</span>
 
             <span class="c1">// Get subcategories, if any</span>
             <span class="k">if</span> <span class="n">hasCategories</span> <span class="p">{</span>
-                    <span class="n">category</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">subCategory</span> <span class="k">in</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">parentId</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">category</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">subCategory</span> <span class="k">in</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">parentId</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">subCategory</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-                        <span class="c1">// ...</span>
-                    <span class="p">}</span>
+                    <span class="c1">// ...</span>
                 <span class="p">}</span>
+            <span class="p">}</span>
 
             <span class="c1">// Get display products, if any</span>
             <span class="k">if</span> <span class="n">hasProducts</span> <span class="p">{</span>
                 <span class="n">category</span><span class="o">.</span><span class="n">products</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">displayProduct</span> <span class="k">in</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">displayProduct</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">displayProduct</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
                     <span class="nf">print</span><span class="p">(</span><span class="n">displayProduct</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                     <span class="nf">print</span><span class="p">(</span><span class="n">displayProduct</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
 
@@ -2229,60 +2244,60 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">sampleProduct</span> <span class="o">=</span> <span class="kt">Product</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="n">sampleProductID</span><span class="p">)</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">getProductDetails</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">,</span> <span class="nv">categoryId</span><span class="p">:</span> <span class="n">sampleCategoryID</span><span class="p">,</span> <span class="nv">product</span><span class="p">:</span> <span class="n">sampleProduct</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Product</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">product</span><span class="p">):</span>
         <span class="p">{</span>
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">merchantId</span><span class="p">)</span>
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">subtitle</span><span class="p">)</span>
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">merchantId</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">subtitle</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
 
-                <span class="n">product</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+            <span class="n">product</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">option</span> <span class="k">in</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">extraInfo</span><span class="p">)</span>
+
+                <span class="n">option</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">optionValue</span> <span class="k">in</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">optionValue</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">optionValue</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
                 <span class="p">}</span>
+            <span class="p">}</span>
 
-                <span class="n">product</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">option</span> <span class="k">in</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">extraInfo</span><span class="p">)</span>
-
-                    <span class="n">option</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">optionValue</span> <span class="k">in</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">optionValue</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">optionValue</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-                    <span class="p">}</span>
+            <span class="n">product</span><span class="o">.</span><span class="n">optionAvailable</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
+                <span class="nv">$0</span><span class="o">.</span><span class="n">combination</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">variant</span> <span class="k">in</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
                 <span class="p">}</span>
+            <span class="p">}</span>
 
-                <span class="n">product</span><span class="o">.</span><span class="n">optionAvailable</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
-                    <span class="nv">$0</span><span class="o">.</span><span class="n">combination</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">variant</span> <span class="k">in</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">variant</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
+            <span class="n">product</span><span class="o">.</span><span class="n">customOptions</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">isRequire</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">optionId</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">sortOrder</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">optionType</span><span class="p">)</span>
 
-                <span class="n">product</span><span class="o">.</span><span class="n">customOptions</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">isRequire</span><span class="p">)</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">optionId</span><span class="p">)</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">sortOrder</span><span class="p">)</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">optionType</span><span class="p">)</span>
-
-                    <span class="nv">$0</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">sortOrder</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-                        <span class="nf">print</span><span class="p">(</span><span class="n">valueId</span><span class="p">)</span>
-                    <span class="p">}</span>
-
-                    <span class="nv">$0</span><span class="o">.</span><span class="n">valuesId</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">valueId</span> <span class="k">in</span>
+                <span class="nv">$0</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">sortOrder</span><span class="p">)</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
                     <span class="nf">print</span><span class="p">(</span><span class="n">valueId</span><span class="p">)</span>
-                    <span class="p">}</span>
-
-                    <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
                 <span class="p">}</span>
 
-                <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">productPlacement</span><span class="p">)</span>
+                <span class="nv">$0</span><span class="o">.</span><span class="n">valuesId</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">valueId</span> <span class="k">in</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="n">valueId</span><span class="p">)</span>
+                <span class="p">}</span>
+
+                <span class="nf">print</span><span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="nf">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">productPlacement</span><span class="p">)</span>
         <span class="p">}</span>
 
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
@@ -2379,54 +2394,54 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">itemsLimit</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">50</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">merchantManager</span><span class="o">.</span><span class="nf">searchForMerchants</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="n">searchData</span><span class="p">,</span> <span class="nv">page</span><span class="p">:</span> <span class="n">currentPage</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="n">itemsLimit</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">MerchantSearchResult</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">merchantSearchResult</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// Current state</span>
-                    <span class="k">let</span> <span class="nv">page</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="n">page</span>
-                    <span class="k">let</span> <span class="nv">total</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="n">total</span>
-                    <span class="k">let</span> <span class="nv">merchants</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="n">merchants</span>
+            <span class="k">let</span> <span class="nv">page</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="n">page</span>
+            <span class="k">let</span> <span class="nv">total</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="n">total</span>
+            <span class="k">let</span> <span class="nv">merchants</span> <span class="o">=</span> <span class="n">merchantSearchResult</span><span class="o">.</span><span class="n">merchants</span>
 
             <span class="k">for</span> <span class="n">merchant</span> <span class="k">in</span> <span class="n">merchants</span> <span class="p">{</span>
-                        <span class="c1">// Base information</span>
-                        <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">id</span>
-                        <span class="k">let</span> <span class="nv">priority</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">priority</span>
-                        <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">name</span>
-                        <span class="k">let</span> <span class="nv">tagLine</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">tagline</span>
-                        <span class="k">let</span> <span class="nv">distance</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">distance</span>
+                <span class="c1">// Base information</span>
+                <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">id</span>
+                <span class="k">let</span> <span class="nv">priority</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">priority</span>
+                <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">let</span> <span class="nv">tagLine</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">tagline</span>
+                <span class="k">let</span> <span class="nv">distance</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">distance</span>
 
                 <span class="c1">// Assets</span>
-                        <span class="k">let</span> <span class="nv">banner</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">banner</span>
-                        <span class="k">let</span> <span class="nv">bannerThumbs</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">bannerThumbs</span>
-                        <span class="k">let</span> <span class="nv">logo</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">logo</span>
-                        <span class="k">let</span> <span class="nv">logoThumbs</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">logoThumbs</span>
+                <span class="k">let</span> <span class="nv">banner</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">banner</span>
+                <span class="k">let</span> <span class="nv">bannerThumbs</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">bannerThumbs</span>
+                <span class="k">let</span> <span class="nv">logo</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">logo</span>
+                <span class="k">let</span> <span class="nv">logoThumbs</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">logoThumbs</span>
 
-                        <span class="c1">// Extra information</span>
-                        <span class="k">let</span> <span class="nv">info</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">contactInformation</span>
-                        <span class="k">let</span> <span class="nv">infoEmail</span> <span class="o">=</span> <span class="n">info</span><span class="p">?</span><span class="o">.</span><span class="n">email</span>
-                        <span class="k">let</span> <span class="nv">infoName</span> <span class="o">=</span> <span class="n">info</span><span class="p">?</span><span class="o">.</span><span class="n">name</span>
-                        <span class="k">let</span> <span class="nv">infoPhone</span> <span class="o">=</span> <span class="n">info</span><span class="p">?</span><span class="o">.</span><span class="n">phone</span>
+                <span class="c1">// Extra information</span>
+                <span class="k">let</span> <span class="nv">info</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">contactInformation</span>
+                <span class="k">let</span> <span class="nv">infoEmail</span> <span class="o">=</span> <span class="n">info</span><span class="p">?</span><span class="o">.</span><span class="n">email</span>
+                <span class="k">let</span> <span class="nv">infoName</span> <span class="o">=</span> <span class="n">info</span><span class="p">?</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">let</span> <span class="nv">infoPhone</span> <span class="o">=</span> <span class="n">info</span><span class="p">?</span><span class="o">.</span><span class="n">phone</span>
 
-                        <span class="c1">// List of Stores</span>
-                        <span class="k">if</span> <span class="k">let</span> <span class="nv">stores</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">stores</span> <span class="p">{</span>
-                            <span class="k">for</span> <span class="n">store</span> <span class="k">in</span> <span class="n">stores</span> <span class="p">{</span>
-                            <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">id</span>
-                            <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">name</span>
-                            <span class="k">let</span> <span class="nv">location</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">location</span>
-                            <span class="p">}</span>
-                        <span class="p">}</span>
+                <span class="c1">// List of Stores</span>
+                <span class="k">if</span> <span class="k">let</span> <span class="nv">stores</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">stores</span> <span class="p">{</span>
+                    <span class="k">for</span> <span class="n">store</span> <span class="k">in</span> <span class="n">stores</span> <span class="p">{</span>
+                        <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">id</span>
+                        <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">name</span>
+                        <span class="k">let</span> <span class="nv">location</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">location</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
 
-                        <span class="c1">// List of Terms &amp; Conditions</span>
-                        <span class="k">let</span> <span class="nv">termsAndConditions</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">termsAndConditions</span>
+                <span class="c1">// List of Terms &amp; Conditions</span>
+                <span class="k">let</span> <span class="nv">termsAndConditions</span> <span class="o">=</span> <span class="n">merchant</span><span class="o">.</span><span class="n">termsAndConditions</span>
 
                 <span class="k">for</span> <span class="n">item</span> <span class="k">in</span> <span class="n">termsAndConditions</span> <span class="p">{</span>
-                            <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span>
-                            <span class="k">let</span> <span class="nv">storeId</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">storeId</span>
-                            <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span>
-                            <span class="k">let</span> <span class="nv">content</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">content</span>
-                            <span class="k">let</span> <span class="nv">checkboxText</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">checkboxText</span>
-                                <span class="p">}</span>
-                    <span class="p">}</span>
+                    <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span>
+                    <span class="k">let</span> <span class="nv">storeId</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">storeId</span>
+                    <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span>
+                    <span class="k">let</span> <span class="nv">content</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">content</span>
+                    <span class="k">let</span> <span class="nv">checkboxText</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">checkboxText</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
@@ -2533,31 +2548,30 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">itemsLimit</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">50</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">productManager</span><span class="o">.</span><span class="nf">searchForProducts</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="n">productSearchData</span><span class="p">,</span> <span class="nv">page</span><span class="p">:</span> <span class="n">currentPage</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="n">itemsLimit</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">ProductSearchResult</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">productSearchResult</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// Current state</span>
-                    <span class="k">let</span> <span class="nv">page</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="n">page</span>
-                    <span class="k">let</span> <span class="nv">total</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="n">total</span>
-                    <span class="k">let</span> <span class="nv">products</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="n">products</span>
+            <span class="k">let</span> <span class="nv">page</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="n">page</span>
+            <span class="k">let</span> <span class="nv">total</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="n">total</span>
+            <span class="k">let</span> <span class="nv">products</span> <span class="o">=</span> <span class="n">productSearchResult</span><span class="o">.</span><span class="n">products</span>
 
-                    <span class="k">for</span> <span class="n">product</span> <span class="k">in</span> <span class="n">products</span> <span class="p">{</span>
-                        <span class="c1">// Base information</span>
-                        <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span>
-                        <span class="k">let</span> <span class="nv">merchantId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">merchantId</span>
-                        <span class="k">let</span> <span class="nv">merchantName</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">merchantName</span>
-                        <span class="k">let</span> <span class="nv">categoryId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">categoryId</span>
-                        <span class="k">let</span> <span class="nv">categoryName</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">categoryName</span>
-                        <span class="k">let</span> <span class="nv">price</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span>
-                        <span class="k">let</span> <span class="nv">isAct</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">isAct</span>
+            <span class="k">for</span> <span class="n">product</span> <span class="k">in</span> <span class="n">products</span> <span class="p">{</span>
+                <span class="c1">// Base information</span>
+                <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span>
+                <span class="k">let</span> <span class="nv">merchantId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">merchantId</span>
+                <span class="k">let</span> <span class="nv">merchantName</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">merchantName</span>
+                <span class="k">let</span> <span class="nv">categoryId</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">categoryId</span>
+                <span class="k">let</span> <span class="nv">categoryName</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">categoryName</span>
+                <span class="k">let</span> <span class="nv">price</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span>
+                <span class="k">let</span> <span class="nv">isAct</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">isAct</span>
                 <span class="k">let</span> <span class="nv">isVirtual</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">isVirtual</span>
                 <span class="k">let</span> <span class="nv">hasRequiredOptions</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">hasRequiredOptions</span>
 
                 <span class="c1">// Assets</span>
                 <span class="k">let</span> <span class="nv">image</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">image</span>
                 <span class="k">let</span> <span class="nv">imageThumbs</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">thumbs</span>
-                    <span class="p">}</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
@@ -2644,7 +2658,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="k">let</span> <span class="nv">sampleMerchantID</span> <span class="o">=</span> <span class="s">"12"</span>
 
 <span class="n">rezolveSession</span><span class="p">?</span><span class="o">.</span><span class="n">paymentOptionManager</span><span class="o">.</span><span class="nf">getPaymentOptionFor</span><span class="p">(</span><span class="nv">checkoutProduct</span><span class="p">:</span> <span class="n">sampleCheckoutProduct</span><span class="p">,</span> <span class="nv">merchantId</span><span class="p">:</span> <span class="n">sampleMerchantID</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">PaymentOption</span><span class="p">,</span> <span class="kt">RezolveError</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">in</span>
-        <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">option</span><span class="p">):</span>
         <span class="p">{</span>
             <span class="c1">// For this example we assume the user chooses the first option. In reality, we should display all options and provide the ability to choose.</span>
@@ -2850,7 +2864,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
+        <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryProductsResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">,</span> <span class="nv">productsPage</span><span class="p">:</span> <span class="kt">PageResult</span><span class="o">&lt;</span><span class="kt">DisplayProduct</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
@@ -3241,7 +3255,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
+        <span class="c1">// See "Mall" section "3. If the consumer clicks a subcategory, call `getProductsAndCategories`"</span>
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">onCategoryProductsResult</span><span class="p">(</span><span class="nv">merchantId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">category</span><span class="p">:</span> <span class="kt">RezolveCategory</span><span class="p">,</span> <span class="nv">productsPage</span><span class="p">:</span> <span class="kt">PageResult</span><span class="o">&lt;</span><span class="kt">DisplayProduct</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
@@ -3303,7 +3317,26 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="c1">// Enable Background Modes for your app’s target.</span>
 <span class="o">-</span> <span class="kt">Location</span> <span class="kt">Updates</span>
 <span class="o">-</span> <span class="kt">Background</span> <span class="kt">Fetch</span>
-</code></pre><pre class="highlight java tab-java"><code>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Taken from App.java in the Sample App project  </span>
+
+<span class="c1">// Set up a Notification Helper</span>
+
+<span class="c1">// Notes:</span>
+<span class="c1">// Geofence and Location Detection service share the same notification</span>
+<span class="c1">// See geofenceForegroundNotificationProperties to define the look of the notification</span>
+<span class="c1">// Foreground notification is required for the foreground service. </span>
+<span class="c1">// This prevents the app from getting killed by the system. </span>
+
+<span class="n">NotificationHelper</span> <span class="n">notificationHelper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NotificationHelperImpl</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="n">Notification</span> <span class="n">notification</span> <span class="o">=</span> <span class="n">notificationHelper</span><span class="o">.</span><span class="na">createNotification</span><span class="o">(</span>
+    <span class="mi">1</span><span class="o">,</span>
+    <span class="n">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">app_name</span><span class="o">),</span>
+    <span class="kc">null</span><span class="o">,</span>
+    <span class="kc">null</span><span class="o">,</span>
+    <span class="kc">null</span><span class="o">,</span>
+    <span class="n">geofenceForegroundNotificationProperties</span>
+ <span class="o">);</span>
+
 </code></pre>
 <p>This section describes how to set up your project to use the location features of the Rezolve SDK.  </p>
 <h3 id='initializing-location-detection'>Initializing location detection</h3><pre class="highlight swift tab-swift"><code><span class="c1">// On Rezolve class initialization you need to pass your SSP configuration into sspActManagerSettings parameter, which is a class of RezolveSDK.SspActManagerSettings. As an example, it has the following structure.</span>
@@ -3318,8 +3351,36 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
     <span class="nv">baiduLocationKey</span><span class="p">:</span> <span class="s">"{String}"</span>
 <span class="p">)</span>
 <span class="c1">// Adding a baiduLocationKey is not mandatory, but will definitely increase tracking accuraccy if you are targeting regions located in China mainland.</span>
-</code></pre><pre class="highlight kotlin tab-kotlin"><code>
-</code></pre><h3 id='detecting-geozones'>Detecting geozones</h3><pre class="highlight swift tab-swift"><code><span class="c1">// Setting up Rezolve SDK with an active SSP Act Manager configuration.</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Taken from App.java in the Sample App project </span>
+
+<span class="c1">// Create and start Location Provider</span>
+<span class="c1">// Make sure you have secured the location permission before starting the location provider.</span>
+<span class="kd">final</span> <span class="n">LocationProviderFused</span> <span class="n">locationProviderFused</span> <span class="o">=</span> <span class="n">LocationProviderFused</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">notification</span><span class="o">);</span>
+<span class="n">locationProviderFused</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+
+<span class="c1">// Next, set up Geofence detection and Resolvers </span>
+
+<span class="c1">// Set up SspActManager </span>
+<span class="n">SspActManager</span> <span class="n">sspActManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SspActManager</span><span class="o">(</span><span class="n">httpClient</span><span class="o">);</span>
+
+<span class="c1">// Set up Rezolve Configuration Builder (this also supports the image/audio Scanner function)</span>
+<span class="k">new</span> <span class="n">ResolverConfiguration</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">rezolveSDK</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">enableBarcode1dResolver</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">enableCoreResolver</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">enableSspResolver</span><span class="o">(</span><span class="n">sspActManager</span><span class="o">,</span> <span class="mi">400</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+<span class="c1">// Set up GeofenceMananger</span>
+<span class="kd">final</span> <span class="n">GeofenceManager</span> <span class="n">geofenceManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GeofenceManager</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">sspActManager</span><span class="o">(</span><span class="n">sspActManager</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">engagementsUpdatePolicy</span><span class="o">(</span><span class="k">new</span> <span class="n">EngagementsUpdatePolicy</span><span class="o">.</span><span class="na">Builder</span><span class="o">().</span><span class="na">build</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">notificationChannelPropertiesList</span><span class="o">(</span><span class="n">geofenceLocationChannels</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">engagementAlertNotification</span><span class="o">(</span><span class="n">geofenceAlertNotificationProperties</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">context</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</code></pre>
+<p>Initializing location detection requires setting up the <code>SspActManager</code> with appropriate settings.</p>
+<h3 id='detecting-geozones'>Detecting geozones</h3><pre class="highlight swift tab-swift"><code><span class="c1">// Setting up Rezolve SDK with an active SSP Act Manager configuration.</span>
 <span class="k">let</span> <span class="nv">sdk</span> <span class="o">=</span> <span class="kt">Rezolve</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">Config</span><span class="o">.</span><span class="n">rezolveApiKey</span><span class="p">,</span>
     <span class="nv">partnerId</span><span class="p">:</span> <span class="kt">Config</span><span class="o">.</span><span class="n">partnerId</span><span class="p">,</span>
     <span class="nv">subPartnerId</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
@@ -3339,7 +3400,86 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <span class="n">ssp</span><span class="p">?</span><span class="o">.</span><span class="n">nearbyEngagementsManager</span><span class="o">.</span><span class="nf">stopUpdatingDistanceFromNearbyEngagements</span><span class="p">()</span>
 <span class="n">ssp</span><span class="p">?</span><span class="o">.</span><span class="n">nearbyEngagementsManager</span><span class="o">.</span><span class="nf">resetNotificationSuppressData</span><span class="p">()</span>
 <span class="n">ssp</span><span class="p">?</span><span class="o">.</span><span class="n">nearbyEngagementsManager</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="kc">nil</span>
-</code></pre><pre class="highlight java tab-java"><code></code></pre><h3 id='handling-detection-and-notification'>Handling detection and notification</h3><pre class="highlight swift tab-swift"><code><span class="c1">// Handle incoming changes regarding Geofence status from the SDK.</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Taken from App.java in the Sample App project </span>
+
+<span class="c1">// Make sure the location provider is started before detection.</span>
+<span class="c1">// Based on the provided EngagementsUpdatePolicy  the GeofenceManager will manage geofence updates</span>
+
+<span class="kd">final</span> <span class="n">GeofenceManager</span> <span class="n">geofenceManager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GeofenceManager</span><span class="o">.</span><span class="na">Builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">sspActManager</span><span class="o">(</span><span class="n">sspActManager</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">engagementsUpdatePolicy</span><span class="o">(</span><span class="k">new</span> <span class="n">EngagementsUpdatePolicy</span><span class="o">.</span><span class="na">Builder</span><span class="o">().</span><span class="na">build</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">notificationChannelPropertiesList</span><span class="o">(</span><span class="n">geofenceLocationChannels</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">engagementAlertNotification</span><span class="o">(</span><span class="n">geofenceAlertNotificationProperties</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">context</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<span class="n">registerGeofenceListener</span><span class="o">();</span>
+<span class="n">locationProviderFused</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+<span class="n">geofenceManager</span><span class="o">.</span><span class="na">startGeofenceTracking</span><span class="o">();</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">registerGeofenceListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">IntentFilter</span> <span class="n">intentFilter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntentFilter</span><span class="o">();</span>
+        <span class="n">intentFilter</span><span class="o">.</span><span class="na">addAction</span><span class="o">(</span><span class="n">ACTION_GEOFENCE_NOTIFICATION_DISPLAYED</span><span class="o">);</span>
+        <span class="n">intentFilter</span><span class="o">.</span><span class="na">addAction</span><span class="o">(</span><span class="n">ACTION_GEOFENCE_NOTIFICATION_SELECTED</span><span class="o">);</span>
+        <span class="n">registerReceiver</span><span class="o">(</span><span class="n">geofenceBroadcastReceiver</span><span class="o">,</span> <span class="n">intentFilter</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">BroadcastReceiver</span> <span class="n">geofenceBroadcastReceiver</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BroadcastReceiver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">Intent</span> <span class="n">intent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">action</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getAction</span><span class="o">();</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">sender</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_SENDER_PACKAGE_NAME</span><span class="o">);</span>
+            <span class="k">if</span><span class="o">(!</span><span class="n">context</span><span class="o">.</span><span class="na">getPackageName</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="n">sender</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">"Ignoring intent from: "</span> <span class="o">+</span> <span class="n">sender</span> <span class="o">+</span><span class="s">", expected: "</span> <span class="o">+</span> <span class="n">context</span><span class="o">.</span><span class="na">getPackageName</span><span class="o">());</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">action</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">switch</span> <span class="o">(</span><span class="n">action</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">case</span> <span class="nl">ACTION_GEOFENCE_NOTIFICATION_DISPLAYED:</span> <span class="o">{</span>
+                        <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_NAME</span><span class="o">);</span>
+                        <span class="kd">final</span> <span class="n">String</span> <span class="n">shortDescription</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_DESCRIPTION_SHORT</span><span class="o">);</span>
+                        <span class="kd">final</span> <span class="n">String</span> <span class="n">actId</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_ACT_ID</span><span class="o">);</span>
+                        <span class="kd">final</span> <span class="n">SspObject</span> <span class="n">sspObject</span> <span class="o">=</span> <span class="n">getSspObjectFromIntent</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+                        <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">action</span> <span class="o">+</span> <span class="s">": "</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">shortDescription</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">actId</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">sspObject</span><span class="o">);</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">case</span> <span class="nl">ACTION_GEOFENCE_NOTIFICATION_SELECTED:</span> <span class="o">{</span>
+                        <span class="kd">final</span> <span class="n">SspObject</span> <span class="n">sspObject</span> <span class="o">=</span> <span class="n">getSspObjectFromIntent</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+                        <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">action</span> <span class="o">+</span> <span class="s">": "</span> <span class="o">+</span> <span class="n">sspObject</span><span class="o">);</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nd">@Nullable</span>
+        <span class="kd">private</span> <span class="n">SspObject</span> <span class="nf">getSspObjectFromIntent</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">Intent</span> <span class="n">intent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">SspObject</span> <span class="n">sspObject</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">hasExtra</span><span class="o">(</span><span class="n">KEY_SSP_ACT</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="n">sspObject</span> <span class="o">=</span> <span class="n">SspAct</span><span class="o">.</span><span class="na">jsonToEntity</span><span class="o">(</span><span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_SSP_ACT</span><span class="o">)));</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">hasExtra</span><span class="o">(</span><span class="n">KEY_SSP_CATEGORY</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="n">sspObject</span> <span class="o">=</span> <span class="n">SspCategory</span><span class="o">.</span><span class="na">jsonToEntity</span><span class="o">(</span><span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_SSP_CATEGORY</span><span class="o">)));</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">hasExtra</span><span class="o">(</span><span class="n">KEY_SSP_PRODUCT</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="n">sspObject</span> <span class="o">=</span> <span class="n">SspProduct</span><span class="o">.</span><span class="na">jsonToEntity</span><span class="o">(</span><span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">intent</span><span class="o">.</span><span class="na">getStringExtra</span><span class="o">(</span><span class="n">KEY_SSP_PRODUCT</span><span class="o">)));</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">sspObject</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+</code></pre>
+<p>During detection, the user&#39;s location is monitored. Detection times vary according to OS settings. </p>
+
+<p>For IOS, the following applies: &quot;When testing your region monitoring code in iOS Simulator or on a device, realize that region events may not happen immediately after a region boundary is crossed. To prevent spurious notifications, iOS doesn&#39;t deliver region notifications until certain threshold conditions are met. Specifically, the user&#39;s location must cross the region boundary, move away from the boundary by a minimum distance, and remain at that minimum distance for at least 20 seconds before the notifications are reported.</p>
+
+<p>The specific threshold distances are determined by the hardware and the location technologies that are currently available. For example, if Wi-Fi is disabled, region monitoring is significantly less accurate. However, for testing purposes, you can assume that the minimum distance is approximately 200 meters.&quot;</p>
+<h3 id='handling-detection-and-notification'>Handling detection and notification</h3><pre class="highlight swift tab-swift"><code><span class="c1">// Handle incoming changes regarding Geofence status from the SDK.</span>
 
 <span class="kd">extension</span> <span class="kt">RezolveGeofence</span><span class="p">:</span> <span class="kt">NearbyEngagementsManagerDelegate</span> <span class="p">{</span>
     <span class="kd">func</span> <span class="nf">didStartMonitoring</span><span class="p">(</span><span class="k">for</span> <span class="nv">circularRegions</span><span class="p">:</span> <span class="p">[</span><span class="kt">CLCircularRegion</span><span class="p">],</span> <span class="nv">coordinate</span><span class="p">:</span> <span class="kt">CLLocationCoordinate2D</span><span class="p">,</span> <span class="nv">radius</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
@@ -3362,7 +3502,28 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
         <span class="nf">print</span><span class="p">(</span><span class="s">"didReceiveInAppNotification"</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre><pre class="highlight java tab-java"><code></code></pre>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">// Taken from App.java in the Sample App project </span>
+
+<span class="c1">// The SDK sends the following broadcast messages (see code sample in "Detecting Geozones" above for details):</span>
+
+<span class="c1">// When the notification is displayed in the notification center, the broadcast action is set to: </span>
+<span class="nl">ACTION_GEOFENCE_NOTIFICATION_DISPLAYED:</span>
+
+<span class="c1">// And when the user taps the notification, the broadcast action is set to: </span>
+<span class="nl">ACTION_GEOFENCE_NOTIFICATION_SELECTED:</span>
+
+<span class="c1">// Notes:</span>
+<span class="c1">// The SDK shows a notification when it detects the geofence zone. </span>
+<span class="c1">// The SDK calls the server endpoint to get the object details, and if the object is active</span>
+<span class="c1">//   it will show the notification and send the ACTION_GEOFENCE_NOTIFICATION_DISPLAYED broadcast.</span>
+<span class="c1">// Use the geofenceBroadcastReceiver to fetch details about the trigger and SspObject.</span>
+<span class="c1">// The fetched ssp object has to be in an active state for notification to be shown. </span>
+<span class="c1">// The SDK prevents showing duplicate notifications if the same geofence was detected </span>
+<span class="c1">//   during the silent period defined in the EngagementsUpdatePolicy.</span>
+
+</code></pre>
+<p>When a geofence is detected, notification is potentially shown, as long as it is not within a silent period from a previous detection.</p>
+
           <h2 id='act'>Act</h2>
 <p>An Act is a type of consumer questionnaire that can be created in the Rezolve Commerce Engine. Acts are used to solicit information and collect consumer answers and contact information. No payment is required to submit an Act.</p>
 
@@ -3458,7 +3619,23 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
-<h2 id='ios-2-0-4-1-may-15-2020'>IOS 2.0.4.1 - May 15, 2020</h2><h3 id='ios'>IOS</h3>
+<h2 id='android-3-0-0-july-1-2020'>Android 3.0.0 - July 1, 2020</h2>
+<ul>
+<li>Added StoreDetails object to OrderDetails.</li>
+<li>Added SSP module.</li>
+<li>Added guest-login module.</li>
+<li>Added Geozone detection</li>
+<li>RezolveSDK divided into separate modules: core, payment and scan.</li>
+<li>Changed AudioDetectService, now sends merchant_id and is_act flag for product response.</li>
+<li>Changed to improve visibility for javadocs and variables after importing the sdk.</li>
+<li>Changed ScanManagerInterface, no longer extends ErrorInterface. All scan errors will be returned in onScanError callback that now includes ScannedData.</li>
+<li>Changed AudioDetectService intent_extra_merchant_name, changed to intent_extra_merchant_id.</li>
+<li>Changed onProductResult from ScanManagerInterface and TriggerInterface to add categoryId to returned data</li>
+<li>Changed StoreDetails &#39;pickupStore&#39; field name to &#39;pickupStoreId&#39;.</li>
+<li>Changed permission requirements: Only one of &quot;android.permission.CAMERA&quot; and &quot;android.permission.RECORD_AUDIO&quot; is now required to initialize ScanManager.</li>
+<li>Changed ScanManager, now requires BarcodeMode enum instead of boolean to set the how the manager should deal with barcodes.</li>
+</ul>
+<h2 id='ios-2-0-4-1-may-15-2020'>IOS 2.0.4.1 - May 15, 2020</h2>
 <ul>
 <li>Added Geofence support</li>
 <li>Added SSP Manager integration</li>
@@ -3654,7 +3831,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 <li>Added tutorial for Click &amp; Collect</li>
 <li>Removed manually created module reference docs and replaced them with module reference docs generated from source. </li>
 </ul>
-<h3 id='ios-2'>IOS</h3><h4 id='added'>Added</h4>
+<h3 id='ios'>IOS</h3><h4 id='added'>Added</h4>
 <ul>
 <li>Support for virtual products</li>
 <li><code>x-rezolve-device-id</code> for all Core calls</li>

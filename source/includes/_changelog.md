@@ -2,9 +2,24 @@
 
 All notable changes to the project will be documented in this log.
 
-## IOS 2.0.4.1 - May 15, 2020
+## Android 3.0.0 - July 1, 2020
 
-### IOS 
+- Added StoreDetails object to OrderDetails.
+- Added SSP module.
+- Added guest-login module.
+- Added Geozone detection
+- RezolveSDK divided into separate modules: core, payment and scan.
+- Changed AudioDetectService, now sends merchant_id and is_act flag for product response.
+- Changed to improve visibility for javadocs and variables after importing the sdk.
+- Changed ScanManagerInterface, no longer extends ErrorInterface. All scan errors will be returned in onScanError callback that now includes ScannedData.
+- Changed AudioDetectService intent_extra_merchant_name, changed to intent_extra_merchant_id.
+- Changed onProductResult from ScanManagerInterface and TriggerInterface to add categoryId to returned data
+- Changed StoreDetails 'pickupStore' field name to 'pickupStoreId'.
+- Changed permission requirements: Only one of "android.permission.CAMERA" and "android.permission.RECORD_AUDIO" is now required to initialize ScanManager.
+- Changed ScanManager, now requires BarcodeMode enum instead of boolean to set the how the manager should deal with barcodes.
+
+
+## IOS 2.0.4.1 - May 15, 2020
 
 - Added Geofence support
 - Added SSP Manager integration

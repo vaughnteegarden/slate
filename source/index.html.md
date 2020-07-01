@@ -126,7 +126,9 @@ We will not provide development support if you have not integrated Crashlytics o
 
 Latest release versions:
 
-- Android: 2.3.1
+- Android: 3.0.0
+- Compatible Android Scan version: 3.0-alpha.0sz
+
 - IOS: 2.0.4.1
 
 If this is your first time downloading the SDK, you will be provided with an API Key and the required environment information to begin development.
@@ -215,13 +217,20 @@ Add the Rezolve repository to your root build.gradle file, in the `allprojects` 
 ```java
 // in /app/build.gradle
 dependencies {
-  def rezolveSdkVersion = "2.0.1"
-  implementation "com.rezolve:sdk-android:$rezolveSdkVersion"
-  // ...
+	def rezolveSdkVersion = "3.0-alpha.0"
+	def rezolveSdkScanVersion = "3.0-alpha.0"
+    // ...
+	implementation "com.rezolve.sdk:core-android:$rezolveSdkVersion"
+    implementation "com.rezolve.sdk:payment-android:$rezolveSdkVersion"
+    implementation "com.rezolve.sdk:ssp-android:$rezolveSdkVersion"
+    implementation "com.rezolve.sdk:ssp-google-geofence:$rezolveSdkVersion"
+    implementation "com.rezolve.sdk:resolver:$rezolveSdkVersion"
+    implementation "com.rezolve.sdk:scan-android:$rezolveSdkScanVersion"
+    // ...
 }
 ```
 
-Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `rezolveSdkVersion` to the version you wish to use. Note it is important to use double quotes as shown around the implementation string, or `$rezolveSdkVersion` won't be evaluated. To upgrade to a new release, update `rezolveSdkVersion` to the latest version.
+Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `rezolveSdkVersion` and `rezolveSdkScanVersion` to the version you wish to use. Note it is important to use double quotes as shown around the implementation strings, or `$rezolveSdkVersion` won't be evaluated. To upgrade to a new release, update `rezolveSdkVersion` and `rezolveSdkScanVersion` to the latest version.
 
 ### Permissions
 
@@ -233,10 +242,19 @@ Add Rezolve SDK dependency to build.gradle file in your :app module. Set the `re
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+// RECORD_AUDIO permission is only needed if you implement the Audio Scan feature.
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    
+// CAMERA permission is only needed if you implement the Image Scan feature.
 <uses-permission android:name="android.permission.CAMERA" />
     
 // FOREGROUND_SERVICE permission is only needed if you implement the Background Listening feature.
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+// Location permissions are only needed if you implement the Geofence detection feature.
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
 ```

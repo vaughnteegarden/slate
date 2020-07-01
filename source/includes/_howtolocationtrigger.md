@@ -24,6 +24,25 @@ When the app is active, the SDK continuously samples the consumer's location, an
 - Background Fetch
 ```
 ```java
+// Taken from App.java in the Sample App project  
+
+// Set up a Notification Helper
+
+// Notes:
+// Geofence and Location Detection service share the same notification
+// See geofenceForegroundNotificationProperties to define the look of the notification
+// Foreground notification is required for the foreground service. 
+// This prevents the app from getting killed by the system. 
+
+NotificationHelper notificationHelper = new NotificationHelperImpl(this);
+Notification notification = notificationHelper.createNotification(
+    1,
+    getString(R.string.app_name),
+    null,
+    null,
+    null,
+    geofenceForegroundNotificationProperties
+ );
 
 ```
 
@@ -45,11 +64,39 @@ let sspActManagerSettings = SspActManagerSettings(
 )
 // Adding a baiduLocationKey is not mandatory, but will definitely increase tracking accuraccy if you are targeting regions located in China mainland.
 ```
-```kotlin
+```java
+// Taken from App.java in the Sample App project 
 
+// Create and start Location Provider
+// Make sure you have secured the location permission before starting the location provider.
+final LocationProviderFused locationProviderFused = LocationProviderFused.create(this, notification);
+locationProviderFused.start();
+
+// Next, set up Geofence detection and Resolvers 
+
+// Set up SspActManager 
+SspActManager sspActManager = new SspActManager(httpClient);
+
+// Set up Rezolve Configuration Builder (this also supports the image/audio Scanner function)
+new ResolverConfiguration.Builder(rezolveSDK)
+    .enableBarcode1dResolver(true)
+    .enableCoreResolver(true)
+    .enableSspResolver(sspActManager, 400)
+    .build(this);
+
+// Set up GeofenceMananger
+final GeofenceManager geofenceManager = new GeofenceManager.Builder()
+    .sspActManager(sspActManager)
+    .engagementsUpdatePolicy(new EngagementsUpdatePolicy.Builder().build())
+    .notificationChannelPropertiesList(geofenceLocationChannels)
+    .engagementAlertNotification(geofenceAlertNotificationProperties)
+    .context(this)
+    .build();
 ```
 
 Initializing location detection requires setting up the `SspActManager` with appropriate settings.
+
+
 
 ### Detecting geozones
 
@@ -76,6 +123,79 @@ ssp?.nearbyEngagementsManager.resetNotificationSuppressData()
 ssp?.nearbyEngagementsManager.delegate = nil
 ```
 ```java
+// Taken from App.java in the Sample App project 
+
+// Make sure the location provider is started before detection.
+// Based on the provided EngagementsUpdatePolicy  the GeofenceManager will manage geofence updates
+
+final GeofenceManager geofenceManager = new GeofenceManager.Builder()
+                .sspActManager(sspActManager)
+                .engagementsUpdatePolicy(new EngagementsUpdatePolicy.Builder().build())
+                .notificationChannelPropertiesList(geofenceLocationChannels)
+                .engagementAlertNotification(geofenceAlertNotificationProperties)
+                .context(this)
+                .build();
+registerGeofenceListener();
+locationProviderFused.start();
+geofenceManager.startGeofenceTracking();
+private void registerGeofenceListener() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_GEOFENCE_NOTIFICATION_DISPLAYED);
+        intentFilter.addAction(ACTION_GEOFENCE_NOTIFICATION_SELECTED);
+        registerReceiver(geofenceBroadcastReceiver, intentFilter);
+    }
+    BroadcastReceiver geofenceBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            final String sender = intent.getStringExtra(KEY_SENDER_PACKAGE_NAME);
+            if(!context.getPackageName().equalsIgnoreCase(sender)) {
+                Log.d(TAG, "Ignoring intent from: " + sender +", expected: " + context.getPackageName());
+                return;
+            }
+            if(action != null) {
+                switch (action) {
+                    case ACTION_GEOFENCE_NOTIFICATION_DISPLAYED: {
+                        final String name = intent.getStringExtra(KEY_NAME);
+                        final String shortDescription = intent.getStringExtra(KEY_DESCRIPTION_SHORT);
+                        final String actId = intent.getStringExtra(KEY_ACT_ID);
+                        final SspObject sspObject = getSspObjectFromIntent(intent);
+                        Log.d(TAG, action + ": " + name + ", " + shortDescription + ", " + actId + ", " + sspObject);
+                        break;
+                    }
+                    case ACTION_GEOFENCE_NOTIFICATION_SELECTED: {
+                        final SspObject sspObject = getSspObjectFromIntent(intent);
+                        Log.d(TAG, action + ": " + sspObject);
+                        break;
+                    }
+                }
+            }
+        }
+        @Nullable
+        private SspObject getSspObjectFromIntent(@NonNull Intent intent) {
+            SspObject sspObject = null;
+            if(intent.hasExtra(KEY_SSP_ACT)) {
+                try {
+                    sspObject = SspAct.jsonToEntity(new JSONObject(intent.getStringExtra(KEY_SSP_ACT)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if(intent.hasExtra(KEY_SSP_CATEGORY)) {
+                try {
+                    sspObject = SspCategory.jsonToEntity(new JSONObject(intent.getStringExtra(KEY_SSP_CATEGORY)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if(intent.hasExtra(KEY_SSP_PRODUCT)) {
+                try {
+                    sspObject = SspProduct.jsonToEntity(new JSONObject(intent.getStringExtra(KEY_SSP_PRODUCT)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return sspObject;
+        }
+    };
 ```
 
 During detection, the user's location is monitored. Detection times vary according to OS settings. 
@@ -112,6 +232,25 @@ extension RezolveGeofence: NearbyEngagementsManagerDelegate {
 }
 ```
 ```java
+// Taken from App.java in the Sample App project 
+
+// The SDK sends the following broadcast messages (see code sample in "Detecting Geozones" above for details):
+
+// When the notification is displayed in the notification center, the broadcast action is set to: 
+ACTION_GEOFENCE_NOTIFICATION_DISPLAYED:
+
+// And when the user taps the notification, the broadcast action is set to: 
+ACTION_GEOFENCE_NOTIFICATION_SELECTED:
+
+// Notes:
+// The SDK shows a notification when it detects the geofence zone. 
+// The SDK calls the server endpoint to get the object details, and if the object is active
+//   it will show the notification and send the ACTION_GEOFENCE_NOTIFICATION_DISPLAYED broadcast.
+// Use the geofenceBroadcastReceiver to fetch details about the trigger and SspObject.
+// The fetched ssp object has to be in an active state for notification to be shown. 
+// The SDK prevents showing duplicate notifications if the same geofence was detected 
+//   during the silent period defined in the EngagementsUpdatePolicy.
+
 ```
 
-When a geofence is detected, the code to the right handles the geofence.
+When a geofence is detected, notification is potentially shown, as long as it is not within a silent period from a previous detection.
