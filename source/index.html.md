@@ -48,7 +48,7 @@ The Rezolve SDK communicates with the Rezolve online product stack – a set of 
 
 A Rezolve Reference App is available. This app was designed to showcase the unique capabilities of the Rezolve system, and to demonstrate the consumer experience.
 
-To get the app, go here:  https://help.rezolve.com/rezolve-reference-app/
+To get the app, go here:  <a href='https://help.rezolve.com/rezolve-reference-app/' target='_blank'>Rezolve Reference App</a>
 
 Download links, sample media, and instructions are all included. 
 
