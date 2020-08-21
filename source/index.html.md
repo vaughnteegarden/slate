@@ -42,21 +42,16 @@ You can switch between IOS and Android by clicking the tabs above.
 
 The **Rezolve Inside<sup>TM</sup> SDK** is a software development kit that enables mobile app developers to integrate Rezolve’s mobile commerce and engagement capabilities into their new or existing mobile apps.
 
-To learn more about what the Rezolve Inside<sup>TM</sup> SDK can offer your app, <a href="images/RezolveOverview-Platform.pdf">click here for a platform overview PDF</a>.
+The Rezolve SDK communicates with the Rezolve online product stack – a set of dashboards and services designed to provide retailers and brands with everything they need to promote and sell via Rezolve, and also provide consumers with a seamless mobile experience.
 
 ## Reference App
 
-A Rezolve Reference App is available, and is a great way to experience Rezolve's offerings. A pdf of the screen flow is <a href="images/DemoAppFlowScreens.pdf">available here</a>.
+A Rezolve Reference App is available. This app was designed to showcase the unique capabilities of the Rezolve system, and to demonstrate the consumer experience.
 
-If you would like access to the reference app, email Stephen Meli (stephen@rezolve.com) the following information:
+To get the app, go here:  https://help.rezolve.com/rezolve-reference-app/
 
-1. Your full name
-2. Your company
-3. What country you are located in
-4. Your contact phone number (and Skype ID if you have one)
-5. Your phone OS (Android or IOS), OS version (if you know it), and phone model
-6. The email address associated with your Android or IOS account (the one associated with the Play Store/App Store)
-7. Your contact email, if it differs from your account email
+Download links, sample media, and instructions are all included. 
+
 
 
 
