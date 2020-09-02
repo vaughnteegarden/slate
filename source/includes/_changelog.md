@@ -2,6 +2,10 @@
 
 All notable changes to the project will be documented in this log.
 
+## Android 3.0.0 - Sept 2, 2020
+
+- Changed compatible Android Scan module version to 3.0.0
+
 ## Android 3.0.0 - July 1, 2020
 
 - Added StoreDetails object to OrderDetails.

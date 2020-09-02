@@ -122,7 +122,7 @@ We will not provide development support if you have not integrated Crashlytics o
 Latest release versions:
 
 - Android: 3.0.0
-- Compatible Android Scan version: 3.0-alpha.0sz
+- Compatible Android Scan version: 3.0.0
 
 - IOS: 2.0.4.1
 
@@ -212,8 +212,8 @@ Add the Rezolve repository to your root build.gradle file, in the `allprojects` 
 ```java
 // in /app/build.gradle
 dependencies {
-	def rezolveSdkVersion = "3.0-alpha.0"
-	def rezolveSdkScanVersion = "3.0-alpha.0"
+	def rezolveSdkVersion = "3.0.0"
+	def rezolveSdkScanVersion = "3.0.0"
     // ...
 	implementation "com.rezolve.sdk:core-android:$rezolveSdkVersion"
     implementation "com.rezolve.sdk:payment-android:$rezolveSdkVersion"
