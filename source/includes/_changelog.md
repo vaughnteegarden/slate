@@ -2,6 +2,43 @@
 
 All notable changes to the project will be documented in this log.
 
+## Android 3.1.0 - Jan 27, 2021
+
+- Added AdditionalAttribute list to Order
+- Added GeozoneNotificationCallback and stop using BroadcastReceiver to pass to app Display action of notification.
+- Added Cloneable to CheckoutProduct
+- Added Cloneable to ConfigurableOption and CustomConfigurableOption
+- Added engagementId to ScannedData
+- Added EventReportInterface
+- Added PartnerSettings to EventReportManager
+- Added engagementId and engagementName into SspObject
+- Added common elements into SspObject.entityToJson implementation
+- Added getMerchantId method to SspObject
+- Added form builder models.
+- Added CurrencyInformation to Merchant
+- Added currencyInformation fields getters
+- Added user fields (name, location, phone, email) to SspActSubmission
+- Added ACCESS_BACKGROUND_LOCATION permission to ssp-google-geofence-detector module
+- Added serializable implementation to CheckoutProduct and its fields
+- Added check for empty first or last name to CustomerProfileManager.update call
+- Added custom payload to OrderDetails
+- Added new constructor for (Custom?|ConfigurableOption)
+- Added Resolvable.isExclusive()
+- Added new enum Resolvable.LOCAL_EXCLUSIVE and Resolvable.SERVER_EXCLUSIVE. In exclusive mode, only the first matching resolver will process the payload.
+- Added a ProGuard configuration in the SDK to ensure that app modules that depend on the SDK do not have to manually update their ProGuard files to use our library.
+- Added ENTITY_DOESNT_EXIST error type to RezolveError class
+- Change: AuthParams class for SSP authentication now requires two extra params: engagement endpoint and act endpoint
+- Change: SspActManager now requires SspHttpClient instead of HttpClient.
+- Change: LocationProviderFused now only require single argument (context).
+- Change: renamed ScanHelper.isBarcodeScan to ScanHelper.is1DBarcodeScan to differentiate from QR scan.
+- Change: Allow creating SspActQuestions for PageBuildingBlocks.
+- Change: change name of EventReportInterface to SendEventReportCallback
+- Change: Set EventReport date when the event is created.
+- Fixed crash when an opaque URI is passed to ScannedData.parse() method
+- Removed setPartnerId and setDateTime, setOS from EventReport.Builder
+- Removed Product references from Order
+- Removed geozone notification if detection is handled by any of the callbacks
+
 ## Android 3.0.0 - Sept 2, 2020
 
 - Changed compatible Android Scan module version to 3.0.0

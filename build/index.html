@@ -317,8 +317,8 @@ The Rezolve Inside<sup>TM</sup> SDK and Platform feature a robust and state-of-t
 <p>Latest release versions:</p>
 
 <ul>
-<li>Android: 3.0.0</li>
-<li><p>Compatible Android Scan version: 3.0.0</p></li>
+<li>Android: 3.1.0</li>
+<li><p>Compatible Android Scan version: 3.0.1</p></li>
 <li><p>IOS: 2.0.4.1</p></li>
 </ul>
 
@@ -3611,6 +3611,43 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 
           <h1 id='changelog'>Changelog</h1>
 <p>All notable changes to the project will be documented in this log.</p>
+<h2 id='android-3-1-0-jan-27-2021'>Android 3.1.0 - Jan 27, 2021</h2>
+<ul>
+<li>Added AdditionalAttribute list to Order</li>
+<li>Added GeozoneNotificationCallback and stop using BroadcastReceiver to pass to app Display action of notification.</li>
+<li>Added Cloneable to CheckoutProduct</li>
+<li>Added Cloneable to ConfigurableOption and CustomConfigurableOption</li>
+<li>Added engagementId to ScannedData</li>
+<li>Added EventReportInterface</li>
+<li>Added PartnerSettings to EventReportManager</li>
+<li>Added engagementId and engagementName into SspObject</li>
+<li>Added common elements into SspObject.entityToJson implementation</li>
+<li>Added getMerchantId method to SspObject</li>
+<li>Added form builder models.</li>
+<li>Added CurrencyInformation to Merchant</li>
+<li>Added currencyInformation fields getters</li>
+<li>Added user fields (name, location, phone, email) to SspActSubmission</li>
+<li>Added ACCESS_BACKGROUND_LOCATION permission to ssp-google-geofence-detector module</li>
+<li>Added serializable implementation to CheckoutProduct and its fields</li>
+<li>Added check for empty first or last name to CustomerProfileManager.update call</li>
+<li>Added custom payload to OrderDetails</li>
+<li>Added new constructor for (Custom?|ConfigurableOption)</li>
+<li>Added Resolvable.isExclusive()</li>
+<li>Added new enum Resolvable.LOCAL_EXCLUSIVE and Resolvable.SERVER_EXCLUSIVE. In exclusive mode, only the first matching resolver will process the payload.</li>
+<li>Added a ProGuard configuration in the SDK to ensure that app modules that depend on the SDK do not have to manually update their ProGuard files to use our library.</li>
+<li>Added ENTITY_DOESNT_EXIST error type to RezolveError class</li>
+<li>Change: AuthParams class for SSP authentication now requires two extra params: engagement endpoint and act endpoint</li>
+<li>Change: SspActManager now requires SspHttpClient instead of HttpClient.</li>
+<li>Change: LocationProviderFused now only require single argument (context).</li>
+<li>Change: renamed ScanHelper.isBarcodeScan to ScanHelper.is1DBarcodeScan to differentiate from QR scan.</li>
+<li>Change: Allow creating SspActQuestions for PageBuildingBlocks.</li>
+<li>Change: change name of EventReportInterface to SendEventReportCallback</li>
+<li>Change: Set EventReport date when the event is created.</li>
+<li>Fixed crash when an opaque URI is passed to ScannedData.parse() method</li>
+<li>Removed setPartnerId and setDateTime, setOS from EventReport.Builder</li>
+<li>Removed Product references from Order</li>
+<li>Removed geozone notification if detection is handled by any of the callbacks</li>
+</ul>
 <h2 id='android-3-0-0-sept-2-2020'>Android 3.0.0 - Sept 2, 2020</h2>
 <ul>
 <li>Changed compatible Android Scan module version to 3.0.0</li>

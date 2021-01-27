@@ -121,8 +121,8 @@ We will not provide development support if you have not integrated Crashlytics o
 
 Latest release versions:
 
-- Android: 3.0.0
-- Compatible Android Scan version: 3.0.0
+- Android: 3.1.0
+- Compatible Android Scan version: 3.0.1
 
 - IOS: 2.0.4.1
 
