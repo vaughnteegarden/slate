@@ -9,7 +9,7 @@ Touch Triggers could also be used to create a Wishlist feature; ask your sales p
 Trigger Manager provides a way to resolve touch triggers into actionable content, like products or categories. 
 
 Touch Engagements, or touch triggers, always have the same format: 
-`http://rzlv.co/[partnerId]/[merchantId]/[categoryId]/[productId]?ad=[adId]&placement=[placementId]`
+`http://rzlv.co/[partnerId]/[merchantId]/[categoryId]/[productId][(optional...)?ad=[adId]&placement=[placementId]]`
 
 To use touch triggers, the partner should watch for urls in their content stream that match this pattern, render them as a touchable link, and then when touched, pass the url to the `TriggerManager.resolveTrigger method`. 
 

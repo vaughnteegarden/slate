@@ -2,6 +2,12 @@
 
 All notable changes to the project will be documented in this log.
 
+
+## Feb 11, 2021
+
+- Added documentation on how to detect and handle SSP-based engagements for Android and IOS. 
+
+
 ## Android 3.1.0 - Jan 27, 2021
 
 - Added AdditionalAttribute list to Order

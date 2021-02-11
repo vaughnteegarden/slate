@@ -3,7 +3,8 @@ title: Rezolve Inside (TM) SDK Documentation
 
 language_tabs:
   - swift: IOS
-  - java: Android
+  - java: Android/Java
+  - kotlin: Android/Kotlin
 
 toc_footers:
   - <a href='http://www.rezolve.com'>Rezolve Homepage</a>
@@ -13,13 +14,20 @@ includes:
 - howtobasic
 - howtojwt
 - howtoconsumerprofile
+- howto-and-detectengagements
+- howto-and-acttarget
+- howto-and-prod-cat-url-target
+- howto-ios-detectengagements
+- howto-ios-acttarget
+- howto-ios-prod-cat-target
+- howto-ios-urltarget
+- howtotriggermanager
 - howtoinstantbuy
 - howtocartbuy
 - howtocategory
 - howtomall
 - howtosearch
 - howtoclickandcollect
-- howtotriggermanager
 - howtobackgroundlistening
 - howtolocationtrigger
 - howtoact
