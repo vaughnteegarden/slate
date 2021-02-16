@@ -2044,10 +2044,78 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre>
 <p>If you have an Act Id, you can retrieve it using the example code to the right. </p>
 
-          <h2 id='handling-ssp-product-targets-ios'>Handling SSP Product Targets - IOS</h2>
-<p>TODO</p>
-<h2 id='handling-ssp-category-targets-ios'>Handling SSP Category Targets - IOS</h2>
-<p>TODO</p>
+          <h2 id='handling-ssp-product-targets-ios'>Handling SSP Product Targets - IOS</h2><pre class="highlight swift tab-swift"><code><span class="kd">func</span> <span class="nf">onSspEngagementResult</span><span class="p">(</span><span class="nv">engagement</span><span class="p">:</span> <span class="kt">ResolverEngagement</span><span class="p">,</span> <span class="nv">eventType</span><span class="p">:</span> <span class="kt">RezolveEventReport</span><span class="o">.</span><span class="kt">RezolveEventReportType</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">engagementId</span>
+    <span class="k">let</span> <span class="nv">scanId</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">serviceId</span>
+    <span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">payloadPath</span>
+    <span class="k">let</span> <span class="nv">payoffs</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">payoffs</span>
+    <span class="k">let</span> <span class="nv">payload</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">rezolveCustomPayload</span>
+
+    <span class="c1">// The logic of parsing, is that you might find a `customUrl` in the structure not being `null`.</span>
+    <span class="c1">// Hence, we will need to examine it and redirect the user to the linked Web Page, Product or Category</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">act</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">act</span><span class="p">?</span><span class="o">.</span><span class="n">act</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">customUrl</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+            <span class="c1">// Parse act.customUrl</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="k">let</span> <span class="nv">product</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">product</span><span class="p">?</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">customUrl</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+            <span class="c1">// To Parse product.customUrl </span>
+            <span class="c1">// Check if url begins with "https://rzlv.co"</span>
+            <span class="c1">// Check if url path is in format "/[int]/[int]/[int]/[int]"</span>
+            <span class="c1">// If both the above are true, you have a valid RezolveTrigger. Use Trigger Manager to look up the product. </span>
+            <span class="c1">// If the url does not meet the above rules, it is not a RezolveTrigger, it is a regular url. Redirect the user to the url. </span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="k">let</span> <span class="nv">category</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">category</span><span class="p">?</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">customUrl</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+            <span class="c1">// Parse category.customUrl</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<p>To handle a product result, get the product custom URL and test it. </p>
+
+<p>If the url is a RezolveTrigger, similar in format to <code>https://rzlv.co/1/2/3/4</code>, use <a href="#trigger-manager">Trigger Manager</a> to fetch the product. See code sample for test advice.</p>
+
+<p>If the url is NOT a RezolveTrigger, assume it is a regular url, and you should handle it as you see fit. The typical behavior is a simple redirect to the url, to be opened in a browser. </p>
+<h2 id='handling-ssp-category-targets-ios'>Handling SSP Category Targets - IOS</h2><pre class="highlight swift tab-swift"><code><span class="kd">func</span> <span class="nf">onSspEngagementResult</span><span class="p">(</span><span class="nv">engagement</span><span class="p">:</span> <span class="kt">ResolverEngagement</span><span class="p">,</span> <span class="nv">eventType</span><span class="p">:</span> <span class="kt">RezolveEventReport</span><span class="o">.</span><span class="kt">RezolveEventReportType</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">id</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">engagementId</span>
+    <span class="k">let</span> <span class="nv">scanId</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">serviceId</span>
+    <span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">payloadPath</span>
+    <span class="k">let</span> <span class="nv">payoffs</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">payoffs</span>
+    <span class="k">let</span> <span class="nv">payload</span> <span class="o">=</span> <span class="n">engagement</span><span class="o">.</span><span class="n">rezolveCustomPayload</span>
+
+    <span class="c1">// The logic of parsing, is that you might find a `customUrl` in the structure not being `null`.</span>
+    <span class="c1">// Hence, we will need to examine it and redirect the user to the linked Web Page, Product or Category</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">act</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">act</span><span class="p">?</span><span class="o">.</span><span class="n">act</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">customUrl</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+            <span class="c1">// Parse act.customUrl</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="k">let</span> <span class="nv">product</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">product</span><span class="p">?</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">customUrl</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+            <span class="c1">// Parse product.customUrl </span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="k">let</span> <span class="nv">category</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">category</span><span class="p">?</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">customUrl</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">customUrl</span> <span class="p">{</span>
+            <span class="c1">// To Parse category.customUrl </span>
+            <span class="c1">// Check if url begins with "https://rzlv.co"</span>
+            <span class="c1">// Check if url path is in format "/[int]/[int]/[int]"  (note: one fewer parameter than a product)</span>
+            <span class="c1">// If both the above are true, you have a valid RezolveTrigger. Use Trigger Manager to look up the category. </span>
+            <span class="c1">// If the url does not meet the above rules, it is not a RezolveTrigger, it is a regular url. Redirect the user to the url. </span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<p>To handle a category result, get the category custom URL and test it. </p>
+
+<p>If the url is a RezolveTrigger, similar in format to <code>https://rzlv.co/1/2/3/4</code>, use <a href="#trigger-manager">Trigger Manager</a> to fetch the category. See code sample for test advice.</p>
+
+<p>If the url is NOT a RezolveTrigger, assume it is a regular url, and you should handle it as you see fit. The typical behavior is a simple redirect to the url, to be opened in a browser. </p>
 
           <h2 id='handling-ssp-url-targets-ios'>Handling SSP URL Targets - IOS</h2><pre class="highlight swift tab-swift"><code><span class="k">let</span> <span class="nv">act</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">act</span><span class="p">?</span><span class="o">.</span><span class="n">act</span>      <span class="c1">// Information for linked Act</span>
 <span class="k">let</span> <span class="nv">product</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">product</span>   <span class="c1">// Information for linked Product</span>
@@ -2060,7 +2128,7 @@ eyJyZXpvbHZlX2VudGl0eV9pZCI6IjpOT05FOiIsInBhcnRuZXJfZW50aXR5X2lkIjoiMTIzIiwiZXhw
 </code></pre>
 <p>If you find a non-null <code>payload</code>, next check for a non-null <code>customUrl</code></p>
 
-<p>If a custom URL is found, you should simply redirect the user to the linked entity. </p>
+<p>If a custom URL is found, you redirect the user to the linked entity. </p>
 
           <h2 id='trigger-manager'>Trigger Manager</h2>
 <p>Triggers are specially formatted media in the Rezolve system that can point to products, categories, and other resources. Image Engagements and Audio Engagements are a type of trigger, and these are handled by <code>ScanManager</code>. Touch Triggers are handled by <code>TriggerManager</code>. Touch Triggers are essentially URLs that are typically rendered as a touchable link or button onscreen. </p>

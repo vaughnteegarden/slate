@@ -13,4 +13,4 @@ let categoryCustomUrl = category?.customUrl
 
 If you find a non-null `payload`, next check for a non-null `customUrl`
 
-If a custom URL is found, you should simply redirect the user to the linked entity. 
+If a custom URL is found, you redirect the user to the linked entity. 
